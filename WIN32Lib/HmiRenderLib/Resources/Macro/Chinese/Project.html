@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>CTWinEx_Help</title>
+</head>
+
+<body>
+	<pre>
+				<h3 style="color:#0066FF">附录： C标准库函数的调用限制</h3>
+						<h4 style="color:#0066FF">----主要说明受到限制的库函数</h4>
+
+大多数常用的标准C库函数（除堆函数）均是能正常使用的，现罗列出那些使用时受到限制的标准库函数
+      1. alloca.h中所有的函数不能调用，函数均与堆相关	
+      2. assert.h中的断言函数不能调用
+      3. stdio.h中针对流的函数不能调用，只有针对字符串的函数（sscanf、sprintf）可以正常使用
+      4. stdlib.h中相关的堆操作函数不能调用，因此提供了替代的API函数
+	</pre>
+</body>
+</html>

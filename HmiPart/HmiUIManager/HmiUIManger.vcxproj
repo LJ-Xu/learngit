@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{64E722D6-2480-4211-A2BF-8CCDBD42F222}</ProjectGuid>
+    <RootNamespace>HmiUIManger</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectName>HmiUIManager</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(IncludePath);$(ProjectDir)include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\XJSocket\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)HmiPart\Service\buttonrpc;$(SolutionDir)HmiPart\Service\DataService\include;$(SolutionDir)HmiPart\HmiCore\include;</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(IncludePath);$(ProjectDir)include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\XJSocket\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)HmiPart\Service\buttonrpc;$(SolutionDir)HmiPart\Service\DataService\include;$(SolutionDir)HmiPart\HmiCore\include;</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;UICONTROL_EXPORTS;WIN32_EXTRA_LEAN;_WINDOWS;_USRDLL</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE;UICONTROL_EXPORTS;WIN32_EXTRA_LEAN;_WINDOWS;_USRDLL</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Data\UIDataService.cpp" />
+    <ClCompile Include="src\GHMIPage.cpp" />
+    <ClCompile Include="src\HMIPage.cpp" />
+    <ClCompile Include="src\HMIWindow.cpp" />
+    <ClCompile Include="src\IPageFactory.cpp" />
+    <ClCompile Include="src\Macro\XJMacro.cpp" />
+    <ClCompile Include="src\ModalPage.cpp" />
+    <ClCompile Include="src\Secure\UsrPermission.cpp" />
+    <ClCompile Include="src\IControlFactory.cpp" />
+    <ClCompile Include="src\Secure\IPermission.cpp" />
+    <ClCompile Include="src\BaseControl.cpp" />
+    <ClCompile Include="src\BaseGControl.cpp" />
+    <ClCompile Include="src\Resource\IResourceService.cpp" />
+    <ClCompile Include="src\Resource\ResourceService.cpp" />
+    <ClCompile Include="src\Tools\BinBitmap.cpp" />
+    <ClCompile Include="src\UIManager.cpp" />
+    <ClCompile Include="src\UIThread.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\GHMIPage.h" />
+    <ClInclude Include="include\HMIPage.h" />
+    <ClInclude Include="include\HMIBaseView.h" />
+    <ClInclude Include="include\GlobalWindow.h" />
+    <ClInclude Include="include\BaseControl.h" />
+    <ClInclude Include="include\BaseGControl.h" />
+    <ClInclude Include="include\BaseModel.h" />
+    <ClInclude Include="include\BasicView.h" />
+    <ClInclude Include="include\HmiWindow.h" />
+    <ClInclude Include="include\IControlFactory.h" />
+    <ClInclude Include="include\IDataService.h" />
+    <ClInclude Include="include\IResourceService.h" />
+    <ClInclude Include="include\ModalPage.h" />
+    <ClInclude Include="include\ModuleAssemble.h" />
+    <ClInclude Include="include\Observer.h" />
+    <ClInclude Include="include\ResourceService.h" />
+    <ClInclude Include="include\UIComm.h" />
+    <ClInclude Include="include\UIDataService.h" />
+    <ClInclude Include="include\UIManager.h" />
+    <ClInclude Include="include\IPermission.h" />
+    <ClInclude Include="include\UsrPermission.h" />
+    <ClInclude Include="include\UIData.h" />
+    <ClInclude Include="include\UIThread.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

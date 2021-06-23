@@ -1,0 +1,19 @@
+# Packages # 
+############ 
+bin/*
+temp/*
+debug/*
+release/*
+build/*
+.vs/
+
+ # Compiled source # 
+###################
+*.exe 
+*.o
+*.db
+*.opendb
+*.exp
+*.user
+*.suo
+

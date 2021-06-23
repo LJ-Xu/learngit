@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Free</title>
+</head>
+
+<body>
+<p>
+		<pre style="COLOR: #33cc66">
+/***********************************************************************************
+Function    : Free替代标准库函数中的free使用。功能完全相同
+     Note   : 申请的空间请及时释放
+     pBuffer: 待释放的空间
+************************************************************************************/
+		</pre>
+		<pre style="COLOR: #3366ff">
+void *Malloc( UINT size )
+		</pre>
+		<p style = "COLOR: #ff3333">实例:</p>
+		<pre style="COLOR: #8080ff">
+BYTE* pBuffer = Malloc(10);
+Free(pBuffer)
+		</pre>
+</body>
+</html>

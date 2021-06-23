@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\atomdictbase.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dictbuilder.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dictdef.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dictlist.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dicttrie.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lpicache.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\matrixsearch.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mystdlib.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ngram.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pinyinime.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\searchutility.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\spellingtable.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\spellingtrie.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\splparser.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sync.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\userdict.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utf16char.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utf16reader.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\dictdef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\pinyinime.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\utf16char.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\dictbuilder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dictlist.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dicttrie.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lpicache.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\matrixsearch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mystdlib.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ngram.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pinyinime.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\searchutility.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\spellingtable.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\spellingtrie.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\splparser.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sync.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\userdict.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utf16char.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utf16reader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Module">
+      <UniqueIdentifier>{ab073e8d-c0ef-4fbd-81bb-d0f688056913}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View">
+      <UniqueIdentifier>{f6b77b83-9011-4e56-a72d-7bdac1267a54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control">
+      <UniqueIdentifier>{ccd859e1-1ca0-4f15-962c-6286a0498fc3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{AF968C44-C6B7-4051-B9DD-9881A7F4970A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>FLTKMain</RootNamespace>
+    <ProjectName>HmiTest</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(IncludePath);$(ProjectDir)include;$(ProjectDir)getopt\include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiCore\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\log4cpp\include;$(SolutionDir)\ThirdPart\gtest\include;$(SolutionDir)\ThirdPart\breakpad\src;$(SolutionDir)\ThirdPart\googlepinyin\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)\ThirdPart\sqlite\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\SocketLib\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)HmiPart\HmiUtility\include</IncludePath>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PreLinkEventUseInBuild>false</PreLinkEventUseInBuild>
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)ThirdPart\lib;$(SolutionDir)Lib;$(SolutionDir)Debug</LibraryPath>
+    <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
+    <LibraryWPath>$(WindowsSDK_MetadataPath);</LibraryWPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)ThirdPart\lib;$(SolutionDir)Lib;$(SolutionDir)Debug</LibraryPath>
+    <IncludePath>$(IncludePath);$(ProjectDir)include;$(ProjectDir)getopt\include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiCore\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\log4cpp\include;$(SolutionDir)\ThirdPart\gtest\include;$(SolutionDir)\ThirdPart\breakpad\src;$(SolutionDir)\ThirdPart\googlepinyin\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)\ThirdPart\sqlite\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\SocketLib\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)HmiPart\HmiUtility\include</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <CallingConvention>Cdecl</CallingConvention>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>..\Service\HmiStorageService\include;..\Project\include;src\TestHelper;src\demo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;log4cppD.lib;common.lib;crash_generation_client.lib;crash_generation_server.lib;exception_handler.lib;gtest.lib;gtest_main.lib;googlepinyind.lib;sqlited.lib;libzmqd.lib;Iphlpapi.lib;libboost_regex-vc141-mt-gd-1_65_1.lib;libboost_filesystem-vc141-mt-gd-1_65_1.lib;libboost_date_time-vc141-mt-gd-1_65_1.lib;libboost_system-vc141-mt-gd-1_65_1.lib;zint.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ThirdPart\lib;$(OutDir)</AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;log4cppLIB.lib;common.lib;crash_generation_client.lib;crash_generation_server.lib;exception_handler.lib;gtestd.lib;gtest_maind.lib;libzmq.lib;Iphlpapi.lib;libboost_regex-vc141-mt-1_65_1.lib;libboost_filesystem-vc141-mt-1_65_1.lib;libboost_date_time-vc141-mt-1_65_1.lib;libboost_system-vc141-mt-1_65_1.lib;zint.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\qd\AlarmDisplayTest\AlarmDisplayTest.cpp" />
+    <ClCompile Include="src\qd\CharacterInputTest\CharacterInputTest.cpp" />
+    <ClCompile Include="src\qd\ChineseDisplayTest\ChineseDisplayTest.cpp" />
+    <ClCompile Include="src\qd\ChineseInputTest\ChineseInputTest.cpp" />
+    <ClCompile Include="src\qd\DataTableTest\DataTableTest.cpp" />
+    <ClCompile Include="src\qd\XYTrendTest\XYTrendTest.cpp" />
+    <ClCompile Include="src\TangYao\Alarm\AlarmTest.cpp" />
+    <ClCompile Include="src\zhaojiaqi\AlarmBar\AlarmBarTest.cpp" />
+    <ClCompile Include="src\qd\MultiPilotLampTest\MultiPilotLampTest.cpp" />
+    <ClCompile Include="src\qd\MultiStatusKeypadTest\MultiStatusKeypadTest.cpp" />
+    <ClCompile Include="src\qd\PinYinPageTest\PinYinPageTest.cpp" />
+    <ClCompile Include="src\qd\ReportFormTest\ReportFormTest.cpp" />
+    <ClCompile Include="src\qd\TrendChartTest\TrendChartTest.cpp" />
+    <ClCompile Include="src\qd\VarStringTest\VarStringTest.cpp" />
+    <ClCompile Include="src\qd\XYLineChartTest\XYLineChartTest.cpp" />
+    <ClCompile Include="src\TangYao\Sample\SampleTest.cpp" />
+    <ClCompile Include="src\zhaojiaqi\BarCode\BarCodeTest.cpp" />
+    <ClCompile Include="src\zhaojiaqi\Dashboard\DashboardTest.cpp" />
+    <ClCompile Include="src\zhaojiaqi\Scale\ScaleTest.cpp" />
+    <ClCompile Include="src\qd\BtnPilotLampTest\BtnPilotLampTest.cpp" />
+    <ClCompile Include="src\qd\CharacterDisplayTest\CharacterDisplayTest.cpp" />
+    <ClCompile Include="src\qd\DigitalDisplayTest\DigitalDisplayTest.cpp" />
+    <ClCompile Include="src\qd\DigitalInputTest\DigitalInputTest.cpp" />
+    <ClCompile Include="src\qd\FluidTest\FluidTest.cpp" />
+    <ClCompile Include="src\qd\GArcTest\GArcTest.cpp" />
+    <ClCompile Include="src\qd\GCircleTest\GCircleTest.cpp" />
+    <ClCompile Include="src\qd\GifTest\GifTest.cpp" />
+    <ClCompile Include="src\qd\GLineTest\GLineTest.cpp" />
+    <ClCompile Include="src\qd\GRectangleTest\GRectangleTest.cpp" />
+    <ClCompile Include="src\qd\KeyPadTest\KeyPadTest.cpp" />
+    <ClCompile Include="src\qd\PilotLampTest\PilotLampTest.cpp" />
+    <ClCompile Include="src\qd\SlideInputTest\SlideInputTest.cpp" />
+    <ClCompile Include="src\qd\StaticStringTest\StaticStringTest.cpp" />
+    <ClCompile Include="src\TangYao\PieChart\PieChartTest.cpp" />
+    <ClCompile Include="src\TangYao\Stirrer\StirrerTest.cpp" />
+    <ClCompile Include="src\TangYao\Valve\ValveTest.cpp" />
+    <ClCompile Include="src\TangYao\WaterPump\WaterPumpTest.cpp" />
+    <ClCompile Include="src\zhaojiaqi\Date\DateTest.cpp" />
+    <ClCompile Include="src\qd\DropMenuTest\DropMenuTest.cpp" />
+    <ClCompile Include="src\qd\GDynPicTest\GDynPicTest.cpp" />
+    <ClCompile Include="src\qd\GPolyLineTest\GPolyLineTest.cpp" />
+    <ClCompile Include="src\qd\TableTest\TableTest.cpp" />
+    <ClCompile Include="src\zhaojiaqi\GStickChart\GStickChartTest.cpp" />
+    <ClCompile Include="src\zhaojiaqi\Motor\MotorTest.cpp" />
+    <ClCompile Include="src\TestHelper\ProjectTestHelper.cpp" />
+    <ClCompile Include="src\demo\Breakpad_Test_Use.cpp" />
+    <ClCompile Include="src\demo\DataService_Test_PSW.cpp" />
+    <ClCompile Include="src\demo\HmiCore_Test_Run.cpp" />
+    <ClCompile Include="src\demo\Log4cpp_Test_Use.cpp" />
+    <ClCompile Include="src\demo\Serialize_Test_Memory.cpp" />
+    <ClCompile Include="src\demo\Sqlite_Test_Use.cpp" />
+    <ClCompile Include="src\demo\TrendChart_Test_Run.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\TemplateDemo\WindowDemo.cpp" />
+    <ClCompile Include="src\TestHelper\WindowTestHelper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HmiPart\HmiComm\HmiComm.vcxproj">
+      <Project>{7d1327f4-41c5-4f99-9af7-edd580d0e568}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\HmiPart\HmiCore\HmiCore.vcxproj">
+      <Project>{85439fd0-5785-42f4-a295-c0eb0d82457f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\HmiPart\HmiUIManager\HmiUIManger.vcxproj">
+      <Project>{64e722d6-2480-4211-a2bf-8ccdbd42f222}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\HmiPart\HmiUtility\HmiUtility.vcxproj">
+      <Project>{15da0a7d-b60b-468a-922f-d78b5cc642f3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\HmiPart\MsgQueue\MsgQueue.vcxproj">
+      <Project>{46d87fd6-5396-4f26-95fa-61077bb18963}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\HmiPart\Project\Project.vcxproj">
+      <Project>{838b1209-0d49-41d1-987c-9d661f341c95}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\HmiPart\Service\HmiStorageService\HmiStorageService.vcxproj">
+      <Project>{05af489d-aaab-44a6-898c-25cd221a23ed}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\HmiPart\UIControl\UIControl.vcxproj">
+      <Project>{3e7fd125-e6a3-4157-8de8-88eee14c0ec8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\OSLayer\System\System.vcxproj">
+      <Project>{261c6c66-ebd7-42eb-be9f-32337f3b15ce}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ThirdPart\FLTK\ide\VisualC2010\fltk.lib.vcxproj">
+      <Project>{e070aafc-9d03-41a3-bc7d-30887ea0d50f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ThirdPart\googlepinyin\googlepinyin\googlepinyin.vcxproj">
+      <Project>{67e8dd22-60f3-44ba-8d82-fd15203ad038}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ThirdPart\json\Json.vcxproj">
+      <Project>{c6a8a155-a1f0-4e14-aa89-64352f369acd}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ThirdPart\sqlite\sqlite3.vcxproj">
+      <Project>{a90e61cb-179f-4972-810b-d4ffc2eff389}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\qd\AlarmDisplayTest\AlarmDisplayTest.h" />
+    <ClInclude Include="src\qd\CharacterInputTest\CharacterInputTest.h" />
+    <ClInclude Include="src\qd\ChineseDisplayTest\ChineseDisplayTest.h" />
+    <ClInclude Include="src\qd\ChineseInputTest\ChineseInputTest.h" />
+    <ClInclude Include="src\qd\DataTableTest\DataTableTest.h" />
+    <ClInclude Include="src\qd\XYTrendTest\XYTrendTest.h" />
+    <ClInclude Include="src\TangYao\Alarm\AlarmTest.h" />
+    <ClInclude Include="src\zhaojiaqi\AlarmBar\AlarmBarTest.h" />
+    <ClInclude Include="src\qd\MultiPilotLampTest\MultiPilotLampTest.h" />
+    <ClInclude Include="src\qd\MultiStatusKeypadTest\MultiStatusKeypadTest.h" />
+    <ClInclude Include="src\qd\PinYinPageTest\PinYinPageTest.h" />
+    <ClInclude Include="src\qd\ReportFormTest\ReportFormTest.h" />
+    <ClInclude Include="src\qd\TrendChartTest\TrendChartTest.h" />
+    <ClInclude Include="src\qd\VarStringTest\VarStringTest.h" />
+    <ClInclude Include="src\qd\XYLineChartTest\XYLineChartTest.h" />
+    <ClInclude Include="src\TangYao\Sample\SampleTest.h" />
+    <ClInclude Include="src\zhaojiaqi\BarCode\BarCodeTest.h" />
+    <ClInclude Include="src\zhaojiaqi\Dashboard\DashboardTest.h" />
+    <ClInclude Include="src\zhaojiaqi\Scale\ScaleTest.h" />
+    <ClInclude Include="src\qd\BtnPilotLampTest\BtnPilotLampTest.h" />
+    <ClInclude Include="src\qd\CharacterDisplayTest\CharacterDisplayTest.h" />
+    <ClInclude Include="src\qd\DigitalDisplayTest\DigitalDisplayTest.h" />
+    <ClInclude Include="src\qd\DigitalInputTest\DigitalInputTest.h" />
+    <ClInclude Include="src\qd\FluidTest\FluidTest.h" />
+    <ClInclude Include="src\qd\GArcTest\GArcTest.h" />
+    <ClInclude Include="src\qd\GCircleTest\GCircleTest.h" />
+    <ClInclude Include="src\qd\GifTest\GifTest.h" />
+    <ClInclude Include="src\qd\GLineTest\GLineTest.h" />
+    <ClInclude Include="src\qd\GRectangleTest\GRectangleTest.h" />
+    <ClInclude Include="src\qd\KeyPadTest\KeyPadTest.h" />
+    <ClInclude Include="src\qd\PilotLampTest\PilotLampTest.h" />
+    <ClInclude Include="src\qd\SlideInputTest\SlideInputTest.h" />
+    <ClInclude Include="src\qd\StaticStringTest\StaticStringTest.h" />
+    <ClInclude Include="src\TangYao\PieChart\PieChartTest.h" />
+    <ClInclude Include="src\TangYao\Stirrer\StirrerTest.h" />
+    <ClInclude Include="src\TangYao\Valve\ValveTest.h" />
+    <ClInclude Include="src\TangYao\WaterPump\WaterPumpTest.h" />
+    <ClInclude Include="src\zhaojiaqi\GStickChart\GStickChart.h" />
+    <ClInclude Include="src\qd\DropMenuTest\DropMenuTest.h" />
+    <ClInclude Include="src\zhaojiaqi\Date\DateTest.h" />
+    <ClInclude Include="src\qd\GDynPicTest\GDynPicTest.h" />
+    <ClInclude Include="src\qd\GPolyLineTest\GPolyLineTest.h" />
+    <ClInclude Include="src\qd\TableTest\TableTest.h" />
+    <ClInclude Include="src\zhaojiaqi\GStickChart\GStickChartTest.h" />
+    <ClInclude Include="src\zhaojiaqi\Motor\MotorTest.h" />
+    <ClInclude Include="src\TestHelper\ProjectTestHelper.h" />
+    <ClInclude Include="src\demo\BaseTest.h" />
+    <ClInclude Include="src\demo\Breakpad_Test_Use.h" />
+    <ClInclude Include="src\demo\DataService_Test_PSW.h" />
+    <ClInclude Include="src\demo\Gtest_test_Use.h" />
+    <ClInclude Include="src\demo\HmiCore_Test_Run.h" />
+    <ClInclude Include="src\demo\Log4cpp_Test_Use.h" />
+    <ClInclude Include="src\demo\Serialize_Test_Memory.h" />
+    <ClInclude Include="src\demo\Sqlite_Test_Use.h" />
+    <ClInclude Include="src\demo\TrendChart_Test_Run.h" />
+    <ClInclude Include="src\TemplateDemo\WindowDemo.h" />
+    <ClInclude Include="src\TestHelper\WindowTestHelper.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

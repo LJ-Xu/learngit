@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>DataConvert</title>
+</head>
+
+<body>
+	<p>
+		<pre style="COLOR: #33ff33">// 数据类型转换</pre>
+		
+		<pre style="COLOR: #3366ff">
+Word_2_Int16(w)     ((short)(w))
+Word_2_Int32(w)     ((int)(short)(w))
+DWord_2_Int32(dw)   ((int)(dw))
+DWord_2_Float(dw)   (*(float*)&amp;(dw))
+
+Int16_2_Word(s)     ((WORD)(s))
+Int32_2_Word(s)     ((WORD)(short)(s))
+Int32_2_DWord(i)    ((DWORD)(i))
+Float_2_DWord(f)    (*(DWORD*)&amp;(f))
+		</pre>
+<P></P>
+</body>

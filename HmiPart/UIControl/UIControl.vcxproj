@@ -1,0 +1,603 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{3E7FD125-E6A3-4157-8DE8-88EEE14C0EC8}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>UIControl</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(IncludePath);$(ProjectDir)include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)ThirdPart\qrcodeex\include;$(SolutionDir)ThirdPart\FLTK\src;$(SolutionDir)ThirdPart\FLTK;$(SolutionDir)ThirdPart\googlepinyin\include;$(SolutionDir)ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\SocketLib\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)HmiPart\Service\buttonrpc;$(SolutionDir)HmiPart\Service\buttonrpc\build-vs2015\depends\include;$(SolutionDir)HmiPart\Service\DataService\include;$(SolutionDir)ThirdPart\restrpc\include;$(SolutionDir)ThirdPart\boost_1_65_1;$(SolutionDir)ThirdPart\msgpack-c\include</IncludePath>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PreLinkEventUseInBuild>false</PreLinkEventUseInBuild>
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)Lib;$(SolutionDir)ThirdPart\lib;$(SolutionDir)Debug</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(IncludePath);$(ProjectDir)include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)ThirdPart\qrcodeex\include;$(SolutionDir)ThirdPart\FLTK\src;$(SolutionDir)ThirdPart\FLTK;$(SolutionDir)ThirdPart\googlepinyin\include;$(SolutionDir)ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\SocketLib\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)HmiPart\Service\buttonrpc;$(SolutionDir)HmiPart\Service\buttonrpc\build-vs2015\depends\include;$(SolutionDir)HmiPart\Service\DataService\include;$(SolutionDir)ThirdPart\restrpc\include;$(SolutionDir)ThirdPart\boost_1_65_1;$(SolutionDir)ThirdPart\msgpack-c\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)Lib;$(SolutionDir)ThirdPart\lib;$(SolutionDir)Debug</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;ZMQ_STATIC;_DEBUG;_CRT_SECURE_NO_DEPRECATE;UICONTROL_EXPORTS;WIN32_EXTRA_LEAN;_WINDOWS;_USRDLL;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\Service\HmiStorageService\include;..\Project\include;$(SolutionDir)ThirdPart\sqlite\include;$(SolutionDir)FLTK;$(SolutionDir)ThirdPart\qrcode\include;$(SolutionDir)ThirdPart\qrcodeex\include</AdditionalIncludeDirectories>
+      <CallingConvention>Cdecl</CallingConvention>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>qrencode.lib;zint.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;UICONTROL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;ZMQ_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;UICONTROL_EXPORTS;WIN32_EXTRA_LEAN;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\Service\HmiStorageService\include;..\Project\include;$(SolutionDir)ThirdPart\sqlite\include;$(SolutionDir)FLTK;$(SolutionDir)ThirdPart\qrcode\include</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>qrencode.lib</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;UICONTROL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\GCtrl\AdvanceFuncGControl.cpp" />
+    <ClCompile Include="src\GCtrl\AdvanceFuncGModel.cpp" />
+    <ClCompile Include="src\GCtrl\AlarmGView.cpp" />
+    <ClCompile Include="src\GCtrl\OperatorGControl.cpp" />
+    <ClCompile Include="src\GCtrl\OperatorGModel.cpp" />
+    <ClCompile Include="src\GCtrl\PrintSetControl.cpp" />
+    <ClCompile Include="src\GCtrl\PrintSetModel.cpp" />
+    <ClCompile Include="src\GCtrl\SysSetGControl.cpp" />
+    <ClCompile Include="src\GCtrl\SysSetGModel.cpp" />
+    <ClCompile Include="src\Graphic\GFuncControl.cpp" />
+    <ClCompile Include="src\Graphic\GFuncModel.cpp" />
+    <ClCompile Include="src\Graphic\GFuncView.cpp" />
+    <ClCompile Include="src\Macro\UIApi.cpp" />
+    <ClCompile Include="src\Macro\UICommand.cpp" />
+    <ClCompile Include="src\Macro\UIServer.cpp" />
+    <ClCompile Include="src\Parts\AlarmDisplayControl.cpp" />
+    <ClCompile Include="src\Parts\AlarmDisplayModel.cpp" />
+    <ClCompile Include="src\Parts\AlarmDisplayView.cpp" />
+    <ClCompile Include="src\Parts\BackLightControl.cpp" />
+    <ClCompile Include="src\Parts\BackLightModel.cpp" />
+    <ClCompile Include="src\Parts\BackLightView.cpp" />
+    <ClCompile Include="src\Parts\BtnFunctionControl.cpp" />
+    <ClCompile Include="src\Parts\BtnFunctionModel.cpp" />
+    <ClCompile Include="src\Parts\BtnFunctionView.cpp" />
+    <ClCompile Include="src\Parts\CharacterInputControl.cpp" />
+    <ClCompile Include="src\Parts\CharacterInputModel.cpp" />
+    <ClCompile Include="src\Parts\CharacterInputView.cpp" />
+    <ClCompile Include="src\Parts\ChineseDisplayControl.cpp" />
+    <ClCompile Include="src\Parts\ChineseDisplayModel.cpp" />
+    <ClCompile Include="src\Parts\ChineseDisplayView.cpp" />
+    <ClCompile Include="src\Parts\ChineseInputControl.cpp" />
+    <ClCompile Include="src\Parts\ChineseInputModel.cpp" />
+    <ClCompile Include="src\Parts\ChineseInputView.cpp" />
+    <ClCompile Include="src\Graphic\BarCodeControl.cpp" />
+    <ClCompile Include="src\Graphic\BarCodeModel.cpp" />
+    <ClCompile Include="src\Graphic\BarCodeView.cpp" />
+    <ClCompile Include="src\Parts\AlarmBarControl.cpp" />
+    <ClCompile Include="src\Parts\AlarmBarModel.cpp" />
+    <ClCompile Include="src\Parts\AlarmBarView.cpp" />
+    <ClCompile Include="src\Parts\BuzzerControl.cpp" />
+    <ClCompile Include="src\Parts\BuzzerModel.cpp" />
+    <ClCompile Include="src\Parts\BuzzerView.cpp" />
+    <ClCompile Include="src\Parts\DataTableControl.cpp" />
+    <ClCompile Include="src\Parts\DataTableModel.cpp" />
+    <ClCompile Include="src\Parts\DataTableView.cpp" />
+    <ClCompile Include="src\Parts\FanControl.cpp" />
+    <ClCompile Include="src\Parts\FanModel.cpp" />
+    <ClCompile Include="src\Parts\FanView.cpp" />
+    <ClCompile Include="src\Parts\MultiPilotLampControl.cpp" />
+    <ClCompile Include="src\Parts\MultiPilotLampModel.cpp" />
+    <ClCompile Include="src\Parts\MultiPilotLampView.cpp" />
+    <ClCompile Include="src\Parts\MultiStatusKeypadControl.cpp" />
+    <ClCompile Include="src\Parts\MultiStatusKeypadModel.cpp" />
+    <ClCompile Include="src\Parts\MultiStatusKeypadView.cpp" />
+    <ClCompile Include="src\GCtrl\AlarmGControl.cpp" />
+    <ClCompile Include="src\GCtrl\AlarmGModel.cpp" />
+    <ClCompile Include="src\GCtrl\SampleGModel.cpp" />
+    <ClCompile Include="src\Parts\DashboardControl.cpp" />
+    <ClCompile Include="src\Parts\DashboardModel.cpp" />
+    <ClCompile Include="src\Parts\DashboardView.cpp" />
+    <ClCompile Include="src\Parts\OperatorChartControl.cpp" />
+    <ClCompile Include="src\Parts\OperatorChartModel.cpp" />
+    <ClCompile Include="src\Parts\OperatorChartView.cpp" />
+    <ClCompile Include="src\Parts\PinYinPageControl.cpp" />
+    <ClCompile Include="src\Parts\PinYinPageModel.cpp" />
+    <ClCompile Include="src\Parts\PinYinPageView.cpp" />
+    <ClCompile Include="src\Parts\RecipeChartControl.cpp" />
+    <ClCompile Include="src\Parts\RecipeChartModel.cpp" />
+    <ClCompile Include="src\Parts\RecipeChartView.cpp" />
+    <ClCompile Include="src\Parts\RecipeTransferControl.cpp" />
+    <ClCompile Include="src\Parts\RecipeTransferModel.cpp" />
+    <ClCompile Include="src\Parts\RecipeTransferView.cpp" />
+    <ClCompile Include="src\Parts\RegionFunctionControl.cpp" />
+    <ClCompile Include="src\Parts\RegionFunctionModel.cpp" />
+    <ClCompile Include="src\Parts\RegionFunctionView.cpp" />
+    <ClCompile Include="src\Parts\ReportFormControl.cpp" />
+    <ClCompile Include="src\Parts\ReportFormModel.cpp" />
+    <ClCompile Include="src\Parts\ReportFormView.cpp" />
+    <ClCompile Include="src\Parts\ScaleControl.cpp" />
+    <ClCompile Include="src\Parts\ScaleModel.cpp" />
+    <ClCompile Include="src\Parts\ScaleView.cpp" />
+    <ClCompile Include="src\Parts\CharacterDisplayControl.cpp" />
+    <ClCompile Include="src\Parts\CharacterDisplayModel.cpp" />
+    <ClCompile Include="src\Parts\CharacterDisplayView.cpp" />
+    <ClCompile Include="src\Parts\ClockControl.cpp" />
+    <ClCompile Include="src\Parts\ClockModel.cpp" />
+    <ClCompile Include="src\Parts\ClockView.cpp" />
+    <ClCompile Include="src\Data\UIData.cpp" />
+    <ClCompile Include="src\GCtrl\SampleGCtrl.cpp" />
+    <ClCompile Include="src\ControlFactory.cpp" />
+    <ClCompile Include="src\Graphic\GArcControl.cpp" />
+    <ClCompile Include="src\Graphic\GArcModel.cpp" />
+    <ClCompile Include="src\Graphic\GArcView.cpp" />
+    <ClCompile Include="src\Graphic\GCircleControl.cpp" />
+    <ClCompile Include="src\Graphic\GCircleModel.cpp" />
+    <ClCompile Include="src\Graphic\GCircleView.cpp" />
+    <ClCompile Include="src\Graphic\GDynPicControl.cpp" />
+    <ClCompile Include="src\Graphic\GDynPicModel.cpp" />
+    <ClCompile Include="src\Graphic\GDynPicView.cpp" />
+    <ClCompile Include="src\Graphic\GLineControl.cpp" />
+    <ClCompile Include="src\Graphic\GLineModel.cpp" />
+    <ClCompile Include="src\Graphic\GLineView.cpp" />
+    <ClCompile Include="src\Graphic\GPolyLineControl.cpp" />
+    <ClCompile Include="src\Graphic\GPolyLineModel.cpp" />
+    <ClCompile Include="src\Graphic\GPolyLineView.cpp" />
+    <ClCompile Include="src\Graphic\GRectangleControl.cpp" />
+    <ClCompile Include="src\Graphic\GRectangleModel.cpp" />
+    <ClCompile Include="src\Graphic\GRectangleView.cpp" />
+    <ClCompile Include="src\Graphic\GStickChartControl.cpp" />
+    <ClCompile Include="src\Graphic\GStickChartModel.cpp" />
+    <ClCompile Include="src\Graphic\GStickChartView.cpp" />
+    <ClCompile Include="src\PageFactory.cpp" />
+    <ClCompile Include="src\Parts\BtnPilotLampControl.cpp" />
+    <ClCompile Include="src\Parts\BtnPilotLampModel.cpp" />
+    <ClCompile Include="src\Parts\BtnPilotLampView.cpp" />
+    <ClCompile Include="src\Parts\DigitalDisplayControl.cpp" />
+    <ClCompile Include="src\Parts\DigitalDisplayModel.cpp" />
+    <ClCompile Include="src\Parts\DigitalDisplayView.cpp" />
+    <ClCompile Include="src\Parts\DigitalInputControl.cpp" />
+    <ClCompile Include="src\Parts\DigitalInputModel.cpp" />
+    <ClCompile Include="src\Parts\DigitalInputView.cpp" />
+    <ClCompile Include="src\Parts\DropMenuAdd.cpp" />
+    <ClCompile Include="src\Parts\DropMenuControl.cpp" />
+    <ClCompile Include="src\Parts\DropMenuItem.cpp" />
+    <ClCompile Include="src\Parts\DropMenuModel.cpp" />
+    <ClCompile Include="src\Parts\DropMenuUnit.cpp" />
+    <ClCompile Include="src\Parts\DropMenuView.cpp" />
+    <ClCompile Include="src\Parts\FluidUnitControl.cpp" />
+    <ClCompile Include="src\Parts\FluidUnitModel.cpp" />
+    <ClCompile Include="src\Parts\FluidUnitView.cpp" />
+    <ClCompile Include="src\Parts\GifPicControl.cpp" />
+    <ClCompile Include="src\Parts\GifPicModel.cpp" />
+    <ClCompile Include="src\Parts\GifPicView.cpp" />
+    <ClCompile Include="src\Parts\KeyBtnControl.cpp" />
+    <ClCompile Include="src\Parts\KeyBtnModel.cpp" />
+    <ClCompile Include="src\Parts\KeyBtnView.cpp" />
+    <ClCompile Include="src\Parts\KeypadControl.cpp" />
+    <ClCompile Include="src\Parts\KeypadModel.cpp" />
+    <ClCompile Include="src\Parts\KeypadView.cpp" />
+    <ClCompile Include="src\Parts\PilotLampControl.cpp" />
+    <ClCompile Include="src\Parts\PilotLampModel.cpp" />
+    <ClCompile Include="src\Parts\PilotLampView.cpp" />
+    <ClCompile Include="src\Parts\PieChartControl.cpp" />
+    <ClCompile Include="src\Parts\PieChartModel.cpp" />
+    <ClCompile Include="src\Parts\PieChartView.cpp" />
+    <ClCompile Include="src\Parts\SlideInputControl.cpp" />
+    <ClCompile Include="src\Parts\SlideInputModel.cpp" />
+    <ClCompile Include="src\Parts\SlideInputView.cpp" />
+    <ClCompile Include="src\Parts\StaticStringControl.cpp" />
+    <ClCompile Include="src\Parts\StaticStringModel.cpp" />
+    <ClCompile Include="src\Parts\StaticStringView.cpp" />
+    <ClCompile Include="src\Parts\StirrerControl.cpp" />
+    <ClCompile Include="src\Parts\StirrerModel.cpp" />
+    <ClCompile Include="src\Parts\StirrerView.cpp" />
+    <ClCompile Include="src\Parts\TableControl.cpp" />
+    <ClCompile Include="src\Parts\TableModel.cpp" />
+    <ClCompile Include="src\Parts\TableView.cpp" />
+    <ClCompile Include="src\Parts\DateControl.cpp" />
+    <ClCompile Include="src\Parts\DateModel.cpp" />
+    <ClCompile Include="src\Parts\DateView.cpp" />
+    <ClCompile Include="src\Parts\MotorControl.cpp" />
+    <ClCompile Include="src\Parts\MotorModel.cpp" />
+    <ClCompile Include="src\Parts\MotorView.cpp" />
+    <ClCompile Include="src\Parts\TimerControl.cpp" />
+    <ClCompile Include="src\Parts\TimerModel.cpp" />
+    <ClCompile Include="src\Parts\TimerView.cpp" />
+    <ClCompile Include="src\Parts\TrendChartControl.cpp" />
+    <ClCompile Include="src\Parts\TrendChartModel.cpp" />
+    <ClCompile Include="src\Parts\TrendChartView.cpp" />
+    <ClCompile Include="src\Parts\ValveControl.cpp" />
+    <ClCompile Include="src\Parts\ValveModel.cpp" />
+    <ClCompile Include="src\Parts\ValveView.cpp" />
+    <ClCompile Include="src\Parts\VarStringControl.cpp" />
+    <ClCompile Include="src\Parts\VarStringModel.cpp" />
+    <ClCompile Include="src\Parts\VarStringView.cpp" />
+    <ClCompile Include="src\Parts\WaterPumpControl.cpp" />
+    <ClCompile Include="src\Parts\WaterPumpModel.cpp" />
+    <ClCompile Include="src\Parts\WaterPumpView.cpp" />
+    <ClCompile Include="src\Parts\XYLineChartControl.cpp" />
+    <ClCompile Include="src\Parts\XYLineChartModel.cpp" />
+    <ClCompile Include="src\Parts\XYLineChartView.cpp" />
+    <ClCompile Include="src\Parts\XYTrendControl.cpp" />
+    <ClCompile Include="src\Parts\XYTrendModel.cpp" />
+    <ClCompile Include="src\Parts\XYTrendView.cpp" />
+    <ClCompile Include="src\Service\PcResourceService.cpp" />
+    <ClCompile Include="src\Storage\UIStorage.cpp" />
+    <ClCompile Include="src\TestDemo\GTestControl.cpp" />
+    <ClCompile Include="src\TestDemo\GTestModel.cpp" />
+    <ClCompile Include="src\TestDemo\GTestView.cpp" />
+    <ClCompile Include="src\TestDemo\TestBitVarControl.cpp" />
+    <ClCompile Include="src\TestDemo\TestBitVarModel.cpp" />
+    <ClCompile Include="src\TestDemo\TestBitVarView.cpp" />
+    <ClCompile Include="src\Utility\AdvancedGraphic.cpp" />
+    <ClCompile Include="src\Utility\CodeFormatUtility.cpp" />
+    <ClCompile Include="src\Utility\gifdec.c" />
+    <ClCompile Include="src\Utility\GraphicDrawHandle.cpp" />
+    <ClCompile Include="src\Utility\KeyInputUtility.cpp" />
+    <ClCompile Include="src\Utility\NoticesUtility.cpp" />
+    <ClCompile Include="src\Utility\PermUtility.cpp" />
+    <ClCompile Include="src\Utility\RotatePic.cpp" />
+    <ClCompile Include="src\Utility\RowTable.cpp" />
+    <ClCompile Include="src\Utility\ScreenSaver.cpp" />
+    <ClCompile Include="src\Utility\StringUtility.cpp" />
+    <ClCompile Include="src\Utility\SysSetApi.cpp" />
+    <ClCompile Include="src\Utility\TableBase.cpp" />
+    <ClCompile Include="src\Utility\ViewShowUtility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\AdvancedGraphic.h" />
+    <ClInclude Include="include\AlarmBarControl.h" />
+    <ClInclude Include="include\AlarmBarModel.h" />
+    <ClInclude Include="include\AlarmBarView.h" />
+    <ClInclude Include="include\AlarmGView.h" />
+    <ClInclude Include="include\BackLightControl.h" />
+    <ClInclude Include="include\BackLightModel.h" />
+    <ClInclude Include="include\BackLightView.h" />
+    <ClInclude Include="include\BarCodeControl.h" />
+    <ClInclude Include="include\BarCodeModel.h" />
+    <ClInclude Include="include\BarCodeView.h" />
+    <ClInclude Include="include\BuzzerControl.h" />
+    <ClInclude Include="include\BuzzerModel.h" />
+    <ClInclude Include="include\BuzzerView.h" />
+    <ClInclude Include="include\AlarmGControl.h" />
+    <ClInclude Include="include\AlarmGModel.h" />
+    <ClInclude Include="include\DashboardControl.h" />
+    <ClInclude Include="include\DashboardModel.h" />
+    <ClInclude Include="include\DashboardView.h" />
+    <ClInclude Include="include\ClockControl.h" />
+    <ClInclude Include="include\ClockModel.h" />
+    <ClInclude Include="include\ClockView.h" />
+    <ClInclude Include="include\AlarmDisplayControl.h" />
+    <ClInclude Include="include\AlarmDisplayModel.h" />
+    <ClInclude Include="include\AlarmDisplayView.h" />
+    <ClInclude Include="include\AlarmInputControl.h" />
+    <ClInclude Include="include\AlarmInputModel.h" />
+    <ClInclude Include="include\AlarmInputView.h" />
+    <ClInclude Include="include\AlarmWinControl.h" />
+    <ClInclude Include="include\AlarmWinModel.h" />
+    <ClInclude Include="include\AlarmWinView.h" />
+    <ClInclude Include="include\BtnFunctionControl.h" />
+    <ClInclude Include="include\BtnFunctionModel.h" />
+    <ClInclude Include="include\BtnFunctionView.h" />
+    <ClInclude Include="include\DataSampleControl.h" />
+    <ClInclude Include="include\DataSampleModel.h" />
+    <ClInclude Include="include\DataSampleView.h" />
+    <ClInclude Include="include\DataTableControl.h" />
+    <ClInclude Include="include\DataTableModel.h" />
+    <ClInclude Include="include\DataTableView.h" />
+    <ClInclude Include="include\DropMenuControl.h" />
+    <ClInclude Include="include\DropMenuItem.h" />
+    <ClInclude Include="include\DropMenuModel.h" />
+    <ClInclude Include="include\DropMenuUnit.h" />
+    <ClInclude Include="include\DropMenuView.h" />
+    <ClInclude Include="include\DrorMenuAdd.h" />
+    <ClInclude Include="include\FanControl.h" />
+    <ClInclude Include="include\FanModel.h" />
+    <ClInclude Include="include\FanView.h" />
+    <ClInclude Include="include\GFuncControl.h" />
+    <ClInclude Include="include\GFuncModel.h" />
+    <ClInclude Include="include\GFuncView.h" />
+    <ClInclude Include="include\GifPicControl.h" />
+    <ClInclude Include="include\GifPicModel.h" />
+    <ClInclude Include="include\GifPicView.h" />
+    <ClInclude Include="include\KeyInputUtility.h" />
+    <ClInclude Include="include\MotorControl.h" />
+    <ClInclude Include="include\MotorModel.h" />
+    <ClInclude Include="include\MotorView.h" />
+    <ClInclude Include="include\MultiPilotLampView.h" />
+    <ClInclude Include="include\MultiStatusKeypadControl.h" />
+    <ClInclude Include="include\MultiStatusKeypadModel.h" />
+    <ClInclude Include="include\MultiStatusKeypadView.h" />
+    <ClInclude Include="include\BtnPilotLampControl.h" />
+    <ClInclude Include="include\BtnPilotLampModel.h" />
+    <ClInclude Include="include\BtnPilotLampView.h" />
+    <ClInclude Include="include\BtnTriggleControl.h" />
+    <ClInclude Include="include\BtnTriggleModel.h" />
+    <ClInclude Include="include\BtnTriggleView.h" />
+    <ClInclude Include="include\CharacterDisplayControl.h" />
+    <ClInclude Include="include\CharacterDisplayModel.h" />
+    <ClInclude Include="include\CharacterDisplayView.h" />
+    <ClInclude Include="include\ChineseBtnControl.h" />
+    <ClInclude Include="include\ChineseBtnModel.h" />
+    <ClInclude Include="include\ChineseBtnView.h" />
+    <ClInclude Include="include\ChineseDisplayControl.h" />
+    <ClInclude Include="include\ChineseDisplayModel.h" />
+    <ClInclude Include="include\ChineseDisplayView.h" />
+    <ClInclude Include="include\ChineseInputControl.h" />
+    <ClInclude Include="include\ChineseInputModel.h" />
+    <ClInclude Include="include\ChineseInputView.h" />
+    <ClInclude Include="include\ControlFactory.h" />
+    <ClInclude Include="include\DateControl.h" />
+    <ClInclude Include="include\DateModel.h" />
+    <ClInclude Include="include\DateView.h" />
+    <ClInclude Include="include\DigitalDisplayControl.h" />
+    <ClInclude Include="include\DigitalDisplayModel.h" />
+    <ClInclude Include="include\DigitalDisplayView.h" />
+    <ClInclude Include="include\FluidUnitControl.h" />
+    <ClInclude Include="include\FluidUnitModel.h" />
+    <ClInclude Include="include\FluidUnitView.h" />
+    <ClInclude Include="include\GArcControl.h" />
+    <ClInclude Include="include\GArcModel.h" />
+    <ClInclude Include="include\GArcView.h" />
+    <ClInclude Include="include\GCircleControl.h" />
+    <ClInclude Include="include\GCircleModel.h" />
+    <ClInclude Include="include\GCircleView.h" />
+    <ClInclude Include="include\GDynPicControl.h" />
+    <ClInclude Include="include\GDynPicModel.h" />
+    <ClInclude Include="include\GDynPicView.h" />
+    <ClInclude Include="include\GLabelControl.h" />
+    <ClInclude Include="include\GLabelModel.h" />
+    <ClInclude Include="include\GLabelView.h" />
+    <ClInclude Include="include\GLineControl.h" />
+    <ClInclude Include="include\GLineModel.h" />
+    <ClInclude Include="include\GLineView.h" />
+    <ClInclude Include="include\GPolyLineControl.h" />
+    <ClInclude Include="include\GPolyLineModel.h" />
+    <ClInclude Include="include\GPolyLineView.h" />
+    <ClInclude Include="include\GRectangleControl.h" />
+    <ClInclude Include="include\GRectangleModel.h" />
+    <ClInclude Include="include\GRectangleView.h" />
+    <ClInclude Include="include\GScaleControl.h" />
+    <ClInclude Include="include\GScaleModel.h" />
+    <ClInclude Include="include\GScaleView.h" />
+    <ClInclude Include="include\GStickChartControl.h" />
+    <ClInclude Include="include\GStickChartModel.h" />
+    <ClInclude Include="include\GStickChartView.h" />
+    <ClInclude Include="include\GTestControl.h" />
+    <ClInclude Include="include\DigitalInputControl.h" />
+    <ClInclude Include="include\DigitalInputModel.h" />
+    <ClInclude Include="include\DigitalInputView.h" />
+    <ClInclude Include="include\CharacterInputControl.h" />
+    <ClInclude Include="include\CharacterInputModel.h" />
+    <ClInclude Include="include\CharacterInputView.h" />
+    <ClInclude Include="include\KeyBoardControl.h" />
+    <ClInclude Include="include\KeyBoardModel.h" />
+    <ClInclude Include="include\KeyBoardView.h" />
+    <ClInclude Include="include\KeyBtnControl.h" />
+    <ClInclude Include="include\KeyBtnModel.h" />
+    <ClInclude Include="include\KeyBtnView.h" />
+    <ClInclude Include="include\KeyMsgControl.h" />
+    <ClInclude Include="include\KeyMsgModel.h" />
+    <ClInclude Include="include\KeyMsgView.h" />
+    <ClInclude Include="include\KeypadControl.h" />
+    <ClInclude Include="include\KeypadModel.h" />
+    <ClInclude Include="include\KeypadView.h" />
+    <ClInclude Include="include\MultiPilotLampControl.h" />
+    <ClInclude Include="include\MultiPilotLampModel.h" />
+    <ClInclude Include="include\OperatorChartControl.h" />
+    <ClInclude Include="include\OperatorChartModel.h" />
+    <ClInclude Include="include\OperatorChartView.h" />
+    <ClInclude Include="include\OperatorGControl.h" />
+    <ClInclude Include="include\OperatorGModel.h" />
+    <ClInclude Include="include\PageFactory.h" />
+    <ClInclude Include="include\PcResourceService.h" />
+    <ClInclude Include="include\PieChartControl.h" />
+    <ClInclude Include="include\PieChartModel.h" />
+    <ClInclude Include="include\PieChartView.h" />
+    <ClInclude Include="include\PilotLampControl.h" />
+    <ClInclude Include="include\PilotLampModel.h" />
+    <ClInclude Include="include\PilotLampView.h" />
+    <ClInclude Include="include\PinYinPageControl.h" />
+    <ClInclude Include="include\PinYinPageModel.h" />
+    <ClInclude Include="include\PinYinPageView.h" />
+    <ClInclude Include="include\PinYinWindow.h" />
+    <ClInclude Include="include\PrintSetControl.h" />
+    <ClInclude Include="include\PrintSetModel.h" />
+    <ClInclude Include="include\RecipeChartControl.h" />
+    <ClInclude Include="include\RecipeChartModel.h" />
+    <ClInclude Include="include\RecipeChartView.h" />
+    <ClInclude Include="include\RecipeGControl.h" />
+    <ClInclude Include="include\RecipeGModel.h" />
+    <ClInclude Include="include\RecipeTransferControl.h" />
+    <ClInclude Include="include\RecipeTransferModel.h" />
+    <ClInclude Include="include\RecipeTransferView.h" />
+    <ClInclude Include="include\RegionFunctionControl.h" />
+    <ClInclude Include="include\RegionFunctionModel.h" />
+    <ClInclude Include="include\RegionFunctionView.h" />
+    <ClInclude Include="include\RowTable.h" />
+    <ClInclude Include="include\SampleGModel.h" />
+    <ClInclude Include="include\ScreenSaver.h" />
+    <ClInclude Include="include\ServiceHelper.h" />
+    <ClInclude Include="include\SlideInputControl.h" />
+    <ClInclude Include="include\SlideInputModel.h" />
+    <ClInclude Include="include\SlideInputView.h" />
+    <ClInclude Include="include\StaticStringControl.h" />
+    <ClInclude Include="include\StaticStringModel.h" />
+    <ClInclude Include="include\StaticStringView.h" />
+    <ClInclude Include="include\StirrerControl.h" />
+    <ClInclude Include="include\StirrerModel.h" />
+    <ClInclude Include="include\StirrerView.h" />
+    <ClInclude Include="include\SysSetApi.h" />
+    <ClInclude Include="include\SysSetGControl.h" />
+    <ClInclude Include="include\SysSetGModel.h" />
+    <ClInclude Include="include\TableBase.h" />
+    <ClInclude Include="include\TableControl.h" />
+    <ClInclude Include="include\TableModel.h" />
+    <ClInclude Include="include\TableView.h" />
+    <ClInclude Include="include\TestDemoConfig.h" />
+    <ClInclude Include="include\TimerControl.h" />
+    <ClInclude Include="include\TimerModel.h" />
+    <ClInclude Include="include\TimerView.h" />
+    <ClInclude Include="include\TrendChartControl.h" />
+    <ClInclude Include="include\TrendChartModel.h" />
+    <ClInclude Include="include\TrendChartView.h" />
+    <ClInclude Include="include\UICommand.h" />
+    <ClInclude Include="include\UIData.h" />
+    <ClInclude Include="include\ValveControl.h" />
+    <ClInclude Include="include\ValveModel.h" />
+    <ClInclude Include="include\ValveView.h" />
+    <ClInclude Include="include\UIStorage.h" />
+    <ClInclude Include="include\VarStringControl.h" />
+    <ClInclude Include="include\VarStringModel.h" />
+    <ClInclude Include="include\StringUtility.h" />
+    <ClInclude Include="include\SampleGCtrl.h" />
+    <ClInclude Include="include\VarStringView.h" />
+    <ClInclude Include="include\ViewShowUtility.h" />
+    <ClInclude Include="include\WaterPumpControl.h" />
+    <ClInclude Include="include\WaterPumpModel.h" />
+    <ClInclude Include="include\WaterPumpView.h" />
+    <ClInclude Include="include\XYLineChartControl.h" />
+    <ClInclude Include="include\XYLineChartModel.h" />
+    <ClInclude Include="include\XYLineChartView.h" />
+    <ClInclude Include="include\ScaleControl.h" />
+    <ClInclude Include="include\ScaleModel.h" />
+    <ClInclude Include="include\ScaleView.h" />
+    <ClInclude Include="include\XYTrendControl.h" />
+    <ClInclude Include="include\XYTrendModel.h" />
+    <ClInclude Include="include\XYTrendView.h" />
+    <ClInclude Include="include\UIServer.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
