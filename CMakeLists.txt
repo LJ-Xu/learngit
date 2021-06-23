@@ -143,7 +143,11 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/../uimainlib/HmiPart/Service/XJSocket XJS
 set (EXTRA_LIBS ${EXTRA_LIBS} XJSocket)
 elseif(EXISTS "${PROJECT_SOURCE_DIR}/../umlib")
 set (EXTRA_LIBS ${EXTRA_LIBS} DataService DataClient XJSocket)
-link_directories(${PROJECT_SOURCE_DIR}/../umlib)
+  IF(LX32)
+    link_directories(${PROJECT_SOURCE_DIR}/../umlib/OutputLib/ubuntu)
+  else()
+    link_directories(${PROJECT_SOURCE_DIR}/../umlib/OutputLib/armlinux)
+  endif()
 endif()
  
 
