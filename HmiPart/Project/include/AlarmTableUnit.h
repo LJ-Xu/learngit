@@ -3,7 +3,7 @@
 #include "AlarmSeekUnit.h"
 namespace Project
 {
-	enum AlarmSeekMode { AlarmSeekDATE, AlarmSeekTIME, AlarmSeekGROUP, AlarmSeekNUM, AlarmSeekLEVEL, AlarmSeekREG };
+	enum AlarmSeekMode :char { AlarmSeekDATE, AlarmSeekTIME, AlarmSeekGROUP, AlarmSeekNUM, AlarmSeekLEVEL, AlarmSeekREG };
 
 	class AlarmTableUnit : public AlarmSeekUnit
 	{

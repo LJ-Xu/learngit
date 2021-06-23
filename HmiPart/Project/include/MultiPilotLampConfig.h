@@ -20,7 +20,7 @@ namespace Project
 			archive(Mode, Value, RegVar);
 		}
 	};
-	enum Logic
+	enum Logic:char
 	{
 		NONE,
 		AND,

@@ -3,7 +3,7 @@
 #include "XYLineChannel.h"
 namespace Project
 {
-	enum FullSampleAct {StopSample, CleanSample, CoverSample};
+	enum FullSampleAct :char {StopSample, CleanSample, CoverSample};
 	struct ReferencePolyLines
 	{
 		int LineColor;

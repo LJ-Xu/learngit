@@ -14,7 +14,7 @@
 #include "BtnUnit.h"
 namespace Project
 {
-	enum BtnAction { BtnSETON, BtnSETOFF, BtnOPPOSITE, BtnSHORTON };
+	enum BtnAction :char { BtnSETON, BtnSETOFF, BtnOPPOSITE, BtnSHORTON };
 	class KeypadConfig : public BtnUnit
 	{
 	public:

@@ -32,12 +32,11 @@ namespace Project
 		InputSequence Sequence;									//输入次序
 		map<int, vector<WinCtrlID>> SequenceGroup;				//输入次序组
 
-		int PinYinIdx = 25900;
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
 			archive(WriteVar, PswMode, KeyMethod, Sequence, SequenceGroup,
-				ResBef, ResAft, Rule, Key, TextStyle, Text, PinYinIdx,
+				ResBef, ResAft, Rule, Key, TextStyle, Text, 
 				VOffX, VOffY, Perm, Width, Height, X, Y, IsEnable, IsRecord, CtrlName);
 		}
 

@@ -18,7 +18,7 @@
 #include <string>
 namespace Project
 {
-	enum TrendLineType {TrendLine,TrendCurve,TrendDot,TrendLineDot};
+	enum TrendLineType:int {TrendLine,TrendCurve,TrendDot,TrendLineDot};
 	class TrendChannel
 	{
 	public:

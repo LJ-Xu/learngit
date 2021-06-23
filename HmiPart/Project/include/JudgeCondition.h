@@ -4,7 +4,7 @@
 #include "Sysdef.h"
 namespace Project
 {
-	enum Conditions:int
+	enum Conditions:char
 	{
 		LT,			//小于
 		GT,			//大于

@@ -19,7 +19,7 @@
 #include "CerealCommon.hpp"
 namespace Project
 {
-	enum NotifyBitMode { SetON, SetOFF, Rising, Falling };
+	enum NotifyBitMode :char { SetON, SetOFF, Rising, Falling };
 
 	struct BitNotices
 	{

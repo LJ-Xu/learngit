@@ -5,14 +5,14 @@
 using namespace std;
 namespace Project
 {
-	enum PortType
+	enum PortType :char
 	{
 		Download = 0,//下载口
 		PLCPort,//PLC口
 		NetPort,//网口
 		PortNum
 	};
-	enum PointType
+	enum PointType :char
 	{
 		RS232, RS485, RS422, CAN, PointNum
 	};

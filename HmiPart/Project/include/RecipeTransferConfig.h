@@ -14,7 +14,7 @@
 #include "BtnUnit.h"
 namespace Project
 {
-	enum RecipeTransferAction { DownLoadToPLC, UpLoadFromPLC, RecipeReg };
+	enum RecipeTransferAction :char { DownLoadToPLC, UpLoadFromPLC, RecipeReg };
 	class RecipeTransferConfig : public BtnUnit
 	{
 	public:

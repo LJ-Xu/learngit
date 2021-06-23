@@ -4,7 +4,7 @@
 namespace Project
 {
 	using namespace std;
-	enum CursorSize{ 
+	enum CursorSize :char {
 		B20x20, W20x20,
 		B30x30, W30x30,
 		B40x40, W40x40,
@@ -80,7 +80,7 @@ namespace Project
 				IsRemoteMonitor, Iscalibrate, IsFindUDisk);
 		}
 	};
-	enum ClockWriteMode	{ ClockWriteContinue, ClockWriteTrigger, ClockWriteCycle };
+	enum ClockWriteMode :char { ClockWriteContinue, ClockWriteTrigger, ClockWriteCycle };
 	struct ClockSet
 	{
 		bool IsbanClockSet;			// «∑ÒΩ˚÷π ±÷”…Ë÷√

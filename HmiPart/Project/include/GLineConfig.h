@@ -25,7 +25,7 @@
 
 namespace Project
 {
-	enum ArrowType { TriangleArrow, Arrow, SolidArrow, RectArrow, DotArrow };
+	enum ArrowType:char { TriangleArrow, Arrow, SolidArrow, RectArrow, DotArrow };
 	class BaseArrow
 	{
 	public:

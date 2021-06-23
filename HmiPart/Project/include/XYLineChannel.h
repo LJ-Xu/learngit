@@ -6,8 +6,8 @@
 #include <vector>
 namespace Project
 {
-	enum XYLineMode	{ Line, Xshadow, Yshadow, CurveLine, Dot ,LineDot	};
-	enum DotStyle { FilledRect, FilledTriangle, FilledCricle, Rect, Triangel, Cricle, Fork };
+	enum XYLineMode :char { Line, Xshadow, Yshadow, CurveLine, Dot ,LineDot	};
+	enum DotStyle :char { FilledRect, FilledTriangle, FilledCricle, Rect, Triangel, Cricle, Fork };
 	class XYLineChannel 
 	{
 	public:
