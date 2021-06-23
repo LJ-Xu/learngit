@@ -24,8 +24,8 @@ namespace UI
 		chartBgColor_ = fl_rgb_color(RGBColor(model->ChartXYLineConfig.LineChartBackColor));
 		scaleBgColor_ = fl_rgb_color(RGBColor(model->ChartXYLineConfig.ScaleAreaBackColor));
 		useGrid = model->ChartXYLineConfig.UseGrid;
-		useXAxis = model->ChartXYLineConfig.UseYScale;
-		useYAxis = model->ChartXYLineConfig.UseXScale;
+		useXAxis = model->ChartXYLineConfig.UseXScale;
+		useYAxis = model->ChartXYLineConfig.UseYScale;
 		if (model->ChartXYLineConfig.XScaleSet.MarkType != Project::ScaleMarkType::NullSacle)
 		{
 			xscalefontSize_ = model->ChartXYLineConfig.XScaleSet.ScaleMarkSize;
