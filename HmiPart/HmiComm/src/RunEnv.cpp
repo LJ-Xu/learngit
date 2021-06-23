@@ -26,6 +26,18 @@ bool RunEnv::Init()
 	int port = 0;
 	if(sscanf(pv, "%d", &port)>0)
 		Cnf.SrvPort = port;
+
+
+	pv = ini.GetValue("run", "AlarmPath");
+	if (pv == nullptr)return false;
+	Cnf.AlarmPath = System::GetAbsPath(pv);
+	pv = ini.GetValue("run", "SamplePath");
+	if (pv == nullptr)return false;
+	Cnf.SamplePath = System::GetAbsPath(pv);
+	pv = ini.GetValue("run", "OperationPath");
+	if (pv == nullptr)return false;
+	Cnf.OperationPath = System::GetAbsPath(pv);
+
 	pv = ini.GetValue("log", "CnfPath"); if (pv == nullptr)return false;
 	Cnf.LogCnfPath = System::GetAbsPath(pv);
 

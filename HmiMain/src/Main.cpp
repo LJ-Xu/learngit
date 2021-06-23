@@ -201,7 +201,13 @@ static void LoadParam(Param& param)
 	
 	RunEnv::Init();	
 	if (!param.Cnf.BinPath.empty())
-		RunEnv::Cnf = param.Cnf;
+		RunEnv::Cnf.BinPath = param.Cnf.BinPath;
+	if (!param.Cnf.AlarmPath.empty())
+		RunEnv::Cnf.AlarmPath = param.Cnf.AlarmPath;
+	if (!param.Cnf.SamplePath.empty())
+		RunEnv::Cnf.SamplePath = param.Cnf.SamplePath;
+	if (!param.Cnf.OperationPath.empty())
+		RunEnv::Cnf.OperationPath = param.Cnf.OperationPath;
 	Logger::SetFlag(true);
 	Logger::Ins().Init(RunEnv::Cnf.LogCnfPath);
 }

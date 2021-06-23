@@ -11,6 +11,9 @@ struct RunConfig
 	int   SrvPort;
 	std::string LogCnfPath;
 	bool IsDebug; //是否为debug方式运行
+	std::string AlarmPath;
+	std::string SamplePath;
+	std::string OperationPath;
 };
 struct HMIEvent
 {

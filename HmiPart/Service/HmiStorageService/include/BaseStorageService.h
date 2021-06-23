@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include "sqlite3.h"
+#include "RunEnv.h"
 #define SQLCMDLEN 512
 using namespace std;
 

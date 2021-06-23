@@ -7,7 +7,8 @@ namespace Storage
 
 	SampleStorageService::SampleStorageService() : 
 		//BaseStorageService("Sample.db", "Sample") {
-		BaseStorageService("././HMI/Sample.db", "Sample") {
+		BaseStorageService(RunEnv::Cnf.SamplePath, "Sample") {
+		//BaseStorageService("././HMI/Sample.db", "Sample") {
 		// 创建内存数据库
 		if (Create()) {
 			Close();
