@@ -40,14 +40,14 @@ namespace Project
 	//	{FunctionName::PrintScreenFunc,[]() {return NewFunc<PrintScreen>(); }},
 	//};
 
-	enum CoilAction { SETON, SETOFF, OPPOSITE };
-	enum DataAction { CONSTANT, ADD, MINUS, INCREASE, DECREASE };
-	enum MathAction { ADDTION, SUB, MULTIPLY, DIVISION };
-	enum FrameAction { START, FRONT, NUM };
-	enum WinAction { SWITCH, OPEN, RETURN };
-	enum FlieLocation { USB, SD, HMI, FileREG };
-	enum FlieNameType { FIX, DATA, DYNAMIC };
-	enum WinSrc { CURRENT, REGVAR, WINNO };
+	enum CoilAction:char { SETON, SETOFF, OPPOSITE };
+	enum DataAction :char { CONSTANT, ADD, MINUS, INCREASE, DECREASE };
+	enum MathAction :char { ADDTION, SUB, MULTIPLY, DIVISION };
+	enum FrameAction :char { START, FRONT, NUM };
+	enum WinAction :char { SWITCH, OPEN, RETURN };
+	enum FlieLocation :char { USB, SD, HMI, FileREG };
+	enum FlieNameType :char { FIX, DATA, DYNAMIC };
+	enum WinSrc :char { CURRENT, REGVAR, WINNO };
 	
 	struct DataContent
 	{
@@ -109,7 +109,7 @@ namespace Project
 		}SetData;
 		struct Arithmetic 
 		{
-			enum MathDataType
+			enum MathDataType :char
 			{
 				BCD_16,
 				BCD_32,

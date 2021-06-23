@@ -10,10 +10,10 @@
  * modify   :
  *          :
  *******************************************************************************/
-#include "stdafx.h"
+//#include "stdafx.h"
+#include "PieChartView.h"
 #include "Message.h"
 #include "HMIWindow.h"
-#include "PieChartView.h"
 #include "PieChartControl.h"
 #include "ViewShowUtility.h"
 #include "PermUtility.h"

@@ -44,8 +44,8 @@ namespace Project
 				ViceScaleNum, ViceScaleLen, ScaleStyle);
 		}
 	};
-	enum YScaleMode	{ Custom, Channel, All };
-	enum YScaleTag { NullSacle, NumSacle, PercentSacle };
+	enum YScaleMode :char { Custom, Channel, All };
+	enum YScaleTag :char { NullSacle, NumSacle, PercentSacle };
 
 	class YAxis : public AxisSetting
 	{
@@ -80,7 +80,7 @@ namespace Project
 			archive(ProjectName, DescribeName);
 		}
 	};
-	enum TrendSeekMode { DATE, TIME, CHANNELNO, REG };
+	enum TrendSeekMode :char { DATE, TIME, CHANNELNO, REG };
 	class TrendViewUnit : public AlarmSeekUnit
 	{
 	public:

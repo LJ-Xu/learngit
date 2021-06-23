@@ -19,7 +19,7 @@
 #include "BaseLine.h"
 namespace Project
 {
-	enum SlideDir {SildeUp, SildeDown, SildeLeft, SildeRight};
+	enum SlideDir :char {SildeUp, SildeDown, SildeLeft, SildeRight};
 	class SlideInputConfig : public MoveableDisplayUnit
 	{
 	public:

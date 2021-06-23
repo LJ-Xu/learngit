@@ -306,95 +306,6 @@ namespace UI
 		}
 	}
 
-
-	//int SampleGCtrl::CopyIntegerToChar(char * ch, int value)
-	//{
-	//	char digit[20];
-	//	sprintf(digit, "%d", value);
-	//	memcpy(ch, digit, strlen(digit));
-	//	return strlen(digit);
-	//}
-
-	//int SampleGCtrl::CopyDataTypeStrToChar(char* dst,const Project::BaseVar* var)
-	//{
-	//	if (!var)
-	//		return 0;
-	//	int pos=0;
-	//	switch (var->RegType)
-	//	{
-	//	case Project::LocalRegType::TP_PSB:
-	//		memcpy(dst, "PSB", 3);
-	//		pos += 3;
-	//		break;
-	//	case Project::LocalRegType::TP_SPSB:
-	//		memcpy(dst, "SPSB", 4);
-	//		pos += 4;
-	//		break;
-	//	case Project::LocalRegType::TP_PSW:
-	//		memcpy(dst, "PSW", 3);
-	//		pos += 3;
-	//		break;
-	//	case Project::LocalRegType::TP_SPSW:
-	//		memcpy(dst, "SPSW", 4);
-	//		pos += 4;
-	//		break;
-	//	case Project::LocalRegType::TP_PFW:
-	//		memcpy(dst, "PFW", 3);
-	//		pos += 3;
-	//		break;
-	//	case Project::LocalRegType::TP_SPFW:
-	//		memcpy(dst, "SPFW", 4);
-	//		pos += 4;
-	//		break;
-	//	default:
-	//		break;
-	//	}
-	//	pos += CopyIntegerToChar(dst + pos, var->Addr);
-	//	return pos;
-	//}
-
-	//string SampleGCtrl::GetSavePath(int pathMode, Project::DataVarId& addrPath, int nameMode, string fileName, Project::DataVarId& addrName)
-	//{
-	//	std::string filePath = "";
-	//	switch (pathMode)
-	//	{
-	//	case 1://Hmi
-	//		filePath.append("HMI//");
-	//		break;
-	//	case 2://SD
-	//		filePath.append("SDCARD//");
-	//		break;
-	//	case 3://USB
-	//		break;
-	//		filePath.append("USB//");
-	//	case 4:
-	//		if (NULL_VID_VALUE != addrPath.Vid)
-	//		{
-	//			filePath.append(DataApi::AppString(addrPath));
-	//			filePath.append("//");
-	//		}
-	//		break;
-	//	}
-	//	switch (nameMode)
-	//	{
-	//	case 1://固定文件名
-	//		filePath.append(fileName);
-	//		break;
-	//	case 2://日期指定
-	//		filePath.append(System::GetCurrentDateToString());
-	//		break;
-	//	case 3://动态文件名
-	//		if (NULL_VID_VALUE != addrName.Vid)
-	//		{
-	//			filePath.append(DataApi::AppString(addrName));
-	//			filePath.append("//");
-	//		}
-	//		break;
-	//	}
-	//	filePath.append(".csv");
-	//	return filePath;
-	//}
-
 	void SampleValue_CB(void * param) {
 		Project::SampleInfoRes * sampleGroup = (Project::SampleInfoRes *)param;
 		if (sampleGroup->SampleStoreInfo.StopFlag)
@@ -402,7 +313,7 @@ namespace UI
 			return;
 		}
 		DDWORD date = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-		BOOL updateFlag = false;
+		BOOL updateFlag = FALSE;
 		for (size_t i = 0; i < sampleGroup->SimpleChannelLst.size(); ++i) {
 			Project::SampleChannel channel = sampleGroup->SimpleChannelLst[i];
 			double a = UIData::Number<double>(channel.SampleAddr);

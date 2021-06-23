@@ -11,6 +11,8 @@
  *          :
  *******************************************************************************/
 #pragma once
+#include "GraphicDrawHandle.h"
+#include "stdafx.h"
 #include "BasicView.h"
 #include <FL/Fl_Box.H>
 #include <FL/fl_draw.H>
@@ -18,7 +20,6 @@
 #include <FL/Fl_Chart.H>
 #include "PieChartConfig.h"
 
-using namespace std;
 
 namespace UI
 {
@@ -39,7 +40,7 @@ namespace UI
 		BasicView BaseView;
 		std::vector<int> ValueSnapList;
 		int TotalValue;
-		vector<std::pair<int, int>> TxtPosList;
+		std::vector<std::pair<int, int>> TxtPosList;
 	};
 }
 

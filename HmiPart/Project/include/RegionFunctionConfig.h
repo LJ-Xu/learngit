@@ -4,7 +4,7 @@
 #include "MoveableDisplayUnit.h"
 namespace Project
 {
-	enum ActionMode {Startframe, CloseFrame, CoilTrigger, FuncTimer, FuncContinue, FirstDownload, FirstPowerON, NumLogic};
+	enum ActionMode :char {Startframe, CloseFrame, CoilTrigger, FuncTimer, FuncContinue, FirstDownload, FirstPowerON, NumLogic};
 	class RegionFunctionConfig :public MoveableDisplayUnit
 	{
 	public:

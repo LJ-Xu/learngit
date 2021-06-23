@@ -6,13 +6,13 @@
 #include "ImageResId.h"
 namespace Project
 {
-	enum PicSwitchMode
+	enum PicSwitchMode:char
 	{
 		Mode_OneWay = 0,	//µ¥³Ì
 		Mode_GondBack		//Íù·µ
 	};
 
-	enum PicSwitchSeq
+	enum PicSwitchSeq:char
 	{
 		Seq_Order = 0,		//Ë³Ðò
 		Seq_Reverse,		//ÄæÐò

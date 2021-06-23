@@ -93,7 +93,7 @@ namespace UI
 			int time[3] = { 0 };
 			tm searchlocal;
 			int size = 3 < mode_->OperatorConfig.SearchRegVarId.size() ? 3 : mode_->OperatorConfig.SearchRegVarId.size();
-			for (unsigned i = 0; i < size;i++)
+			for (int i = 0; i < size;i++)
 				time[i] = UI::UIData::Number<int>(mode_->OperatorConfig.SearchRegVarId[i]);
 			searchlocal.tm_sec = 0;
 			searchlocal.tm_min = 0;

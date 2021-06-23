@@ -14,8 +14,8 @@
 #include "MoveableDisplayUnit.h"
 namespace Project
 {
-	enum TimerStartCond { StartBitChange, StartValueChange, TimerStartWin, StartCloseWin };
-	enum TimerStopCond	{ StopCloseWin, StopReachTime, StopBitChange };
+	enum TimerStartCond :char { StartBitChange, StartValueChange, TimerStartWin, StartCloseWin };
+	enum TimerStopCond :char { StopCloseWin, StopReachTime, StopBitChange };
 
 	class TimerConfig :public MoveableDisplayUnit
 	{

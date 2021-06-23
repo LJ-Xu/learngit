@@ -2,11 +2,11 @@
 #include "MoveableDisplayUnit.h"
 namespace Project
 {
-	enum PrinterType {SerialPrinter,USBPrinter,NetPrinter};
-	enum CutPaperStyle {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
+	enum PrinterType :char {SerialPrinter, USBPrinter, NetPrinter};
+	enum CutPaperStyle :char {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
 		B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10	};
-	enum PaperSize {NoCut,FullCut,HalfCut};
-	enum PrintWin {PrintCurrentWin,PrintRegWin,PrintWinNo};
+	enum PaperSize :char {NoCut, FullCut, HalfCut};
+	enum PrintWin :char {PrintCurrentWin, PrintRegWin, PrintWinNo};
 	class PrintSetConfig :public MoveableDisplayUnit
 	{
 	public:
