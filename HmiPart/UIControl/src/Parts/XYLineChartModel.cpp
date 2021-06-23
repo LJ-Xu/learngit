@@ -147,7 +147,7 @@ namespace UI
 			if (json.HasMember("XSecondaryScaleLen"))
 				ChartXYLineConfig.XScaleSet.SecondaryScaleLen = json["XSecondaryScaleLen"].GetInt();
 			if (json.HasMember("XScaleMarkShowNumber"))
-				ChartXYLineConfig.XScaleSet.UseScaleMark = json["XScaleMarkShowNumber"].GetBool();
+				ChartXYLineConfig.XScaleSet.MarkType = (Project::ScaleMarkType)json["XScaleMarkShowNumber"].GetInt();
 			if (json.HasMember("XScaleMarkFont") && !json["XScaleMarkFont"].IsNull())
 				ChartXYLineConfig.XScaleSet.ScaleMarkFont = json["XScaleMarkFont"].GetString();
 			if (json.HasMember("XScaleMarkSize"))
@@ -182,7 +182,7 @@ namespace UI
 			if (json.HasMember("YSecondaryScaleLen"))
 				ChartXYLineConfig.YScaleSet.SecondaryScaleLen = json["YSecondaryScaleLen"].GetInt();
 			if (json.HasMember("YScaleMarkShowNumber"))
-				ChartXYLineConfig.YScaleSet.UseScaleMark = json["YScaleMarkShowNumber"].GetBool();
+				ChartXYLineConfig.YScaleSet.MarkType = (Project::ScaleMarkType)json["YScaleMarkShowNumber"].GetInt();
 			if (json.HasMember("YScaleMarkFont") && !json["YScaleMarkFont"].IsNull())
 				ChartXYLineConfig.YScaleSet.ScaleMarkFont = json["YScaleMarkFont"].GetString();
 			if (json.HasMember("YScaleMarkSize"))

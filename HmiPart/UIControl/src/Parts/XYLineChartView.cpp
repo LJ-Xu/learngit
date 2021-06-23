@@ -26,7 +26,7 @@ namespace UI
 		useGrid = model->ChartXYLineConfig.UseGrid;
 		useXAxis = model->ChartXYLineConfig.UseYScale;
 		useYAxis = model->ChartXYLineConfig.UseXScale;
-		if (model->ChartXYLineConfig.XScaleSet.UseScaleMark)
+		if (model->ChartXYLineConfig.XScaleSet.MarkType != Project::ScaleMarkType::NullSacle)
 		{
 			xscalefontSize_ = model->ChartXYLineConfig.XScaleSet.ScaleMarkSize;
 			xscalefontStyle_ = UI::IResourceService::GetFontIdx(model->ChartXYLineConfig.XScaleSet.ScaleMarkFont);
@@ -34,7 +34,7 @@ namespace UI
 		}
 		xscaleInterval_ = model->ChartXYLineConfig.XaxisLen / model->ChartXYLineConfig.XScaleSet.PrimaryScaleNum;
 		
-		if (model->ChartXYLineConfig.YScaleSet.UseScaleMark)
+		if (model->ChartXYLineConfig.XScaleSet.MarkType != Project::ScaleMarkType::NullSacle)
 		{
 			yscalefontSize_ = model->ChartXYLineConfig.YScaleSet.ScaleMarkSize;
 			yscalefontStyle_ = UI::IResourceService::GetFontIdx(model->ChartXYLineConfig.YScaleSet.ScaleMarkFont);
@@ -83,11 +83,12 @@ namespace UI
 	}
 
 	/*转换数据显示格式*/
-	string XYLineChartView::ChangeDisplayFormat(float value, int integer, int decimal)
+	string XYLineChartView::ChangeDisplayFormat(float value, Project::ScaleMark style)
 	{
 		shared_ptr<XYLineChartModel> model = BaseView.GetModel<XYLineChartModel>();
+		int integer = style.IntegerNum, decimal = style.DecimalnNum;
 		string data = to_string(value);
-		string intString, floatString;
+		string intString = "", floatString;
 		int pos = data.find(".");
 		if (pos == 0)	//小数点在头部
 		{
@@ -120,12 +121,25 @@ namespace UI
 			string maxString;
 			for (size_t i = 0; i < (size_t)integer; i++)
 				maxString += "*";
+			if (style.MarkType == Project::ScaleMarkType::PercentSacle)
+				maxString += "%";
 			return maxString;
 		}
 		if (decimal)
-			return intString + "." + floatString;
+		{
+			if (style.MarkType == Project::ScaleMarkType::PercentSacle)
+				return intString + "." + floatString + "%";
+			else if(style.MarkType == Project::ScaleMarkType::NumSacle)
+				return intString + "." + floatString;
+		}
 		else
-			return intString;
+		{
+			if (style.MarkType == Project::ScaleMarkType::PercentSacle)
+				return intString + "%";
+			else if (style.MarkType == Project::ScaleMarkType::NumSacle)
+				return intString;
+		}
+		return intString;
 	}
 
 
@@ -167,8 +181,12 @@ namespace UI
 			}
 		}
 		/*绘制坐标*/
-		float numInterval = (float)(model->ChartXYLineConfig.YScaleSet.UpperLimit - model->ChartXYLineConfig.YScaleSet.LowerLimit) / (float)model->ChartXYLineConfig.XScaleSet.PrimaryScaleNum;
-		if (model->ChartXYLineConfig.YScaleSet.UseScaleMark)	
+		float numInterval;
+		if (model->ChartXYLineConfig.YScaleSet.MarkType == Project::ScaleMarkType::PercentSacle)		//百分比
+			numInterval = 100.0 / (float)model->ChartXYLineConfig.YScaleSet.PrimaryScaleNum;
+		else
+			numInterval = (float)(model->ChartXYLineConfig.YScaleSet.UpperLimit - model->ChartXYLineConfig.YScaleSet.LowerLimit) / (float)model->ChartXYLineConfig.YScaleSet.PrimaryScaleNum;
+		if (model->ChartXYLineConfig.YScaleSet.MarkType != Project::ScaleMarkType::NullSacle)
 		{
 			/*设置字体*/
 			fl_font(yscalefontStyle_, yscalefontSize_);
@@ -176,10 +194,20 @@ namespace UI
 			fl_color(yscalefontColor_);
 			for (size_t i = 0; i < model->ChartXYLineConfig.YScaleInfo.size(); i++)
 			{
-				float num = numInterval * (float)i + (float)model->ChartXYLineConfig.YScaleSet.LowerLimit;
-				if (i == model->ChartXYLineConfig.YScaleInfo.size() - 1)
-					num = (float)model->ChartXYLineConfig.YScaleSet.UpperLimit;
-				model->ChartXYLineConfig.YScaleInfo[i].ScaleContent = ChangeDisplayFormat(num,model->ChartXYLineConfig.YScaleSet.IntegerNum, model->ChartXYLineConfig.YScaleSet.DecimalnNum);
+				float num;
+				if (model->ChartXYLineConfig.YScaleSet.MarkType == Project::ScaleMarkType::PercentSacle)
+				{
+					num = numInterval * (float)i;
+					if (i == model->ChartXYLineConfig.YScaleInfo.size() - 1)
+						num = 100.0;
+				}
+				else if (model->ChartXYLineConfig.YScaleSet.MarkType == Project::ScaleMarkType::NumSacle)
+				{
+					num = numInterval * (float)i + (float)model->ChartXYLineConfig.YScaleSet.LowerLimit;
+					if (i == model->ChartXYLineConfig.YScaleInfo.size() - 1)
+						num = (float)model->ChartXYLineConfig.YScaleSet.UpperLimit;
+				}
+				model->ChartXYLineConfig.YScaleInfo[i].ScaleContent = ChangeDisplayFormat(num,model->ChartXYLineConfig.YScaleSet);
 				fl_draw(model->ChartXYLineConfig.YScaleInfo[i].ScaleContent.data(),
 					model->ChartXYLineConfig.YScaleInfo[i].Coordinate.X + model->ChartXYLineConfig.OffX,
 					model->ChartXYLineConfig.YScaleInfo[i].Coordinate.Y + model->ChartXYLineConfig.OffY,
@@ -315,8 +343,12 @@ namespace UI
 			}
 		}
 		/*绘制坐标*/
-		float numInterval = (float)(model->ChartXYLineConfig.XScaleSet.UpperLimit - model->ChartXYLineConfig.XScaleSet.LowerLimit) / (float)model->ChartXYLineConfig.XScaleSet.PrimaryScaleNum;
-		if (model->ChartXYLineConfig.XScaleSet.UseScaleMark)	//使用时间并且每屏时间模式
+		float numInterval;
+		if (model->ChartXYLineConfig.XScaleSet.MarkType == Project::ScaleMarkType::PercentSacle)		//百分比
+			numInterval = 100.0 / (float)model->ChartXYLineConfig.XScaleSet.PrimaryScaleNum;
+		else
+			numInterval = (float)(model->ChartXYLineConfig.XScaleSet.UpperLimit - model->ChartXYLineConfig.XScaleSet.LowerLimit) / (float)model->ChartXYLineConfig.XScaleSet.PrimaryScaleNum;
+		if (model->ChartXYLineConfig.XScaleSet.MarkType != Project::ScaleMarkType::NullSacle)	
 		{
 			/*设置字体*/
 			fl_font(xscalefontStyle_, xscalefontSize_);
@@ -324,10 +356,20 @@ namespace UI
 			fl_color(xscalefontColor_);
 			for (size_t i = 0; i < model->ChartXYLineConfig.XScaleInfo.size(); i++)
 			{
-				float num = numInterval * (float)i + (float)model->ChartXYLineConfig.XScaleSet.LowerLimit;
-				if (i == model->ChartXYLineConfig.XScaleInfo.size() - 1)
-					num = (float)model->ChartXYLineConfig.XScaleSet.UpperLimit;
-				model->ChartXYLineConfig.XScaleInfo[i].ScaleContent = ChangeDisplayFormat(num, model->ChartXYLineConfig.XScaleSet.IntegerNum, model->ChartXYLineConfig.XScaleSet.DecimalnNum);
+				float num;
+				if (model->ChartXYLineConfig.XScaleSet.MarkType == Project::ScaleMarkType::PercentSacle)
+				{
+					num = numInterval * (float)i;
+					if (i == model->ChartXYLineConfig.XScaleInfo.size() - 1)
+						num = 100.0;
+				}
+				else if (model->ChartXYLineConfig.XScaleSet.MarkType == Project::ScaleMarkType::NumSacle)
+				{
+					num = numInterval * (float)i + (float)model->ChartXYLineConfig.XScaleSet.LowerLimit;
+					if (i == model->ChartXYLineConfig.XScaleInfo.size() - 1)
+						num = (float)model->ChartXYLineConfig.XScaleSet.UpperLimit;
+				}
+				model->ChartXYLineConfig.XScaleInfo[i].ScaleContent = ChangeDisplayFormat(num, model->ChartXYLineConfig.XScaleSet);
 				fl_draw(model->ChartXYLineConfig.XScaleInfo[i].ScaleContent.data(),
 					model->ChartXYLineConfig.XScaleInfo[i].Coordinate.X + model->ChartXYLineConfig.OffX,
 					model->ChartXYLineConfig.XScaleInfo[i].Coordinate.Y + model->ChartXYLineConfig.OffY,

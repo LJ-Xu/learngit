@@ -15,7 +15,7 @@ namespace Project
 		bool UseSecondaryScaleNum;		//是否使用副刻度
 		int SecondaryScaleNum = 1;		//副刻度数
 		int SecondaryScaleLen;			//副刻度长度
-		bool UseScaleMark;
+		ScaleMarkType MarkType;			//数字刻度样式 0:不使用 1:数值 2:百分比
 		string ScaleMarkFont;			//标注字体
 		int ScaleMarkSize;				//标注字体大小
 		int ScaleMarkColor;				//标注颜色
@@ -24,7 +24,6 @@ namespace Project
 
 		/*特殊变量*/
 		int ScaleType;					//刻度样式	0：时间 1：数字
-		int NumScaleType;				//数字刻度样式	0：数字	1：百分比
 		bool IsUseTimeScale;			//是否使用时间刻度
 		bool IsdiaplayDate;				//显示日期
 		DateMode DateStyle;				//日期格式
@@ -36,7 +35,7 @@ namespace Project
 		{
 			archive(UpperLimit, UpperLimitVar, LowerLimit, LowerLimitVar, ScaleColor,
 				PrimaryScaleNum, PrimaryScaleLen, SecondaryScaleNum, SecondaryScaleLen,
-				UseScaleMark, ScaleMarkFont, ScaleMarkSize, ScaleMarkColor, IntegerNum, DecimalnNum);
+				MarkType, ScaleMarkFont, ScaleMarkSize, ScaleMarkColor, IntegerNum, DecimalnNum);
 		}
 	};
 
