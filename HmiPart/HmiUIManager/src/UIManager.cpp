@@ -191,7 +191,7 @@ namespace UI
 			GetCenterY(prj_->Setting.Height),
 			prj_->Setting.Width, prj_->Setting.Height);
 #ifndef WIN32
-		curWin_->clear_border();
+		//curWin_->clear_border();
 #endif // linux_
 
 		curWin_->HMIProject(prj_);
