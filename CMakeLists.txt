@@ -10,7 +10,9 @@ project(Hmi)
 #include_directories(${PROJECT_SOURCE_DIR}/Json)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-
+IF(LX32)
+  add_definitions(-DARM_PLAT)
+endif()
 if(EXISTS "${PROJECT_SOURCE_DIR}/../uimainlib")
 elseif(EXISTS "${PROJECT_SOURCE_DIR}/../umlib")
 include_directories(${PROJECT_SOURCE_DIR}/../umlib/HmiPart/Service/DataService/include)
