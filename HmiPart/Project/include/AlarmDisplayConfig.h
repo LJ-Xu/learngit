@@ -5,8 +5,8 @@
 #include "AlarmTableUnit.h"
 namespace Project
 {
-	enum ConfirmMode  {Single, Double, Long};
-	enum AlarmDisMode {REALTIME,HISTORY,SEARCH};		//实时、历史
+	enum ConfirmMode :char {Single, Double, Long};
+	enum AlarmDisMode :char {REALTIME,HISTORY,SEARCH};		//实时、历史
 	struct ColInfo
 	{
 		std::string ProjectName;			//显示项目
@@ -20,8 +20,8 @@ namespace Project
 			archive(ProjectName, DescribeName, TitleDescribe, RowHeight, ColWidth);
 		}
 	};
-	enum TimeMode { HMS, HM, HMSMS,HMSChinese};
-	enum DateMode { YMDSlash, DMYSlash, MDYSlash, YMDChinese };
+	enum TimeMode :char { HMS, HM, HMSMS,HMSChinese};
+	enum DateMode :char { YMDSlash, DMYSlash, MDYSlash, YMDChinese };
 	class AlarmDisplayConfig : public AlarmTableUnit
 	{
 	public:

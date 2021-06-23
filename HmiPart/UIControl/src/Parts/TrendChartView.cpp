@@ -1089,11 +1089,11 @@ namespace UI
 			break;
 		}
 		case Project::TrendDot:
-			fl_pie(x, y - 2, 4, 4, 0, 360);
+			fl_pie((int)x, (int)y - 2, 4, 4, 0.0, 360.0);
 			break;
 		case Project::TrendLineDot:
 			fl_vertex(x, y);
-			fl_pie(x, y - 2, 4, 4, 0, 360);
+			fl_pie((int)x, (int)y - 2, 4, 4, 0.0, 360.0);
 			break;
 		default:
 			break;

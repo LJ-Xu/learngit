@@ -6,7 +6,7 @@ namespace UI
 	class CodeFormatUtility
 	{
 	public:
-		enum CodeRule	
+		enum CodeRule :char
 		{
 			ASCII,
 			UTF_8,

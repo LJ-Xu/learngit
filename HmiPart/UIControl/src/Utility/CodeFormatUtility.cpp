@@ -2893,7 +2893,6 @@ namespace UI
 	{
 		int count;
 		int len = 0;
-		unsigned char c[6];
 
 		if (uc < 0x80)
 			count = 1;
@@ -3102,11 +3101,6 @@ namespace UI
 	{
 		switch (rule)
 		{
-		//case UI::CodeFormatUtility::ASCII:
-		//{
-
-		//}
-		//break;
 		case UI::CodeFormatUtility::UTF_16:			//Utf16תUtf8
 		{
 			UTF16 *dstdata = new UTF16[len / 2];
@@ -3115,8 +3109,25 @@ namespace UI
 			delete[] dstdata;
 			return true;
 		}
+		case UI::CodeFormatUtility::GB2312:
+		{
+			//string gb2312 = data;
+			char *src = new char[len + 1];
+			int srclen = len + 1;
+			int dstlen = len * 3 / 2 > MAXLENGTH ? len * 3 / 2 : MAXLENGTH + 1;
+			char *dst = new char[dstlen];
+			memset(src, '\0', srclen);
+			memcpy(src, data, len);
+			memset(dst, '\0', dstlen);
+			CodeFormatUtility::GB2312ToUtf8(dst, dstlen, src, srclen);
+			memcpy(data, dst, len);
+			//gb2312 = dst;
+			delete[] src;
+			delete[] dst;
+			return true;
 		}
-		return false;
+		}
+		return true;
 	}
 
 	bool CodeFormatUtility::Utf8ToCode(CodeRule rule, char *data, int len)
@@ -3142,8 +3153,7 @@ namespace UI
 		}
 		case UI::CodeFormatUtility::GB2312:
 		{
-			char dst[1024] = { 0 };
-            char *pdst = dst;
+			char dst[MAXLENGTH] = { 0 };
 #ifdef WIN32
 			wchar_t * pUnicodeBuff = NULL;
 			int rlen = 0;
@@ -3155,17 +3165,21 @@ namespace UI
 			memcpy(data, dst, len);
 			delete[] pUnicodeBuff;
 #else
-			iconv_t  cd;
-			size_t ret;
-            size_t dsize = sizeof(dst);
-            size_t dlen= len;
-			cd = iconv_open("GBK", "UTF-8");
-			if (cd == (iconv_t)-1) {
-				printf("iconv_open error\n");
-			}
-			ret = iconv(cd, &data, &dlen, &pdst, &dsize);
+			int dstlen = len * 3 / 2 > MAXLENGTH ? len * 3 / 2 : MAXLENGTH + 1;
+			Utf8ToGB2312(dst, dstlen, data, len);
+			memset(data, '\0', len);
 			memcpy(data, dst, len);
-			iconv_close(cd);
+			//iconv_t  cd;
+			//size_t ret;
+   //         size_t dsize = sizeof(dst);
+   //         size_t dlen= len;
+			//cd = iconv_open("GBK", "UTF-8");
+			//if (cd == (iconv_t)-1) {
+			//	printf("iconv_open error\n");
+			//}
+			//ret = iconv(cd, &data, &dlen, &pdst, &dsize);
+			//memcpy(data, dst, len);
+			//iconv_close(cd);
 #endif
 			break;
 		}

@@ -4,7 +4,7 @@
 #include "AlarmSeekUnit.h"
 namespace Project
 {
-	enum  ReportSeekMode { ReportDATE, ReportTIME, ReportREG };
+	enum  ReportSeekMode :char { ReportDATE, ReportTIME, ReportREG };
 	class ReportFormUnit : public AlarmSeekUnit
 	{
 	public:

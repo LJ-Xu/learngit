@@ -4,7 +4,7 @@
 #include "AlarmDisplayConfig.h"
 namespace Project
 {
-	enum OperatorSeekMode	{ OperatorByDate, OperatorByTime, OperatorByName, OperatorByReg};
+	enum OperatorSeekMode :char { OperatorByDate, OperatorByTime, OperatorByName, OperatorByReg};
 	class OperatorChartConfig : public AlarmSeekUnit
 	{
 	public:
