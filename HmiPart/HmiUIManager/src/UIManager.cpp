@@ -191,7 +191,9 @@ namespace UI
 			GetCenterY(prj_->Setting.Height),
 			prj_->Setting.Width, prj_->Setting.Height);
 #ifndef WIN32
+	#ifdef ARM_PLAT //只有在armlinux下需要
 		curWin_->clear_border();
+	#endif
 #endif // linux_
 
 		curWin_->HMIProject(prj_);

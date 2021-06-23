@@ -257,20 +257,22 @@ namespace UI
 			string maxString;
 			for (size_t i = 0; i < (size_t)model->ChartTrendConfig.AxisY.YIntegerNum; i++)
 				maxString += "*";
+			if (model->ChartTrendConfig.AxisY.ScaleTag == Project::ScaleMarkType::PercentSacle)		//百分比
+				maxString += "%";
 			return maxString;
 		}
 		if (model->ChartTrendConfig.AxisY.YDecimalnNum)
 		{
-			if (model->ChartTrendConfig.AxisY.ScaleTag == Project::YScaleTag::PercentSacle)		//百分比
+			if (model->ChartTrendConfig.AxisY.ScaleTag == Project::ScaleMarkType::PercentSacle)		//百分比
 				return intString + "." + floatString + "%"; 
-			else if(model->ChartTrendConfig.AxisY.ScaleTag == Project::YScaleTag::NumSacle)
+			else if(model->ChartTrendConfig.AxisY.ScaleTag == Project::ScaleMarkType::NumSacle)
 				return intString + "." + floatString;
 		}
 		else
 		{
-			if (model->ChartTrendConfig.AxisY.ScaleTag == Project::YScaleTag::PercentSacle)		//百分比
+			if (model->ChartTrendConfig.AxisY.ScaleTag == Project::ScaleMarkType::PercentSacle)		//百分比
 				return intString + "%";
-			else if (model->ChartTrendConfig.AxisY.ScaleTag == Project::YScaleTag::NumSacle)
+			else if (model->ChartTrendConfig.AxisY.ScaleTag == Project::ScaleMarkType::NumSacle)
 				return intString;
 		}
 		return " ";
@@ -521,12 +523,26 @@ namespace UI
 		fl_color(yscalefontColor_);
 		if (info.size() == 0)
 			return;
-		DOUBLE numInterval = (DOUBLE)(max - min) / (DOUBLE)model->ChartTrendConfig.AxisY.MainScaleNum;
+		DOUBLE numInterval;
+		if (model->ChartTrendConfig.AxisY.ScaleTag == Project::ScaleMarkType::PercentSacle)		//百分比
+			numInterval = 100.0 / (DOUBLE)model->ChartTrendConfig.AxisY.MainScaleNum;
+		else if(model->ChartTrendConfig.AxisY.ScaleTag == Project::ScaleMarkType::NumSacle)
+			numInterval = (DOUBLE)(max - min) / (DOUBLE)model->ChartTrendConfig.AxisY.MainScaleNum;
 		for (size_t i = 0; i < info.size(); i++)
 		{
-			DOUBLE num = numInterval * (DOUBLE)i + min;
-			if (i == info.size() - 1)
-				num = max;
+			DOUBLE num;
+			if (model->ChartTrendConfig.AxisY.ScaleTag == Project::ScaleMarkType::PercentSacle)
+			{
+				num = numInterval * (DOUBLE)i;
+				if (i == info.size() - 1)
+					num = 100.0;
+			}
+			else if (model->ChartTrendConfig.AxisY.ScaleTag == Project::ScaleMarkType::NumSacle)
+			{
+				num = numInterval * (DOUBLE)i + min;
+				if (i == info.size() - 1)
+					num = max;
+			}
 			info[i].ScaleContent = ChangeDisplayFormat(num);
 			fl_draw(info[i].ScaleContent.data(),
 				info[i].Coordinate.X + model->ChartTrendConfig.OffX,
@@ -609,7 +625,7 @@ namespace UI
 				fl_end_line();
 			}
 		}
-		if (model->ChartTrendConfig.AxisY.ScaleTag != Project::YScaleTag::NullSacle)
+		if (model->ChartTrendConfig.AxisY.ScaleTag != Project::ScaleMarkType::NullSacle)
 		{
 			if(!model->ChartTrendConfig.YScaleInfo.empty())
 				DrawYaxisScale();

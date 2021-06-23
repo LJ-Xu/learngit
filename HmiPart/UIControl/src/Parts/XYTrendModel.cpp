@@ -263,12 +263,10 @@ namespace UI
 					if (xscale["ScaleStyle"].HasMember("SubScaleLen"))
 						TrendXYConfig.XScaleSet.SecondaryScaleLen = xscale["ScaleStyle"]["SubScaleLen"].GetInt();
 				}
-				if (xscale.HasMember("MarkUsed"))
-					TrendXYConfig.XScaleSet.UseScaleMark = xscale["MarkUsed"].GetBool();
 				if (xscale.HasMember("MarkStyle") && xscale["MarkStyle"].IsObject())
 				{
 					if(xscale["MarkStyle"].HasMember("MarkType"))
-						TrendXYConfig.XScaleSet.NumScaleType = xscale["MarkStyle"]["MarkType"].GetInt();
+						TrendXYConfig.XScaleSet.MarkType = (Project::ScaleMarkType)xscale["MarkStyle"]["MarkType"].GetInt();
 					if (xscale["MarkStyle"].HasMember("MarkCss") && xscale["MarkStyle"]["MarkCss"].IsObject())
 					{
 						if (xscale["MarkStyle"]["MarkCss"].HasMember("Fonts") && xscale["MarkStyle"]["MarkCss"]["Fonts"].IsObject())
@@ -309,12 +307,10 @@ namespace UI
 					if (yscale["ScaleStyle"].HasMember("SubScaleLen"))
 						TrendXYConfig.YScaleSet.SecondaryScaleLen = yscale["ScaleStyle"]["SubScaleLen"].GetInt();
 				}
-				if (yscale.HasMember("MarkUsed"))
-					TrendXYConfig.YScaleSet.UseScaleMark = yscale["MarkUsed"].GetBool();
 				if (yscale.HasMember("MarkStyle") && yscale["MarkStyle"].IsObject())
 				{
 					if(yscale["MarkStyle"].HasMember("MarkType"))
-						TrendXYConfig.YScaleSet.NumScaleType = yscale["MarkStyle"]["MarkType"].GetInt();
+						TrendXYConfig.YScaleSet.MarkType = (Project::ScaleMarkType)yscale["MarkStyle"]["MarkType"].GetInt();
 					if (yscale["MarkStyle"].HasMember("MarkCss") && yscale["MarkStyle"]["MarkCss"].IsObject())
 					{
 						if (yscale["MarkStyle"]["MarkCss"].HasMember("Fonts") && yscale["MarkStyle"]["MarkCss"]["Fonts"].IsObject())

@@ -156,7 +156,38 @@ namespace UI
 	}
 	void AlarmGControl::HandleAlarmAction(Project::AlarmInfoRes& alarmres, bool triggeralarm)
 	{
+#if 0
+		AlarmGView* pView = static_cast<AlarmGView*>(pView_);
+		pView->Triggeralarm = triggeralarm;
+		pView->UseBeep = alarmres.UseBeep;
+		pView->UseAlarmPopWin = alarmres.UseAlarmPopWin;
+		pView->PopWinNo = alarmres.PopWinNo;
+		pView->IsCloseWin = alarmres.IsCloseWin;
+		std::thread thr([&]() {
+			if (triggeralarm)			//触发报警
+			{
+				if (alarmres.UseBeep)
+				{
+					//触发蜂鸣器
+				}
+				if (alarmres.UseAlarmPopWin)	//打开弹窗
+				{
+					Win()->OpenDialogPage(alarmres.PopWinNo);
+				}
+			}
+			else				//报警消失
+			{
+				if (alarmres.UseAlarmPopWin && alarmres.IsCloseWin)	//关闭弹窗
+					Win()->ClosePage(alarmres.PopWinNo);
+			}
+		});
+		thr.detach();
+		//pView_->damage();
+		//pView_->redraw();
+#else
 		//文件保存
+		
+		
 		AlarmGView* pView = static_cast<AlarmGView*>(pView_);
 		/*pView->Triggeralarm = triggeralarm;
 		pView->UseBeep = alarmres.UseBeep;
@@ -196,6 +227,8 @@ namespace UI
 			
 		};
 		Win()->Invoke(func,this, alarmres.PopWinNo);
+		
+#endif
 	}
 
 	std::string GetContextString(const AlarmInfoContext & almctxt)
