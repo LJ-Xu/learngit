@@ -17,7 +17,8 @@ namespace Storage
 	OperatorStorageService * OperatorStorageService::ins = nullptr;
 
 	OperatorStorageService::OperatorStorageService() : 
-		BaseStorageService("././HMI/Operation.db", "Operation") {
+		//BaseStorageService("././HMI/Operation.db", "Operation") {
+		BaseStorageService(RunEnv::Cnf.OperationPath, "Operation") {
 		//BaseStorageService("..\\..\\HMI\\Operation.db", "Operation") {
 		// 创建内存数据库
 		if (Create())

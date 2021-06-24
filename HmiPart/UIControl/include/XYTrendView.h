@@ -50,7 +50,7 @@ namespace UI
 		/*绘制参考线*/
 		void DrawReferenceLine();
 		/*转换标注格式*/
-		string ChangeDisplayFormat(float value, int integer, int decimal);
+		string ChangeDisplayFormat(float value, Project::ScaleMark style);
 		//int handle(int event);
 		BasicView BaseView;
 
