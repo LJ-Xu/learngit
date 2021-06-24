@@ -171,7 +171,7 @@ void XYTrendTest::Init()
 		cfg->XScaleSet.UseSecondaryScaleNum = true;
 		cfg->XScaleSet.SecondaryScaleNum = 10;
 		cfg->XScaleSet.SecondaryScaleLen = 10;
-		cfg->XScaleSet.UseScaleMark = true;
+		cfg->XScaleSet.MarkType = true;
 		cfg->XScaleSet.ScaleMarkFont = "Arial";
 		cfg->XScaleSet.ScaleMarkColor = 0;
 		cfg->XScaleSet.ScaleMarkSize = 12;
@@ -188,7 +188,7 @@ void XYTrendTest::Init()
 		cfg->YScaleSet.UseSecondaryScaleNum = true;
 		cfg->YScaleSet.SecondaryScaleNum = 10;
 		cfg->YScaleSet.SecondaryScaleLen = 10;
-		cfg->YScaleSet.UseScaleMark = true;
+		cfg->YScaleSet.MarkType = true;
 		cfg->YScaleSet.ScaleMarkFont = "Arial";
 		cfg->YScaleSet.ScaleMarkColor = 0;
 		cfg->YScaleSet.ScaleMarkSize = 12;

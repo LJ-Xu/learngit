@@ -115,7 +115,7 @@ namespace UI
 		if (json.HasMember("YViceScaleLen"))
 			ChartTrendConfig.AxisY.ViceScaleLen = json["YViceScaleLen"].GetInt();
 		if (json.HasMember("ScaleTag"))
-			ChartTrendConfig.AxisY.ScaleTag = (Project::YScaleTag)json["ScaleTag"].GetInt();
+			ChartTrendConfig.AxisY.ScaleTag = (Project::ScaleMarkType)json["ScaleTag"].GetInt();
 		if (json.HasMember("YIntegerNum"))
 			ChartTrendConfig.AxisY.YIntegerNum = json["YIntegerNum"].GetInt();
 		if (json.HasMember("YDecimalnNum"))

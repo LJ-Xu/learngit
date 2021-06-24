@@ -202,7 +202,7 @@ void TrendChartTest::Init()
 		cfg->AxisX.ScaleStyle.Font.Size = 12;
 
 
-		cfg->AxisY.ScaleTag = Project::YScaleTag::NumSacle;
+		cfg->AxisY.ScaleTag = Project::ScaleMarkType::NumSacle;
 		cfg->AxisY.YIntegerNum = 5;
 		cfg->AxisY.YDecimalnNum = 0;
 		cfg->AxisY.ScaleRange = Project::YScaleMode::Custom;	//刻度范围	0：自定义 1：使用通道最大最小值 2：显示所有通道范围

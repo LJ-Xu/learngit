@@ -24,9 +24,9 @@ namespace UI
 		chartBgColor_ = fl_rgb_color(RGBColor(model->TrendXYConfig.LineChartBackColor));
 		scaleBgColor_ = fl_rgb_color(RGBColor(model->TrendXYConfig.ScaleAreaBackColor));
 		useGrid = model->TrendXYConfig.UseGrid;
-		useXAxis = model->TrendXYConfig.UseYScale;
-		useYAxis = model->TrendXYConfig.UseXScale;
-		if (model->TrendXYConfig.XScaleSet.UseScaleMark)
+		useXAxis = model->TrendXYConfig.UseXScale;
+		useYAxis = model->TrendXYConfig.UseYScale;
+		if (model->TrendXYConfig.XScaleSet.MarkType != Project::ScaleMarkType::NullSacle)
 		{
 			xscalefontSize_ = model->TrendXYConfig.XScaleSet.ScaleMarkSize;
 			xscalefontStyle_ = UI::IResourceService::GetFontIdx(model->TrendXYConfig.XScaleSet.ScaleMarkFont);
@@ -34,7 +34,7 @@ namespace UI
 		}
 		xscaleInterval_ = model->TrendXYConfig.XaxisLen / model->TrendXYConfig.XScaleSet.PrimaryScaleNum;
 
-		if (model->TrendXYConfig.YScaleSet.UseScaleMark)
+		if (model->TrendXYConfig.YScaleSet.MarkType != Project::ScaleMarkType::NullSacle)
 		{
 			yscalefontSize_ = model->TrendXYConfig.YScaleSet.ScaleMarkSize;
 			yscalefontStyle_ = UI::IResourceService::GetFontIdx(model->TrendXYConfig.YScaleSet.ScaleMarkFont);
@@ -79,11 +79,12 @@ namespace UI
 		}
 	}
 	/*转换数据显示格式*/
-	string XYTrendView::ChangeDisplayFormat(float value, int integer, int decimal)
+	string XYTrendView::ChangeDisplayFormat(float value, Project::ScaleMark style)
 	{
 		shared_ptr<XYTrendModel> model = BaseView.GetModel<XYTrendModel>();
+		int integer = style.IntegerNum, decimal = style.DecimalnNum;
 		string data = to_string(value);
-		string intString, floatString;
+		string intString = "", floatString;
 		int pos = data.find(".");
 		if (pos == 0)	//小数点在头部
 		{
@@ -116,12 +117,25 @@ namespace UI
 			string maxString;
 			for (size_t i = 0; i < (size_t)integer; i++)
 				maxString += "*";
+			if (style.MarkType == Project::ScaleMarkType::PercentSacle)
+				maxString += "%";
 			return maxString;
 		}
 		if (decimal)
-			return intString + "." + floatString;
+		{
+			if (style.MarkType == Project::ScaleMarkType::PercentSacle)
+				return intString + "." + floatString + "%";
+			else if (style.MarkType == Project::ScaleMarkType::NumSacle)
+				return intString + "." + floatString;
+		}
 		else
-			return intString;
+		{
+			if (style.MarkType == Project::ScaleMarkType::PercentSacle)
+				return intString + "%";
+			else if (style.MarkType == Project::ScaleMarkType::NumSacle)
+				return intString;
+		}
+		return intString;
 	}
 
 
@@ -163,8 +177,13 @@ namespace UI
 			}
 		}
 		/*绘制坐标*/
-		float numInterval = (float)(model->TrendXYConfig.YScaleSet.UpperLimit - model->TrendXYConfig.YScaleSet.LowerLimit) / (float)model->TrendXYConfig.XScaleSet.PrimaryScaleNum;
-		if (model->TrendXYConfig.YScaleSet.UseScaleMark)
+		float numInterval;
+		if (model->TrendXYConfig.YScaleSet.MarkType == Project::ScaleMarkType::PercentSacle)		//百分比
+			numInterval = 100.0 / (float)model->TrendXYConfig.YScaleSet.PrimaryScaleNum;
+		else
+			numInterval = (float)(model->TrendXYConfig.YScaleSet.UpperLimit - model->TrendXYConfig.YScaleSet.LowerLimit) / (float)model->TrendXYConfig.YScaleSet.PrimaryScaleNum;
+
+		if (model->TrendXYConfig.YScaleSet.MarkType != Project::ScaleMarkType::NullSacle)
 		{
 			/*设置字体*/
 			fl_font(yscalefontStyle_, yscalefontSize_);
@@ -172,10 +191,22 @@ namespace UI
 			fl_color(yscalefontColor_);
 			for (size_t i = 0; i < model->TrendXYConfig.YScaleInfo.size(); i++)
 			{
-				float num = numInterval * (float)i + (float)model->TrendXYConfig.YScaleSet.LowerLimit;
+				float num;
+				if (model->TrendXYConfig.YScaleSet.MarkType == Project::ScaleMarkType::PercentSacle)
+				{
+					num = numInterval * (float)i;
+					if (i == model->TrendXYConfig.YScaleInfo.size() - 1)
+						num = 100.0;
+				}
+				else if (model->TrendXYConfig.YScaleSet.MarkType == Project::ScaleMarkType::NumSacle)
+				{
+					num = numInterval * (float)i + (float)model->TrendXYConfig.YScaleSet.LowerLimit;
+					if (i == model->TrendXYConfig.YScaleInfo.size() - 1)
+						num = (float)model->TrendXYConfig.YScaleSet.UpperLimit;
+				}
 				if (i == model->TrendXYConfig.YScaleInfo.size() - 1)
 					num = (float)model->TrendXYConfig.YScaleSet.UpperLimit;
-				model->TrendXYConfig.YScaleInfo[i].ScaleContent = ChangeDisplayFormat(num, model->TrendXYConfig.YScaleSet.IntegerNum, model->TrendXYConfig.YScaleSet.DecimalnNum);
+				model->TrendXYConfig.YScaleInfo[i].ScaleContent = ChangeDisplayFormat(num, model->TrendXYConfig.YScaleSet);
 				fl_draw(model->TrendXYConfig.YScaleInfo[i].ScaleContent.data(),
 					model->TrendXYConfig.YScaleInfo[i].Coordinate.X + model->TrendXYConfig.OffX,
 					model->TrendXYConfig.YScaleInfo[i].Coordinate.Y + model->TrendXYConfig.OffY,
@@ -338,8 +369,12 @@ namespace UI
 			}
 		}
 		/*绘制坐标*/
-		float numInterval = (float)(model->TrendXYConfig.XScaleSet.UpperLimit - model->TrendXYConfig.XScaleSet.LowerLimit) / (float)model->TrendXYConfig.XScaleSet.PrimaryScaleNum;
-		if (model->TrendXYConfig.XScaleSet.UseScaleMark)	//使用时间并且每屏时间模式
+		float numInterval;
+		if (model->TrendXYConfig.XScaleSet.MarkType == Project::ScaleMarkType::PercentSacle)		//百分比
+			numInterval = 100.0 / (float)model->TrendXYConfig.XScaleSet.PrimaryScaleNum;
+		else
+			numInterval = (float)(model->TrendXYConfig.XScaleSet.UpperLimit - model->TrendXYConfig.XScaleSet.LowerLimit) / (float)model->TrendXYConfig.XScaleSet.PrimaryScaleNum;
+		if (model->TrendXYConfig.XScaleSet.MarkType != Project::ScaleMarkType::NullSacle)
 		{
 			/*设置字体*/
 			fl_font(xscalefontStyle_, xscalefontSize_);
@@ -347,10 +382,22 @@ namespace UI
 			fl_color(xscalefontColor_);
 			for (size_t i = 0; i < model->TrendXYConfig.XScaleInfo.size(); i++)
 			{
-				float num = numInterval * (float)i + (float)model->TrendXYConfig.XScaleSet.LowerLimit;
+				float num;
+				if (model->TrendXYConfig.XScaleSet.MarkType == Project::ScaleMarkType::PercentSacle)
+				{
+					num = numInterval * (float)i;
+					if (i == model->TrendXYConfig.XScaleInfo.size() - 1)
+						num = 100.0;
+				}
+				else if (model->TrendXYConfig.XScaleSet.MarkType == Project::ScaleMarkType::NumSacle)
+				{
+					num = numInterval * (float)i + (float)model->TrendXYConfig.XScaleSet.LowerLimit;
+					if (i == model->TrendXYConfig.XScaleInfo.size() - 1)
+						num = (float)model->TrendXYConfig.XScaleSet.UpperLimit;
+				}
 				if (i == model->TrendXYConfig.XScaleInfo.size() - 1)
 					num = (float)model->TrendXYConfig.XScaleSet.UpperLimit;
-				model->TrendXYConfig.XScaleInfo[i].ScaleContent = ChangeDisplayFormat(num, model->TrendXYConfig.XScaleSet.IntegerNum, model->TrendXYConfig.XScaleSet.DecimalnNum);
+				model->TrendXYConfig.XScaleInfo[i].ScaleContent = ChangeDisplayFormat(num, model->TrendXYConfig.XScaleSet);
 				fl_draw(model->TrendXYConfig.XScaleInfo[i].ScaleContent.data(),
 					model->TrendXYConfig.XScaleInfo[i].Coordinate.X + model->TrendXYConfig.OffX,
 					model->TrendXYConfig.XScaleInfo[i].Coordinate.Y + model->TrendXYConfig.OffY,

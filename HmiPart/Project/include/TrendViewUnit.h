@@ -7,6 +7,7 @@
 
 namespace Project
 {
+	//enum ScaleMarkType :char {NullMark, NumMark, PerCentMark};
 	class AxisSetting
 	{
 	public:
@@ -45,12 +46,12 @@ namespace Project
 		}
 	};
 	enum YScaleMode :char { Custom, Channel, All };
-	enum YScaleTag :char { NullSacle, NumSacle, PercentSacle };
+	enum ScaleMarkType :char { NullSacle, NumSacle, PercentSacle };
 
 	class YAxis : public AxisSetting
 	{
 	public:
-		YScaleTag ScaleTag;					//刻度标记	0：不显示，1：数字，2：百分比
+		ScaleMarkType ScaleTag;					//刻度标记	0：不显示，1：数字，2：百分比
 		int YIntegerNum;				//整数位数
 		int YDecimalnNum;				//小数位数
 		YScaleMode ScaleRange;			//刻度范围	0：自定义 1：使用通道最大最小值 2：显示所有通道范围
