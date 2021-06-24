@@ -153,6 +153,7 @@ namespace UI
 			if (HandleOperatePush())
 			{
 				//beginTime_ = high_resolution_clock::now();
+				redraw();
 				return HMIBaseButton::handle(event);
 			}
 			redraw();

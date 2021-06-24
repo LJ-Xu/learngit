@@ -97,6 +97,7 @@ namespace UI
 		/*设置字体和大小*/
 		int fontSize = model->StringConfig.Css.Font.Size;
 		int fontStyle = UI::IResourceService::GetFontIdx(model->StringConfig.Css.Font.Name);
+		printf("StaticString font style = %d, size = %d\n", fontStyle, fontSize);
 		fl_font(fontStyle, fontSize);
 		/*设置字体颜色*/
 		Fl_Color textcolor = fl_rgb_color(RGBColor(model->StringConfig.Css.Colors));

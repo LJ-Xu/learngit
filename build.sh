@@ -14,9 +14,9 @@ if [ $ISX32 -eq 0 ];then
 cmake .. -DCMAKE_TOOLCHAIN_FILE=../arm_linux_gnueabihf.cmake 
 make -j8 && arm-linux-gnueabihf-strip HmiMain 
 [[ $? -ne 0 ]] && exit 
-cp ./XJSocket.out/*.a ../../umlib/OutputLib/armlinux/
-cp ./DataClient.out/*.a ../../umlib/OutputLib/armlinux/
-cp ./DataService.out/*.a ../../umlib/OutputLib/armlinux/
+#cp ./XJSocket.out/*.a ../../umlib/OutputLib/armlinux/
+#cp ./DataClient.out/*.a ../../umlib/OutputLib/armlinux/
+#cp ./DataService.out/*.a ../../umlib/OutputLib/armlinux/
 else
 cmake .. -DUBUNTU=on -DLX32=1
 make -j8
