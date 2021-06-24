@@ -6,7 +6,8 @@ namespace Storage
 
 	AlarmStorageService::AlarmStorageService() : 
 		//BaseStorageService("..\\..\\HMI\\Alarm.db", "Alarm") {
-		BaseStorageService("././HMI/Alarm.db", "Alarm") {
+		BaseStorageService(RunEnv::Cnf.AlarmPath, "Alarm") {
+		//BaseStorageService("././HMI/Alarm.db", "Alarm") {
 		// 创建内存数据库
 		if (Create()) {
 			Close();
