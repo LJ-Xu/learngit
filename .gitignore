@@ -5777,3 +5777,21 @@ build
 
 !ThirdPart/boost_1_65_1
 
+/HMI_Debug/XJSocketd.lib
+/HMI_Debug/UIControl.lib
+/HMI_Debug/System.lib
+/HMI_Debug/sqliteD.lib
+/HMI_Debug/Project.lib
+/HMI_Debug/MsgQueue.lib
+/HMI_Debug/JsonD.lib
+/HMI_Debug/HmiUtility.lib
+/HMI_Debug/HmiUIManager.lib
+/HMI_Debug/HmiStorageService.lib
+/HMI_Debug/HmiMain.lib
+/HMI_Debug/HmiMain.exp
+/HMI_Debug/HmiMain.exe
+/HMI_Debug/HmiCore.lib
+/HMI_Debug/HmiComm.lib
+/HMI_Debug/googlepinyinD.lib
+/HMI_Debug/DataServiced.lib
+/HMI_Debug/DataClientd.lib

@@ -76,7 +76,7 @@ namespace HMI
 		void SendPackage(int cmd, int type, int vid, int eid, const  char*buf, int len);
 		void SendEx(char* data, int len);
 		char* GetBufEx(int len);
-		int TrrigerSend();
+		//int TrrigerSend();
 		std::unique_ptr<char> buf_;
 		int bufSize_;
 		int widx_;
