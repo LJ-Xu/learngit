@@ -93,7 +93,11 @@ namespace UI
 			SysSetApi::TriggerBeep();
 			CurrentStatus = 1;
 			if (HandleOperatePush())
+			{
+				redraw();
 				return HMIBaseButton::handle(event);
+			}			
+			redraw();
 			return 1;
 		case FL_RELEASE:
 			if (when() & FL_WHEN_RELEASE)
@@ -102,6 +106,7 @@ namespace UI
 				CurrentStatus = 0;
 				IsReleased = true;
 			}
+			redraw();
 			return HMIBaseButton::handle(event);
 		default:
 			return HMIBaseButton::handle(event);

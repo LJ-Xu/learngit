@@ -495,7 +495,10 @@ namespace UI
 			X += Fl::event_x_root() - Fl::event_x();
 			Y += Fl::event_y_root() - Fl::event_y();
 		}
-		DropMenuWidow mw(this, X, Y, W, H, winheigth,initial_item);    
+		DropMenuWidow mw(this, X, Y, W, H, winheigth,initial_item);  
+#ifndef WIN32
+		mw.clear_border();
+#endif
 		if (mw.RealH < mw.AllMenuH)
 		{
 			mw.hscrollbar = new Fl_Scrollbar(W - hscollwidth, 0, hscollwidth, mw.RealH);

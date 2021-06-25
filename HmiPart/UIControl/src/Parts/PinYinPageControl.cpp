@@ -45,26 +45,32 @@ namespace UI
 	}
 	void PinYinPageControl::OnReady()
 	{
-        char buf[512];
-
-		string path = getcwd(buf, 512);
+        	char buf[1024];
+		memset(buf,'\0',1024);
+		string path,syspath,usrpath;
 #ifdef WIN32
-		//LOG_ERROR("Can't Open DataBase0: %s\n", path.c_str());
-
 		//path = path.substr(0, path.rfind('\\'));
-
-		string syspath = path + "\\dict_pinyin.dat";
-		string usrpath = path + "\\dict_pinyin_user.dat";
+		path = getcwd(buf, 1024);
+		syspath = path + "\\dict_pinyin.dat";
+		usrpath = path + "\\dict_pinyin_user.dat";
 		LOG_INFO("PinYin Data Get From : %s\n", path.c_str());
 
 #else
+		readlink("/proc/self/exe", buf, 1024 - 1);
+		path = buf;
 		//LOG_ERROR("Can't Open DataBase: %s\n", _pgmptr);
+		printf("PinYin Data Get From : %s\n", path.c_str());
 		path = path.substr(0, path.rfind('/'));
-
-		string syspath = path + "/dict_pinyin.dat";
-		string usrpath = path + "/dict_pinyin_user.dat";
+		syspath = path + "/dict_pinyin.dat";
+		usrpath = path + "/dict_pinyin_user.dat";
+		syspath = "/data/dict_pinyin.dat";
+		usrpath = "/data/dict_pinyin_user.dat";
 #endif
-		im_open_decoder(syspath.c_str(), usrpath.c_str());
+		printf("syspath is : %s\n", syspath.c_str());
+		printf("usrpath is : %s\n", usrpath.c_str());
+		bool ret = im_open_decoder(syspath.c_str(), usrpath.c_str());
+		if(!ret)
+			printf("open pinyin data fail\n");
 
 	}
 	void PinYinPageControl::CreateView()

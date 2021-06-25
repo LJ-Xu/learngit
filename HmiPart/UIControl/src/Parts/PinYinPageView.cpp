@@ -143,7 +143,8 @@ namespace UI
 
 		/*设置字体和大小*/
 		int fontSize = model->PinYinConfig.TextStyle.Font.Size;
-		int fontStyle = UI::IResourceService::GetFontIdx(model->PinYinConfig.TextStyle.Font.Name);
+		//int fontStyle = UI::IResourceService::GetFontIdx(model->PinYinConfig.TextStyle.Font.Name);
+		int fontStyle = UI::IResourceService::GetFontIdx("xxx");
 		fl_font(fontStyle, fontSize);
 		
 		/*设置字体颜色*/
