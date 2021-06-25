@@ -154,7 +154,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)ThirdPart\lib;$(SolutionDir)Lib;</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)\Lib\win\release</LibraryPath>
     <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
     <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
