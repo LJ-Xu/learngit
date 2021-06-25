@@ -311,9 +311,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\UIMainLib\HmiPart\Service\DataService\DataService.vcxproj">
-      <Project>{665f7fa7-7fda-4e18-b118-e641b6f6bdb0}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\..\HmiPart\HmiComm\HmiComm.vcxproj">
       <Project>{7d1327f4-41c5-4f99-9af7-edd580d0e568}</Project>
     </ProjectReference>
@@ -332,9 +329,6 @@
     <ProjectReference Include="..\..\HmiPart\Project\Project.vcxproj">
       <Project>{838b1209-0d49-41d1-987c-9d661f341c95}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\HmiPart\Service\DataClient\DataClient.vcxproj">
-      <Project>{7bee7a7f-388a-40d8-9bd6-28a0e837ee3f}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\..\HmiPart\Service\HmiPrinterService\HmiPrinterService.vcxproj">
       <Project>{a1932b5e-e2e0-4f33-a817-f20d5e93eb60}</Project>
     </ProjectReference>
@@ -343,9 +337,6 @@
     </ProjectReference>
     <ProjectReference Include="..\..\HmiPart\Service\HmiStorageService\HmiStorageService.vcxproj">
       <Project>{05af489d-aaab-44a6-898c-25cd221a23ed}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\HmiPart\Service\XJSocket\XJSocket.vcxproj">
-      <Project>{c06fc5e1-1e1d-4c5d-81b2-c96bd110a8fb}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\HmiPart\UIControl\UIControl.vcxproj">
       <Project>{3e7fd125-e6a3-4157-8de8-88eee14c0ec8}</Project>
