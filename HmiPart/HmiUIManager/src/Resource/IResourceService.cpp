@@ -47,7 +47,7 @@ namespace UI
 			//printf("%s\n",s);
 			if (name.empty())
 				return 0;
-			if (strstr(s, name.c_str()))
+			if (!strcmp(s, name.c_str()))
 				return i;
 		}
 		return 0;
