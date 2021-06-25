@@ -136,7 +136,7 @@ static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor,
 	std::string path(descriptor.path());
 	int pos = path.rfind('/');
 	std::string name = path.substr(pos + 1, path.size() - pos - 1);
-	sprintf(buf, "rm -rf `ls /data/dmp/ds/*.dmp | grep -v \"%s\"`", name.c_str())
+	sprintf(buf, "rm -rf `ls /data/dmp/ds/*.dmp | grep -v \"%s\"`", name.c_str());
 	system(buf);
 	printf("Dump path: %s\n", descriptor.path());
 	return succeeded;
