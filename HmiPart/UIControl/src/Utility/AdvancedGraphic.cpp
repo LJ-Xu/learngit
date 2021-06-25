@@ -877,7 +877,9 @@ namespace UI
 			sprintf(cf, stringFormat, fValue);
 #endif
 			iFontLen = strlen(cf);
-			int offL = (iFontLen*fontStyle.Font.Size)/4;
+			int offL = fl_width(cf, iFontLen)/2;
+			int offH = fl_height()/2;
+			//int offL = (iFontLen*fontStyle.Font.Size)/4;
 			double arc = curAngle *M_PI / 180;
 			int modAngle = curAngle;
 			if (((int)(curAngle+90) % 180) != 0)
@@ -885,7 +887,7 @@ namespace UI
 
 				modAngle = curAngle - 90;
 				offX = offL * sin(arc);
-				offY = offL * cos(arc);
+				offY = offH * cos(arc);
 				disX = cx + (radius) * cos(arc);
 				disY = cy - (radius) * sin(arc);
 				fl_draw(modAngle, cf, disX- offX, disY- offY);
@@ -966,19 +968,25 @@ namespace UI
 			{
 				sprintf(cf, stringFormat, fValue);
 			}
+
+			int offL = fl_width(cf, strlen(cf))/2;
+			int offH = fl_height()/2;
 			switch (direction)
 			{
 				//ио
 			case 0:
 				//об
 			case 1:
-				tpDY = dy + i * mOffset+fontStyle.Font.Size / 2;
+				//tpDY = dy + i * mOffset+fontStyle.Font.Size / 2;
+				tpDY = dy + i * mOffset + offH;
 				break;
 				//вС
 			case 2:
 				//ср
 			case 3:
-				tpDX = dx + i * mOffset - fontStyle.Font.Size*len / 4;
+				//tpDX = dx + i * mOffset - fontStyle.Font.Size*len / 4;
+
+				tpDX = dx + i * mOffset - offL;
 				break;
 			}
 			

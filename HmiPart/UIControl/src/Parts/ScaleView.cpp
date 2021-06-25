@@ -220,7 +220,7 @@ namespace UI
 				}
 			}
 			
-			AdvancedGarphic::DrawScale(ishor, (model->ScaleConfig.MarkPlace+1)%2, sx, sy, len, model->ScaleConfig.MainGraduateCount, model->ScaleConfig.SecondaryScaleCutCount, model->ScaleConfig.MajorScaleLineLength, model->ScaleConfig.SecondaryScaleLength, model->ScaleConfig.LineStyle, model->ScaleConfig.LineColor, model->ScaleConfig.LineWidth);
+			AdvancedGarphic::DrawScale(ishor, (model->ScaleConfig.MarkPlace+1)%2, sx, sy, len, model->ScaleConfig.MainGraduateCount, model->ScaleConfig.UseSecondaryScale?model->ScaleConfig.SecondaryScaleCutCount:0, model->ScaleConfig.MajorScaleLineLength, model->ScaleConfig.SecondaryScaleLength, model->ScaleConfig.LineStyle, model->ScaleConfig.LineColor, model->ScaleConfig.LineWidth);
 			//数字标记
 			if ((model->ScaleConfig.IsDisplayMark) && (model->ScaleConfig.MainGraduateCount > 1) && GradFormat[0] != '0')
 			{
@@ -316,8 +316,8 @@ namespace UI
 			int lineStartX, lineStartY;
 			int lineEndX, lineEndY;
 			//线段收尾坐标的相对圆心的半径长度，根据内环和外环时有不同的延生方向
-			int curMainLineStartPtRadius, curSecLineStartPtRadius;
-			int curMainLineEndPtRadius, curSecLineEndPtRadius;
+			int curMainLineStartPtRadius=0, curSecLineStartPtRadius=0;
+			int curMainLineEndPtRadius=0, curSecLineEndPtRadius=0;
 			//数字标记坐标的中心点相对圆心的半径长度，区分情况同上
 			//int curGraduatePtRadius;
 			switch (model->ScaleConfig.MarkPlace)
@@ -355,7 +355,7 @@ namespace UI
 				calculatePosOnCircle(curLineAngle, curMainLineEndPtRadius, lineEndX, lineEndY);
 				fl_line(centerX + lineStartX, centerY + lineStartY, centerX + lineEndX, centerY + lineEndY);
 
-				if (idxM < model->ScaleConfig.MainGraduateCount - 1)
+				if (model->ScaleConfig.UseSecondaryScale&&(idxM < model->ScaleConfig.MainGraduateCount - 1))
 				{
 					for (int idxS = 1; idxS <= model->ScaleConfig.SecondaryScaleCutCount; ++idxS)
 					{
