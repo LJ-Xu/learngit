@@ -69,10 +69,15 @@ namespace UI
 				RGBAimage = IResourceService::Ins()->GetImage(model->MenuConfig.PicKey[2].KeyVal);
 				if (RGBAimage)			// π”√±≥æ∞Õº∆¨
 				{
+					color(bgcolor_);	//…Ë÷√±≥æ∞—’…´
 					image(RGBAimage);
 					align(align() | FL_ALIGN_IMAGE_BACKDROP);
 					box(FL_NO_BOX);
 					draw_box();
+					fl_color(active() ? FrameColor : fl_inactive(FrameColor));
+					fl_line_style(0, 0);
+					fl_rect(x(), y(), w(), h());
+					fl_box(FL_FLAT_BOX);
 				}
 				else
 				{
