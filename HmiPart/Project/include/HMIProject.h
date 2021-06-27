@@ -28,6 +28,7 @@ namespace Project
 	
 	struct HMIProject
 	{
+		static HMIProject* Ins;
 		ProjectInfo Info;//工程信息
 		ProjectSetting Setting;//设置信息
 		ProjectDevice  Devices;

@@ -21,7 +21,7 @@ namespace UI
 		{
 	
 			vars_ = &prj->Vars;
-			DataApi::Init(vars_);
+			DataApi::Init(prj);
 			DataApi::Attatch(obsrv);
 			return true;
 		}
