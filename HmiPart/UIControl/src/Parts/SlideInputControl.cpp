@@ -107,10 +107,9 @@ namespace UI
 			DOUBLE readvalue = UI::UIData::Number<DOUBLE>(mode_->SlideInputConfig.ReadVar);
 			pView->value(readvalue);
 			if (mode_->SlideInputConfig.Perm.HasShowPerm && mode_->SlideInputConfig.Perm.HasLimitShowPerm)
-				pView->redraw();
-			//UI::ViewShowUtility::ShowView(pView, mode_->SlideInputConfig.Perm,
-			//	mode_->SlideInputConfig.X + mode_->SlideInputConfig.OffX,
-			//	mode_->SlideInputConfig.Y + mode_->SlideInputConfig.OffY);
+				UI::ViewShowUtility::ShowView(pView, mode_->SlideInputConfig.Perm,
+					mode_->SlideInputConfig.X + mode_->SlideInputConfig.OffX,
+					mode_->SlideInputConfig.Y + mode_->SlideInputConfig.OffY);
 		}
 		if (mode_->SlideInputConfig.AttrMaxVar.Cmp(varId)) 
 		{
