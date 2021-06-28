@@ -40,6 +40,6 @@ bool RunEnv::Init()
 
 	pv = ini.GetValue("log", "CnfPath"); if (pv == nullptr)return false;
 	Cnf.LogCnfPath = System::GetAbsPath(pv);
-
+	return true;
 
 }

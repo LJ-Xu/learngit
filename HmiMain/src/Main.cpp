@@ -107,6 +107,7 @@ bool dumpCallback(const wchar_t *dump_path, const wchar_t *id,
 	MDRawAssertionInfo *assertion,
 	bool succeeded)
 {
+
 	if (succeeded) {
 		printf("dump guid is %ws\n", id);
 	}
@@ -131,6 +132,12 @@ static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor,
 	void* context,
 	bool succeeded)
 {
+	char buf[256];
+	std::string path(descriptor.path());
+	int pos = path.rfind('/');
+	std::string name = path.substr(pos + 1, path.size() - pos - 1);
+	sprintf(buf, "rm -rf `ls /data/dmp/ds/*.dmp | grep -v \"%s\"`", name.c_str());
+	system(buf);
 	printf("Dump path: %s\n", descriptor.path());
 	return succeeded;
 }

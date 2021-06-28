@@ -126,15 +126,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(IncludePath);$(ProjectDir)include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\XJSocket\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)HmiPart\Service\buttonrpc;$(SolutionDir)HmiPart\Service\DataService\include;$(SolutionDir)HmiPart\HmiCore\include;</IncludePath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Debug|Win32'">
     <IncludePath>$(IncludePath);$(ProjectDir)include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\XJSocket\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)HmiPart\Service\buttonrpc;$(SolutionDir)HmiPart\Service\DataService\include;$(SolutionDir)HmiPart\HmiCore\include;</IncludePath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(IncludePath);$(ProjectDir)include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\XJSocket\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)HmiPart\Service\buttonrpc;$(SolutionDir)HmiPart\Service\DataService\include;$(SolutionDir)HmiPart\HmiCore\include;</IncludePath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Release|Win32'">
     <IncludePath>$(IncludePath);$(ProjectDir)include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\XJSocket\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)HmiPart\Service\buttonrpc;$(SolutionDir)HmiPart\Service\DataService\include;$(SolutionDir)HmiPart\HmiCore\include;</IncludePath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
