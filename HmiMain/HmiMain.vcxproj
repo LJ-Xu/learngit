@@ -231,8 +231,16 @@
       <Command>XCOPY  $(SolutionDir)Output\$(Configuration)\out\$(ProjectName)\$(ProjectName).exe $(SolutionDir)Output\$(Configuration)\ /e/y
 XCOPY  $(SolutionDir)Output\$(Configuration)\out\XJSocket\XJSocketd.lib $(SolutionDir)Lib\win\debug /e/y
 XCOPY  $(SolutionDir)Output\$(Configuration)\out\DataClient\DataClientd.lib $(SolutionDir)Lib\win\debug /e/y
-XCOPY  $(SolutionDir)Output\$(Configuration)\out\DataService\DataServiced.lib $(SolutionDir)Lib\win\debug /e/y</Command>
+XCOPY  $(SolutionDir)Output\$(Configuration)\out\DataService\DataServiced.lib $(SolutionDir)Lib\win\debug /e/y
+
+XCOPY  $(SolutionDir)ExLib\HmiPart\Service\XJSocket\include\* $(SolutionDir)HmiPart\Service\XJSocket\include\ /e/y
+XCOPY  $(SolutionDir)ExLib\HmiPart\Service\DataClient\include\* $(SolutionDir)HmiPart\Service\DataClient\include\ /e/y
+XCOPY  $(SolutionDir)ExLib\HmiPart\Service\DataService\include\* $(SolutionDir)HmiPart\Service\DataService\include\ /e/y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -312,8 +320,16 @@ XCOPY  $(SolutionDir)Output\$(Configuration)\out\DataService\DataServiced.lib $(
       <Command>XCOPY  $(SolutionDir)Output\$(Configuration)\out\$(ProjectName)\$(ProjectName).exe $(SolutionDir)Output\$(Configuration)\ /e/y
 XCOPY  $(SolutionDir)Output\$(Configuration)\out\XJSocket\XJSocket.lib $(SolutionDir)Lib\win\release /e/y
 XCOPY  $(SolutionDir)Output\$(Configuration)\out\DataClient\DataClient.lib $(SolutionDir)Lib\win\release /e/y
-XCOPY  $(SolutionDir)Output\$(Configuration)\out\DataService\DataService.lib $(SolutionDir)Lib\win\release /e/y</Command>
+XCOPY  $(SolutionDir)Output\$(Configuration)\out\DataService\DataService.lib $(SolutionDir)Lib\win\release /e/y
+
+XCOPY  $(SolutionDir)ExLib\HmiPart\Service\XJSocket\include\* $(SolutionDir)HmiPart\Service\XJSocket\include\ /e/y
+XCOPY  $(SolutionDir)ExLib\HmiPart\Service\DataClient\include\* $(SolutionDir)HmiPart\Service\DataClient\include\ /e/y
+XCOPY  $(SolutionDir)ExLib\HmiPart\Service\DataService\include\* $(SolutionDir)HmiPart\Service\DataService\include\ /e/y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
