@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+message DeleteRecipeRecord
+{
+   bytes tablename = 1;
+   string id = 2;
+}
+
+message InsertRecipeRecord
+{
+   bytes tablename = 1;
+   string id = 2;
+}
+
+message UpdateRecipeRecord
+{
+   bytes tablename = 1;
+   string id = 2;
+   bytes columnname = 3;
+   string data = 4;
+}
+
+message BaseVarParam
+{
+	int32 devid = 1;	//设备ID，设备的索引号
+	int32 stano = 2;	//站号
+	int32 regtype = 3;	//寄存器类别 1:PSB 2:
+	int32 datatype = 4;	//寄存器类型
+	int32 addr1 = 5;	//地址偏移
+	int32 count = 6;	//寄存器字节数
+	int32 addr = 7;		//地址
+}
+
+message ColDataInfo
+{
+	int32 datatype = 1; //数据类型
+	int32 datafmt = 2;  //数据格式
+	int32 regcount = 3; //寄存器个数
+	bytes columnname = 4;
+}
+
+message UpLoadRecipe
+{
+	bytes tablename = 1;
+	int32 count = 2; //上传总short数
+	BaseVarParam dstvar = 3; //PSW开始位置
+	repeated ColDataInfo coldatainfos = 4;
+	BaseVarParam flagvar = 5;
+}
+
+message DownLoadRecipe
+{
+	bytes tablename = 1;
+	int32 count = 2; //下载总short数
+	BaseVarParam srcvar = 3; //PSW开始位置
+	repeated ColDataInfo coldatainfos = 4;
+	BaseVarParam flagvar = 5;
+}
+
+message ImportCSVdata
+{
+	int32 storagemedia = 1;
+	bytes filename = 2;
+	int32 count = 3; //导出总short数
+	BaseVarParam srcvar = 4; //PSW开始位置
+	repeated ColDataInfo coldatainfos = 5;
+	BaseVarParam statusvar = 6;
+	BaseVarParam resultvar = 7;
+	BaseVarParam processvar = 8;
+}
+
+message ExportCSVdata
+{
+	int32 storagemedia = 1;
+	bytes filename = 2;
+	int32 count = 3; //导入总short数
+	BaseVarParam dstvar = 4; //PSW开始位置
+	repeated ColDataInfo coldatainfos = 5;
+	BaseVarParam statusvar = 6;
+	BaseVarParam resultvar = 7;
+	BaseVarParam processvar = 8;
+}
+
+message MoveVardatas
+{
+	BaseVarParam svar = 1;
+	BaseVarParam dvar = 2;
+	int32 regcount = 3;
+}

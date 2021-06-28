@@ -1,0 +1,36 @@
+#########################################
+#
+# make file
+#########################################
+
+include ../Make.include
+
+# exe, staticlib, dynamiclib
+TYPE:= staticlib
+
+#output name
+TARGETNAME:= proto_msg
+
+# include dir
+INCLUDES := -I$(NAUT_ROOTDIR)/thirdparty/protobuf-3.4.x/include
+
+# depends lib src
+LIBDIRS=
+ 
+#src dir
+SRCDIR:= ./src/
+
+#version file
+include $(SRCDIR)/version
+ 
+#CCXXFLAGS= -DDEBUG -g
+ 
+#OFLAGS= -L$(TARGET_PATH_R)
+GLOBAL_CCXXFLAGS += -std=c++11 
+CCXXFLAGS = -fPIC
+#CFLAGS =
+#EXOBJS =
+#EXCLUDESRCS =
+ 
+ 
+include ../Make.share
