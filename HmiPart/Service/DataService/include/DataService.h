@@ -22,10 +22,10 @@ namespace UI
 	class DataService :public HMI::IDaAppCB
 	{
 	public:
-		DataService() :sem_(2)
+		DataService()
 		{}
 	public:
-		void Init(Project::ProjectPortVarsInfo*);
+		void Init(Project::HMIProject*);
 		void Start();
 		void Exit();
 		~DataService();
@@ -61,7 +61,7 @@ namespace UI
 		std::unique_ptr<HMI::DataClient> client_;
 		thread td_;
 		bool runFlag_ = false;
-		Semaphore sem_;
+		
 		Project::ProjectPortVarsInfo* vars_ = nullptr;
 		friend void Run(void* param);
 

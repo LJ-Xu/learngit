@@ -143,10 +143,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)d</TargetName>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)d</TargetName>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -156,9 +160,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

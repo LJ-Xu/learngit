@@ -22,6 +22,7 @@ public:
 	~WinSocketClient();
 
 private:
+	int CreateSocket();
 	bool recvFlag_;
 	char* recvBuf_ = nullptr;
 	XJSocketClient* client_;

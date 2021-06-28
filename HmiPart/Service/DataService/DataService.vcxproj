@@ -129,12 +129,16 @@
     <IncludePath>$(SolutionDir)\HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)\HmiPart\Project\include;$(ProjectDir)..\DataClient\include;$(ProjectDir)..\XJSocket\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)\OSLayer\System\include;$(SolutionDir)\ThirdPart\;$(IncludePath)</IncludePath>
     <TargetName>$(ProjectName)d</TargetName>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)\HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)\HmiPart\Project\include;$(ProjectDir)..\DataClient\include;$(ProjectDir)..\XJSocket\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)\OSLayer\System\include;$(SolutionDir)\ThirdPart\;$(IncludePath)</IncludePath>
     <TargetName>$(ProjectName)d</TargetName>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -145,10 +149,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)\HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)\HmiPart\Project\include;$(ProjectDir)..\DataClient\include;$(ProjectDir)..\XJSocket\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)\OSLayer\System\include;$(SolutionDir)\ThirdPart\;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)\HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)\HmiPart\Project\include;$(ProjectDir)..\DataClient\include;$(ProjectDir)..\XJSocket\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)\OSLayer\System\include;$(SolutionDir)\ThirdPart\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)\HmiPart\Project\include;$(ProjectDir)..\DataClient\include;$(ProjectDir)..\XJSocket\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)\OSLayer\System\include;$(SolutionDir)\ThirdPart\;$(ProjectDir);$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

@@ -15,6 +15,8 @@ public:
 
 	int Connect(std::string addr, int port);
 
+	int DisConnect();
+
 	int Send(const char* buf, int len);
 
 private:
