@@ -60,7 +60,7 @@ namespace UI
 					model->MenuConfig.Y + (model->MenuConfig.Height - h()) + model->MenuConfig.OffY, w(), h());
 
 			int H = (labelmaxsize_ - 3)&-2;
-			int X = x() + w() - H - Fl::box_dx(box()) - Fl::box_dw(box()) - 1;
+			int X = x() + w() - H - 1;
 			int Y = y() + (h() - H) / 2;
 			Fl_Image *RGBAimage = nullptr;
 			/*绘制背景*/
@@ -150,7 +150,7 @@ namespace UI
 			/*绘制文字*/
 			fl_font(labelfont(), labelsize());
 			fl_color(labelcolor());
-			draw_label(x() + Fl::box_dx(box()), y(), X - x() + 2, h());
+			draw_label(x(), y(), X - x() + 2, h());
 			if (IResourceService::Ins()->IsRenderMode())
 			{
 				if (model->MenuConfig.PopMode == 0)		//向下拉

@@ -5804,3 +5804,4 @@ build
 /HMI_Debug/googlepinyinD.lib
 /HMI_Debug/DataServiced.lib
 /HMI_Debug/DataClientd.lib
+/HmiMain/HMIMain.ini
