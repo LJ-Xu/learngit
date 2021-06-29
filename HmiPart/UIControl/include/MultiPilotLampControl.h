@@ -53,7 +53,7 @@ namespace UI
 		 * Note	    :
 		 *******************************************************************************/
 		//bool MeetCondition(Project::Conditions cond, double src, double dst);
-		bool MeetCondition(Project::StatusCondition cond, XJDataType* tp);
+		bool MeetCondition(Project::StatusCondition cond, XJDataType* tp, int decimals);
 
 	private:
 		std::shared_ptr<MultiPilotLampModel> mode_;

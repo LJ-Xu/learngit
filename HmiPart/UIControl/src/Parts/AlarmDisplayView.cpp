@@ -431,9 +431,9 @@ namespace UI
 				{
 					/*设置背景颜色*/
 					fl_color(fl_rgb_color(RGBColor(model->AlarmDisConfig.TitleBgColor)));
-					fl_rectf(model->AlarmDisConfig.X + model->AlarmDisConfig.OffX,
-						model->AlarmDisConfig.Y + model->AlarmDisConfig.OffY,
-						w(), model->AlarmDisConfig.TitleHeight);
+					fl_rectf(model->AlarmDisConfig.X + model->AlarmDisConfig.OffX - 2,
+						model->AlarmDisConfig.Y + model->AlarmDisConfig.OffY - 2,
+						w() + 6, model->AlarmDisConfig.TitleHeight + 6);
 					/*获取关于字符串*/
 					if (model->AlarmDisConfig.UseSameStyle)
 					{
@@ -463,7 +463,7 @@ namespace UI
 			{
 				// BG COLOR
 				fl_color(cell_bgcolor_);
-				fl_rectf(X, Y + model->AlarmDisConfig.TitleHeight, W, H - model->AlarmDisConfig.TitleHeight);
+				fl_rectf(X - 2, Y + model->AlarmDisConfig.TitleHeight - 2, W + 6, H - model->AlarmDisConfig.TitleHeight + 6);
 				fl_color(fl_rgb_color(RGBColor(model->AlarmDisConfig.FrameStyle.Color)));
 				fl_line_style(model->AlarmDisConfig.FrameStyle.Type, model->AlarmDisConfig.FrameStyle.Weight);
 				// TEXT
@@ -512,7 +512,7 @@ namespace UI
 				{
 					// BG COLOR
 					fl_color(bgColor);
-					fl_rectf(X, Y, W, H);
+					fl_rectf(X - 2, Y - 2, W + 6, H + 6);
 					fl_color(fontColor_);
 					fl_font(fontStyle_, fontSize_);
 					if (!UI::CodeFormatUtility::IsStrUtf8(text.c_str()))

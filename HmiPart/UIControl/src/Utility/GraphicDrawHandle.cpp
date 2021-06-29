@@ -750,7 +750,7 @@ namespace UI
 	void GraphicDrawHandle::PushClip(double x, double y, double w, double h)
 	{
 		double zoom = UI::IResourceService::Ins()->GetZoom();
-		fl_push_clip((int)(x * zoom), (int)(y * zoom), (int)(w * zoom), (int)(h * zoom));
+		fl_push_clip((int)(x * zoom), (int)(y * zoom), (int)(w * zoom) + 1, (int)(h * zoom) + 1);
 	}
 
 }
