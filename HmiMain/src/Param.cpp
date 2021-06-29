@@ -28,13 +28,13 @@ bool Param::ParseParam(int argc, char **argv)
 			break;
 		switch (c) {
 		case 'f':
-			Cnf.BinPath = std::string(optarg);
+			RunEnv::Cnf.BinPath = std::string(optarg);
 			break;
 		case 'p':
-			sscanf(optarg, "%d", &Cnf.SrvPort);
+			sscanf(optarg, "%d", &RunEnv::Cnf.SrvPort);
 			break;
 		case 'i':
-			Cnf.SrvIP = std::string(optarg);
+			RunEnv::Cnf.SrvIP = std::string(optarg);
 			break;
 		case 'h':
 			PrintUsage(argv[0]);

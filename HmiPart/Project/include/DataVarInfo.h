@@ -146,9 +146,6 @@ namespace Project
 		WinCtrlID CtrlId;   //控件ID
 		/*********数据或者数据指针***********/
 		int Data; //当数据内容大于4字节的时候为指针
-		/*******************/
-		DataVarId Sub;//子集，主要用于合并重合的DataVarInfo ,,填写负数代表无子节点
-		DataVarId FNext;//用于组帧逻辑：帧的元素之间链表，，非组帧之间的链表
 		/**********用于间接指定的通知功能************/
 		DataVarId IndctVid;      //varID --间接指定所用		
 		int RawAddr;//间接指定变量的原始  >=0：间接指定变量
@@ -158,7 +155,7 @@ namespace Project
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
-			archive(DevId,StaNo, RegType, Data, DataType,Addr, Addr1,Count,CtrlId, Sub, FNext, IndctVid,RawAddr, DataExType);
+			archive(DevId,StaNo, RegType, Data, DataType,Addr,Addr1,Count,CtrlId,IndctVid,RawAddr,DataExType);
 		}
 
 
@@ -182,23 +179,6 @@ namespace Project
 		{
 			return CtrlId = -1;
 		}
- 
-		bool IsBottomVar()
-		{
-			//return sub==DataVarId::NullId || sub.vid < 0;
-			return Sub.IsNegative();
-		}
-		bool GetTopVarIdByBottom(DataVarId& varId)
-		{
-			if (IsBottomVar())
-			{
-				varId.Vid = Sub.Vid&NULL_VID_VALUE;
-				return true;
-			}				
-			else
-				return false;
-		}
-		 
 /*
 		bool operator>(const DataVarInfo& val)
 		{

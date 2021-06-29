@@ -5,10 +5,11 @@
 
 struct RunConfig
 {
-	RunConfig():SrvIP("127.0.0.1"), SrvPort(8800),IsDebug(false){}
+	RunConfig():SrvIP("127.0.0.1"), SrvPort(8800), UIPort(9000),IsDebug(false){}
 	std::string BinPath;
 	std::string SrvIP ;
-	int   SrvPort;
+	unsigned short   SrvPort;
+	unsigned short   UIPort;
 	std::string LogCnfPath;
 	bool IsDebug; //是否为debug方式运行
 	std::string AlarmPath;
