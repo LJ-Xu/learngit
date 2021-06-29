@@ -179,7 +179,8 @@ namespace UI
 		{
 			int time[3] = { 0 };
 			tm searchlocal;
-			for (unsigned i = 0; i < mode_->ReportConfig.SearchTimeVar.size();i++)
+			int size = 3 < mode_->ReportConfig.SearchRegVarId.size() ? 3 : mode_->ReportConfig.SearchRegVarId.size();
+			for (int i = 0; i < size;i++)
 				time[i] = UI::UIData::Number<int>(mode_->ReportConfig.SearchTimeVar[i]);
 			searchlocal.tm_sec = 0;
 			searchlocal.tm_min = 0;
