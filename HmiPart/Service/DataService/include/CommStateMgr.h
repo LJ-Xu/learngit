@@ -1,30 +1,38 @@
 #pragma once
+#include <vector>
+#include <map>
+namespace Project
+{
+	struct HMIProject;
+}
 namespace UI
 {
-	struct DevCommState
+	struct DevCommStateInfo
 	{
-		int Success; // 成功次数
-		int Error; //失败次数
-		int Req; //请求次数
-		unsigned int Tick; //时间戳,计算最近2S中状态
-		DevCommState() {}
-		DevCommState(unsigned int tc):Tick(tc)
-		{
-		
-		}
+		long long RespTick;//ms
+		long long ReqTick;//ms
+		int ReqIdx;
+		std::map<int, DevCommStateInfo> SubDevs;
+		DevCommStateInfo():ReqIdx(0), RespTick(0), ReqTick(0){}
 	};
-	enum DeviceDataState
+	enum DeviceDataStateEM
 	{
-		Dev_State_Req, Dev_State_Success, Dev_State_Error, Dev_State_Timeout
+		Dev_State_Req, Dev_State_Resp,Dev_State_Success, Dev_State_Error, Dev_State_Timeout
 	};
-
+	enum RespStateEM
+	{
+		Resp_State_OK, Resp_State_Timeout, Resp_State_Wait, Resp_State_ERR
+	};
 	class CommStateMgr
 	{
 	public:
+		static void Init(Project::HMIProject* prj);
 		static void State(short devid, short stano, short state);
-		static bool IsOK(short devid, short stano);
+		//static bool IsRespTimeout();
+		//是否可以继续请求
+		static RespStateEM RespState(short devid, short stano);
 	private:
-		static std::map<unsigned int, DevCommState> devstate_;
+		static std::vector<DevCommStateInfo> devstate_;
 	};
 }
 

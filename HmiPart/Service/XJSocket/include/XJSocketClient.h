@@ -14,6 +14,8 @@ public:
 
 	int Connect(std::string addr,int port);
 
+	int DisConnect();
+
 	int Send(const char* buf,int len);
 
 	virtual void OnRecved(char* buf, int len) {};

@@ -125,9 +125,21 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)HmiComm;$(SolutionDir)HmiCore;$(SolutionDir)MsgQueue;$(SolutionDir)HmiPrinterService;$(SolutionDir)Project\Include;</IncludePath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Debug|Win32'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)HmiComm;$(SolutionDir)HmiCore;$(SolutionDir)MsgQueue;$(SolutionDir)HmiPrinterService;$(SolutionDir)Project\Include;</IncludePath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Release|Win32'">
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

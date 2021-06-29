@@ -289,7 +289,7 @@ namespace UI
 			UI::ViewShowUtility::ShowView(pView_, mode_->MPLampconfig.Perm, mode_->MPLampconfig.X + mode_->MPLampconfig.OffX, mode_->MPLampconfig.Y + mode_->MPLampconfig.OffY);
 		}
 
-		if (mode_->MPLampconfig.VOffX.Cmp(varId))
+		if (mode_->MPLampconfig.VOffY.Cmp(varId))
 		{
 			mode_->MPLampconfig.OffY = UI::UIData::Number<int>(mode_->MPLampconfig.VOffY) + Page()->GetPageOffY();
 			UI::ViewShowUtility::ShowView(pView_, mode_->MPLampconfig.Perm, mode_->MPLampconfig.X + mode_->MPLampconfig.OffX, mode_->MPLampconfig.Y + mode_->MPLampconfig.OffY);

@@ -38,6 +38,7 @@ namespace UI
 		void SetReadVar();
 		bool HandleOperatePush();
 		int handle(int event);
+		int handle(int event, int x, int y, int w, int h);
 		BasicView BaseView;
 	protected:
 		void draw() override;

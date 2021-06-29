@@ -66,8 +66,8 @@ namespace UI
 		syspath = "/data/dict_pinyin.dat";
 		usrpath = "/data/dict_pinyin_user.dat";
 #endif
-		printf("syspath is : %s\n", syspath.c_str());
-		printf("usrpath is : %s\n", usrpath.c_str());
+		LOG_INFO("syspath is : %s\n", syspath.c_str());
+		LOG_INFO("usrpath is : %s\n", usrpath.c_str());
 		bool ret = im_open_decoder(syspath.c_str(), usrpath.c_str());
 		if(!ret)
 			printf("open pinyin data fail\n");

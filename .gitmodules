@@ -1,0 +1,6 @@
+[submodule "ExLib1"]
+	path = ExLib1
+	url = git@192.168.60.222:hmi/uimainlib.git
+[submodule "ExLib"]
+	path = ExLib
+	url = git@192.168.60.222:hmi/uimainlib.git

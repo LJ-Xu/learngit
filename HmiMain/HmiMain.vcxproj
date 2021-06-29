@@ -35,6 +35,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExLib\HmiPart\Service\DataClient\DataClient.vcxproj">
+      <Project>{7bee7a7f-388a-40d8-9bd6-28a0e837ee3f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ExLib\HmiPart\Service\DataService\DataService.vcxproj">
+      <Project>{665f7fa7-7fda-4e18-b118-e641b6f6bdb0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ExLib\HmiPart\Service\XJSocket\XJSocket.vcxproj">
+      <Project>{c06fc5e1-1e1d-4c5d-81b2-c96bd110a8fb}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\HmiPart\HmiComm\HmiComm.vcxproj">
       <Project>{7d1327f4-41c5-4f99-9af7-edd580d0e568}</Project>
     </ProjectReference>
@@ -171,19 +180,27 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(IncludePath);$(ProjectDir)include;$(ProjectDir)getopt\include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiCore\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\log4cpp\include;$(SolutionDir)\ThirdPart\gtest\include;$(SolutionDir)\ThirdPart\breakpad\src;$(SolutionDir)\ThirdPart\googlepinyin\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\XJSocket\include</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)ThirdPart\lib;$(SolutionDir)\Lib\win</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)\Lib\win\debug</LibraryPath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Debug|Win32'">
-    <IncludePath>$(IncludePath);$(ProjectDir)include;$(ProjectDir)getopt\include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiCore\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\log4cpp\include;$(SolutionDir)\ThirdPart\gtest\include;$(SolutionDir)\ThirdPart\breakpad\src;$(SolutionDir)\ThirdPart\googlepinyin\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\XJSocket\include</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)ThirdPart\lib;$(SolutionDir)\Lib</LibraryPath>
+    <IncludePath>$(IncludePath);$(ProjectDir)include;$(ProjectDir)getopt\include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiCore\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\log4cpp\include;$(SolutionDir)\ThirdPart\gtest\include;$(SolutionDir)\ThirdPart\breakpad\src;$(SolutionDir)\ThirdPart\googlepinyin\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)ExLib\HmiPart\Service\DataClient\include;$(SolutionDir)ExLib\HmiPart\Service\XJSocket\include;$(SolutionDir)ExLib\HmiPart\Service\DataService\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)\Lib\win\debug</LibraryPath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(IncludePath);$(ProjectDir)include;$(ProjectDir)getopt\include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiCore\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\log4cpp\include;$(SolutionDir)\ThirdPart\gtest\include;$(SolutionDir)\ThirdPart\breakpad\src;$(SolutionDir)\ThirdPart\googlepinyin\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\XJSocket\include</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)ThirdPart\lib;$(SolutionDir)\Lib;$(SolutionDir)\Debug</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)\Lib\win\release</LibraryPath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Release|Win32'">
-    <IncludePath>$(IncludePath);$(ProjectDir)include;$(ProjectDir)getopt\include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiCore\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\log4cpp\include;$(SolutionDir)\ThirdPart\gtest\include;$(SolutionDir)\ThirdPart\breakpad\src;$(SolutionDir)\ThirdPart\googlepinyin\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\XJSocket\include</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)ThirdPart\lib;$(SolutionDir)\Lib;$(SolutionDir)\Debug</LibraryPath>
+    <IncludePath>$(IncludePath);$(ProjectDir)include;$(ProjectDir)getopt\include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiCore\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\log4cpp\include;$(SolutionDir)\ThirdPart\gtest\include;$(SolutionDir)\ThirdPart\breakpad\src;$(SolutionDir)\ThirdPart\googlepinyin\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)ExLib\HmiPart\Service\DataClient\include;$(SolutionDir)ExLib\HmiPart\Service\XJSocket\include;$(SolutionDir)ExLib\HmiPart\Service\DataService\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)\Lib\win\release</LibraryPath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -197,11 +214,11 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;log4cppD.lib;common.lib;crash_generation_client.lib;crash_generation_server.lib;exception_handler.lib;gtest.lib;gtest_main.lib;googlepinyind.lib;sqlited.lib;libzmqD.lib;Iphlpapi.lib;libboost_regex-vc141-mt-gd-1_65_1.lib;libboost_filesystem-vc141-mt-gd-1_65_1.lib;libboost_date_time-vc141-mt-gd-1_65_1.lib;libboost_system-vc141-mt-gd-1_65_1.lib;zint.lib;libprotobufd.lib;XJSocketd.lib;DataClientd.lib;DataServiced.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;log4cppD.lib;common.lib;crash_generation_client.lib;crash_generation_server.lib;exception_handler.lib;libzmqD.lib;Iphlpapi.lib;libboost_regex-vc141-mt-gd-1_65_1.lib;libboost_filesystem-vc141-mt-gd-1_65_1.lib;libboost_date_time-vc141-mt-gd-1_65_1.lib;libboost_system-vc141-mt-gd-1_65_1.lib;zint.lib;libprotobufd.lib;DataServiced.lib;DataClientd.lib;XJSocketd.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)ThirdPart\lib;$(OutDir)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY  $(SolutionDir)Debug\HmiMain.exe $(SolutionDir)..\Hmi\Hmi\bin\HmiTest\HMI\ /e/u/y</Command>
+      <Command>XCOPY  $(SolutionDir)Output\$(Configuration)\out\$(ProjectName)\$(ProjectName).exe $(SolutionDir)Output\$(Configuration)\ /e/y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Debug|Win32'">
@@ -216,12 +233,23 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;log4cppD.lib;common.lib;crash_generation_client.lib;crash_generation_server.lib;exception_handler.lib;gtest.lib;gtest_main.lib;googlepinyind.lib;sqlited.lib;libzmqD.lib;Iphlpapi.lib;libboost_regex-vc141-mt-gd-1_65_1.lib;libboost_filesystem-vc141-mt-gd-1_65_1.lib;libboost_date_time-vc141-mt-gd-1_65_1.lib;libboost_system-vc141-mt-gd-1_65_1.lib;zint.lib;libprotobufd.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;log4cppD.lib;common.lib;crash_generation_client.lib;crash_generation_server.lib;exception_handler.lib;libzmqD.lib;Iphlpapi.lib;libboost_regex-vc141-mt-gd-1_65_1.lib;libboost_filesystem-vc141-mt-gd-1_65_1.lib;libboost_date_time-vc141-mt-gd-1_65_1.lib;libboost_system-vc141-mt-gd-1_65_1.lib;zint.lib;libprotobufd.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)ThirdPart\lib;$(OutDir)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY  $(SolutionDir)Debug\HmiMain.exe $(SolutionDir)..\Hmi\Hmi\bin\HmiTest\HMI\ /e/u/y</Command>
+      <Command>XCOPY  $(SolutionDir)Output\$(Configuration)\out\$(ProjectName)\$(ProjectName).exe $(SolutionDir)Output\$(Configuration)\ /e/y
+XCOPY  $(SolutionDir)Output\$(Configuration)\out\XJSocket\XJSocketd.lib $(SolutionDir)Lib\win\debug /e/y
+XCOPY  $(SolutionDir)Output\$(Configuration)\out\DataClient\DataClientd.lib $(SolutionDir)Lib\win\debug /e/y
+XCOPY  $(SolutionDir)Output\$(Configuration)\out\DataService\DataServiced.lib $(SolutionDir)Lib\win\debug /e/y
+
+XCOPY  $(SolutionDir)ExLib\HmiPart\Service\XJSocket\include\* $(SolutionDir)HmiPart\Service\XJSocket\include\ /e/y
+XCOPY  $(SolutionDir)ExLib\HmiPart\Service\DataClient\include\* $(SolutionDir)HmiPart\Service\DataClient\include\ /e/y
+XCOPY  $(SolutionDir)ExLib\HmiPart\Service\DataService\include\* $(SolutionDir)HmiPart\Service\DataService\include\ /e/y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -269,6 +297,9 @@
     <ManifestResourceCompile>
       <ResourceOutputFileName>$(IntDir)$(TargetName)$(TargetExt).embed.manifest.res</ResourceOutputFileName>
     </ManifestResourceCompile>
+    <PostBuildEvent>
+      <Command>XCOPY  $(SolutionDir)Output\$(Configuration)\out\$(ProjectName)\$(ProjectName).exe $(SolutionDir)Output\$(Configuration)\ /e/y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Release|Win32'">
     <ClCompile>
@@ -286,7 +317,7 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;log4cppLIB.lib;common.lib;crash_generation_client.lib;crash_generation_server.lib;exception_handler.lib;gtest.lib;gtest_main.lib;googlepinyin.lib;sqlite.lib;libzmq.lib;Iphlpapi.lib;libboost_regex-vc141-mt-1_65_1.lib;libboost_filesystem-vc141-mt-1_65_1.lib;libboost_date_time-vc141-mt-1_65_1.lib;libboost_system-vc141-mt-1_65_1.lib;zint.lib;libprotobuf.lib;XJSocket.lib;DataClient.lib;DataService.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;log4cppLIB.lib;common.lib;crash_generation_client.lib;crash_generation_server.lib;exception_handler.lib;libzmq.lib;Iphlpapi.lib;libboost_regex-vc141-mt-1_65_1.lib;libboost_filesystem-vc141-mt-1_65_1.lib;libboost_date_time-vc141-mt-1_65_1.lib;libboost_system-vc141-mt-1_65_1.lib;zint.lib;libprotobuf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <OutputManifestFile>$(IntDir)$(TargetName)$(TargetExt).embed.manifest</OutputManifestFile>
@@ -294,6 +325,20 @@
     <ManifestResourceCompile>
       <ResourceOutputFileName>$(IntDir)$(TargetName)$(TargetExt).embed.manifest.res</ResourceOutputFileName>
     </ManifestResourceCompile>
+    <PostBuildEvent>
+      <Command>XCOPY  $(SolutionDir)Output\$(Configuration)\out\$(ProjectName)\$(ProjectName).exe $(SolutionDir)Output\$(Configuration)\ /e/y
+XCOPY  $(SolutionDir)Output\$(Configuration)\out\XJSocket\XJSocket.lib $(SolutionDir)Lib\win\release /e/y
+XCOPY  $(SolutionDir)Output\$(Configuration)\out\DataClient\DataClient.lib $(SolutionDir)Lib\win\release /e/y
+XCOPY  $(SolutionDir)Output\$(Configuration)\out\DataService\DataService.lib $(SolutionDir)Lib\win\release /e/y
+
+XCOPY  $(SolutionDir)ExLib\HmiPart\Service\XJSocket\include\* $(SolutionDir)HmiPart\Service\XJSocket\include\ /e/y
+XCOPY  $(SolutionDir)ExLib\HmiPart\Service\DataClient\include\* $(SolutionDir)HmiPart\Service\DataClient\include\ /e/y
+XCOPY  $(SolutionDir)ExLib\HmiPart\Service\DataService\include\* $(SolutionDir)HmiPart\Service\DataService\include\ /e/y</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

@@ -65,7 +65,15 @@ namespace UI
 		}
 		return true;
 	}
-	int SlideInputView::handle(int event) {
+	int SlideInputView::handle(int event)
+	{
+		if (event == FL_PUSH && Fl::visible_focus()) {
+			Fl::focus(this);
+			redraw();
+		}
+		return handle(event,0, 0, 0, 0);
+	}
+	int SlideInputView::handle(int event,int x, int y, int w, int h) {
 		shared_ptr<SlideInputModel> model = BaseView.GetModel<SlideInputModel>();
 		switch (event) {
 		case FL_PUSH: {		
@@ -82,40 +90,36 @@ namespace UI
 				return 1;
 			//写入前通知
 			NoticesUtility::NoticeWrite(model->SlideInputConfig.ResBef);
-			double val;
-			if (minimum() == maximum())
-				val = 0.5;
-			else {
-				val = (value() - minimum()) / (maximum() - minimum());
-				if (val > 1.0) val = 1.0;
-				else if (val < 0.0) val = 0.0;
-			}
-			
-			int ww = (horizontal() ? model->SlideInputConfig.SlideRailWidth : model->SlideInputConfig.SlideRailHeight);
-			int mx = (horizontal() ? Fl::event_x() - (model->SlideInputConfig.SlideRailPos.X + model->SlideInputConfig.OffX) :
-				Fl::event_y() - (model->SlideInputConfig.SlideRailPos.Y + model->SlideInputConfig.OffY));
-			
-			int T = (horizontal() ? model->SlideInputConfig.SlideRailHeight : model->SlideInputConfig.SlideRailWidth) / 2 + 1;
-			//if (slideW_ < T) slideW_ = T;
-			int xx = int(val * (ww - slideW_) + .5) + slideW_ / 2;
-
-			handle_push();
-			if (wp.deleted()) return 1;
 			if (model->SlideInputConfig.UseIncDecPerClick)
 			{
+				double val;
+				if (minimum() == maximum())
+					val = 0.5;
+				else {
+					val = (value() - minimum()) / (maximum() - minimum());
+					if (val > 1.0) val = 1.0;
+					else if (val < 0.0) val = 0.0;
+				}
+			
+				int ww = (horizontal() ? model->SlideInputConfig.SlideRailWidth : model->SlideInputConfig.SlideRailHeight);
+				int mx = (horizontal() ? Fl::event_x() - (model->SlideInputConfig.SlideRailPos.X + model->SlideInputConfig.OffX) :
+					Fl::event_y() - (model->SlideInputConfig.SlideRailPos.Y + model->SlideInputConfig.OffY));
+			
+				int T = (horizontal() ? model->SlideInputConfig.SlideRailHeight : model->SlideInputConfig.SlideRailWidth) / 2 + 1;
+				//if (slideW_ < T) slideW_ = T;
+				int xx = int(val * (ww - slideW_) + .5) + slideW_ / 2;
+
+				handle_push();
+				if (wp.deleted()) return 1;
 				if (mx > xx)
 					handle_drag(clamp(increment(value(), 1)));
 				else if (mx < xx)
 					handle_drag(clamp(increment(value(), -1)));
-				if (wp.deleted()) return 1;
 				handle_release();
-				PermUtility::QuitLimitPerm(model->SlideInputConfig.Perm);
 				return 1;
 			}
+			handle_push();
 			if (wp.deleted()) return 1;
-			handle_release();
-			PermUtility::QuitLimitPerm(model->SlideInputConfig.Perm);
-			//return 1;
 		}
 		case FL_DRAG: {
 			char dataflag = DataApi::GetDataFlag(model->SlideInputConfig.ReadVar);
@@ -173,10 +177,7 @@ namespace UI
 			handle_drag(clamp(v));		
 			/*如果是实时显示，将数值写入到ReadVar,否则不处理*/
 			if (model->SlideInputConfig.UseChangeInput)
-			{
-				//NoticesUtility::NoticeWrite(model->SlideInputConfig.ResBef);//写入前通知
 				SetReadVar();
-			}
 		} return 1;
 		case FL_RELEASE:	
 		{
@@ -186,6 +187,7 @@ namespace UI
 			handle_release();
 			/*将数值写入寄存器*/
 			SetReadVar();
+			PermUtility::QuitLimitPerm(model->SlideInputConfig.Perm);
 			return 1;
 		}
 		case FL_FOCUS:

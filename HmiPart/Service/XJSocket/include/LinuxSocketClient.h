@@ -3,7 +3,6 @@
 #include "XJSocket.h"
 #include <string>
 #include <thread>
-
 class XJSocketClient;
 class LinuxSocketClient
 {
@@ -11,13 +10,16 @@ public:
 
 	LinuxSocketClient() = default;
 
-	int Init(XJSocketClient* client);
-
+	int Init(XJSocketClient* client);	
+	
 	int Connect(std::string addr, int port);
+
+	int DisConnect();
 
 	int Send(const char* buf, int len);
 
 private:
+	int CreateSocket();
 	int UnBlock(int sfd);
 	void Close();
 	void ReceiveMessageThread(void* ptr);
