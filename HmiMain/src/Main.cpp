@@ -221,7 +221,7 @@ static void LoadParam(Param& param)
 #pragma comment( linker, "/subsystem:windows /entry:mainCRTStartup")
 #define xTEST
 int main(int argc, char ** argv) {
-	InitBreakpad();
+	//InitBreakpad();
 	Param param;
 	param.ParseParam(argc, argv);
 	LoadParam(param);
