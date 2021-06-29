@@ -5,7 +5,7 @@
 RunConfig  RunEnv::Cnf;
 SystemInfo RunEnv::SysInfo;
 HMIInfo  RunEnv::HMIApp;
-#define INI_NAME "HMIMain.ini"
+#define INI_NAME "HmiMain.ini"
 
 bool RunEnv::Init()
 {
