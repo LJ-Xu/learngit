@@ -16,9 +16,9 @@ namespace UI
 	struct ReqVarItem
 	{
 		ReqVarItem() {}
-		ReqVarItem(int fid, int vid) :FrameIdx(fid), Vid(vid) {}
+		ReqVarItem(int fid, int vidx) :FrameIdx(fid), Vidx(vidx) {}
 		int FrameIdx;
-		unsigned int Vid;
+		unsigned int Vidx;
 	};
 	struct DevRequestGroup
 	{

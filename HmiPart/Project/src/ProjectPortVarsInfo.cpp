@@ -91,18 +91,9 @@ namespace Project
 								staticVar.CtrlId = sVarTmp["CtrlIdx"].GetInt();
 							if (sVarTmp.HasMember("RawAddr"))
 								staticVar.RawAddr = sVarTmp["RawAddr"].GetInt();
-							if (sVarTmp.HasMember("Sub") && !sVarTmp["Sub"].IsNull())
-							{
-									staticVar.Sub.Parse(sVarTmp["Sub"]);
-							}
 							if (sVarTmp.HasMember("OffsetVarID") && !sVarTmp["OffsetVarID"].IsNull())
 							{
 									staticVar.IndctVid.Parse(sVarTmp["OffsetVarID"]);
-							}
- 
-							if (sVarTmp.HasMember("FNext") && !sVarTmp["FNext"].IsNull())
-							{
-									staticVar.FNext.Parse(sVarTmp["FNext"]);
 							}
 							VarInfos.push_back(staticVar);
 						}

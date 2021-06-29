@@ -203,28 +203,30 @@ void CLOSE_DATASERVER()
 
 #endif
 }
-static void LoadParam(Param& param)
+static void LoadParam(Param& param, int argc, char ** argv)
 {
 	
-	RunEnv::Init();	
-	if (!param.Cnf.BinPath.empty())
+	RunEnv::Init();
+	param.ParseParam(argc, argv);
+	/*if (!param.Cnf.BinPath.empty())
 		RunEnv::Cnf.BinPath = param.Cnf.BinPath;
+	if (!param.Cnf.SrvIP.empty())
+		RunEnv::Cnf.SrvIP = param.Cnf.SrvIP;
 	if (!param.Cnf.AlarmPath.empty())
 		RunEnv::Cnf.AlarmPath = param.Cnf.AlarmPath;
 	if (!param.Cnf.SamplePath.empty())
 		RunEnv::Cnf.SamplePath = param.Cnf.SamplePath;
 	if (!param.Cnf.OperationPath.empty())
-		RunEnv::Cnf.OperationPath = param.Cnf.OperationPath;
+		RunEnv::Cnf.OperationPath = param.Cnf.OperationPath;*/
 	Logger::SetFlag(true);
 	Logger::Ins().Init(RunEnv::Cnf.LogCnfPath);
 }
 #pragma comment( linker, "/subsystem:windows /entry:mainCRTStartup")
 #define xTEST
 int main(int argc, char ** argv) {
-	//InitBreakpad();
-	Param param;
-	param.ParseParam(argc, argv);
-	LoadParam(param);
+	InitBreakpad();
+	Param param;	
+	LoadParam(param, argc, argv);
 	LOG_INFO("Start HmiMain.exe\n");
 	/*CLOSE_DATASERVER();
 
