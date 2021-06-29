@@ -271,20 +271,20 @@ namespace UI
 									string strGet = to_string(DataApi::AppNumber<DWORD>(itorMnt.MonitorAddrRef));
 									AnalyseNumberStr(strGet, strTemp, itorMnt.Intgerdigits, 0, itorMnt.IsPreLead);
 								}
-								strRet.append(strTemp, strTemp.size());
+								strRet.append(strTemp.c_str(), strTemp.size());
 								break;
 							}
 							case 1://×Ö·û
 							{
 								string strTemp = DataApi::AppString(itorMnt.MonitorAddrRef);
-								strRet.append(strTemp,strTemp.size());
+								strRet.append(strTemp.c_str(),strTemp.size());
 								break;
 							}
 							case 2://ÖÐÎÄ
 							{
 								string strGet = DataApi::AppString(itorMnt.MonitorAddrRef);
 								UI::IResourceService::GB2312toUtf8(strGet);
-								strRet.append(strGet, strGet.size());
+								strRet.append(strGet.c_str(), strGet.size());
 								break;
 							}
 							}
@@ -298,7 +298,7 @@ namespace UI
 							{
 								if (value == (DWORD)(itor->SrcId))
 								{
-									strRet.append(itor->Text.Texts[0], itor->Text.Texts[0].size());
+									strRet.append(itor->Text.Texts[0].c_str(), itor->Text.Texts[0].size());
 									break;
 								}
 							}

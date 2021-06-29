@@ -76,6 +76,24 @@ namespace UI
 		HandleSysChange(Permission);
 		StartScoll();
 	}
+	void AlarmBarControl::HandleDataVar(Project::DataVarId &varId)
+	{
+		AlarmBarView* pView = static_cast<AlarmBarView*>(pView_);
+		if (Mode->AlarmBarConfig.VOffX.Cmp(varId))
+		{
+			Mode->AlarmBarConfig.OffX = UI::UIData::Number<int>(Mode->AlarmBarConfig.VOffX) + Page()->GetPageOffX();
+			UI::ViewShowUtility::ShowView(pView_, Mode->AlarmBarConfig.Perm, Mode->AlarmBarConfig.X + Mode->AlarmBarConfig.OffX, Mode->AlarmBarConfig.Y + Mode->AlarmBarConfig.OffY);
+		}
+		if (Mode->AlarmBarConfig.VOffY.Cmp(varId))
+		{
+			Mode->AlarmBarConfig.OffY = UI::UIData::Number<int>(Mode->AlarmBarConfig.VOffY) + Page()->GetPageOffY();
+			UI::ViewShowUtility::ShowView(pView_, Mode->AlarmBarConfig.Perm, Mode->AlarmBarConfig.X + Mode->AlarmBarConfig.OffX, Mode->AlarmBarConfig.Y + Mode->AlarmBarConfig.OffY);
+		}
+		if (Mode->AlarmBarConfig.Perm.ShowVID.Cmp(varId))
+			UI::PermUtility::HandleShowPerm(Mode->AlarmBarConfig.Perm, pView_);
+		if (Mode->AlarmBarConfig.Perm.EnableVID.Cmp(varId))
+			UI::PermUtility::HandleEnablePerm(Mode->AlarmBarConfig.Perm, pView_);
+	}
 	void AlarmBarControl::HandleSysChange(SysChangeEM catogray)
 	{
 		AlarmBarModel* mode_ = static_cast<AlarmBarModel*>(pModel_.get());

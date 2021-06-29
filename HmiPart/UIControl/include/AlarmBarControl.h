@@ -17,6 +17,7 @@ namespace UI
 		void HandleSysChange(SysChangeEM catogray);
 	protected:
 		int PeekHMIMessage(Message::Msg* msg) override;
+		void HandleDataVar(Project::DataVarId &varId);
 	private:
 		void InitAlarmData(Project::DataVarId& varid);
 	public:

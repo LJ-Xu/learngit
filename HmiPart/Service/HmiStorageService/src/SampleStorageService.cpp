@@ -182,7 +182,7 @@ namespace Storage
 	 */
 	vector<SampleRecord> SampleStorageService::SelectAllSampleRecord() {
 		char sql[SQLCMDLEN] = { 0 };
-		snprintf(sql, sizeof(sql), "SELECT * FROM Sample union all SELECT * FROM fileDb.Sample;");
+		snprintf(sql, sizeof(sql), "SELECT * FROM Sample union all SELECT * FROM fileDb.Sample ORDER BY Date;");
 		return SelectSample(sql);
 	}
 
@@ -196,7 +196,7 @@ namespace Storage
 	vector<SampleRecord> SampleStorageService::SelectSampleRecordByChannel(int channel) {
 		char sql[SQLCMDLEN] = { 0 };
 		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE ChannelNo = %d union all \
-									SELECT * FROM fileDb.Sample WHERE ChannelNo = %d;", channel, channel);
+									SELECT * FROM fileDb.Sample WHERE ChannelNo = %d ORDER BY Date;", channel, channel);
 		return SelectSample(sql);
 	}
 
@@ -205,7 +205,7 @@ namespace Storage
 		char sql[SQLCMDLEN] = { 0 };
 		int gnm = gName << 16;
 		int gno = gNo << 24;
-		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d union all SELECT * FROM fileDb.Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d ", gnm, gnm, gno, gno, gnm, gnm, gno, gno);
+		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d union all SELECT * FROM fileDb.Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d ORDER BY Date ", gnm, gnm, gno, gno, gnm, gnm, gno, gno);
 		return SelectSample(sql);
 	}
 
@@ -230,7 +230,7 @@ namespace Storage
 	vector<SampleRecord> SampleStorageService::SelectSampleRecordByDate(int channel, DDWORD startDate, DDWORD endDate) {
 		char sql[SQLCMDLEN] = { 0 };
 		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE ChannelNo = %d AND Date BETWEEN %lld AND %lld union all \
-									SELECT * FROM fileDb.Sample WHERE ChannelNo = %d AND Date BETWEEN %lld AND %lld;",
+									SELECT * FROM fileDb.Sample WHERE ChannelNo = %d AND Date BETWEEN %lld AND %lld ORDER BY Date;",
 			channel, startDate, endDate, channel, startDate, endDate);
 		return SelectSample(sql);
 	}
@@ -248,7 +248,7 @@ namespace Storage
 		char sql[SQLCMDLEN] = { 0 };
 		//sprintf(sql, "SELECT * FROM Sample WHERE ChannelNo = %d AND Date BETWEEN %lld AND %lld", channel, startTime, endTime);
 		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE ChannelNo = %d AND Date BETWEEN %lld AND %lld union all \
-									SELECT * FROM fileDb.Sample WHERE ChannelNo = %d AND Date BETWEEN %lld AND %lld;",
+									SELECT * FROM fileDb.Sample WHERE ChannelNo = %d AND Date BETWEEN %lld AND %lld ORDER BY Date;",
 			channel, startTime, endTime, channel, startTime, endTime);
 		return SelectSample(sql);
 	}

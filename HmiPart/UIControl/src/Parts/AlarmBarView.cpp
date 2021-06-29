@@ -197,7 +197,7 @@ namespace UI
 					StrAlarm.append(System::GetTimeToString(itorRec->StartTick / 1000)).append(" ");
 					break;
 				case 4:
-					StrAlarm.append(itorRec->Title, itorRec->Title.size()).append(" ");
+					StrAlarm.append(itorRec->Title.c_str(), itorRec->Title.size()).append(" ");
 					break;
 				case 5:
 					StrAlarm.append(" ±¨¾¯´ÎÊı:").append(to_string(itorRec->Times)).append(" ");
