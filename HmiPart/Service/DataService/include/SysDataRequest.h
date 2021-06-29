@@ -8,7 +8,7 @@ namespace Project
 namespace UI
 {
 	enum RequestStatue:char
-	{ RS_OK=0,RS_TIMEOUT=-2,RS_CONTINUE=-1,};
+	{ RS_OK=0,RS_TIMEOUT=2,RS_CONTINUE=1,};
 	class SysDataRequest
 	{
 	public:
