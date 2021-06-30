@@ -24,6 +24,8 @@
 #include "PermUtility.h"
 #include "HMIWindow.h"
 #include "SysSetApi.h"
+#include "OperatorGControl.h"
+
 using namespace std;
 
 namespace UI
@@ -53,12 +55,18 @@ namespace UI
 			if (model->TransferRecipeConfig.TransmitMode == Project::RecipeTransferAction::DownLoadToPLC)
 			{
 				int row = Storage::RecipeStorage::Ins()->GetCountByRepiceName(model->TransferRecipeConfig.RecipeId);
+				if (model->TransferRecipeConfig.IsRecord)
+					OperatorGControl::Ins()->AddOperatorRecord(ctrl->Page()->Winno(), model->TransferRecipeConfig.CtrlName, model->TransferRecipeConfig.PlcVarIdRef,
+						Storage::OperatorAction::OA_DOWNLOND, model->TransferRecipeConfig.RecipeId, model->TransferRecipeConfig.RecipeCount);
 				DataApi::RecipeToPLC(model->TransferRecipeConfig.RecipeId, model->TransferRecipeConfig.RecipeCount * row, index,
 					model->TransferRecipeConfig.PlcVarIdRef, ColInfo, model->TransferRecipeConfig.CompleteVarIdRef);
 			}
 			else if (model->TransferRecipeConfig.TransmitMode == Project::RecipeTransferAction::UpLoadFromPLC)
 			{
 				int row = Storage::RecipeStorage::Ins()->GetCountByRepiceName(model->TransferRecipeConfig.RecipeId);
+				if (model->TransferRecipeConfig.IsRecord)
+					OperatorGControl::Ins()->AddOperatorRecord(ctrl->Page()->Winno(), model->TransferRecipeConfig.CtrlName, model->TransferRecipeConfig.PlcVarIdRef,
+						Storage::OperatorAction::OA_UPLOAD, model->TransferRecipeConfig.RecipeId, model->TransferRecipeConfig.RecipeCount);
 				DataApi::RecipeFromPLC(model->TransferRecipeConfig.RecipeId, model->TransferRecipeConfig.RecipeCount * row, index,
 					model->TransferRecipeConfig.PlcVarIdRef, ColInfo, model->TransferRecipeConfig.CompleteVarIdRef);
 			}

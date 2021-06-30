@@ -159,6 +159,52 @@ namespace UI
 		delete[] username;
 	}
 
+	void OperatorGControl::AddOperatorRecord(size_t win, string ctrlName, Project::DataVarId vid, int action, string recipename, int count)
+	{
+		if (!startrecord_)
+			return;
+		int len = LocalData::GetLocalVarLen(SYS_PSW_LoginedName);
+		char *username = new char[len + 1];
+		memset(username, '\0', len + 1);
+		LocalData::GetString(SYS_PSW_LoginedName, username);
+		string name = username;
+		string devname = "";
+		Project::BaseVar *var = (DataApi::GetDataVarInfo(vid));
+		if (var)
+			devname = UI::UICommand::Ins()->GetDeviceName(var->DevId);
+		int ret = Storage::OperatorStorage::Ins()->Trigger(name, devname, win, ctrlName, action, *var, recipename, count);
+		/*通知操作记录有更新*/
+		if (ret == SQLITE_OK)		//插入成功
+		{
+			LOG_INFO_("Add Operator Record --- Switch win\n");
+			bool noticebit = LocalData::GetBit(SYS_PSB_OperatorRECORD_NOTICE);
+			noticebit = !noticebit;
+			LocalData::SetBit(SYS_PSB_OperatorRECORD_NOTICE, noticebit);
+		}
+		delete[] username;
+	}
+
+	void OperatorGControl::AddOperatorRecord(size_t win, string ctrlName, int action, vector<string> funcname)
+	{
+		if (!startrecord_)
+			return;
+		int len = LocalData::GetLocalVarLen(SYS_PSW_LoginedName);
+		char *username = new char[len + 1];
+		memset(username, '\0', len + 1);
+		LocalData::GetString(SYS_PSW_LoginedName, username);
+		string name = username;
+		int ret = Storage::OperatorStorage::Ins()->Trigger(name, win, ctrlName, action, funcname);
+		/*通知操作记录有更新*/
+		if (ret == SQLITE_OK)		//插入成功
+		{
+			LOG_INFO_("Add Operator Record --- Switch win\n");
+			bool noticebit = LocalData::GetBit(SYS_PSB_OperatorRECORD_NOTICE);
+			noticebit = !noticebit;
+			LocalData::SetBit(SYS_PSB_OperatorRECORD_NOTICE, noticebit);
+		}
+		delete[] username;
+	}
+
 	void OperatorGControl::AddOperatorRecord(size_t win, string ctrlName, int action, int startWin, int endWin)
 	{
 		if (!startrecord_)

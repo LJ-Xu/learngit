@@ -13,7 +13,7 @@ namespace Storage
 		HR_WINDOW_OPEN, //窗体打开
 	};
 
-	enum OperatorAction
+	enum OperatorAction :int
 	{
 		OA_SET,		// 设置值
 		OA_TOGGLE,	// 位取反
@@ -21,6 +21,10 @@ namespace Storage
 		OA_STRING,	// 设置字符串
 		OA_PREVWIN,	// 跳转上一窗口
 		OA_NEXTWIN,	// 跳转下一窗口
+		OA_UPLOAD,	//上传配方
+		OA_DOWNLOND,	//下载配方
+		OA_PRESS,		//按下
+		OA_RELEASE		//释放
 	};
 
 	struct OperatorRecord : BaseRecord

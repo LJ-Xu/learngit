@@ -203,6 +203,120 @@ namespace Storage
 		return OperatorStorageService::Ins()->InsertOperatorRecord(record);
 	}
 
+	int OperatorStorage::Trigger(string userName, string devName, size_t win, string ctrlName, int action, Project::BaseVar var, string describe, int count)
+	{
+		OperatorRecord record;
+		// 设置当前日期
+		record.Date = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+		// 设置当前时间
+		record.Time = record.Date;
+		// 设置用户名称
+		record.UserName = userName;
+		// 设置窗口编号
+		record.Window = win;
+		// 设置对象名称
+		record.CtrlName = ctrlName;
+		// 设置操作记录
+		switch (action)
+		{
+		case OperatorAction::OA_UPLOAD:
+		{
+			record.Action = "Upload recipe";
+			// 设置操作信息
+			record.Information = "上传" + describe;
+			break;
+		}
+		case OperatorAction::OA_DOWNLOND:
+		{
+			record.Action = "Download recipe";
+			// 设置操作信息
+			record.Information = "下载" + describe;
+			break;
+		}
+		default:
+			break;
+		}
+		// 添加操作记录
+		string regName = "PSW";
+		switch (var.RegType)
+		{
+		case Project::LocalRegType::TP_PSB:
+			regName = "PSB";
+			break;
+		case Project::LocalRegType::TP_SPSB:
+			regName = "SPSB";
+			break;
+		case Project::LocalRegType::TP_PSW:
+			regName = "PSW";
+			break;
+		case Project::LocalRegType::TP_SPSW:
+			regName = "SPSW";
+			break;
+		case Project::LocalRegType::TP_PFW:
+			regName = "PFW";
+			break;
+		case Project::LocalRegType::TP_SPFW:
+			regName = "SPFW";
+			break;
+		default:
+			break;
+		}
+		record.Address = devName + " : " + regName + to_string(var.Addr) + "(" + to_string(count) + "words" + ")";
+		return OperatorStorageService::Ins()->InsertOperatorRecord(record);
+	}
+
+	static map<string, string> FuncNameMap = {
+	{ "SetCoil",       "设置线圈" },
+	{ "SetData",	   "设置数据" },
+	{ "Arithmetic",    "四则运算" },
+	{ "SendData",      "数据传输" },
+	{ "SwitchScreen",  "画面切换" },
+	{ "OpenWin",	   "调用窗口" },
+	{ "CloseWin",      "关闭窗口" },
+	{ "ImportCSVdata", "导入CSV"  },
+	{ "ExportCSVdata", "导出CSV"  },
+	{ "DownloadRecipe","上传配方" },
+	{ "UploadRecipe",  "下载配方" },
+	{ "CallbackFunc",  "函数调用" },
+	{ "PrintScreen",   "画面打印" },
+	};
+	int OperatorStorage::Trigger(string userName, size_t win, string ctrlName, int action, vector<string>& describe)
+	{
+		OperatorRecord record;
+		// 设置当前日期
+		record.Date = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+		// 设置当前时间
+		record.Time = record.Date;
+		// 设置用户名称
+		record.UserName = userName;
+		// 设置窗口编号
+		record.Window = win;
+		// 设置对象名称
+		record.CtrlName = ctrlName;
+		// 设置操作记录
+		switch (action)
+		{
+		case OperatorAction::OA_PRESS:
+			record.Action = "Press";
+			break;
+		case OperatorAction::OA_RELEASE:
+			record.Action = "Release";
+			break;
+		default:
+			break;
+		}
+		// 设置操作信息
+		for (size_t i = 0; i < describe.size(); i++)
+		{
+			record.Information += FuncNameMap[describe[i]];
+			if (i != describe.size() - 1)
+				record.Information += "、";
+		}
+		record.Address = "";
+		// 添加操作记录
+		return OperatorStorageService::Ins()->InsertOperatorRecord(record);
+	}
+
 	int OperatorStorage::CleanRcd()
 	{
 		return OperatorStorageService::Ins()->DeleteOperatorRecords();

@@ -25,6 +25,7 @@
 #include <fstream> 
 #include <sstream> 
 #include "RecipeStorage.h"
+#include "OperatorGControl.h"
 #include "Logger.h"
 namespace UI
 {
@@ -139,6 +140,7 @@ namespace UI
 	bool BtnFunctionControl::HandleBtnFunc(int action)
 	{
 		//vector<Project::BtnFunctionRes> reses;
+		vector<string> funcname;
 		switch (action)
 		{
 		case FunctionAct::PRESS:
@@ -153,6 +155,7 @@ namespace UI
 					return false;
 				if (switchwin_)		//已经切换画面，不执行动作
 					return false;
+				funcname.push_back(mode_->FuncBtnConfig.Press[i].FunctionName);
 				if (mode_->FuncBtnConfig.Press[i].FunctionName == "SetCoil")
 					HandleSetCoil(mode_->FuncBtnConfig.Press[i].FunctionParam);
 				if (mode_->FuncBtnConfig.Press[i].FunctionName == "SetData")
@@ -189,6 +192,9 @@ namespace UI
 				if (mode_->FuncBtnConfig.Press[i].FunctionName == "PrintScreen")
 					HandlePrintScreen(mode_->FuncBtnConfig.Press[i].FunctionParam);
 			}
+			if (mode_->FuncBtnConfig.IsRecord)
+				OperatorGControl::Ins()->AddOperatorRecord(Page()->Winno(), mode_->FuncBtnConfig.CtrlName,
+					Storage::OperatorAction::OA_PRESS, funcname);
 			if (needaddtimer)				//添加定时器，执行递增递减动作
 			{
 				StartTimer = true;
@@ -214,6 +220,7 @@ namespace UI
 			{
 				if (switchwin_)		//已经切换画面，不执行动作
 					return false;
+				funcname.push_back(mode_->FuncBtnConfig.Release[i].FunctionName);
 				if (mode_->FuncBtnConfig.Release[i].FunctionName == "SetCoil")
 					HandleSetCoil(mode_->FuncBtnConfig.Release[i].FunctionParam);
 				if (mode_->FuncBtnConfig.Release[i].FunctionName == "SetData")
@@ -241,6 +248,9 @@ namespace UI
 				if (mode_->FuncBtnConfig.Release[i].FunctionName == "PrintScreen")
 					HandlePrintScreen(mode_->FuncBtnConfig.Release[i].FunctionParam);
 			}
+			if (mode_->FuncBtnConfig.IsRecord)
+				OperatorGControl::Ins()->AddOperatorRecord(Page()->Winno(), mode_->FuncBtnConfig.CtrlName,
+					Storage::OperatorAction::OA_RELEASE, funcname);
 			if (switchwin_)		//已经切换画面，不执行动作
 				return false;
 			break;

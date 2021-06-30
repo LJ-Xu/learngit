@@ -29,6 +29,8 @@ namespace Storage
 		int Trigger(string userName, string devName, size_t win, string ctrlName, int action, Project::BaseVar var, double orgVal, double newVal, XJDataType tp);
 		int Trigger(string userName, string devName, size_t win, string ctrlName, Project::BaseVar var, char * orgVal, char * newVal);
 		int Trigger(string userName, size_t win, string ctrlName, int action, int startWin, int endWin);
+		int Trigger(string userName, string devName, size_t win, string ctrlName, int action, Project::BaseVar var, string describe, int count);
+		int Trigger(string userName, size_t win, string ctrlName, int action, vector<string>& describe);
 		int CleanRcd();		//Çå³ý²Ù×÷¼ÇÂ¼
 		void Rcd(RecordEnum recdEm, char* uname,char* addrname,char* ctrlname,char* comt,char* data);
 		void Rcd(RecordEnum recdEm, unsigned int uid,unsigned int vid, 

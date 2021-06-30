@@ -37,6 +37,8 @@ namespace UI
 		void AddOperatorRecord(size_t win, string ctrlName, int action, Project::DataVarId vid, double orgVal, double newVal);
 		void AddOperatorRecord(size_t win, string ctrlName, Project::DataVarId vid, char * orgVal, char * newVal);
 		void AddOperatorRecord(size_t win, string ctrlName, int action, int startWin, int endWin);
+		void AddOperatorRecord(size_t win, string ctrlName, Project::DataVarId vid, int action, string recipename, int count);
+		void AddOperatorRecord(size_t win, string ctrlName, int action, vector<string> funcname);
 		//void AddOperatorRecord(Storage::OperatorRecord & record);
 		static OperatorGControl *Ins();
 	private:
