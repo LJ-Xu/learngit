@@ -45,5 +45,9 @@ namespace UI
 		int index = 0;
 		static AlarmGControl *ctrl_;
 
+		std::thread* ThrBeep;
+		std::thread* ThrPopWin;
+		bool RunBeep;
+		bool RunPop;
 	};
 }
