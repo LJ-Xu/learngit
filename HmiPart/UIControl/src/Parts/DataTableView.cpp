@@ -613,8 +613,8 @@ namespace UI
 					{
 						/*设置背景颜色*/
 						fl_color(fl_rgb_color(RGBColor(model->DataConfig.TitleBgColor)));
-						fl_rectf(model->DataConfig.X + model->DataConfig.OffX,
-							model->DataConfig.Y + model->DataConfig.OffY, w(), h);
+						fl_rectf(model->DataConfig.X + model->DataConfig.OffX - 2,
+							model->DataConfig.Y + model->DataConfig.OffY - 2, w() + 6, h + 6);
 					}
 					/*获取关于字符串*/
 					string text = StringUtility::GetDrawString(IResourceService::Ins(), model->DataConfig.TitleRes, 0);
@@ -637,7 +637,7 @@ namespace UI
 					if (model->DataConfig.Appearance)
 					{
 						fl_color(cell_bgcolor_);
-						fl_rectf(X, Y, W, H);
+						fl_rectf(X - 2, Y - 2, W + 6, H + 6);
 					}
 					// TEXT
 					if (model->DataConfig.ColInfoLst.size() > (size_t)C)
@@ -678,7 +678,7 @@ namespace UI
 				if (model->DataConfig.Appearance)
 				{
 					fl_color(cell_bgcolor_);
-					fl_rectf(X, Y, W, H);
+					fl_rectf(X - 2, Y - 2, W + 6, H + 6);
 				}
 				// TEXT'
 				int align = 0;

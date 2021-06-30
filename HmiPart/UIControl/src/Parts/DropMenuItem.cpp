@@ -304,36 +304,29 @@ namespace UI
 		return 0;
 	}
 	int DropMenuWidow::handle(int e) {
-//#ifndef WIN32
-//		// This off-route takes care of the "detached menu" bug on OS X.
-//		// Apple event handler requires that we hide all menu windows right
-//		// now, so that Carbon can continue undisturbed with handling window
-//		// manager events, like dragging the application window.
-//		int ret = early_hide_handle(e);
-//		
-//		//DropMenuState &pp = *p;
-//		//if (pp.state == DONE_STATE) {
-//			//hide();
-//			/*if (pp.fakemenu) {
-//				pp.fakemenu->hide();
-//				if (pp.fakemenu->title)
-//					pp.fakemenu->title->hide();
-//			}
-//			int i = pp.nummenus;
-//			while (i > 0) {
-//				DropMenuWidow *mw = pp.p[--i];
-//				if (mw) {
-//					mw->hide();
-//					if (mw->title)
-//						mw->title->hide();
-//				}
-//			}*/
-//		//}
-//		return ret;
-//	}
-//
-//	int DropMenuWidow::early_hide_handle(int e) {
-//#endif
+#ifndef WIN32
+		// This off-route takes care of the "detached menu" bug on OS X.
+		// Apple event handler requires that we hide all menu windows right
+		// now, so that Carbon can continue undisturbed with handling window
+		// manager events, like dragging the application window.
+		int ret = early_hide_handle(e);
+		DropMenuState &pp = *p;
+		if (pp.state == DONE_STATE) {
+			if (pp.fakemenu) {
+				pp.fakemenu->hide();
+			}
+			int i = pp.nummenus;
+			while (i > 0) {
+				DropMenuWidow *mw = pp.p[--i];
+				if (mw) {
+					mw->hide();
+				}
+			}
+		}
+		return ret;
+	}
+	int DropMenuWidow::early_hide_handle(int e) {
+#endif
 		DropMenuState &pp = *p;
 		switch (e) {
 		case FL_KEYBOARD:
@@ -509,7 +502,7 @@ namespace UI
 		}
 		else
 			mw.hscrollbar = new Fl_Scrollbar(0, 0, 0, 0);
-		mw.show();
+		//mw.show();
 		Fl::grab(mw);
 		DropMenuState pp; p = &pp;
 		MenuState = &pp;

@@ -522,9 +522,9 @@ namespace UI
 					{
 						/*设置背景颜色*/
 						fl_color(fl_rgb_color(RGBColor(model->RecipeConfig.TitleBackColor)));
-						fl_rectf(model->RecipeConfig.X + model->RecipeConfig.OffX,
-							model->RecipeConfig.Y + model->RecipeConfig.OffY,
-							model->RecipeConfig.Width, model->RecipeConfig.TitleHeight);
+						fl_rectf(model->RecipeConfig.X + model->RecipeConfig.OffX - 2,
+							model->RecipeConfig.Y + model->RecipeConfig.OffY - 2,
+							model->RecipeConfig.Width + 6, model->RecipeConfig.TitleHeight + 6);
 					}
 					/*获取关于字符串*/
 					string text = StringUtility::GetDrawString(IResourceService::Ins(), model->RecipeConfig.TxtTitle, 0);
@@ -547,7 +547,8 @@ namespace UI
 					if (model->RecipeConfig.AppearMode)
 					{
 						fl_color(fl_rgb_color(RGBColor(model->RecipeConfig.ColTitleBackColor)));
-						fl_rectf(X, Y + model->RecipeConfig.TitleHeight, W, H - model->RecipeConfig.TitleHeight);
+						fl_rectf(X - 2, Y + model->RecipeConfig.TitleHeight - 2,
+							W + 6, H - model->RecipeConfig.TitleHeight + 6);
 					}
 					// TEXT
 					if (model->RecipeConfig.InfoLst.size() > (size_t)C)
@@ -606,7 +607,7 @@ namespace UI
 						else
 							fl_color(cell_bgcolor_);
 					}
-					fl_rectf(X, Y, W, H);
+					fl_rectf(X - 2, Y - 2, W + 6, H + 6);
 				}
 				// TEXT
 					fl_font(fontStyle_, fontSize_);

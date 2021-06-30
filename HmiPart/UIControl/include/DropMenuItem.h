@@ -161,6 +161,9 @@ namespace UI
 		DropMenuWidow(DropMenuItem* m, int X, int Y, int W, int H, int realHeight,
 			const DropMenuItem* picked);
 		~DropMenuWidow();
+#ifndef WIN32
+		int early_hide_handle(int);
+#endif
 		void set_selected(int);
 		int find_selected(int mx, int my);
 		int titlex(int);

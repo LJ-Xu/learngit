@@ -17,7 +17,7 @@ namespace Project
 	class JudgeCondition
 	{
 	public:
-		static bool MeetCondition(Conditions cond, double src, double dst, XJDataType tp);
+		static bool MeetCondition(Conditions cond, double src, double dst, XJDataType tp, int decimals = -1);
 	};
 }
 

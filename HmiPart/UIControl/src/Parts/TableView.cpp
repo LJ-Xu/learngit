@@ -82,7 +82,7 @@ namespace UI
 				if (model->TableConfig.UseFillin)
 				{
 					fl_color(active() ? bgcolor_ : fl_inactive(bgcolor_));
-					fl_rectf(X, Y, W, H);
+					fl_rectf(X - 2, Y - 2, W + 6, H + 6);
 				}
 			}
 			fl_pop_clip();
