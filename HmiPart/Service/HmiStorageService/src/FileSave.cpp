@@ -24,7 +24,9 @@
 #define _mkdir mkdir
 #define HANDLE unsigned long
 #include <sys/statfs.h>  
+#include <sys/types.h>
 #include <stdio.h> 
+#include<dirent.h>	
 #endif
 //#include "../../../UIControl/include/UIData.h"
 //#include "../../DataService/include/DataApi.h"
@@ -116,6 +118,7 @@ namespace Storage
 	//获取文件夹下文件名
 	void getFile(const string& path, string file)
 	{
+#ifdef WIN32
 		//文件句柄
 		long   hFile = 0;
 		//文件信息
@@ -140,6 +143,20 @@ namespace Storage
 			} while (_findnext(hFile, &fileinfo) == 0);
 			_findclose(hFile);
 		}
+#else
+		DIR* d = opendir(path.c_str());
+		if (d == NULL)
+		{
+			file = "";
+			return;
+		}
+		struct dirent* entry;
+		if ((entry == readdir()) != NULL)
+		{
+			file.append(entry->d_name);
+		}
+		closedir(d);
+#endif
 	}
 
 	//重复的文件名则保存为*(1~N).*这样的格式
