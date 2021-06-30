@@ -18,7 +18,7 @@
 #include "PermUtility.h"
 #include "UIData.h"
 #include "pinyinime.h"
-
+#include "RunEnv.h"
 #ifdef WIN32
 #include "../ThirdPart/googlepinyin/spellingtrie.h"
 #include <direct.h>
@@ -45,22 +45,24 @@ namespace UI
 	}
 	void PinYinPageControl::OnReady()
 	{
-        	char buf[1024];
-		memset(buf,'\0',1024);
+        //char buf[1024];
+		//memset(buf,'\0',1024);
 		string path,syspath,usrpath;
+		path = RunEnv::Cnf.PinYinDataPath;
+
 #ifdef WIN32
 		//path = path.substr(0, path.rfind('\\'));
-		path = getcwd(buf, 1024);
+		//path = getcwd(buf, 1024);
 		syspath = path + "\\dict_pinyin.dat";
 		usrpath = path + "\\dict_pinyin_user.dat";
 		LOG_INFO("PinYin Data Get From : %s\n", path.c_str());
 
 #else
-		readlink("/proc/self/exe", buf, 1024 - 1);
-		path = buf;
+		//readlink("/proc/self/exe", buf, 1024 - 1);
+		//path = buf;
 		//LOG_ERROR("Can't Open DataBase: %s\n", _pgmptr);
 		printf("PinYin Data Get From : %s\n", path.c_str());
-		path = path.substr(0, path.rfind('/'));
+		//path = path.substr(0, path.rfind('/'));
 		syspath = path + "/dict_pinyin.dat";
 		usrpath = path + "/dict_pinyin_user.dat";
 		syspath = "/data/dict_pinyin.dat";

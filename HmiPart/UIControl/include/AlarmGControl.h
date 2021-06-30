@@ -16,6 +16,7 @@
 #include "AlarmGView.h"
 #include <BaseControl.h>
 #include <vector>
+#include <thread>
 
 using namespace std;
 

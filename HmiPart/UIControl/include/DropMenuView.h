@@ -37,7 +37,7 @@ namespace UI
 
 		int CurrentIndex = 0;	//当前显示的下拉条目索引
 		int StartNum;
-		int SelectNum;
+		int SelectNum = 0;
 		Fl_Scrollbar* MenuScrollbar;		//滚动条
 		int MenuScrollvalue;
 		int Rowheight;
