@@ -5,7 +5,7 @@
 RunConfig  RunEnv::Cnf;
 SystemInfo RunEnv::SysInfo;
 HMIInfo  RunEnv::HMIApp;
-#define INI_NAME "HmiMain.ini"
+#define INI_NAME "HMIMain.ini"
 
 bool RunEnv::Init()
 {
@@ -49,6 +49,10 @@ bool RunEnv::Init()
 	pv = ini.GetValue("run", "OperationPath");
 	if (pv != nullptr)
 		Cnf.OperationPath = System::GetAbsPath(pv);
+
+	pv = ini.GetValue("run", "PinYinDataPath");
+	if (pv != nullptr)
+		Cnf.PinYinDataPath = System::GetAbsPath(pv);
 
 	pv = ini.GetValue("log", "CnfPath"); 
 	if (pv != nullptr)

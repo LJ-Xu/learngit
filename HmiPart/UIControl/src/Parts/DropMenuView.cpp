@@ -39,7 +39,6 @@ namespace UI
 	{
 		if (IResourceService::Ins()->IsRenderMode())
 			InitDraw();
-
 		shared_ptr<DropMenuModel> model = BaseView.GetModel<DropMenuModel>();
 		if (model->MenuConfig.MenuMode == 0)
 			h(model->MenuConfig.ContentHeight);
@@ -49,11 +48,14 @@ namespace UI
 		if (model->MenuConfig.MenuMode == 0)	 //下拉菜单
 		{
 			DropMenuItem* m = menu()->next(SelectNum);
-			align(m->labelalign_);
-			labelcolor(m->labelcolor_);
-			labelfont(m->labelfont_);
-			labelsize(m->labelsize_);
-			label(m->text.c_str());
+			if(m)
+			{
+				align(m->labelalign_);
+				labelcolor(m->labelcolor_);
+				labelfont(m->labelfont_);
+				labelsize(m->labelsize_);
+				label(m->text.c_str());
+			}	
 
 			if (model->MenuConfig.PopMode == 1)		//向上弹出
 				resize(model->MenuConfig.X + model->MenuConfig.OffX, 
@@ -334,6 +336,8 @@ namespace UI
 		shared_ptr<DropMenuControl> ctrl = BaseView.GetControl<DropMenuControl>();
 		SelectNum = CurrentIndex;
 		DropMenuItem* menu = menu_->next(SelectNum);		//通过索引寻找内容
+		if(!menu)
+			return;
 		//labelalign_ = menu->labelalign();
 		//labelcolor_ = menu->labelcolor();
 		//labelfont_ = menu->labelfont();
