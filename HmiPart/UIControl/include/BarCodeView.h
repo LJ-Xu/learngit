@@ -4,7 +4,7 @@
 #include "BasicView.h"
 #include "zint.h"
 
-#define QRBUFFLEN 20
+#define QRBUFFLEN 128
 namespace UI
 {
 	class BarCodeControl;
@@ -25,6 +25,7 @@ namespace UI
 	public:
 		int FinX;
 		int FinY;
+		int BuffLen;
 		char BuffValue[QRBUFFLEN];
 	};
 

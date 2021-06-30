@@ -23,6 +23,8 @@
 #define _S_IFDIR  S_IFDIR
 #define _mkdir mkdir
 #define HANDLE unsigned long
+#include <sys/statfs.h>  
+#include <stdio.h> 
 #endif
 //#include "../../../UIControl/include/UIData.h"
 //#include "../../DataService/include/DataApi.h"
@@ -111,6 +113,34 @@ namespace Storage
 		}
 		return true;
 	}
+	//获取文件夹下文件名
+	void getFile(const string& path, string file)
+	{
+		//文件句柄
+		long   hFile = 0;
+		//文件信息
+		struct _finddata_t fileinfo;
+		string p;
+		if ((hFile = _findfirst(p.assign(path).append("\\*").c_str(), &fileinfo)) != -1)
+		{
+			do
+			{
+				//如果是目录,迭代之
+				//如果不是,加入列表
+				if ((fileinfo.attrib &  _A_SUBDIR))
+				{
+					if (strcmp(fileinfo.name, ".") != 0 && strcmp(fileinfo.name, "..") != 0)
+						getFile(p.assign(path).append("\\").append(fileinfo.name), file);
+				}
+				else
+				{
+					file= p.assign(path).append("\\").append(fileinfo.name);
+					return;
+				}
+			} while (_findnext(hFile, &fileinfo) == 0);
+			_findclose(hFile);
+		}
+	}
 
 	//重复的文件名则保存为*(1~N).*这样的格式
 	bool FileSave::WriteNoRepeat(const char* fileName,char* buff,unsigned long long len)
@@ -168,6 +198,8 @@ namespace Storage
 	}
 	int FileSave::LocalExportFile(std::string filePath, char* buf, unsigned long long len, int keepDay, int savenorepeat)
 	{
+		if (!filePath.compare(""))
+			return 0;
 		if (savenorepeat)
 		{
 			if (!WriteNoRepeat(filePath.c_str(), buf, len))
@@ -402,7 +434,7 @@ namespace Storage
 			memcpy(tembuf, "\n", 2);
 			tembuf += 2;
 		}
-		filePath = GetSavePath(spIfRs.SampleStoreInfo.StoreFileInfo.StoreLocation, spIfRs.SampleStoreInfo.StoreFileInfo.StorePosVarId, spIfRs.SampleStoreInfo.StoreFileInfo.FileNameMode, spIfRs.SampleStoreInfo.StoreFileInfo.FileName, spIfRs.SampleStoreInfo.StoreFileInfo.FileNameDataVar);
+		filePath = GetSavePath(spIfRs.SampleStoreInfo.StoreFileInfo.StoreLocation, spIfRs.SampleStoreInfo.StoreFileInfo.StorePosVarId, spIfRs.SampleStoreInfo.StoreFileInfo.FileNameMode, spIfRs.SampleStoreInfo.StoreFileInfo.FileName, spIfRs.SampleStoreInfo.StoreFileInfo.FileNameDataVar, buflen, spIfRs.SampleStoreInfo.StoreFileInfo.StoreSpaceLack);
 		if (LocalExportFile(filePath, buff, buflen, spIfRs.SampleStoreInfo.StoreFileInfo.IsFileSaveTimeLimit?spIfRs.SampleStoreInfo.StoreFileInfo.SaveDays:0))
 		{
 			spIfRs.SampleStoreInfo.StoreFileInfo.SavedCount += vecSpRec.size();
@@ -567,7 +599,7 @@ namespace Storage
 			memcpy(tembuf, "\n", 2);
 			tembuf += 2;
 		}
-		filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar);
+		filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen,res.StoreSpaceLack);
 		LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0,0);
 		IsAlarmNewTrig = false;
 	}
@@ -591,8 +623,8 @@ namespace Storage
 		{
 			while (IsAlarmSaveThrRun)
 			{
-				/*if(IsAlarmNewTrig)
-					FromSqlite2File(*AlarmSaveConfig);*/
+				if(IsAlarmNewTrig)
+					FromSqlite2File(*AlarmSaveConfig);
 #ifdef WIN32
 				Sleep(1500);
 #else
@@ -615,16 +647,74 @@ namespace Storage
 #else
                 usleep(500000);
 #endif
-				/*while (!SampleSaveList.empty())
+				while (!SampleSaveList.empty())
 				{
 					auto itor = SampleSaveList.front();
 					FromSqlite2File(*itor);
 					SampleSaveList.pop();
-				}*/
+				}
 			}
 		}
 		);
 		ThrSaveSample->detach();
+	}
+
+#ifdef WIN32
+	BOOL get_disk_space(char driver, unsigned long long& allSpace, unsigned long long& freeSpace)
+	{
+		BOOL ret = false;
+		DWORD dwSector;
+		DWORD dwBytesInSec;
+		DWORD dwCluster;
+		DWORD dwFreeCluster;
+		string sDriver;
+		sDriver += driver;
+		sDriver += ":\\";
+
+		ret = GetDiskFreeSpace(sDriver.c_str(), &dwSector, &dwBytesInSec, &dwFreeCluster, &dwCluster);
+		allSpace = 0;
+		freeSpace = 0;
+
+		allSpace = dwSector;
+		allSpace *= dwBytesInSec;
+		allSpace *= dwCluster;
+
+		freeSpace = dwSector;
+		freeSpace *= dwBytesInSec;
+		freeSpace *= dwFreeCluster;
+
+		return ret;
+	}
+#else
+#endif
+
+	int FileSave::IsDiskEnoughSpace(DWORD srcbytes, int StoreSpaceLack)
+	{
+		unsigned long long as, fs;
+#ifdef WIN32
+		string strcurdir = System::GetCurDir();
+		char dv = strcurdir[0];// .substr(0, strcurdir.find(":"));
+		get_disk_space(dv, as, fs);
+#else
+		struct statfs diskInfo;
+
+		statfs("/app/run/", &diskInfo);
+		unsigned long long blocksize = diskInfo.f_bsize;    //每个block里包含的字节数  
+		as = blocksize * diskInfo.f_blocks;   //总的字节数，f_blocks为block的数目  
+		printf("Total_size = %llu B = %llu KB = %llu MB = %llu GB\n",
+			as, as >> 10, as >> 20, as >> 30);
+
+		unsigned long long freeDisk = diskInfo.f_bfree * blocksize; //剩余空间的大小  
+		fs = diskInfo.f_bavail * blocksize;   //可用空间大小  
+		printf("Disk_free = %llu MB = %llu GB\nDisk_available = %llu MB = %llu GB\n",
+			freeDisk >> 20, freeDisk >> 30, fs >> 20, fs >> 30);
+#endif
+		if (fs > srcbytes)
+			return 0;
+		else if (as <= srcbytes)
+			return 2;
+		else
+			return 1;
 	}
 
 	int FileSave::GetRealChannelIdFromRecord(int channel, int group, int no)
@@ -676,7 +766,7 @@ namespace Storage
 		pos += CopyIntegerToChar(dst + pos, var->Addr);
 		return pos;
 	}
-	string FileSave::GetSavePath(int pathMode, Project::DataVarId & addrPath, int nameMode, string fileName, Project::DataVarId & addrName)
+	string FileSave::GetSavePath(int pathMode, Project::DataVarId & addrPath, int nameMode, string fileName, Project::DataVarId & addrName,int needlen, int StoreSpaceLack)
 	{
 		std::string filePath = System::GetCurDir().append("\\");
 		switch (pathMode)
@@ -705,23 +795,50 @@ namespace Storage
 			}
 			break;
 		}
-		switch (nameMode)
+		int spacemark = IsDiskEnoughSpace(needlen,StoreSpaceLack);
+		if (spacemark==1)
 		{
-		case 1://固定文件名
-			filePath.append(fileName);
-			break;
-		case 2://日期指定
-			filePath.append(System::GetCurrentDateToString());
-			break;
-		case 3://动态文件名
-			if (NULL_VID_VALUE != addrName.Vid)
+			switch (StoreSpaceLack)
 			{
-				filePath.append(UI::DataApi::AppString(addrName));
-				//filePath.append("\\");
+			case 0://停止保存
+				return "";
+				break;
+			case 1://覆盖旧纪录
+				string stroldfilename="";
+				getFile(filePath, stroldfilename);
+				if (!stroldfilename.compare(""))
+					return "";
+				else
+					filePath.append(stroldfilename);
+				break;
 			}
-			break;
+			return filePath;
 		}
-		filePath.append(".csv");
+		else if (spacemark == 2)
+		{
+			return "";
+		}
+		else
+		{
+			switch (nameMode)
+			{
+			case 1://固定文件名
+				filePath.append(fileName);
+				break;
+			case 2://日期指定
+				filePath.append(System::GetCurrentDateToString());
+				break;
+			case 3://动态文件名
+				if (NULL_VID_VALUE != addrName.Vid)
+				{
+					filePath.append(UI::DataApi::AppString(addrName));
+					//filePath.append("\\");
+				}
+				break;
+			}
+			filePath.append(".csv");
+		}
+		
 		return filePath;
 	}
 }

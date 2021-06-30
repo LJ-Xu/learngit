@@ -69,6 +69,7 @@ namespace UI
 		}
 		/*int EachGet(std::function<void(DataRequest& req)>);*/
 		int Get(DataRequest& req);
+		int Req(DataRequest& req);
 		void AddWin(int winno);
 		void RemoveWin(int winno);
 	public:

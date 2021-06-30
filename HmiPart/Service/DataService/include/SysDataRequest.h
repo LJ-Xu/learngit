@@ -14,6 +14,8 @@ namespace UI
 	public:
 		static void Init();
 		static bool IsInnerReq(DataRequest& daReq);
+		static bool IsSysVar(BaseVar* bv);
+		static bool IsSysReq(int eid, int id);
 		static RequestStatue  Get(DataRequest&);
 		static int  CheckProcess(DataRequest&);
 		static void ResumeTimeout();

@@ -83,7 +83,12 @@ namespace Project
 		{
 			return DevId==0;
 		}
-
+		bool   IsSysRegVar()
+		{
+			return (DevId == 0 && (RegType != Project::TP_SPSW ||
+				RegType == Project::TP_SPFW ||
+				RegType == Project::TP_SPSB));
+		}
 		int GetBufSize()
 		{
 			if (DataType == DT_Bit)
