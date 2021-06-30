@@ -85,6 +85,14 @@ namespace Project
 		}
 		void Parse(rapidjson::Value& jsonObj);
 		static void Parse(std::vector<PrjDev>& vector, rapidjson::Value& jsonObj);
+		bool IsEmpty()
+		{
+			return PortID == 0 && DevName.empty();
+		}
+		bool IsLocal()
+		{
+			return PortID == 0;
+		}
 	};
 	struct HMIPortParam
 	{
