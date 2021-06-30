@@ -32,7 +32,10 @@ namespace UI
 		else
 		{
 			if (perm.HasShowPerm && perm.HasLimitShowPerm)
+			{
+				view->show();
 				view->redraw();
+			}
 		}
 	}
 }

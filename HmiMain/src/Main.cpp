@@ -228,10 +228,10 @@ int main(int argc, char ** argv) {
 	Param param;	
 	LoadParam(param, argc, argv);
 	LOG_INFO("Start HmiMain.exe\n");
-	/*CLOSE_DATASERVER();
+	CLOSE_DATASERVER();
 
-	if (!OPEN_DATASERVER())
-		return 0;*/
+	//if (!OPEN_DATASERVER())
+	//	return 0;
 #ifndef TEST
 	if (!RunEnv::Cnf.BinPath.empty())
 	{
@@ -240,7 +240,7 @@ int main(int argc, char ** argv) {
 		{				 
 			core.Init();
 			UI::UIManager::Ins().AddExit([] {
-				;//CLOSE_DATASERVER();
+				;CLOSE_DATASERVER();
 			});
 		    return core.Run();
 		}
