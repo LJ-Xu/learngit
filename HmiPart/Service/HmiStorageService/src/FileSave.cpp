@@ -151,7 +151,7 @@ namespace Storage
 			return;
 		}
 		struct dirent* entry;
-		if ((entry == readdir()) != NULL)
+		if ((entry == readdir(d)) != NULL)
 		{
 			file.append(entry->d_name);
 		}
