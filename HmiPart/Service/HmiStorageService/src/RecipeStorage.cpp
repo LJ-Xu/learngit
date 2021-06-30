@@ -31,20 +31,20 @@ namespace Storage
 	}
 	vector<vector<string>> RecipeStorage::QueryByRepiceName(string name, int col)
 	{
-		return std::move(RecipeStorageService::Ins(name)->SelectAllRecipeRecord(name,col));
+		return std::move(RecipeStorageService::Ins()->SelectAllRecipeRecord(name,col));
 	}
 
 	vector<vector<string>> RecipeStorage::QueryByKey(string recipename, string key, vector<string> colname)
 	{
-		return std::move(RecipeStorageService::Ins(recipename)->SelectRecipeRecordByKey(recipename, key, colname));
+		return std::move(RecipeStorageService::Ins()->SelectRecipeRecordByKey(recipename, key, colname));
 	}
 	vector<vector<string>> RecipeStorage::QueryByValue(string recipename, vector<string> key, vector<string> colname)
 	{
-		return std::move(RecipeStorageService::Ins(recipename)->SelectRecipeRecordByValue(recipename, key, colname));
+		return std::move(RecipeStorageService::Ins()->SelectRecipeRecordByValue(recipename, key, colname));
 	}
 	int  RecipeStorage::GetCountByRepiceName(string name)
 	{
-		return RecipeStorageService::Ins(name)->GetRecipeDataNum(name);
+		return RecipeStorageService::Ins()->GetRecipeDataNum(name);
 
 	}
 	

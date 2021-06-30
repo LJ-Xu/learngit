@@ -50,6 +50,10 @@ bool RunEnv::Init()
 	if (pv != nullptr)
 		Cnf.OperationPath = System::GetAbsPath(pv);
 
+	pv = ini.GetValue("run", "RecipePath");
+	if (pv != nullptr)
+		Cnf.RecipePath = System::GetAbsPath(pv);
+
 	pv = ini.GetValue("run", "PinYinDataPath");
 	if (pv != nullptr)
 		Cnf.PinYinDataPath = System::GetAbsPath(pv);

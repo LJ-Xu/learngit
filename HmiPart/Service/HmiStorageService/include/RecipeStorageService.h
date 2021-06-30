@@ -12,14 +12,13 @@ namespace Storage
 	class RecipeStorageService 
 	{
 	private:
-		RecipeStorageService() { }
-		RecipeStorageService(string name);
+		RecipeStorageService();
 		~RecipeStorageService();
 		RecipeStorageService(const RecipeStorageService &) = delete;
 		RecipeStorageService & operator=(const RecipeStorageService &) = delete;
 	public:
 		// 获取数据库对象
-		static RecipeStorageService * Ins(string name);
+		static RecipeStorageService * Ins();
 		// 销毁数据库对象
 		void Destroy();
 		// 创建报警录入内存数据库

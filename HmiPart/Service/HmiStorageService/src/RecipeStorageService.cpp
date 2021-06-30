@@ -1,13 +1,13 @@
 #include <string.h>
 #include "RecipeStorageService.h"
-
+#include "RunEnv.h"
 namespace Storage
 {
 	RecipeStorageService * RecipeStorageService::ins = nullptr;
 
-	RecipeStorageService::RecipeStorageService(string name) {
+	RecipeStorageService::RecipeStorageService() {
 		//int ret = sqlite3_open(name.c_str(), &db);
-		int ret = sqlite3_open("Recipe.db", &db);
+		int ret = sqlite3_open(RunEnv::Cnf.RecipePath.c_str(), &db);
 		if (ret != SQLITE_OK) {
 			const char * file = strrchr(__FILE__, '\\') + 1;
 			fprintf(stderr, "%s[%d] ErrCode[%d] Msg: %s\n", file, __LINE__, ret, sqlite3_errmsg(db));
@@ -24,9 +24,9 @@ namespace Storage
 		}
 	}
 
-	RecipeStorageService * RecipeStorageService::Ins(string name) {
+	RecipeStorageService * RecipeStorageService::Ins() {
 		if(!ins)
-			ins = new RecipeStorageService(name);
+			ins = new RecipeStorageService();
 		return ins;
 	}
 
