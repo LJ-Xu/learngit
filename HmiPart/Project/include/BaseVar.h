@@ -85,7 +85,7 @@ namespace Project
 		}
 		bool   IsSysRegVar()
 		{
-			return (DevId == 0 && (RegType != Project::TP_SPSW ||
+			return (DevId == 0 && (RegType == Project::TP_SPSW ||
 				RegType == Project::TP_SPFW ||
 				RegType == Project::TP_SPSB));
 		}

@@ -239,7 +239,10 @@ int main(int argc, char ** argv) {
 		if (TestIsExist(RunEnv::Cnf.BinPath))
 		{				 
 			core.Init();
-			return core.Run();
+			UI::UIManager::Ins().AddExit([] {
+				;//CLOSE_DATASERVER();
+			});
+		    return core.Run();
 		}
 		else
 		{
