@@ -87,11 +87,13 @@ namespace UI
 			CurrentStatus = 1;
 			if (HandleOperatePush())
 			{
-				if (ctrl->HandleBtnFunc(PRESS))
+				if (ctrl->HandleBtnFunc(PRESS))				//按下返回true，窗口仍存在
 				{
 					redraw();
 					return HMIBaseButton::handle(event);
 				}
+				else										//窗口不存在
+					return 1;
 			}
 			else
 				redraw();
@@ -104,11 +106,13 @@ namespace UI
 				IsReleased = true;
 				if (HaveOperateLimit)
 				{
-					//ctrl->HandleBtnFunc(RELEASE);
 					if (ctrl->HandleBtnFunc(RELEASE))
+					{
 						redraw();
-					//else
-					//	return 1;
+						return HMIBaseButton::handle(event);
+					}
+					else
+						return 1;
 				}
 				else
 					redraw();

@@ -15,6 +15,7 @@ struct RunConfig
 	std::string AlarmPath;
 	std::string SamplePath;
 	std::string OperationPath;
+	std::string PinYinDataPath;
 };
 struct HMIEvent
 {
