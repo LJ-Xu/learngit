@@ -37,11 +37,12 @@ namespace UI
 
 	int AlarmBarControl::PeekHMIMessage(Message::Msg* msg)
 	{
-		AlarmBarModel* pMode = static_cast<AlarmBarModel*>(pModel_.get());
-		AlarmBarView* pView = static_cast<AlarmBarView*>(pView_);
+		Project::DataVarId varId;
 		switch (msg->Code)
 		{
 		case WM_EVENT_DATEUPDATE:
+			varId = Project::DataVarId(msg->LParam);
+			HandleDataVar(varId);
 			break;
 		default:
 			break;

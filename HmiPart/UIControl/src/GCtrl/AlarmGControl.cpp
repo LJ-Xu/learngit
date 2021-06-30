@@ -214,7 +214,7 @@ namespace UI
 					if (itor.second.UseAlarmPopWin)	//打开弹窗
 					{
 						Win()->OpenDialogPage(itor.second.PopWinNo);
-						return;
+						//return;
 					}
 				}
 				else				//报警消失
