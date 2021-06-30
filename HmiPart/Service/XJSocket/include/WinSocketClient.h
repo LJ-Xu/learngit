@@ -22,11 +22,12 @@ public:
 	~WinSocketClient();
 
 private:
+	int CreateSocket();
 	bool recvFlag_;
 	char* recvBuf_ = nullptr;
 	XJSocketClient* client_;
 	XJSocket socket_;
-	std::thread receiveThread_;
+	std::shared_ptr<std::thread>  recvTD_;
 	
 };
 

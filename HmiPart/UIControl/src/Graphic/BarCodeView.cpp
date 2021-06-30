@@ -19,7 +19,8 @@ namespace UI
 	BarCodeView::BarCodeView(int X, int Y, int W, int H) : HMIBaseView(X, Y, W, H), PtrBarImage(nullptr)
 	{
 		BuffValue[0] = 48;
-		memset(BuffValue, 0, QRBUFFLEN);
+		BuffLen = QRBUFFLEN;
+		memset(BuffValue, 0, BuffLen);
 	}
 
 
@@ -88,9 +89,11 @@ namespace UI
 		int ret = -1;
 		if (model->BarcodeConfig.UseConstValue)
 		{
-			strcpy(BuffValue, model->BarcodeConfig.ConstString.c_str());
+			//strcpy(BuffValue, model->BarcodeConfig.ConstString.c_str());
+			memcpy(BuffValue, model->BarcodeConfig.ConstString.c_str(), BuffLen);
 		}
-		ret = ZBarcode_Encode_and_Buffer(symbol, (unsigned char *)BuffValue, QRBUFFLEN,0); //±àÂë
+		//ret = ZBarcode_Encode_and_Buffer(symbol, (unsigned char *)BuffValue, QRBUFFLEN,0); //±àÂë
+		ret = ZBarcode_Encode_and_Buffer(symbol, (unsigned char*)BuffValue, BuffLen, 0); //±àÂë
 		if (ret != 0)
 		{
 			//error

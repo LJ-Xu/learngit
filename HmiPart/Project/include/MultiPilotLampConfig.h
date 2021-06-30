@@ -62,7 +62,7 @@ namespace Project
 		int BitNum;							//多位组合位数
 		int DataFormat;						//0:有符号 1:无符号
 		StatusRes Text;						//文字内容
-
+		int Decimals = -1;					//小数精确位
 		vector<StatusCondition> Action;		//状态对应
 		StatusCondition ErrState;			//错误状态
 		int InputErr;						//非法输入处理方式 0:显示错误状态 1:显示当前状态 
@@ -72,7 +72,7 @@ namespace Project
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
-			archive(Text, StatusCnt, BitNum, Action, DataVarType, RegVars,
+			archive(Text, StatusCnt, BitNum, Action, DataVarType, RegVars, Decimals,
 				ErrState, InputErr, InputErrVarRef, DataFormat, UseErrNotice,
 				VOffX, VOffY, Perm, Width, Height, X, Y, IsEnable, IsRecord, CtrlName);
 		}

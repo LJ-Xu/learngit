@@ -200,7 +200,6 @@ namespace UI
 	}
 	int GDynPicControl::PeekHMIMessage(Message::Msg* msg)
 	{
-		GDynPicModel* pMode = static_cast<GDynPicModel*>(pModel_.get());
 		GDynPicView* pView = static_cast<GDynPicView*>(pView_);
 		Project::DataVarId varId;
 		switch (msg->Code)

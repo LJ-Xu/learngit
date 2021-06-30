@@ -1,0 +1,26 @@
+SERVERDIR := server
+
+TARGETNAME := libproto_msg.a
+SRCDIRS := ./src/
+SRCEXTS := .cc
+SOURCES := $(foreach d,$(SRCDIRS),$(wildcard $(addprefix $(d)/*,$(SRCEXTS))))
+OBJS := $(patsubst %.cc,./obj/%.o,$(notdir $(SOURCES)))
+
+CFLAGS = -fPIC -Wall -O3 -std=c++0x
+INC = -I$(NAUT_ROOTDIR)/thirdparty/protobuf-3.4.x/include
+
+all : $(OBJS)
+	ar r $(TARGETNAME) $(OBJS)
+	-mkdir -p $(NAUT_ROOTDIR)/$(SERVERDIR)/public/lib
+	-mkdir -p $(NAUT_ROOTDIR)/$(SERVERDIR)/public/proto_msg
+	-cp -p $(TARGETNAME) $(NAUT_ROOTDIR)/$(SERVERDIR)/public/lib
+	-cp -p $(SRCDIRS)*.h $(NAUT_ROOTDIR)/$(SERVERDIR)/public/proto_msg
+	-rm -rf obj
+$(OBJS) :
+./obj/%.o : ./src/%.cc 
+	@mkdir -p $(dir $@)
+	g++ -c $< -o $@ $(CFLAGS) $(INC)
+	@echo \ 
+
+clean:
+	rm -rf $(TARGETNAME) ./obj $(SRCDIRS)

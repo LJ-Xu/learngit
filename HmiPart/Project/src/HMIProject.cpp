@@ -14,6 +14,7 @@
 
 namespace Project
 {
+	HMIProject* HMIProject::Ins;
 	ofstream& operator<<(ofstream& out, const BinHeader& h)
 	{
 		out.write((char*)&h, sizeof(BinHeader));
@@ -88,6 +89,7 @@ namespace Project
 			in0 >> header;
 			cereal::BinaryInputArchive archive(in0);
 			archive(*this);
+			Ins = this;
 		}
 		this->Reses.Size = header.Size - header.ResOffset;
 		//TODO ³¤¶ÈÅÐ¶Ï
@@ -95,6 +97,7 @@ namespace Project
 		in0.read(this->Reses.GetDataPtr(), this->Reses.Size);
 		in0.close();
 		RecipeDT::SetRecipeDTIns(&this->Tables.Recipe);
+		
 		return 0;
 	}
 	/*

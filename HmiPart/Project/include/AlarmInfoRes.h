@@ -147,6 +147,14 @@ namespace Project
 		bool ChangeFlag = false;
 		char TempByteState=-1;//临时保存位状态
 		AlarmInfoContext Context;//监控内容
+
+		//不作加载的运行参数
+		bool IsBeeping;
+		bool IsPoping;
+		int CurBeepTime;//剩余警报秒数
+		unsigned long long LastBeepTimeStamp;//上一个保存的蜂鸣器触发时间戳(ms)
+		unsigned long long LastPopWinTimeStamp;//上一个保存的弹窗触发时间戳(ms)
+
 		template<class Archive>
 		void serialize(Archive & archive)
 		{

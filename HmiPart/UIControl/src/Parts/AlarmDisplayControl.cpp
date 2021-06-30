@@ -208,7 +208,8 @@ namespace UI
 		{
 			int time[3] = { 0 };
 			tm searchlocal;
-			for (unsigned i = 0; i < mode_->AlarmDisConfig.SearchTimeVar.size();i++)
+			int size = 3 < mode_->AlarmDisConfig.SearchRegVarId.size() ? 3 : mode_->AlarmDisConfig.SearchRegVarId.size();
+			for (int i = 0; i < size;i++)
 				time[i] = UI::UIData::Number<int>(mode_->AlarmDisConfig.SearchTimeVar[i]);
 			searchlocal.tm_sec = 0;
 			searchlocal.tm_min = 0;

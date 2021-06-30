@@ -107,6 +107,7 @@ bool dumpCallback(const wchar_t *dump_path, const wchar_t *id,
 	MDRawAssertionInfo *assertion,
 	bool succeeded)
 {
+
 	if (succeeded) {
 		printf("dump guid is %ws\n", id);
 	}
@@ -131,6 +132,12 @@ static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor,
 	void* context,
 	bool succeeded)
 {
+	char buf[256];
+	std::string path(descriptor.path());
+	int pos = path.rfind('/');
+	std::string name = path.substr(pos + 1, path.size() - pos - 1);
+	sprintf(buf, "rm -rf `ls /data/dmp/ds/*.dmp | grep -v \"%s\"`", name.c_str());
+	system(buf);
 	printf("Dump path: %s\n", descriptor.path());
 	return succeeded;
 }
@@ -196,18 +203,21 @@ void CLOSE_DATASERVER()
 
 #endif
 }
-static void LoadParam(Param& param)
+static void LoadParam(Param& param, int argc, char ** argv)
 {
 	
-	RunEnv::Init();	
-	if (!param.Cnf.BinPath.empty())
+	RunEnv::Init();
+	param.ParseParam(argc, argv);
+	/*if (!param.Cnf.BinPath.empty())
 		RunEnv::Cnf.BinPath = param.Cnf.BinPath;
+	if (!param.Cnf.SrvIP.empty())
+		RunEnv::Cnf.SrvIP = param.Cnf.SrvIP;
 	if (!param.Cnf.AlarmPath.empty())
 		RunEnv::Cnf.AlarmPath = param.Cnf.AlarmPath;
 	if (!param.Cnf.SamplePath.empty())
 		RunEnv::Cnf.SamplePath = param.Cnf.SamplePath;
 	if (!param.Cnf.OperationPath.empty())
-		RunEnv::Cnf.OperationPath = param.Cnf.OperationPath;
+		RunEnv::Cnf.OperationPath = param.Cnf.OperationPath;*/
 	Logger::SetFlag(true);
 	Logger::Ins().Init(RunEnv::Cnf.LogCnfPath);
 }
@@ -215,9 +225,8 @@ static void LoadParam(Param& param)
 #define xTEST
 int main(int argc, char ** argv) {
 	InitBreakpad();
-	Param param;
-	param.ParseParam(argc, argv);
-	LoadParam(param);
+	Param param;	
+	LoadParam(param, argc, argv);
 	LOG_INFO("Start HmiMain.exe\n");
 	/*CLOSE_DATASERVER();
 

@@ -35,13 +35,13 @@ namespace UI
 		float wholep = 100.0;
 		float lastp = wholep;
 		float wholeitg = 0;
-		for (int i = 0; i < model->PieChartUnit.Channels.size(); ++i)
+		for (int i = 1; i <= model->PieChartUnit.Channels.size(); ++i)
 		{
 			wholeitg += i;
 		}
 		for (int i = 0; i < model->PieChartUnit.Channels.size(); ++i)
 		{
-			model->PieChartUnit.Channels[i].Percent = (float)i / wholeitg;
+			model->PieChartUnit.Channels[i].Percent = (float)(i+1) / wholeitg;
 			/*if (i != model->PieChartUnit.Channels.size() - 1)
 			{
 				model->PieChartUnit.Channels[i].Percent = (lastp / 2.0f) / wholep;
@@ -116,19 +116,27 @@ namespace UI
 				}
 				else
 				{
-					//检查小数位
-					int lstDgt = model->PieChartUnit.Bct - (str.size() - 1 - pidx);
-					if (lstDgt <= 0)//小数位过长或刚好
+					if (model->PieChartUnit.Bct == 0)
 					{
-						str = str.substr(0, pidx + model->PieChartUnit.Bct+1);
+						str = str.substr(0, pidx);
 					}
-					else //if (lstDgt > 0)//还有没填满的小数位
+					else
 					{
-						while (lstDgt--)
+						//检查小数位
+						int lstDgt = model->PieChartUnit.Bct - (str.size() - 1 - pidx);
+						if (lstDgt <= 0)//小数位过长或刚好
 						{
-							str.append("0");
+							str = str.substr(0, pidx + model->PieChartUnit.Bct + 1);
+						}
+						else //if (lstDgt > 0)//还有没填满的小数位
+						{
+							while (lstDgt--)
+							{
+								str.append("0");
+							}
 						}
 					}
+					
 				}
 				model->PieChartUnit.Channels[i].text = str;
 			}

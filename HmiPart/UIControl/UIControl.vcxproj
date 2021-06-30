@@ -131,14 +131,18 @@
     <PreLinkEventUseInBuild>false</PreLinkEventUseInBuild>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)Lib;$(SolutionDir)ThirdPart\lib;$(SolutionDir)Debug</LibraryPath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(IncludePath);$(ProjectDir)include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)ThirdPart\qrcodeex\include;$(SolutionDir)ThirdPart\FLTK\src;$(SolutionDir)ThirdPart\FLTK;$(SolutionDir)ThirdPart\googlepinyin\include;$(SolutionDir)ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\SocketLib\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)HmiPart\Service\buttonrpc;$(SolutionDir)HmiPart\Service\buttonrpc\build-vs2015\depends\include;$(SolutionDir)HmiPart\Service\DataService\include;$(SolutionDir)ThirdPart\restrpc\include;$(SolutionDir)ThirdPart\boost_1_65_1;$(SolutionDir)ThirdPart\msgpack-c\include</IncludePath>
+    <IncludePath>$(IncludePath);$(ProjectDir)include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)ThirdPart\qrcodeex\include;$(SolutionDir)ThirdPart\FLTK\src;$(SolutionDir)ThirdPart\FLTK;$(SolutionDir)ThirdPart\googlepinyin\include;$(SolutionDir)ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)ExLib\HmiPart\Service\DataClient\include;$(SolutionDir)ExLib\HmiPart\Service\SocketLib\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)ExLib\HmiPart\Service\DataService\include;$(SolutionDir)ThirdPart\restrpc\include;$(SolutionDir)ThirdPart\boost_1_65_1;$(SolutionDir)ThirdPart\msgpack-c\include</IncludePath>
     <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
     <PreLinkEventUseInBuild>false</PreLinkEventUseInBuild>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)Lib;$(SolutionDir)ThirdPart\lib;$(SolutionDir)Debug</LibraryPath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -150,11 +154,15 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(IncludePath);$(ProjectDir)include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)ThirdPart\qrcodeex\include;$(SolutionDir)ThirdPart\FLTK\src;$(SolutionDir)ThirdPart\FLTK;$(SolutionDir)ThirdPart\googlepinyin\include;$(SolutionDir)ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\SocketLib\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)HmiPart\Service\buttonrpc;$(SolutionDir)HmiPart\Service\buttonrpc\build-vs2015\depends\include;$(SolutionDir)HmiPart\Service\DataService\include;$(SolutionDir)ThirdPart\restrpc\include;$(SolutionDir)ThirdPart\boost_1_65_1;$(SolutionDir)ThirdPart\msgpack-c\include</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)Lib;$(SolutionDir)ThirdPart\lib;$(SolutionDir)Debug</LibraryPath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(IncludePath);$(ProjectDir)include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)ThirdPart\qrcodeex\include;$(SolutionDir)ThirdPart\FLTK\src;$(SolutionDir)ThirdPart\FLTK;$(SolutionDir)ThirdPart\googlepinyin\include;$(SolutionDir)ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\SocketLib\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)HmiPart\Service\buttonrpc;$(SolutionDir)HmiPart\Service\buttonrpc\build-vs2015\depends\include;$(SolutionDir)HmiPart\Service\DataService\include;$(SolutionDir)ThirdPart\restrpc\include;$(SolutionDir)ThirdPart\boost_1_65_1;$(SolutionDir)ThirdPart\msgpack-c\include</IncludePath>
+    <IncludePath>$(IncludePath);$(ProjectDir)include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)ThirdPart\qrcodeex\include;$(SolutionDir)ThirdPart\FLTK\src;$(SolutionDir)ThirdPart\FLTK;$(SolutionDir)ThirdPart\googlepinyin\include;$(SolutionDir)ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)ExLib\HmiPart\Service\DataClient\include;$(SolutionDir)ExLib\HmiPart\Service\SocketLib\include;$(SolutionDir)HmiPart\HmiUtility\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)ExLib\HmiPart\Service\DataService\include;$(SolutionDir)ThirdPart\restrpc\include;$(SolutionDir)ThirdPart\boost_1_65_1;$(SolutionDir)ThirdPart\msgpack-c\include</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)Lib;$(SolutionDir)ThirdPart\lib;$(SolutionDir)Debug</LibraryPath>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -178,11 +186,6 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <Lib>
-      <AdditionalDependencies>qrencode.lib;zint.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Debug|Win32'">
     <ClCompile>
@@ -200,11 +203,6 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <Lib>
-      <AdditionalDependencies>qrencode.lib;zint.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -253,9 +251,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <Lib>
-      <AdditionalDependencies>qrencode.lib</AdditionalDependencies>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Release|Win32'">
     <ClCompile>
@@ -276,9 +271,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <Lib>
-      <AdditionalDependencies>qrencode.lib</AdditionalDependencies>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

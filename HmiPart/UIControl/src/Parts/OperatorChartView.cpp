@@ -281,8 +281,8 @@ namespace UI
 					
 						/*设置背景颜色*/
 					fl_color(fl_rgb_color(RGBColor(model->OperatorConfig.TitleBgColor)));
-					fl_rectf(model->OperatorConfig.X + model->OperatorConfig.OffX,
-						model->OperatorConfig.Y + model->OperatorConfig.OffY, w(), h);
+					fl_rectf(model->OperatorConfig.X + model->OperatorConfig.OffX - 2,
+						model->OperatorConfig.Y + model->OperatorConfig.OffY - 2, w() + 6, h + 6);
 					/*获取关于字符串*/
 					string text = StringUtility::GetDrawString(IResourceService::Ins(), model->OperatorConfig.TitleStringRes, 0);
 					UI::IResourceService::GB2312toUtf8(text);
@@ -310,7 +310,8 @@ namespace UI
 				}
 				// BG COLOR
 					fl_color(cell_bgcolor_);
-					fl_rectf(X, Y + model->OperatorConfig.TitleHeight, W, H - model->OperatorConfig.TitleHeight);
+					fl_rectf(X - 2, Y + model->OperatorConfig.TitleHeight - 2, 
+						W + 6, H - model->OperatorConfig.TitleHeight + 6);
 				// TEXT
 				if (model->OperatorConfig.DisplayItems.size() > (size_t)C)
 				{
@@ -345,7 +346,7 @@ namespace UI
 			{
 				// BG COLOR
 				fl_color(cell_bgcolor_);
-				fl_rectf(X, Y, W, H);
+				fl_rectf(X - 2, Y - 2, W + 6, H + 6);
 				// TEXT
 				fl_font(fontStyle_, fontSize_);
 				fl_color(fl_rgb_color(RGBColor(model->OperatorConfig.RecordItemStringStyle.Colors)));

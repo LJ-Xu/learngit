@@ -1,6 +1,9 @@
 #pragma once
 #include "ProjectPortVarsInfo.h"
 #include "ClientBaseVar.h"
+#include <list>
+#include <vector>
+#include <memory>
 namespace UI
 {
 	struct DataRequest
@@ -10,23 +13,52 @@ namespace UI
 		int eid;
 		Project::BaseVar* VarPtr;
 	};
+	struct ReqVarItem
+	{
+		ReqVarItem() {}
+		ReqVarItem(int fid, int vidx) :FrameIdx(fid), Vidx(vidx) {}
+		int FrameIdx;
+		unsigned int Vidx;
+	};
+	struct DevRequestGroup
+	{
+		std::mutex Lock;
+		std::list<ReqVarItem*> ReqVarList;
+		~DevRequestGroup()
+		{
+			for (list<ReqVarItem*>::iterator it = ReqVarList.begin(); it != ReqVarList.end();)
+			{
+				ReqVarItem* ptr = *it;
+				ReqVarList.erase(it++); // 删除节点，并到下一个节点
+				delete ptr;
+			}
+		}
+	};
 	struct WinRequestInfo
 	{
 		WinRequestInfo(int winno, Project::WindowVar* var)
 		{
 			Reset(winno, var);
 		}
+		void Init(WindowVar* wvar);
 		void Reset(int winno, Project::WindowVar* var)
 		{
 			WinNo = winno;
-			FIdx = 0;
-			NIdx = 0;
+			DIdx = 0;
 			WinVar = var;
 		}
 		int WinNo;
-		int FIdx;//Frame的索引
-		int NIdx; //VID的索引
+		int DIdx;//Devid的索引
 		Project::WindowVar* WinVar;
+		std::vector<DevRequestGroup*> DevReqHlp;
+		~WinRequestInfo()
+		{
+			for (size_t i = 0; i < DevReqHlp.size(); i++)
+			{
+				delete DevReqHlp[i];
+			}
+		}
+		
 	};
 	class DataFrame
 	{
@@ -35,17 +67,33 @@ namespace UI
 		{
 			vars_ = vars;
 		}
+		/*int EachGet(std::function<void(DataRequest& req)>);*/
 		int Get(DataRequest& req);
 		void AddWin(int winno);
 		void RemoveWin(int winno);
+	public:
+		~DataFrame()
+		{
+			if (!winReqs_.empty())
+			{
+				for (list<WinRequestInfo*>::iterator it = winReqs_.begin(); it != winReqs_.end();)
+				{
+					WinRequestInfo* ptr = *it;
+					winReqs_.erase(it++); // 删除节点，并到下一个节点
+					delete ptr;
+				}
+				
+			}
+			 
+		}
 	private:
 		std::mutex mtx_;
 		Project::ProjectPortVarsInfo* vars_ = nullptr;
-		std::vector<WinRequestInfo> winReqs_;
+		std::list<WinRequestInfo*> winReqs_;
 		int winReqIdx_ = 0;
-		WinRequestInfo* GetNextWinReqInfo();
-		int GetNextBaseVar(WinRequestInfo* info, DataRequest& req);
-		void SetWindowVarFlag(WindowVar& wvar, char flag);
+		WinRequestInfo* GetNextWinReqInfoWithNoLock();
+		int GetNextBaseVarWithNoLock(WinRequestInfo* info, DataRequest& req);
+		//void SetWindowVarFlag(WindowVar& wvar, char flag);
 	};
 }
 

@@ -207,7 +207,8 @@ namespace UI
 		{
 			int time[3] = {0};
 			tm searchlocal;
-			for (unsigned i = 0; i < mode_->ChartTrendConfig.SearchDateVarId.size();i++)
+			int size = 3 < mode_->ChartTrendConfig.SearchRegVarId.size() ? 3 : mode_->ChartTrendConfig.SearchRegVarId.size();
+			for (int i = 0; i < size;i++)
 				time[i] = UI::UIData::Number<int>(mode_->ChartTrendConfig.SearchDateVarId[i]);
 			searchlocal.tm_sec = 0;
 			searchlocal.tm_min = 0;

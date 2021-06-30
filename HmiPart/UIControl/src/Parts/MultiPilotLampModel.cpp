@@ -44,7 +44,8 @@ namespace UI
 				MPLampconfig.StatusCnt = json["StatusCnt"].GetInt();
 			if (json.HasMember("DataFormat"))
 				MPLampconfig.DataFormat = json["DataFormat"].GetInt();
-
+			if (json.HasMember("Decimals"))
+				MPLampconfig.Decimals = json["Decimals"].GetInt();
 			if (json.HasMember("StateConds") && json["StateConds"].IsArray())
 			{
 				vector<Project::StatusCondition>().swap(MPLampconfig.Action);

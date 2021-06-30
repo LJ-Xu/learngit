@@ -73,24 +73,24 @@ namespace UI
 		}
 	}
 
-	bool MultiPilotLampControl::MeetCondition(Project::StatusCondition cond, XJDataType* tp)
+	bool MultiPilotLampControl::MeetCondition(Project::StatusCondition cond, XJDataType* tp, int decimals)
 	{
 		if (cond.Type == 0)		//·¶Î§
 		{
 			switch (cond.LogicCondition)
 			{
 			case Project::NONE:
-				if (JudgeCondition::MeetCondition(cond.ConditionA, readvalue_, cond.DataA.Value, *tp))
+				if (JudgeCondition::MeetCondition(cond.ConditionA, readvalue_, cond.DataA.Value, *tp, decimals))
 					return true;
 				break;
 			case Project::AND:
-				if (JudgeCondition::MeetCondition(cond.ConditionA, readvalue_, cond.DataA.Value, *tp) &&
-					JudgeCondition::MeetCondition(cond.ConditionB, readvalue_, cond.DataB.Value, *tp))
+				if (JudgeCondition::MeetCondition(cond.ConditionA, readvalue_, cond.DataA.Value, *tp, decimals) &&
+					JudgeCondition::MeetCondition(cond.ConditionB, readvalue_, cond.DataB.Value, *tp, decimals))
 					return true;
 				break;
 			case Project::OR:
-				if (JudgeCondition::MeetCondition(cond.ConditionA, readvalue_, cond.DataA.Value, *tp) ||
-					JudgeCondition::MeetCondition(cond.ConditionB, readvalue_, cond.DataB.Value, *tp))
+				if (JudgeCondition::MeetCondition(cond.ConditionA, readvalue_, cond.DataA.Value, *tp, decimals) ||
+					JudgeCondition::MeetCondition(cond.ConditionB, readvalue_, cond.DataB.Value, *tp, decimals))
 					return true;
 				break;
 			default:
@@ -122,7 +122,7 @@ namespace UI
 				else
 					readvalue_ = UI::UIData::Number<DOUBLE>((mode_->MPLampconfig.RegVars[num]));
 				XJDataType tp = UIDataService::Ins().GetDataType(mode_->MPLampconfig.RegVars[num]);
-				if (MeetCondition(mode_->MPLampconfig.Action[i], &tp))
+				if (MeetCondition(mode_->MPLampconfig.Action[i], &tp, mode_->MPLampconfig.Decimals))
 				{
 					HandleMeetCondition(i);
 					return;
@@ -150,7 +150,7 @@ namespace UI
 			tp.Type = VarNumberType::NT_Unsigned;
 			for (size_t i = 0; i < mode_->MPLampconfig.Action.size(); i++)
 			{
-				if (MeetCondition(mode_->MPLampconfig.Action[i],&tp))
+				if (MeetCondition(mode_->MPLampconfig.Action[i],&tp, mode_->MPLampconfig.Decimals))
 				{
 					HandleMeetCondition(i);
 					return;
@@ -174,7 +174,7 @@ namespace UI
 			tperr = UIDataService::Ins().GetDataType(mode_->MPLampconfig.RegVars[num]);
 		}
 
-		if (MeetCondition(mode_->MPLampconfig.ErrState, &tperr))
+		if (MeetCondition(mode_->MPLampconfig.ErrState, &tperr, mode_->MPLampconfig.Decimals))
 		{
 			pView->CurrentStatus = -1;
 			pView->CurrentFlash = 1;
@@ -289,7 +289,7 @@ namespace UI
 			UI::ViewShowUtility::ShowView(pView_, mode_->MPLampconfig.Perm, mode_->MPLampconfig.X + mode_->MPLampconfig.OffX, mode_->MPLampconfig.Y + mode_->MPLampconfig.OffY);
 		}
 
-		if (mode_->MPLampconfig.VOffX.Cmp(varId))
+		if (mode_->MPLampconfig.VOffY.Cmp(varId))
 		{
 			mode_->MPLampconfig.OffY = UI::UIData::Number<int>(mode_->MPLampconfig.VOffY) + Page()->GetPageOffY();
 			UI::ViewShowUtility::ShowView(pView_, mode_->MPLampconfig.Perm, mode_->MPLampconfig.X + mode_->MPLampconfig.OffX, mode_->MPLampconfig.Y + mode_->MPLampconfig.OffY);

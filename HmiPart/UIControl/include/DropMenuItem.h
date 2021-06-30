@@ -140,8 +140,8 @@ namespace UI
 		}
 		int size() const;
 	};
-
-	struct DropMenuWidow : public Fl_Menu_Window {
+	
+	struct DropMenuWidow : public Fl_Window {
 		void draw();
 		void drawentry(const DropMenuItem*, int i, int erase);
 	public:
@@ -154,10 +154,6 @@ namespace UI
 		Fl_Scrollbar* hscrollbar;
 
 		int handle(int);
-#if defined (__APPLE__) || defined (USE_X11)
-		int early_hide_handle(int);
-#endif
-
 		int selected;
 		int drawn_selected;	// last redraw has this selected
 		int shortcutWidth;
@@ -165,6 +161,9 @@ namespace UI
 		DropMenuWidow(DropMenuItem* m, int X, int Y, int W, int H, int realHeight,
 			const DropMenuItem* picked);
 		~DropMenuWidow();
+#ifndef WIN32
+		int early_hide_handle(int);
+#endif
 		void set_selected(int);
 		int find_selected(int mx, int my);
 		int titlex(int);

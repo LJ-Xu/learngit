@@ -105,7 +105,7 @@ namespace UI
 	}
 	
 	DropMenuWidow::DropMenuWidow(DropMenuItem* m, int X, int Y, int Wp, int Hp,
-		int realHeight, const DropMenuItem* picked)	: Fl_Menu_Window(X, Y, Wp, Hp, 0)
+		int realHeight, const DropMenuItem* picked)	: Fl_Window(X, Y, Wp, Hp, 0)
 	{
 		int scr_x, scr_y, scr_w, scr_h;
 		int tx = X, ty = Y;
@@ -113,7 +113,7 @@ namespace UI
 		end();
 		set_modal();
 		clear_border();
-		set_menu_window();
+		//set_menu_window();
 		menu = m;
 		if (m) m = m->first(); // find the first item that needs to be rendered
 		drawn_selected = -1;
@@ -159,7 +159,7 @@ namespace UI
 		hide();
 	}
 	void DropMenuWidow::position(int X, int Y) {
-		Fl_Menu_Window::position(X, Y);
+		Fl_Window::position(X, Y);
 	}
 	void DropMenuWidow::autoscroll(int n) {/*
 	  int scr_y, scr_h;
@@ -189,7 +189,7 @@ namespace UI
 	}
 
 	void DropMenuWidow::draw() {
-		Fl_Window::draw();
+		//Fl_Window::draw();
 		Fl_Group::draw();
 		//»æÖÆ±³¾°Í¼Æ¬
 		//Fl_Image *RGBAimage = nullptr;
@@ -304,7 +304,7 @@ namespace UI
 		return 0;
 	}
 	int DropMenuWidow::handle(int e) {
-#if defined (__APPLE__) || defined (USE_X11)
+#ifndef WIN32
 		// This off-route takes care of the "detached menu" bug on OS X.
 		// Apple event handler requires that we hide all menu windows right
 		// now, so that Carbon can continue undisturbed with handling window
@@ -312,25 +312,19 @@ namespace UI
 		int ret = early_hide_handle(e);
 		DropMenuState &pp = *p;
 		if (pp.state == DONE_STATE) {
-			hide();
 			if (pp.fakemenu) {
 				pp.fakemenu->hide();
-				if (pp.fakemenu->title)
-					pp.fakemenu->title->hide();
 			}
 			int i = pp.nummenus;
 			while (i > 0) {
 				DropMenuWidow *mw = pp.p[--i];
 				if (mw) {
 					mw->hide();
-					if (mw->title)
-						mw->title->hide();
 				}
 			}
 		}
 		return ret;
 	}
-
 	int DropMenuWidow::early_hide_handle(int e) {
 #endif
 		DropMenuState &pp = *p;
@@ -496,9 +490,6 @@ namespace UI
 			Y += Fl::event_y_root() - Fl::event_y();
 		}
 		DropMenuWidow mw(this, X, Y, W, H, winheigth,initial_item);  
-#ifndef WIN32
-		mw.clear_border();
-#endif
 		if (mw.RealH < mw.AllMenuH)
 		{
 			mw.hscrollbar = new Fl_Scrollbar(W - hscollwidth, 0, hscollwidth, mw.RealH);
@@ -511,7 +502,7 @@ namespace UI
 		}
 		else
 			mw.hscrollbar = new Fl_Scrollbar(0, 0, 0, 0);
-		mw.show();
+		//mw.show();
 		Fl::grab(mw);
 		DropMenuState pp; p = &pp;
 		MenuState = &pp;
@@ -587,8 +578,6 @@ namespace UI
 		Fl::grab(0);
 		return m;
 	}
-
-	
 
 
 	//const DropMenuItem* DropMenuItem::test_shortcut() const {

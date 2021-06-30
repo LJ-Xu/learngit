@@ -17,7 +17,7 @@ namespace UI
 
 		static void Attatch(Observer * p);
 
-		static void Init(Project::ProjectPortVarsInfo* vars);
+		static void Init(Project::HMIProject* vars);
 
 		static void Start();//启动数据服务
 

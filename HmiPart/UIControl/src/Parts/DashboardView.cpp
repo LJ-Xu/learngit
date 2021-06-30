@@ -536,26 +536,34 @@ namespace UI
 	}
 	void DashboardView::initvalue(DashboardModel* mode_)
 	{
-		this->ArcStartAngle = (mode_->DashboardConfig.StartAngle + Default_Start_Angle);
-		this->ArcEndAngle = (mode_->DashboardConfig.EndAngle + Default_Start_Angle);
-		if (!mode_->DashboardConfig.ArcDirection)
+		if (mode_->DashboardConfig.ArcDirection)
 		{
-			this->ArcStartAngle = -1 * this->ArcStartAngle;
-			while (this->ArcStartAngle < 0)
+			this->ArcStartAngle = (mode_->DashboardConfig.StartAngle + Default_Start_Angle);
+			this->ArcEndAngle = (mode_->DashboardConfig.EndAngle + Default_Start_Angle);
+			/*while (this->ArcStartAngle < this->ArcEndAngle)
 			{
 				this->ArcStartAngle += 360;
-			}
-			this->ArcEndAngle = -1 * this->ArcEndAngle + 360;
+			}*/
+		}
+		else
+		{
+			this->ArcEndAngle = -1 * mode_->DashboardConfig.StartAngle + Default_Start_Angle;
+			this->ArcStartAngle = -1 * mode_->DashboardConfig.EndAngle + Default_Start_Angle;
+			//while (this->ArcStartAngle > this->ArcEndAngle)
+			//{
+			//	this->ArcEndAngle += 360;
+			//}
+			/*this->ArcEndAngle = -1 * this->ArcEndAngle + 360;
 			while (this->ArcEndAngle < 0)
 			{
 				this->ArcEndAngle += 360;
-			}
+			}*/
 		}
 #if KEEPWHOLECIRCLE
-		if (ArcEndAngle < ArcStartAngle)
+		/*if (ArcEndAngle < ArcStartAngle)
 		{
 			this->ArcEndAngle += 360;
-		}
+		}*/
 #endif
 		MaxValueValid = false;
 		UpperWarnValueValid = false;

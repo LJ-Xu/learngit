@@ -58,6 +58,8 @@ namespace Storage
 		//void InsertAlarmResInQueue(Project::AlarmInfoRes* almIfRs);
 		void TryTrigSave(Project::SaveFileRes* res);
 		void StartKeepSave();
+		//0有充分剩余空间1空间不足但可尝试覆盖2总空间完全不足
+		static int IsDiskEnoughSpace(DWORD bytes,int StoreSpaceLack);
 	private:
 		//void HandleExportCSVdata(ExportCSVdata csvData);
 		int GetRealChannelIdFromRecord(int channel, int group, int no);
@@ -65,7 +67,7 @@ namespace Storage
 		void FromSqlite2File(Project::SaveFileRes& res);
 		static int CopyIntegerToChar(char* ch, int value);
 		static int CopyDataTypeStrToChar(char* dst, const Project::BaseVar* var);
-		static string GetSavePath(int pathMode, Project::DataVarId& addrPath, int nameMode, string fileName, Project::DataVarId& addrName);
+		static string GetSavePath(int pathMode, Project::DataVarId& addrPath, int nameMode, string fileName, Project::DataVarId& addrName,int needlen, int StoreSpaceLack);
 
 	private:
 		bool IsSampleSaveThrRun;

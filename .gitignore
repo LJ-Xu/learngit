@@ -11,6 +11,7 @@
 *.userprefs
 
 # Build results
+[Oo]utput/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -136,6 +137,12 @@ DocProject/Help/*.hhk
 DocProject/Help/*.hhp
 DocProject/Help/Html2
 DocProject/Help/html
+
+#prj
+HMI_Debug/
+HMI_Release/
+FLTK/lib/
+
 
 # Click-Once directory
 publish/
@@ -266,6 +273,8 @@ __pycache__/
 *.a
 Hmi
 build
+/ThirdPart/FLTK/lib/
+/ThirdPart/FLTK/lib/
 /HmiComm/ClassDiagram.cd
 /HmiComm/ClassDiagram.cd
 /ThirdPart/FLTK/lib/glutdlls37beta/glut32.lib
@@ -5795,3 +5804,5 @@ build
 /HMI_Debug/googlepinyinD.lib
 /HMI_Debug/DataServiced.lib
 /HMI_Debug/DataClientd.lib
+/HmiMain/HMIMain.ini
+/WIN32Lib/HmiRenderLib/Resource/Pic/User/Project.ico
