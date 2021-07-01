@@ -229,31 +229,34 @@ namespace UI
 	}
 	void GraphicDrawHandle::DrawRectangle(double radius, double x, double y, double w, double h, double linew)
 	{
+		int offset = 0;
+		if (radius)
+			offset = 1;
 #ifdef WIN32
 		/*上边框*/
 		Gdiplus::Point winpoint[2] ={
-			Gdiplus::Point((int)fl_transform_x(x + linew / 2 + radius - 1, y + linew / 2),
-			(int)fl_transform_y(x + linew / 2 + radius - 1, y + linew / 2)),
-			Gdiplus::Point((int)fl_transform_x(x - linew / 2 + w - radius + 1,y + linew / 2),
-			(int)fl_transform_y(x - linew / 2 + w - radius + 1,y + linew / 2)) };
+			Gdiplus::Point((int)fl_transform_x(x + linew / 2 + radius - offset, y + linew / 2),
+			(int)fl_transform_y(x + linew / 2 + radius - offset, y + linew / 2)),
+			Gdiplus::Point((int)fl_transform_x(x - linew / 2 + w - radius + offset,y + linew / 2),
+			(int)fl_transform_y(x - linew / 2 + w - radius + offset,y + linew / 2)) };
 		graphics->DrawCurve(pen, winpoint, 2, 0.0f);
 		/*下边框*/
-		winpoint[0].X = (int)fl_transform_x(x + linew / 2 + radius - 1, y - linew / 2 + h);
-		winpoint[0].Y = (int)fl_transform_y(x + linew / 2 + radius - 1, y - linew / 2 + h);
-		winpoint[1].X = (int)fl_transform_x(x - linew / 2 + w - radius + 1, y - linew / 2 + h);
-		winpoint[1].Y = (int)fl_transform_y(x - linew / 2 + w - radius + 1, y - linew / 2 + h);
+		winpoint[0].X = (int)fl_transform_x(x + linew / 2 + radius - offset, y - linew / 2 + h);
+		winpoint[0].Y = (int)fl_transform_y(x + linew / 2 + radius - offset, y - linew / 2 + h);
+		winpoint[1].X = (int)fl_transform_x(x - linew / 2 + w - radius + offset, y - linew / 2 + h);
+		winpoint[1].Y = (int)fl_transform_y(x - linew / 2 + w - radius + offset, y - linew / 2 + h);
 		graphics->DrawCurve(pen, winpoint, 2, 0.0f);
 		/*左边框*/
-		winpoint[0].X = (int)fl_transform_x(x + linew / 2, y + linew / 2 + radius - 1);
-		winpoint[0].Y = (int)fl_transform_y(x + linew / 2, y + linew / 2 + radius - 1);
-		winpoint[1].X = (int)fl_transform_x(x + linew / 2, y - linew / 2 + h - radius + 1);
-		winpoint[1].Y = (int)fl_transform_y(x + linew / 2, y - linew / 2 + h - radius + 1);
+		winpoint[0].X = (int)fl_transform_x(x + linew / 2, y + linew / 2 + radius - offset);
+		winpoint[0].Y = (int)fl_transform_y(x + linew / 2, y + linew / 2 + radius - offset);
+		winpoint[1].X = (int)fl_transform_x(x + linew / 2, y - linew / 2 + h - radius + offset);
+		winpoint[1].Y = (int)fl_transform_y(x + linew / 2, y - linew / 2 + h - radius + offset);
 		graphics->DrawCurve(pen, winpoint, 2, 0.0f);
 		/*右边框*/
-		winpoint[0].X = (int)fl_transform_x(x - linew / 2 + w, y + linew / 2 + radius - 1);
-		winpoint[0].Y = (int)fl_transform_y(x - linew / 2 + w, y + linew / 2 + radius - 1);
-		winpoint[1].X = (int)fl_transform_x(x - linew / 2 + w, y - linew / 2 + h - radius + 1);
-		winpoint[1].Y = (int)fl_transform_y(x - linew / 2 + w, y - linew / 2 + h - radius + 1);
+		winpoint[0].X = (int)fl_transform_x(x - linew / 2 + w, y + linew / 2 + radius - offset);
+		winpoint[0].Y = (int)fl_transform_y(x - linew / 2 + w, y + linew / 2 + radius - offset);
+		winpoint[1].X = (int)fl_transform_x(x - linew / 2 + w, y - linew / 2 + h - radius + offset);
+		winpoint[1].Y = (int)fl_transform_y(x - linew / 2 + w, y - linew / 2 + h - radius + offset);
 		graphics->DrawCurve(pen, winpoint, 2, 0.0f);
 
 		double *curve = new double[8];
@@ -314,24 +317,24 @@ namespace UI
 #endif
 #else
 		fl_begin_line();
-		fl_vertex(x + linew / 2 + radius,	y + linew / 2  );
-		fl_vertex(x - linew / 2 + w - radius,y + linew / 2  );
+		fl_vertex(x + linew / 2 + radius - offset,	y + linew / 2  );
+		fl_vertex(x - linew / 2 + w - radius + offset,y + linew / 2  );
 		fl_end_line();
 
 
 		fl_begin_line();
-		fl_vertex(x + linew / 2 + radius, y - linew / 2 + h);
-		fl_vertex(x - linew / 2 + w - radius, y - linew / 2 + h);
+		fl_vertex(x + linew / 2 + radius - offset, y - linew / 2 + h);
+		fl_vertex(x - linew / 2 + w - radius + offset, y - linew / 2 + h);
 		fl_end_line();
 
 		fl_begin_line();
-		fl_vertex(x + linew / 2, y + linew / 2 + radius);
-		fl_vertex(x + linew / 2, y - linew / 2 + h - radius);
+		fl_vertex(x + linew / 2, y + linew / 2 + radius - offset);
+		fl_vertex(x + linew / 2, y - linew / 2 + h - radius + offset);
 		fl_end_line();
 
 		fl_begin_line();
-		fl_vertex(x - linew / 2 + w, y + linew / 2 + radius);
-		fl_vertex(x - linew / 2 + w, y - linew / 2 + h - radius);
+		fl_vertex(x - linew / 2 + w, y + linew / 2 + radius - offset);
+		fl_vertex(x - linew / 2 + w, y - linew / 2 + h - radius + offset);
 		fl_end_line();
 
 		double *curve = new double[8];
