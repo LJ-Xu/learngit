@@ -339,7 +339,7 @@ namespace UI
 			case Project::AlarmSeekTIME:
 			{
 				LOG_INFO("Alarm Seek Time %ld to %ld\n", model->AlarmDisConfig.SearchTimeStart, model->AlarmDisConfig.SearchTimeEnd);
-				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByDate(model->AlarmDisConfig.SearchTimeStart,
+				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByTime(model->AlarmDisConfig.SearchTimeStart,
 					model->AlarmDisConfig.SearchTimeEnd);
 				break;
 			}
