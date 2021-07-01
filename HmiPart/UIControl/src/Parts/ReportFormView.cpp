@@ -249,6 +249,17 @@ namespace UI
 		}
 		return text;
 	}
+	int ReportFormView::GetChannelNo(int no)
+	{
+		shared_ptr<ReportFormModel> model = BaseView.GetModel<ReportFormModel>();
+		for (size_t i = 0; i < model->ReportConfig.ReportChannelLst.size(); i++)
+		{
+			if(no == model->ReportConfig.ReportChannelLst[i].Channel)
+				return no | (model->ReportConfig.SimpleGroupName << 16) |
+				(model->ReportConfig.SimpleGroupNo << 24);
+		}
+		return 0;
+	}
 
 	int ReportFormView::GetSampleDataNum()
 	{
@@ -262,7 +273,8 @@ namespace UI
 			{
 				for (size_t i = 0; i < channelno_.size(); i++)
 				{
-					vector<Storage::SampleRecord> tmpdata=Storage::SampleStorage::Ins()->QueryByTime(channelno_[i], model->ReportConfig.SearchTimeStart,
+					int no = GetChannelNo(channelno_[i]);
+					vector<Storage::SampleRecord> tmpdata=Storage::SampleStorage::Ins()->QueryByTime(no, model->ReportConfig.SearchTimeStart,
 						model->ReportConfig.SearchTimeEnd);
 					if (model->ReportConfig.ViewSort && !tmpdata.empty())
 						std::reverse(tmpdata.begin(), tmpdata.end());
@@ -275,7 +287,8 @@ namespace UI
 			{
 				for (size_t i = 0; i < channelno_.size(); i++)
 				{
-					vector<Storage::SampleRecord> tmpdata=Storage::SampleStorage::Ins()->QueryByDate(channelno_[i], model->ReportConfig.SearchDate,
+					int no = GetChannelNo(channelno_[i]);
+					vector<Storage::SampleRecord> tmpdata=Storage::SampleStorage::Ins()->QueryByDate(no, model->ReportConfig.SearchDate,
 						model->ReportConfig.SearchDate + (DDWORD)86400000);
 					if (model->ReportConfig.ViewSort && !tmpdata.empty())
 						std::reverse(tmpdata.begin(), tmpdata.end());
@@ -292,7 +305,8 @@ namespace UI
 			for (size_t i = 0; i < channelno_.size(); i++)
 			{
 				vector<Storage::SampleRecord> tmpdata;
-				Storage::SampleStorage::Ins()->QueryLastRecords(channelno_[i], model->ReportConfig.MaxRows,tmpdata);
+				int no = GetChannelNo(channelno_[i]);
+				Storage::SampleStorage::Ins()->QueryLastRecords(no, model->ReportConfig.MaxRows,tmpdata);
 				if (model->ReportConfig.ViewSort && !tmpdata.empty())
 					std::reverse(tmpdata.begin(), tmpdata.end());
 					//tmpdata.reserve(tmpdata.size());
