@@ -22,6 +22,7 @@ namespace UI
 		int DisplayMode = 0;				//0:正常模式 1:查询模式
 		vector<vector<Storage::SampleRecord>> ChannelData;
 		int GetSampleDataNum();
+		int GetChannelNo(int no);
 		void SetRenderData();
 		string GetTimeString(DDWORD time, int mode);
 		string GetDrawString(string projectname,int row);
