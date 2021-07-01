@@ -22,27 +22,31 @@
 
 namespace UI
 {
-	//void AlarmBeepFunc(void *data)
-	//{
-	//	AlarmGControl* ctrl = (AlarmGControl*)data;
-	//	AlarmGView* pView = static_cast<AlarmGView*>(ctrl->GetView());
-	//	AlarmInfoRes res = pView->AlarmBeepList.
-	//	if (--(pView->BeepTimeOut)>0)
-	//	{
-	//		SysCtrlApi::Beep(1);
-	//		ctrl->Page()->AddTimeout(1000, AlarmBeepFunc, ctrl, false);
-	//	}
-	//	else
-	//	{
-	//		pView->IsBeeping = false;
-	//	}
-	//}
-	//void AlarmPopWinFunc(void *data)
-	//{
-	//	//PopWinPair* pair = (PopWinPair*)data;
-	//	//Page()->AddTimeout(itor.second.PopTime, AlarmBeepFunc, this, true);
-	//	Win()->OpenDialogPage(pair->WinId);
-	//}
+	void AlarmBeepFunc(void *data)
+	{
+		AlarmInfoRes* res = (AlarmInfoRes*)data;
+		if (res->IsBeeping)
+		{
+			if (--(res->CurBeepTime) > 0)
+			{
+				SysCtrlApi::Beep();
+				AlarmGControl::Ins()->Win()->AddTimeout(1, AlarmBeepFunc, res);
+			}
+		}
+	}
+	void AlarmPopWinFunc(void *data)
+	{
+		AlarmInfoRes* res = (AlarmInfoRes*)data;
+		if (res->IsPoping)
+		{
+			AlarmGControl::Ins()->Win()->OpenDialogPage(res->PopWinNo);
+			AlarmGControl::Ins()->Win()->AddTimeout((double)res->PopTime/1000.0f, AlarmPopWinFunc, res);
+		}
+		/*else
+		{
+			AlarmGControl::Ins()->Win()->ClosePage(res->PopWinNo);
+		}*/
+	}
 	AlarmGControl *AlarmGControl::ctrl_ = nullptr;
 
 	AlarmGControl::AlarmGControl(HMIPage * page) : BaseGControl(page) {
@@ -150,8 +154,8 @@ namespace UI
 	}
 
 	AlarmGControl::~AlarmGControl(){
-		RunBeep = false;
-		RunPop = false;
+		/*RunBeep = false;
+		RunPop = false;*/
 	}
 
 	void AlarmGControl::CreateView() {
@@ -159,142 +163,142 @@ namespace UI
 		AlarmGView* view = new AlarmGView(0,0,0,0);
 
 		InitMVCView(view);
-		for (auto itor = model_->AlarmGUnit.InfoLst.begin(); itor != model_->AlarmGUnit.InfoLst.end(); ++itor)
-		{
-			view->AlarmBeepList.push_back(std::make_pair(false, *itor));
-		}
-		for (auto itor = model_->AlarmGUnit.InfoLst.begin(); itor != model_->AlarmGUnit.InfoLst.end(); ++itor)
-		{
-			view->AlarmPopWinList.push_back(std::make_pair(false, *itor));
-		}
-		RunBeep = true;
-		RunPop = true;
-		/*Message::InvokeCBFunc funcbeep*/
-		ThrBeep = new std::thread([&] {
-			AlarmGView* pView = static_cast<AlarmGView*>(pView_);
-			unsigned long long curtime = 0;
-			while (RunBeep)
-				//while (pView->AlarmBeepList.size())
-			{
-				if (!pView->AlarmBeepList.size())
-					continue;
-				auto itor = pView->AlarmBeepList.begin();
-				while (itor != pView->AlarmBeepList.end())
-				{
-					if (itor->first)			//触发报警
-					{
-						if (itor->second.UseBeep)
-						{
-							if (!itor->second.IsBeeping)
-							{
-								SysCtrlApi::Beep(1);
-								itor->second.IsBeeping = true;
-								itor->second.LastBeepTimeStamp = System::GetCurrentTimeStampMs();
-								//Page()->AddTimeout(1000, AlarmBeepFunc, this, false);
-							}
-							else
-							{
-								curtime = System::GetCurrentTimeStampMs();
-								if (curtime - itor->second.LastBeepTimeStamp >= 1000)
-								{
-									if (--(itor->second.CurBeepTime) > 0)
-									{
-										SysCtrlApi::Beep(1);
-									}
-									else
-									{
-										itor->second.IsBeeping = false;
-										pView->AlarmBeepList.erase(itor);
-										continue;
-									}
-								}
-							}
-						}
-					}
-					else//报警消失
-					{
-						if (itor->second.IsBeeping)
-						{
-							itor->second.IsBeeping = false;
-						}
-						/*pView->AlarmBeepList.erase(itor);
-						if (itor == pView->AlarmBeepList.end())
-							break;
-						else
-							continue;*/
-					}
-					++itor;
-				}
-
-#ifdef WIN32
-				Sleep(100);
-#else
-				usleep(100000);
-#endif
-
-			}
-
-		});
-		//Win()->Invoke(funcbeep, this, 0);
-
-		//Message::InvokeCBFunc funcpopwin 
-		ThrPopWin = new std::thread([&] {
-
-			AlarmGView* pView = static_cast<AlarmGView*>(pView_);
-			unsigned long long curtime = 0;
-			//while (pView->AlarmPopWinList.size())
-			while (RunPop)
-			{
-				if (!pView->AlarmPopWinList.size())
-					continue;
-				auto itor = pView->AlarmPopWinList.begin();
-				while (itor != pView->AlarmPopWinList.end())
-				{
-					if (itor->first)
-					{
-						if (!itor->second.PopMode)
-						{
-							Win()->OpenDialogPage(itor->second.PopWinNo);
-						}
-						else
-						{
-							if (!itor->second.IsPoping)
-							{
-								itor->second.IsPoping = true;
-								itor->second.LastPopWinTimeStamp = System::GetCurrentTimeStampMs();
-								Win()->OpenDialogPage(itor->second.PopWinNo);
-							}
-							else
-							{
-								curtime = System::GetCurrentTimeStampMs();
-								if (curtime - itor->second.LastPopWinTimeStamp >= (unsigned long long)itor->second.PopTime)
-								{
-									itor->second.LastPopWinTimeStamp = System::GetCurrentTimeStampMs();
-									Win()->OpenDialogPage(itor->second.PopWinNo);
-								}
-							}
-						}
-					}
-					else
-					{
-						if (itor->second.IsPoping)
-						{
-							itor->second.IsPoping = false;
-						}
-						
-					}
-					++itor;
-				}
-#ifdef WIN32
-				Sleep(100);
-#else
-				usleep(100000);
-#endif
-			}
-		});
-		//Win()->Invoke(funcpopwin, this, 0);
-		ThrBeep->detach();
-		ThrPopWin->detach();
+//		for (auto itor = model_->AlarmGUnit.InfoLst.begin(); itor != model_->AlarmGUnit.InfoLst.end(); ++itor)
+//		{
+//			view->AlarmBeepList.push_back(std::make_pair(false, *itor));
+//		}
+//		for (auto itor = model_->AlarmGUnit.InfoLst.begin(); itor != model_->AlarmGUnit.InfoLst.end(); ++itor)
+//		{
+//			view->AlarmPopWinList.push_back(std::make_pair(false, *itor));
+//		}
+//		RunBeep = true;
+//		RunPop = true;
+//		/*Message::InvokeCBFunc funcbeep*/
+//		ThrBeep = new std::thread([&] {
+//			AlarmGView* pView = static_cast<AlarmGView*>(pView_);
+//			unsigned long long curtime = 0;
+//			while (RunBeep)
+//				//while (pView->AlarmBeepList.size())
+//			{
+//				if (!pView->AlarmBeepList.size())
+//					continue;
+//				auto itor = pView->AlarmBeepList.begin();
+//				while (itor != pView->AlarmBeepList.end())
+//				{
+//					if (itor->first)			//触发报警
+//					{
+//						if (itor->second.UseBeep)
+//						{
+//							if (!itor->second.IsBeeping)
+//							{
+//								SysCtrlApi::Beep(1);
+//								itor->second.IsBeeping = true;
+//								itor->second.LastBeepTimeStamp = System::GetCurrentTimeStampMs();
+//								//Page()->AddTimeout(1000, AlarmBeepFunc, this, false);
+//							}
+//							else
+//							{
+//								curtime = System::GetCurrentTimeStampMs();
+//								if (curtime - itor->second.LastBeepTimeStamp >= 1000)
+//								{
+//									if (--(itor->second.CurBeepTime) > 0)
+//									{
+//										SysCtrlApi::Beep(1);
+//									}
+//									else
+//									{
+//										itor->second.IsBeeping = false;
+//										pView->AlarmBeepList.erase(itor);
+//										continue;
+//									}
+//								}
+//							}
+//						}
+//					}
+//					else//报警消失
+//					{
+//						if (itor->second.IsBeeping)
+//						{
+//							itor->second.IsBeeping = false;
+//						}
+//						/*pView->AlarmBeepList.erase(itor);
+//						if (itor == pView->AlarmBeepList.end())
+//							break;
+//						else
+//							continue;*/
+//					}
+//					++itor;
+//				}
+//
+//#ifdef WIN32
+//				Sleep(100);
+//#else
+//				usleep(100000);
+//#endif
+//
+//			}
+//
+//		});
+//		//Win()->Invoke(funcbeep, this, 0);
+//
+//		//Message::InvokeCBFunc funcpopwin 
+//		ThrPopWin = new std::thread([&] {
+//
+//			AlarmGView* pView = static_cast<AlarmGView*>(pView_);
+//			unsigned long long curtime = 0;
+//			//while (pView->AlarmPopWinList.size())
+//			while (RunPop)
+//			{
+//				if (!pView->AlarmPopWinList.size())
+//					continue;
+//				auto itor = pView->AlarmPopWinList.begin();
+//				while (itor != pView->AlarmPopWinList.end())
+//				{
+//					if (itor->first)
+//					{
+//						if (!itor->second.PopMode)
+//						{
+//							Win()->OpenDialogPage(itor->second.PopWinNo);
+//						}
+//						else
+//						{
+//							if (!itor->second.IsPoping)
+//							{
+//								itor->second.IsPoping = true;
+//								itor->second.LastPopWinTimeStamp = System::GetCurrentTimeStampMs();
+//								Win()->OpenDialogPage(itor->second.PopWinNo);
+//							}
+//							else
+//							{
+//								curtime = System::GetCurrentTimeStampMs();
+//								if (curtime - itor->second.LastPopWinTimeStamp >= (unsigned long long)itor->second.PopTime)
+//								{
+//									itor->second.LastPopWinTimeStamp = System::GetCurrentTimeStampMs();
+//									Win()->OpenDialogPage(itor->second.PopWinNo);
+//								}
+//							}
+//						}
+//					}
+//					else
+//					{
+//						if (itor->second.IsPoping)
+//						{
+//							itor->second.IsPoping = false;
+//						}
+//						
+//					}
+//					++itor;
+//				}
+//#ifdef WIN32
+//				Sleep(100);
+//#else
+//				usleep(100000);
+//#endif
+//			}
+//		});
+//		//Win()->Invoke(funcpopwin, this, 0);
+//		ThrBeep->detach();
+//		ThrPopWin->detach();
 	}
 
 	int AlarmGControl::PeekHMIMessage(Message::Msg * msg) {
@@ -331,45 +335,26 @@ namespace UI
 		//pView_->damage();
 		//pView_->redraw();
 #else
-		//文件保存
-		
-		
 		AlarmGView* pView = static_cast<AlarmGView*>(pView_);
-		/*pView->Triggeralarm = triggeralarm;
-		pView->UseBeep = alarmres.UseBeep;
-		pView->UseAlarmPopWin = alarmres.UseAlarmPopWin;
-		pView->PopWinNo = alarmres.PopWinNo;
-		pView->IsCloseWin = alarmres.IsCloseWin;*/
-		/*if (pView->BeepTimeOut < alarmres.BeepTimeOut)
-			pView->BeepTimeOut = alarmres.BeepTimeOut;*/
 		if (alarmres.UseBeep)
 		{
-			for (auto itor = pView->AlarmBeepList.begin();itor != pView->AlarmBeepList.end();++itor)
+			alarmres.IsBeeping = triggeralarm;
+			if (triggeralarm)
 			{
-				if (itor->second.GroupName == alarmres.GroupName&&itor->second.GroupNo == alarmres.GroupNo)
-				{
-					itor->first = triggeralarm;
-					itor->second.CurBeepTime = alarmres.BeepTimeOut;
-					itor->second.IsBeeping = false;
-				}
+				alarmres.CurBeepTime = alarmres.BeepTimeOut;
+				SysCtrlApi::Beep();
+				Win()->AddTimeout(1, AlarmBeepFunc, &alarmres);
 			}
-			//pView->AlarmBeepList.push_back(std::make_pair(triggeralarm, alarmres));
 		}
 		if (alarmres.UseAlarmPopWin)
 		{
-			for (auto itor = pView->AlarmPopWinList.begin(); itor != pView->AlarmPopWinList.end(); ++itor)
+			alarmres.IsPoping = triggeralarm;
+			if (triggeralarm)
 			{
-				if (itor->second.GroupName == alarmres.GroupName&&itor->second.GroupNo == alarmres.GroupNo)
-				{
-					itor->first = triggeralarm;
-					itor->second.IsPoping = false;
-				}
+				//Win()->OpenDialogPage(alarmres.PopWinNo);
+				Win()->AddTimeout(0, AlarmPopWinFunc,&alarmres);
 			}
 		}
-			//pView->AlarmPopWinList.push_back(std::make_pair(triggeralarm, alarmres));
-		
-
-		
 #endif
 	}
 
