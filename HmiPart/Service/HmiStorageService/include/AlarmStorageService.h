@@ -34,19 +34,24 @@ namespace Storage
 		int DeleteAlarmRecordByGroup(uint16_t alarmGroup);
 		// 根据报警编号删除报警记录
 		int DeleteAlarmRecordByNo(uint16_t alarmNo);
-		// 更新报警记录
+		// 更新报警记录(完全覆盖)
 		int UpdateAlarmRecord(uint16_t alarmGroup, uint16_t alarmNo, const AlarmRecord & record);
+		// 更新报警记录(确认记录)
+		int UpdateAlarmRecordByConfirm(uint16_t alarmGroup, uint16_t alarmNo, const AlarmRecord & record);
+		// 更新报警记录(恢复记录)
+		int UpdateAlarmRecordByResolve(uint16_t alarmGroup, uint16_t alarmNo, const AlarmRecord & record);
 		// 获取报警记录
 		vector<AlarmRecord> SelectAlarm(const char * sql);
 		// 查询报警记录
 		vector<AlarmRecord> SelectAllAlarmRecords();
-		vector<AlarmRecord> SelectAlarmRecordByGroup(int groupname, int groupno);
-		vector<AlarmRecord> SelectAlarmRecordByDate(DDWORD startDate, DDWORD endDate);
-		vector<AlarmRecord> SelectAlarmRecordByTime(DDWORD startTime, DDWORD endTime);
+		vector<AlarmRecord> SelectAlarmRecordByGroup(int groupname, int groupno, int Recover = 0);
+		//Recover:0:不做判断;1:取Recoverd;2:取UnRecover;
+		vector<AlarmRecord> SelectAlarmRecordByDate(DDWORD startDate, DDWORD endDate,int Recover=0);
+		vector<AlarmRecord> SelectAlarmRecordByTime(DDWORD startTime, DDWORD endTime, int Recover = 0);
 		vector<AlarmRecord> SelectAlarmRecordByResolveTick();
-		vector<AlarmRecord> SelectAlarmRecordByGroupName(int groupname);
-		vector<AlarmRecord> SelectAlarmRecordByGroupNo(int groupno);
-		vector<AlarmRecord> SelectAlarmRecordByAlarmLevel(int level);
+		vector<AlarmRecord> SelectAlarmRecordByGroupName(int groupname, int Recover = 0);
+		vector<AlarmRecord> SelectAlarmRecordByGroupNo(int groupno, int Recover = 0);
+		vector<AlarmRecord> SelectAlarmRecordByAlarmLevel(int level, int Recover = 0);
 		vector<AlarmRecord> SelectAlarmRecordByHide(int hideflag);
 		vector<AlarmRecord> SelectAlarmRecordByUnRecover();
 		vector<AlarmRecord> SelectAlarmRecordByRecover();

@@ -32,17 +32,18 @@ namespace Storage
 
 		vector<AlarmRecord> QueryAll();
 		/*通过时间查询报警信息*/
-		vector<AlarmRecord> QueryByTime(DDWORD, DDWORD);
+		//Recover:0:不做判断;1:取Recoverd;2:取UnRecover;
+		vector<AlarmRecord> QueryByTime(DDWORD, DDWORD,int Record = 0);
 		/*通过日期查询报警信息*/
-		vector<AlarmRecord> QueryByDate(DDWORD, DDWORD);
+		vector<AlarmRecord> QueryByDate(DDWORD, DDWORD, int Record = 0);
 		/*通过组名和组编号查询*/
-		vector<AlarmRecord> QueryByGroup(uint32_t, uint32_t);
+		vector<AlarmRecord> QueryByGroup(uint32_t, uint32_t, int Record = 0);
 		/*查询组*/
-		vector<AlarmRecord> QueryByGroupName(uint32_t);
+		vector<AlarmRecord> QueryByGroupName(uint32_t, int Record = 0);
 		/*查询编号*/
-		vector<AlarmRecord> QueryByGroupNo(uint32_t);
+		vector<AlarmRecord> QueryByGroupNo(uint32_t, int Record = 0);
 		/*查询报险等级*/
-		vector<AlarmRecord> QueryByAlarmLevel(uint32_t);
+		vector<AlarmRecord> QueryByAlarmLevel(uint32_t, int Record = 0);
 		/*查询隐藏后的信息*/
 		vector<AlarmRecord> QueryByHide(uint32_t);
 		/*查询未恢复的信息*/
