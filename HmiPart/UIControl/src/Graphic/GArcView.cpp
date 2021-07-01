@@ -97,8 +97,9 @@ namespace UI
 		point.Y = model->ArcConfig.ArcRes.Center.Y + model->ArcConfig.OffY;			//Ô²ÐÄ×ø±ê
 		LOG_INFO("Draw Arc X = %d, Y = %d, W = %d, H = %d\n", point.X, point.Y, 
 			model->ArcConfig.ArcRes.A, model->ArcConfig.ArcRes.B);
-
+		
 		Fl_Color linecolor = fl_rgb_color(RGBColor(model->ArcConfig.Line.Color));
+		linecolor = active() ? linecolor : fl_inactive(linecolor);
 		GraphicDrawHandle::Ins()->BeginPushMatrix(model->ArcConfig.RotateAngle, 1.0, 1.0, point.X, point.Y);
 		GraphicDrawHandle::Ins()->SetBrushStyle(active() ? linecolor : fl_inactive(linecolor),
 			model->ArcConfig.Line.Type, model->ArcConfig.Line.Weight, model->ArcConfig.Line.Alpha);

@@ -430,7 +430,10 @@ namespace UI
 				GraphicDrawHandle::PushClip(X, Y, model->AlarmDisConfig.Width, model->AlarmDisConfig.TitleHeight);
 				{
 					/*设置背景颜色*/
-					fl_color(fl_rgb_color(RGBColor(model->AlarmDisConfig.TitleBgColor)));
+					//fl_color(fl_rgb_color(RGBColor(model->AlarmDisConfig.TitleBgColor)));
+					fl_color(active() ? fl_rgb_color(RGBColor(model->AlarmDisConfig.TitleBgColor)) : 
+						fl_inactive(fl_rgb_color(RGBColor(model->AlarmDisConfig.TitleBgColor))));
+
 					fl_rectf(model->AlarmDisConfig.X + model->AlarmDisConfig.OffX - 2,
 						model->AlarmDisConfig.Y + model->AlarmDisConfig.OffY - 2,
 						w() + 6, model->AlarmDisConfig.TitleHeight + 6);
@@ -438,14 +441,15 @@ namespace UI
 					if (model->AlarmDisConfig.UseSameStyle)
 					{
 						fl_font(fontStyle_, fontSize_);
-						fl_color(fontColor_);
+						fl_color(active() ? fontColor_ : fl_inactive(fontColor_));
+						//fl_color(fontColor_);
 					}
 					else
 					{
 						fl_font(UI::IResourceService::GetFontIdx(model->AlarmDisConfig.TitleStringStyle.Font.Name),
 							model->AlarmDisConfig.TitleStringStyle.Font.Size);
 						Fl_Color textcolor = fl_rgb_color(RGBColor(model->AlarmDisConfig.TitleStringStyle.Colors));
-						fl_color(textcolor);
+						fl_color(active() ? textcolor : fl_inactive(textcolor));
 					}
 					string text = StringUtility::GetDrawString(IResourceService::Ins(), model->AlarmDisConfig.Title, 0);
 					UI::IResourceService::GB2312toUtf8(text);
@@ -462,9 +466,13 @@ namespace UI
 			GraphicDrawHandle::PushClip(X, Y + model->AlarmDisConfig.TitleHeight, W, H - model->AlarmDisConfig.TitleHeight);
 			{
 				// BG COLOR
-				fl_color(cell_bgcolor_);
+				fl_color(active() ? cell_bgcolor_ : fl_inactive(cell_bgcolor_));
+				//fl_color(cell_bgcolor_);
 				fl_rectf(X - 2, Y + model->AlarmDisConfig.TitleHeight - 2, W + 6, H - model->AlarmDisConfig.TitleHeight + 6);
-				fl_color(fl_rgb_color(RGBColor(model->AlarmDisConfig.FrameStyle.Color)));
+				fl_color(active() ? fl_rgb_color(RGBColor(model->AlarmDisConfig.FrameStyle.Color)) : 
+					fl_inactive(fl_rgb_color(RGBColor(model->AlarmDisConfig.FrameStyle.Color))));
+
+				//fl_color(fl_rgb_color(RGBColor(model->AlarmDisConfig.FrameStyle.Color)));
 				fl_line_style(model->AlarmDisConfig.FrameStyle.Type, model->AlarmDisConfig.FrameStyle.Weight);
 				// TEXT
 				if (model->AlarmDisConfig.AlarmOptions.size() > (size_t)C)
@@ -472,14 +480,14 @@ namespace UI
 					if (model->AlarmDisConfig.UseSameStyle)
 					{
 						fl_font(fontStyle_,fontSize_);
-						fl_color(fontColor_);
+						fl_color(active() ? fontColor_ : fl_inactive(fontColor_));
 					}
 					else
 					{
 						fl_font(UI::IResourceService::GetFontIdx(model->AlarmDisConfig.ListTitleStyle.Font.Name),
 							model->AlarmDisConfig.ListTitleStyle.Font.Size);
 						Fl_Color textcolor = fl_rgb_color(RGBColor(model->AlarmDisConfig.ListTitleStyle.Colors));
-						fl_color(textcolor);
+						fl_color(active() ? textcolor : fl_inactive(textcolor));
 					}
 					/*获取text*/
 					string text;
@@ -511,9 +519,10 @@ namespace UI
 				GraphicDrawHandle::PushClip(X, Y, W, H);
 				{
 					// BG COLOR
-					fl_color(bgColor);
+					fl_color(active() ? bgColor : fl_inactive(bgColor));
+
 					fl_rectf(X - 2, Y - 2, W + 6, H + 6);
-					fl_color(fontColor_);
+					fl_color(active() ? fontColor_ : fl_inactive(fontColor_));
 					fl_font(fontStyle_, fontSize_);
 					if (!UI::CodeFormatUtility::IsStrUtf8(text.c_str()))
 						UI::IResourceService::GB2312toUtf8(text);
@@ -558,11 +567,11 @@ namespace UI
 			GraphicDrawHandle::PushClip(X, Y, W, H);
 			{
 				// BG COLOR
-				fl_color(bgColor);
+				fl_color(active() ? bgColor : fl_inactive(bgColor));
 				fl_rectf(X, Y, W, H);
 
 				// TEXT
-				fl_color(textColor);
+				fl_color(active() ? textColor : fl_inactive(textColor));
 				fl_font(fontStyle_, fontSize_);
 				if (!UI::CodeFormatUtility::IsStrUtf8(text.c_str()))
 					UI::IResourceService::GB2312toUtf8(text);

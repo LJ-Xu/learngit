@@ -134,7 +134,8 @@ namespace UI
 		/*设置字体*/
 		fl_font(model->ClockConfig.ClockFontStyle.Font.Style, model->ClockConfig.ClockFontStyle.Font.Size);
 		/*设置字体颜色*/
-		fl_color(fl_rgb_color(model->ClockConfig.ClockFontStyle.RGBColor.R, model->ClockConfig.ClockFontStyle.RGBColor.G, model->ClockConfig.ClockFontStyle.RGBColor.B));
+		fl_color(active() ? fl_rgb_color(model->ClockConfig.ClockFontStyle.RGBColor.R, model->ClockConfig.ClockFontStyle.RGBColor.G, model->ClockConfig.ClockFontStyle.RGBColor.B)
+			: fl_inactive(fl_rgb_color(model->ClockConfig.ClockFontStyle.RGBColor.R, model->ClockConfig.ClockFontStyle.RGBColor.G, model->ClockConfig.ClockFontStyle.RGBColor.B)));
 		//获取文本
 		std::string strDate = GetCurrentClock(model->ClockConfig.TimeFormat, model->ClockConfig.HourType);
 		UI::IResourceService::GB2312toUtf8(strDate);
