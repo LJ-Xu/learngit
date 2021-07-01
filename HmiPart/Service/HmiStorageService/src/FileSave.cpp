@@ -40,19 +40,25 @@ namespace Storage
 	//创建路径
 	bool CreateFolder(string strFilePath)
 	{
+#ifdef WIN32
+		string strpathsymbol = "\\";
 		string::size_type  pos(0);
 		while (true)
 		{
 			if ((pos = strFilePath.find("/", pos)) != string::npos)
 			{
-				strFilePath.replace(pos, 1, "\\");
+				strFilePath.replace(pos, 1, strpathsymbol);
 			}
 			else
 			{
 				break;
 			}
 		}
-		string::size_type rFirstPos = strFilePath.rfind("\\");
+#else
+		string strpathsymbol = "/";
+#endif
+		string::size_type rFirstPos = strFilePath.rfind(strpathsymbol);
+		//string::size_type rFirstPos = strFilePath.rfind("/");
 		if (rFirstPos == string::npos)
 			return true;
 		if (strFilePath.size() != (rFirstPos + 1))   /* 如果转换后的路径不是以\\结束时候，往末尾添加\\，处理的格式统一为D:\\1\\2\\3\\ */
@@ -67,18 +73,18 @@ namespace Storage
 			else
 			{
 				//最后一个是文件夹名字
-				strFilePath += "\\";
+				strFilePath += strpathsymbol;
 			}
 		}
 		else
 		{
-			strFilePath += "\\";
+			strFilePath += strpathsymbol;
 		}
 		string::size_type startPos(0);
 		string::size_type endPos(0);
 		while (true)
 		{
-			if ((endPos = strFilePath.find("\\", startPos)) != string::npos)
+			if ((endPos = strFilePath.find(strpathsymbol.c_str(), startPos)) != string::npos)
 			{
 				string strFolderPath = strFilePath.substr(0, endPos);
 				startPos = endPos + string::size_type(1);
@@ -785,6 +791,7 @@ namespace Storage
 	}
 	string FileSave::GetSavePath(int pathMode, Project::DataVarId & addrPath, int nameMode, string fileName, Project::DataVarId & addrName,int needlen, int StoreSpaceLack)
 	{
+#ifdef WIN32
 		std::string filePath = System::GetCurDir().append("\\");
 		switch (pathMode)
 		{
@@ -812,6 +819,35 @@ namespace Storage
 			}
 			break;
 		}
+#else
+		std::string filePath = System::GetCurDir().append("/");
+		switch (pathMode)
+		{
+		case 1://Hmi
+			filePath.append("HMI/");
+			break;
+		case 2://SD
+			filePath.append("SDCARD/");
+			break;
+		case 3://USB
+			filePath.append("USB/");
+			break;
+		case 4:
+			if (NULL_VID_VALUE != addrPath.Vid)
+			{
+				std::string strName = UI::DataApi::AppString(addrPath);
+				if (strName.size())
+				{
+					filePath.append(strName).append("/");
+				}
+				else
+				{
+					filePath.append("InvalidFilePathInDataVar").append("/");
+				}
+			}
+			break;
+		}
+#endif
 		int spacemark = IsDiskEnoughSpace(needlen,StoreSpaceLack);
 		if (spacemark==1)
 		{
