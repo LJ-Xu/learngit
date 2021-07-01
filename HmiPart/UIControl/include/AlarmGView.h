@@ -11,15 +11,13 @@ namespace UI
 	{
 	public:
 		AlarmGView(int X, int Y, int W, int H) : HMIBaseView(X, Y, W, H) {
-			//ThrBeep = new std::thread()
-
 		}
 		~AlarmGView() {}
 		BasicView BaseView;
 	protected:
-		void draw() override;
+		void draw() override {}
 	public:
-		std::vector<std::pair<bool, Project::AlarmInfoRes>> AlarmBeepList;
-		std::vector<std::pair<bool, Project::AlarmInfoRes>> AlarmPopWinList;
+		/*std::vector<std::pair<bool, Project::AlarmInfoRes>> AlarmBeepList;
+		std::vector<std::pair<bool, Project::AlarmInfoRes>> AlarmPopWinList;*/
 	};
 }
