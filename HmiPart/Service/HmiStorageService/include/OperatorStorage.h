@@ -35,6 +35,7 @@ namespace Storage
 		void Rcd(RecordEnum recdEm, char* uname,char* addrname,char* ctrlname,char* comt,char* data);
 		void Rcd(RecordEnum recdEm, unsigned int uid,unsigned int vid, 
 							unsigned int ctrlid, DDWORD oldval, DDWORD newval);
+		void QueryAll(vector<OperatorRecord> & records);
 		void QueryByTime(DDWORD stime, DDWORD etime, vector<OperatorRecord> & records);
 		void QueryByDate(DDWORD sdate, DDWORD edate, vector<OperatorRecord> & records);
 		void QueryByUser(char* name, vector<OperatorRecord> & records);

@@ -17,8 +17,19 @@
 #include "UIData.h"
 #include "UICommand.h"
 #include "Logger.h"
+#include "FileSave.h"
 namespace UI
 {
+
+	void OperatorSaveFunc(void *data)
+	{
+		if (Storage::FileSave::GetFileSaveTool()->ReadySaveOperate())
+		{
+			Storage::FileSave::GetFileSaveTool()->SaveOperate(*(SaveFileRes*)data);
+		}
+	}
+
+
 	OperatorGControl *OperatorGControl::ctrl_ = nullptr;
 
 	OperatorGControl::OperatorGControl(HMIPage * page) : BaseGControl(page) {
