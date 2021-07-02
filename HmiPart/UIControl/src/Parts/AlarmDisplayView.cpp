@@ -327,37 +327,40 @@ namespace UI
 		}
 		case Project::AlarmDisMode::SEARCH:
 		{
+			int record = 0;
+			if (model->AlarmDisConfig.AlarmMode == 0)		//ʵʱ
+				record = 2;
 			switch (model->AlarmDisConfig.SearchMode)
 			{
 			case Project::AlarmSeekDATE:
 			{
 				LOG_INFO("Alarm Seek DATE = %ld\n", model->AlarmDisConfig.SearchDate);
 				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByDate(model->AlarmDisConfig.SearchDate,
-					model->AlarmDisConfig.SearchDate + (DDWORD)86400000);
+					model->AlarmDisConfig.SearchDate + (DDWORD)86400000, record);
 				break;
 			}
 			case Project::AlarmSeekTIME:
 			{
 				LOG_INFO("Alarm Seek Time %ld to %ld\n", model->AlarmDisConfig.SearchTimeStart, model->AlarmDisConfig.SearchTimeEnd);
 				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByTime(model->AlarmDisConfig.SearchTimeStart,
-					model->AlarmDisConfig.SearchTimeEnd);
+					model->AlarmDisConfig.SearchTimeEnd, record);
 				break;
 			}
 			case Project::AlarmSeekGROUP:
 			{
 				LOG_INFO("Alarm Seek Group %d\n", model->AlarmDisConfig.SearchGroup);
-				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByGroupName(model->AlarmDisConfig.SearchGroup);
+				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByGroupName(model->AlarmDisConfig.SearchGroup, record);
 				break;
 			}
 			case Project::AlarmSeekNUM:
 			{
 				LOG_INFO("Alarm Seek Num %d\n", model->AlarmDisConfig.SearchNo);
-				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByGroupNo(model->AlarmDisConfig.SearchNo);
+				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByGroupNo(model->AlarmDisConfig.SearchNo, record);
 				break;
 			}
 			case Project::AlarmSeekLEVEL:
 				LOG_INFO("Alarm Seek Level %d\n", model->AlarmDisConfig.SearchLevel);
-				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByAlarmLevel(model->AlarmDisConfig.SearchLevel);
+				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByAlarmLevel(model->AlarmDisConfig.SearchLevel, record);
 				break;
 			default:
 				break;
