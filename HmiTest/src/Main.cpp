@@ -97,7 +97,7 @@ std::map<std::string, NewTestFunc> newTestFuncMap = {
 		/**********************QiaoDan**************************/
 		//{"GDynPicTest", []() {return NewTest<GDynPicTest>(); }  },
 		//{"GPolyLineTest", []() {return NewTest<GPolyLineTest>(); }  },
-		//{"TableTest", []() {return NewTest<TableTest>(); }  },
+		{"TableTest", []() {return NewTest<TableTest>(); }  },
 		//{"DropMenuTest", []() {return NewTest<DropMenuTest>(); }  },
 		//{"SlideInputTest", []() {return NewTest<SlideInputTest>(); }  },
 		//{"FluidTest", []() {return NewTest<FluidTest>(); }  },
@@ -126,7 +126,7 @@ std::map<std::string, NewTestFunc> newTestFuncMap = {
 		//{"AlarmDisplayTest", []() {return NewTest<AlarmDisplayTest>(); }  },
 		//{"RecipeChartTest", []() {return NewTest<RecipeChartTest>(); }  },
 		//{"XYTrendTest", []() {return NewTest<XYTrendTest>(); }  },
-		{"DataTableTest", []() {return NewTest<DataTableTest>(); }  },
+		//{"DataTableTest", []() {return NewTest<DataTableTest>(); }  },
 
 	    //{"WindowDemo", []() {return NewTest<WindowDemo>(); }  },
 	    //{"MotorTest", []() {return NewTest<MotorTest>(); }  },
@@ -144,7 +144,7 @@ std::map<std::string, NewTestFunc> newTestFuncMap = {
 		//{"DashboardTest", []() {return NewTest<DashboardTest>(); }  },
 
 		//{"ScaleTest", []() {return NewTest<ScaleTest>(); }  },
-	{"PieChartTest", []() {return NewTest<PieChartTest>(); }}
+		//{"PieChartTest", []() {return NewTest<PieChartTest>(); }}
 
 };
 BaseTest* GetNewTestByName(std::string name)

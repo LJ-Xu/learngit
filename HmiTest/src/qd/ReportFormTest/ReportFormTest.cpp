@@ -77,8 +77,7 @@ void ReportFormTest::Init()
 		res.TriggerBitMode = 1;
 		res.TriggerReadAddr = prjHelper.GetVarID("win1.var11");
 		res.BtyeCondition = Project::Conditions::LT;
-		res.BitCondition = 0;
-		res.BitCond = Project::BitConditions::ON;
+		res.BitCondition = Project::BitConditions::OFF;
 		res.ComPareValue = 10;
 		// res.ComPareVar = prjHelper.GetVarID("win1.var12");
 		res.CollectTimeFrom = 0;
@@ -88,16 +87,16 @@ void ReportFormTest::Init()
 		channel.Channel = 1;
 		channel.SampleAddr = prjHelper.GetVarID("win1.var13");
 		channel.WordNum = 1;
-		channel.DataStyle = "Word";
-		channel.DataFormat = "Unsigned";
+		channel.DataStyle = Project::VarDataType::DT_WORD;
+		channel.DataFormat = Project::VarNumberType::NT_Unsigned;
 		channel.Describe = "Channel1";
 		res.SimpleChannelLst.push_back(channel);
 
 		channel.Channel = 2;
 		channel.SampleAddr = prjHelper.GetVarID("win1.var13");
 		channel.WordNum = 1;
-		channel.DataStyle = "Word";
-		channel.DataFormat = "Unsigned";
+		channel.DataStyle = Project::VarDataType::DT_WORD;
+		channel.DataFormat = Project::VarNumberType::NT_Unsigned;
 		channel.Describe = "Channel2";
 		res.SimpleChannelLst.push_back(channel);
 		cfg->InfoLst.push_back(res);

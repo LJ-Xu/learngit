@@ -35,9 +35,6 @@
     <ClCompile Include="src\demo\Serialize_Test_Memory.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\demo\Sqlite_Test_Use.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\TemplateDemo\WindowDemo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -203,9 +200,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\demo\Serialize_Test_Memory.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\demo\Sqlite_Test_Use.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\TemplateDemo\WindowDemo.h">

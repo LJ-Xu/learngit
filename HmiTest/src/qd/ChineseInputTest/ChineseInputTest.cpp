@@ -100,7 +100,7 @@ void ChineseInputTest::Init()
 		cfg->TextStyle.Font.Size = 18;		//字体大小
 		cfg->Text = "中文";					//默认字符串
 
-		cfg->PinYinIdx = 3;					//拼音界面
+		//cfg->PinYinIdx = 3;					//拼音界面
 
 		/*设置写入前通知*/
 		cfg->ResBef.Bit.DataBitVar = prjHelper.GetVarID("win1.var11");

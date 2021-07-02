@@ -23,6 +23,7 @@
 #include "DataTableConfig.h"
 #include "DigitalDisplayConfig.h"
 #include "ChineseDisplayConfig.h"
+#include "CodeFormatUtility.h"
 static Project::HMIProject prj;
 
 void DataTableTest::Init()
@@ -221,7 +222,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 2;
 		cellinfo.DecimalNum = 1;
 		cellinfo.RegCount = 2;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule = UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 		cellinfo.CellType = 0;						//填充类型 0:地址监控 1:文本
@@ -236,7 +237,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 5;
 		cellinfo.DecimalNum = 0;
 		cellinfo.RegCount = 1;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 		cellinfo.CellType = 0;						//填充类型 0:地址监控 1:文本
@@ -251,7 +252,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 4;
 		cellinfo.DecimalNum = 2;
 		cellinfo.RegCount = 8;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 		cellinfo.CellType = 0;						//填充类型 0:地址监控 1:文本
@@ -266,7 +267,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 4;
 		cellinfo.DecimalNum = 2;
 		cellinfo.RegCount = 2;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 		cellinfo.CellType = 0;						//填充类型 0:地址监控 1:文本
@@ -281,7 +282,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 2;
 		cellinfo.DecimalNum = 1;
 		cellinfo.RegCount = 2;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 		cellinfo.CellType = 1;						//填充类型 0:地址监控 1:文本
@@ -304,7 +305,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 4;
 		cellinfo.DecimalNum = 2;
 		cellinfo.RegCount = 8;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 		cellinfo.CellType = 0;						//填充类型 0:地址监控 1:文本
@@ -319,7 +320,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 4;
 		cellinfo.DecimalNum = 2;
 		cellinfo.RegCount = 2;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 		cellinfo.CellType = 1;						//填充类型 0:地址监控 1:文本
@@ -342,7 +343,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 5;
 		cellinfo.DecimalNum = 0;
 		cellinfo.RegCount = 1;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 		cellinfo.CellType = 0;						//填充类型 0:地址监控 1:文本
@@ -357,7 +358,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 4;
 		cellinfo.DecimalNum = 2;
 		cellinfo.RegCount = 8;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 
@@ -373,7 +374,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 4;
 		cellinfo.DecimalNum = 2;
 		cellinfo.RegCount = 2;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 
@@ -389,7 +390,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 2;
 		cellinfo.DecimalNum = 1;
 		cellinfo.RegCount = 2;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 
@@ -405,7 +406,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 5;
 		cellinfo.DecimalNum = 0;
 		cellinfo.RegCount = 1;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 
@@ -421,7 +422,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 4;
 		cellinfo.DecimalNum = 2;
 		cellinfo.RegCount = 8;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 
@@ -437,7 +438,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 4;
 		cellinfo.DecimalNum = 2;
 		cellinfo.RegCount = 2;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 
@@ -453,7 +454,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 2;
 		cellinfo.DecimalNum = 1;
 		cellinfo.RegCount = 2;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 
@@ -469,7 +470,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 5;
 		cellinfo.DecimalNum = 0;
 		cellinfo.RegCount = 1;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule = UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 
@@ -485,7 +486,7 @@ void DataTableTest::Init()
 		cellinfo.IntegerNum = 4;
 		cellinfo.DecimalNum = 2;
 		cellinfo.RegCount = 8;						//寄存器数
-		cellinfo.Rule = Project::DataCodeRule::DataUTF_8;					//编码格式
+		cellinfo.Rule =UI::CodeFormatUtility::UTF_8;					//编码格式
 		cfg->DataCellInfoLst.push_back(cellinfo);
 
 

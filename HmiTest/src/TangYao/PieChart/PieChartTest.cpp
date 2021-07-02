@@ -41,7 +41,7 @@ void PieChartTest::Init() {
 		// cfg->ReadVars.push_back(prjHelper.GetVarID("win1.var2"));
 		// cfg->ReadVars.push_back(prjHelper.GetVarID("win1.var3"));
 		// cfg->ReadVars.push_back(prjHelper.GetVarID("win1.var4"));
-		cfg->ReadVar = prjHelper.GetVarID("win1.var1");
+		//cfg->ReadVar = prjHelper.GetVarID("win1.var1");
 		cfg->Dir = 0;
 		cfg->Mode = 2;
 		cfg->TextStyle.Font.Name = "Arial";
