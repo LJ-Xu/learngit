@@ -52,8 +52,8 @@ namespace UI
 	void XYTrendView::DrawGrid()
 	{
 		shared_ptr<XYTrendModel> model = BaseView.GetModel<XYTrendModel>();
-
-		fl_color(RGBColor(model->TrendXYConfig.GridStyle.Color));    //设置栅格的颜色  
+		fl_color(active() ? fl_rgb_color(RGBColor(model->TrendXYConfig.GridStyle.Color))
+			: fl_inactive(fl_rgb_color(RGBColor(model->TrendXYConfig.GridStyle.Color))));
 		fl_line_style(model->TrendXYConfig.GridStyle.Type, model->TrendXYConfig.GridStyle.Weight);//设置栅格 样式 宽度
 		double xSpaceInterval, ySpaceInterval;
 		xSpaceInterval = (double)model->TrendXYConfig.XaxisLen / (double)model->TrendXYConfig.XGridEqualNum; //X轴栅格间隔
@@ -143,7 +143,8 @@ namespace UI
 	{
 		shared_ptr<XYTrendModel> model = BaseView.GetModel<XYTrendModel>();
 		double spaceInterval;
-		fl_color(RGBColor(model->TrendXYConfig.YScaleSet.ScaleColor));    //设置刻度线的颜色   
+		fl_color(active() ? fl_rgb_color(RGBColor(model->TrendXYConfig.YScaleSet.ScaleColor))
+			: fl_inactive(fl_rgb_color(RGBColor(model->TrendXYConfig.YScaleSet.ScaleColor)))); //设置刻度线的颜色  
 		fl_line_style(0, 0);													//设置刻度线样式
 
 		/*绘制X轴*/
@@ -188,7 +189,7 @@ namespace UI
 			/*设置字体*/
 			fl_font(yscalefontStyle_, yscalefontSize_);
 			/*设置字体颜色*/
-			fl_color(yscalefontColor_);
+			fl_color(active() ? yscalefontColor_ : fl_inactive(yscalefontColor_)); 
 			for (size_t i = 0; i < model->TrendXYConfig.YScaleInfo.size(); i++)
 			{
 				float num;
@@ -222,13 +223,14 @@ namespace UI
 		{
 			x -= size / 2;
 			y -= size / 2;
-			fl_rectf(x, y, size, size, currentdotColor_);
+			fl_rectf(x, y, size, size, active() ? currentdotColor_ : fl_inactive(currentdotColor_));
 			break;
 		}
 		case Project::FilledTriangle:
 		{
 			double a = cos(30.0 * 3.1415926 / 180.0) * (double)size / 3.0;
-			fl_color(currentdotColor_);
+			fl_color(active() ? currentdotColor_ : fl_inactive(currentdotColor_));
+
 			fl_begin_complex_polygon();
 			fl_vertex(x - size / 2, y + a);
 			fl_vertex(x, y - a * 2);
@@ -240,7 +242,7 @@ namespace UI
 		{
 			x -= size / 2;
 			y -= size / 2;
-			fl_color(currentdotColor_);
+			fl_color(active() ? currentdotColor_ : fl_inactive(currentdotColor_));
 			fl_pie(x, y, size, size, 0, 360);
 			break;
 		}
@@ -248,13 +250,13 @@ namespace UI
 		{
 			x -= size / 2;
 			y -= size / 2;
-			fl_rect(x, y, size, size, currentdotColor_);
+			fl_rect(x, y, size, size, active() ? currentdotColor_ : fl_inactive(currentdotColor_));
 			break;
 		}
 		case Project::Triangel:
 		{
 			double a = cos(30 / 180 * 3.1415926) * size / 3;
-			fl_color(currentdotColor_);
+			fl_color(active() ? currentdotColor_ : fl_inactive(currentdotColor_));
 			fl_begin_polygon();
 			fl_vertex(x - size / 2, y + a);
 			fl_vertex(x, y - a * 2);
@@ -266,13 +268,13 @@ namespace UI
 		{
 			x -= size / 2;
 			y -= size / 2;
-			fl_color(currentdotColor_);
+			fl_color(active() ? currentdotColor_ : fl_inactive(currentdotColor_));
 			fl_arc(x, y, size, size, 0, 360);
 			break;
 		}
 		case Project::Fork:
 		{
-			fl_color(currentdotColor_);
+			fl_color(active() ? currentdotColor_ : fl_inactive(currentdotColor_));
 			fl_line_style(0, 0);											 //设置刻度线样式
 			fl_line(x - size / 2, y - size / 2, x + size / 2, y + size / 2);
 			fl_line(x - size / 2, y + size / 2, x + size / 2, y - size / 2);
@@ -292,7 +294,8 @@ namespace UI
 		{
 			for (unsigned i = 0; i < model->TrendXYConfig.ReferenceLines.size(); i++)
 			{
-				fl_color(fl_rgb_color(RGBColor(model->TrendXYConfig.ReferenceLines[i].LineColor)));
+				fl_color(active() ? fl_rgb_color(RGBColor(model->TrendXYConfig.ReferenceLines[i].LineColor))
+					: fl_inactive(fl_rgb_color(RGBColor(model->TrendXYConfig.ReferenceLines[i].LineColor))));
 				fl_line_style(0, 0);
 				if (model->TrendXYConfig.ReferenceLines[i].LineMode)		//点
 				{
@@ -335,7 +338,8 @@ namespace UI
 	{
 		shared_ptr<XYTrendModel> model = BaseView.GetModel<XYTrendModel>();
 		double spaceInterval;
-		fl_color(RGBColor(model->TrendXYConfig.XScaleSet.ScaleColor));    //设置刻度线的颜色   
+		fl_color(active() ? fl_rgb_color(RGBColor(model->TrendXYConfig.XScaleSet.ScaleColor))
+			: fl_inactive(fl_rgb_color(RGBColor(model->TrendXYConfig.XScaleSet.ScaleColor))));
 		fl_line_style(0, 0);											 //设置刻度线样式
 
 		/*绘制X轴*/
@@ -379,7 +383,7 @@ namespace UI
 			/*设置字体*/
 			fl_font(xscalefontStyle_, xscalefontSize_);
 			/*设置字体颜色*/
-			fl_color(xscalefontColor_);
+			fl_color(active() ? xscalefontColor_ : fl_inactive(xscalefontColor_));
 			for (size_t i = 0; i < model->TrendXYConfig.XScaleInfo.size(); i++)
 			{
 				float num;
@@ -447,7 +451,7 @@ namespace UI
 					;
 					for (int i = startnum; i < startnum + num; i++)
 					{
-						fl_color(linecolor);			//设置线颜色
+						fl_color(active() ? linecolor : fl_inactive(linecolor));
 						fl_line_style(channelinfo.LineStyle, channelinfo.LineSize);	//设置线样式
 						fl_vertex(origin.X + model->TrendXYConfig.OffX + Utility::DataFormate::GetScale(xscale, XData[channelinfo.Index - 1][i], tpx),
 							origin.Y - scrollheight_ - Utility::DataFormate::GetScale(yscale, YData[channelinfo.Index - 1][i], tpy) + model->TrendXYConfig.OffY);
@@ -461,7 +465,7 @@ namespace UI
 				currentdotColor_ = fl_rgb_color(RGBColor(channelinfo.DrawDotColor));
 				fl_begin_line();
 				{
-					fl_color(linecolor);			//设置线颜色
+					fl_color(active() ? linecolor : fl_inactive(linecolor));
 					for (int i = startnum; i < num + startnum; i++)
 					{
 						fl_line_style(channelinfo.LineStyle, channelinfo.LineSize);	//设置线样式
@@ -470,7 +474,7 @@ namespace UI
 					}
 				}
 				fl_end_line();
-				fl_color(currentdotColor_);
+				fl_color(active() ? currentdotColor_ : fl_inactive(currentdotColor_));
 				for (size_t i = (size_t)startnum; i < (size_t)(num + startnum); i++)
 					DrawDot(channelinfo.DrawDotStyle, origin.X + model->TrendXYConfig.OffX + Utility::DataFormate::GetScale(xscale, XData[channelinfo.Index - 1][i], tpx),
 						origin.Y + model->TrendXYConfig.OffY - scrollheight_ - Utility::DataFormate::GetScale(yscale, YData[channelinfo.Index - 1][i], tpy), channelinfo.DrawDotSize);
@@ -480,7 +484,7 @@ namespace UI
 			case Project::Dot:
 			{
 				currentdotColor_ = fl_rgb_color(RGBColor(channelinfo.DrawDotColor));
-				fl_color(currentdotColor_);
+				fl_color(active() ? currentdotColor_ : fl_inactive(currentdotColor_));
 
 				fl_begin_line();
 				{
@@ -495,7 +499,7 @@ namespace UI
 			{
 				fl_begin_complex_polygon();
 				{
-					fl_color(linecolor);										//设置线颜色
+					fl_color(active() ? linecolor : fl_inactive(linecolor));
 					fl_line_style(channelinfo.LineStyle, channelinfo.LineSize);	//设置线样式
 
 					fl_vertex(origin.X + model->TrendXYConfig.OffX + Utility::DataFormate::GetScale(xscale, XData[channelinfo.Index - 1][startnum], tpx),
@@ -514,7 +518,7 @@ namespace UI
 			{
 				fl_begin_complex_polygon();
 				{
-					fl_color(linecolor);										//设置线颜色
+					fl_color(active() ? linecolor : fl_inactive(linecolor));
 					fl_line_style(channelinfo.LineStyle, channelinfo.LineSize);	//设置线样式
 
 					fl_vertex(origin.X + model->TrendXYConfig.OffX,
@@ -560,7 +564,7 @@ namespace UI
 				case Project::CurveLine:
 				case Project::Line:
 				{
-					fl_color(linecolor);			//设置线颜色
+					fl_color(active() ? linecolor : fl_inactive(linecolor));			//设置线颜色
 					fl_begin_line();
 					fl_line_style(model->TrendXYConfig.DataChanel[j].LineStyle, model->TrendXYConfig.DataChanel[j].LineSize);	//设置线样式
 
@@ -586,7 +590,7 @@ namespace UI
 					currentdotColor_ = fl_rgb_color(RGBColor(model->TrendXYConfig.DataChanel[j].DrawDotColor));
 					fl_begin_line();
 					{
-						fl_color(linecolor);			//设置线颜色
+						fl_color(active() ? linecolor : fl_inactive(linecolor));			//设置线颜色
 						for (size_t i = 0;i < xpos.size(); i++)
 						{
 							fl_line_style(model->TrendXYConfig.DataChanel[j].LineStyle, model->TrendXYConfig.DataChanel[j].LineSize);	//设置线样式
@@ -600,7 +604,7 @@ namespace UI
 						}
 					}
 					fl_end_line();
-					fl_color(currentdotColor_);
+					fl_color(active() ? currentdotColor_ : fl_inactive(currentdotColor_));
 					for (size_t i = 0;i < xpos.size(); i++)
 					{
 						if (i == 0 || i == xpos.size() - 1)
@@ -619,7 +623,7 @@ namespace UI
 				case Project::Dot:
 				{
 					currentdotColor_ = fl_rgb_color(RGBColor(model->TrendXYConfig.DataChanel[j].DrawDotColor));
-					fl_color(currentdotColor_);
+					fl_color(active() ? currentdotColor_ : fl_inactive(currentdotColor_));
 					fl_begin_line();
 					{
 						for (size_t i = 0;i < xpos.size(); i++)
@@ -641,7 +645,7 @@ namespace UI
 				}
 				case Project::Xshadow:
 				{
-					fl_color(linecolor);										//设置线颜色
+					fl_color(active() ? linecolor : fl_inactive(linecolor));										//设置线颜色
 					fl_begin_complex_polygon();
 					{
 						fl_vertex(origin.X + model->TrendXYConfig.OffX + xpos[0],
@@ -670,7 +674,7 @@ namespace UI
 				{
 					fl_begin_complex_polygon();
 					{
-						fl_color(linecolor);										//设置线颜色
+						fl_color(active() ? linecolor : fl_inactive(linecolor));										//设置线颜色
 						fl_vertex(origin.X + model->TrendXYConfig.OffX,
 							origin.Y + model->TrendXYConfig.OffY - scrollheight_ - ypos[0] - j * 10);
 						for (size_t i = 0;i < xpos.size(); i++)

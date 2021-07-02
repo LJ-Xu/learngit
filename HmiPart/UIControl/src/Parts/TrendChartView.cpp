@@ -520,7 +520,7 @@ namespace UI
 		/*设置字体*/
 		fl_font(yscalefontStyle_, yscalefontSize_);
 		/*设置字体颜色*/
-		fl_color(yscalefontColor_);
+		fl_color(active() ? yscalefontColor_ : fl_inactive(yscalefontColor_));
 		if (info.size() == 0)
 			return;
 		DOUBLE numInterval;
@@ -593,7 +593,8 @@ namespace UI
 		shared_ptr<TrendChartModel> model = BaseView.GetModel<TrendChartModel>();
 
 		double spaceInterval;
-		fl_color(RGBColor(model->ChartTrendConfig.AxisY.ScaleColor));    //设置刻度线的颜色   
+		fl_color(active() ? fl_rgb_color(RGBColor(model->ChartTrendConfig.AxisY.ScaleColor)) 
+			: fl_inactive(fl_rgb_color(RGBColor(model->ChartTrendConfig.AxisY.ScaleColor))));
 		fl_line_style(0, 0);		//设置刻度线样式
 
 		/*绘制Y轴*/
@@ -637,7 +638,9 @@ namespace UI
 		shared_ptr<TrendChartModel> model = BaseView.GetModel<TrendChartModel>();
 		string timeScale;
 		double spaceInterval;
-		fl_color(RGBColor(model->ChartTrendConfig.AxisX.ScaleColor));    //设置刻度线的颜色   
+		fl_color(active() ? fl_rgb_color(RGBColor(model->ChartTrendConfig.AxisX.ScaleColor))
+			: fl_inactive(fl_rgb_color(RGBColor(model->ChartTrendConfig.AxisX.ScaleColor))));
+		//fl_color(RGBColor(model->ChartTrendConfig.AxisX.ScaleColor));    //设置刻度线的颜色   
 		fl_line_style(0, 0);											 //设置刻度线样式
 
 		/*绘制X轴*/
@@ -679,7 +682,7 @@ namespace UI
 			/*设置字体*/
 			fl_font(xscalefontStyle_, xscalefontSize_);
 			/*设置字体颜色*/
-			fl_color(xscalefontColor_);
+			fl_color(active() ? xscalefontColor_ : fl_inactive(xscalefontColor_));
 			DDWORD timeInterval;
 			DDWORD starttime = 0;
 			if (model->ChartTrendConfig.AxisX.MainScaleNum == 0)model->ChartTrendConfig.AxisX.MainScaleNum = 1;
@@ -706,7 +709,7 @@ namespace UI
 			/*设置字体*/
 			fl_font(xscalefontStyle_, xscalefontSize_);
 			/*设置字体颜色*/
-			fl_color(xscalefontColor_);
+			fl_color(active() ? xscalefontColor_ : fl_inactive(xscalefontColor_));
 			if (model->ChartTrendConfig.AxisX.IsdiaplayDate && !model->ChartTrendConfig.XScaleInfo.empty())
 			{
 				int timeInterval;
@@ -740,7 +743,8 @@ namespace UI
 		shared_ptr<TrendChartModel> model = BaseView.GetModel<TrendChartModel>();
 		string timeScale;
 		double spaceInterval;
-		fl_color(RGBColor(model->ChartTrendConfig.AxisX.ScaleColor));    //设置刻度线的颜色   
+		fl_color(active() ? fl_rgb_color(RGBColor(model->ChartTrendConfig.AxisX.ScaleColor))
+			: fl_inactive(fl_rgb_color(RGBColor(model->ChartTrendConfig.AxisX.ScaleColor))));
 		fl_line_style(0, 0);											 //设置刻度线样式
 
 		/*绘制X轴*/
@@ -783,7 +787,7 @@ namespace UI
 		/*设置字体*/
 		fl_font(xscalefontStyle_, xscalefontSize_);
 		/*设置字体颜色*/
-		fl_color(xscalefontColor_);
+		fl_color(active() ? xscalefontColor_ : fl_inactive(xscalefontColor_));
 		for (size_t i = 0; i < model->ChartTrendConfig.XScaleInfo.size(); i++)
 		{
 			model->ChartTrendConfig.XScaleInfo[i].ScaleContent = date + "\n" + time;
@@ -806,7 +810,8 @@ namespace UI
 			/*设置字体*/
 			fl_font(xscalefontStyle_, xscalefontSize_);
 			/*设置字体颜色*/
-			fl_color(xscalefontColor_);
+			fl_color(active() ? xscalefontColor_ : fl_inactive(xscalefontColor_));
+
 			string datestring, timestring;
 			//if (startTime_ != 0)
 			//{
@@ -826,8 +831,8 @@ namespace UI
 	void TrendChartView::DrawGrid()
 	{
 		shared_ptr<TrendChartModel> model = BaseView.GetModel<TrendChartModel>();
-
-		fl_color(RGBColor(model->ChartTrendConfig.GridStyle.Color));    //设置栅格的颜色  
+		fl_color(active() ? fl_rgb_color(RGBColor(model->ChartTrendConfig.GridStyle.Color)) 
+			: fl_inactive(fl_rgb_color(RGBColor(model->ChartTrendConfig.GridStyle.Color))));
 		fl_line_style(model->ChartTrendConfig.GridStyle.Type, model->ChartTrendConfig.GridStyle.Weight);//设置栅格 样式 宽度
 		double xSpaceInterval, ySpaceInterval;
 		xSpaceInterval = (double)model->ChartTrendConfig.XaxisLen / (double)model->ChartTrendConfig.XUniformNum; //X轴栅格间隔
@@ -858,7 +863,7 @@ namespace UI
 	{
 		shared_ptr<TrendChartModel> model = BaseView.GetModel<TrendChartModel>();
 		//画辅助线
-		fl_color(infolinecolor_);
+		fl_color(active() ? infolinecolor_ : fl_inactive(infolinecolor_));
 		fl_line_style(0, 1);
 		fl_line(origin.X + model->ChartTrendConfig.OffX + displaylinex_,
 			origin.Y + model->ChartTrendConfig.OffY - yaxislength - Hscrollbar->h(),
@@ -880,13 +885,13 @@ namespace UI
 					{
 						//fl_draw_box(FL_THIN_UP_BOX, tableX, tableY, colwidth_[i], rowheight_, infoBgColor_);
 						//绘制填充背景
-						fl_color(infoBgColor_);
+						fl_color(active() ? infoBgColor_ : fl_inactive(infoBgColor_));
 						fl_rectf(tableX, tableY, colwidth_[i], rowheight_);
 						//绘制文字
-						fl_color(infofontcolor_);
+						fl_color(active() ? infofontcolor_ : infofontcolor_);
 						fl_draw(title_[i].c_str(), tableX, tableY, colwidth_[i], rowheight_, FL_ALIGN_CENTER);
 						//绘制边框
-						fl_color(FL_BLACK);
+						fl_color(active() ? FL_BLACK : fl_inactive(FL_BLACK));
 						fl_rect(tableX, tableY, colwidth_[i], rowheight_);
 					}
 					fl_pop_clip();
@@ -987,23 +992,23 @@ namespace UI
 							fl_push_clip(tableX, tableY, colwidth_[j], rowheight_);
 							{
 								// BG COLOR
-								fl_color(infoBgColor_);
+								fl_color(active() ? infoBgColor_ : fl_inactive(infoBgColor_));
 								fl_rectf(tableX, tableY, colwidth_[j], rowheight_);
 
 								// TEXT
 								if (j == 0)
 								{
-									fl_color(lineColor);
+									fl_color(active() ? lineColor : fl_inactive(lineColor));
 									fl_rectf(tableX + (colwidth_[j] - fl_height()) / 2, tableY + (rowheight_ - fl_height()) / 2, fl_height(), fl_height());
 								}
 								else
 								{
-									fl_color(infofontcolor_);
+									fl_color(active() ? infofontcolor_ : fl_inactive(infofontcolor_));
 									fl_draw(displayContent[j - 1].c_str(), tableX, tableY, colwidth_[j], rowheight_, FL_ALIGN_CENTER);
 								}
 
 								// BORDER
-								fl_color(FL_BLACK);
+								fl_color(active() ? FL_BLACK : fl_inactive(FL_BLACK));
 								fl_rect(tableX, tableY, colwidth_[j], rowheight_);
 
 								tableX += colwidth_[j];
@@ -1079,7 +1084,7 @@ namespace UI
 				else
 					dx = (int)((ChannelData[i].Date - startTime_) * (DDWORD)Xaxislength / PeriodTime);
 				SetDisPlayPos(i, dx);
-				fl_color(linecolor);
+				fl_color(active() ? linecolor : fl_inactive(linecolor));
 				fl_line_style(0, channelinfo.TrendStyle.Weight);
 				DrawChannelLine((Project::TrendLineType)channelinfo.TrendStyle.Type, origin.X + model->ChartTrendConfig.OffX + dx,
 					origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
@@ -1158,7 +1163,7 @@ namespace UI
 					{
 						int dx = (int)((ChannelData[i].Date - startTime_) * (DDWORD)Xaxislength / perScreenPeriod_);
 						SetDisPlayPos(i, dx);
-						fl_color(linecolor);
+						fl_color(active() ? linecolor : fl_inactive(linecolor));
 						fl_line_style(0, channelinfo.TrendStyle.Weight);
 						DrawChannelLine((Project::TrendLineType)channelinfo.TrendStyle.Type, origin.X + model->ChartTrendConfig.OffX + dx,
 							origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
@@ -1187,7 +1192,7 @@ namespace UI
 					{
 						int dx = (int)((ChannelData[i].Date - clickstarttime_) * (DDWORD)Xaxislength / perScreenPeriod_);
 						SetDisPlayPos(i, dx);
-						fl_color(linecolor);
+						fl_color(active() ? linecolor : fl_inactive(linecolor));
 						fl_line_style(0, channelinfo.TrendStyle.Weight);
 						DrawChannelLine((Project::TrendLineType)channelinfo.TrendStyle.Type, origin.X + model->ChartTrendConfig.OffX + dx,
 							origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
@@ -1232,7 +1237,7 @@ namespace UI
 							dx = i * Xaxislength / (perScreendot_ - 1);
 						SetDisPlayPos(i, dx);
 					
-						fl_color(linecolor);
+						fl_color(active() ? linecolor : fl_inactive(linecolor));
 						fl_line_style(0, channelinfo.TrendStyle.Weight);
 						DrawChannelLine((Project::TrendLineType)channelinfo.TrendStyle.Type, origin.X + model->ChartTrendConfig.OffX + dx,
 							origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
@@ -1249,7 +1254,7 @@ namespace UI
 							xscaleNum++;
 							if (xscaleNum == model->ChartTrendConfig.AxisX.MainScaleNum + 1)
 								xscaleNum = 0;
-							fl_color(linecolor);
+							fl_color(active() ? linecolor : fl_inactive(linecolor));
 						}
 					}
 					fl_end_line();
@@ -1270,7 +1275,7 @@ namespace UI
 						{
 							SetDisPlayPos(i, dx);
 					
-							fl_color(linecolor);
+							fl_color(active() ? linecolor : fl_inactive(linecolor));
 							fl_line_style(0, channelinfo.TrendStyle.Weight);
 							DrawChannelLine((Project::TrendLineType)channelinfo.TrendStyle.Type, origin.X + model->ChartTrendConfig.OffX + dx,
 								origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
@@ -1312,7 +1317,7 @@ namespace UI
 		for (unsigned j = 0; j < model->ChartTrendConfig.SetChannel.size(); j++)
 		{
 			Fl_Color linecolor = fl_rgb_color(RGBColor(model->ChartTrendConfig.SetChannel[j].TrendStyle.Color));
-			fl_color(linecolor);
+			fl_color(active() ? linecolor : fl_inactive(linecolor));
 			fl_line_style(0, model->ChartTrendConfig.SetChannel[j].TrendStyle.Weight);
 
 			GraphicDrawHandle::PushClip((origin.X + model->ChartTrendConfig.OffX),

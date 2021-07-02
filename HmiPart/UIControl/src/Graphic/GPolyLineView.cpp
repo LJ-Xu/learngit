@@ -156,6 +156,8 @@ namespace UI
 		pointX = model->PolyLineConfig.X + model->PolyLineConfig.Width / 2.0;
 		pointY = model->PolyLineConfig.Y + model->PolyLineConfig.Height / 2.0;
 		Fl_Color linecolor = fl_rgb_color(RGBColor(model->PolyLineConfig.LineStyle.Color));
+		linecolor = active() ? linecolor : fl_inactive(linecolor);
+
 		GraphicDrawHandle::Ins()->BeginPushMatrix(model->PolyLineConfig.RotateAngle, 1.0, 1.0, pointX, pointY);
 		GraphicDrawHandle::Ins()->SetBrushStyle(active() ? linecolor : fl_inactive(linecolor),
 			model->PolyLineConfig.LineStyle.Type, model->PolyLineConfig.LineStyle.Weight,

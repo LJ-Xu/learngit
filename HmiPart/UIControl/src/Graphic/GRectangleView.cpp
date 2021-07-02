@@ -97,6 +97,8 @@ namespace UI
 		if (model->RectangleConfig.IsFill)  //ÊÇ·ñÌî³ä
 			DrawFill();
 		Fl_Color linecolor = fl_rgb_color(RGBColor(model->RectangleConfig.Line.Color));
+		linecolor = active() ? linecolor : fl_inactive(linecolor);
+
 		GraphicDrawHandle::Ins()->BeginPushMatrix(model->RectangleConfig.RotateAngle, 1.0, 1.0, pointX, pointY);
 		GraphicDrawHandle::Ins()->SetBrushStyle(active() ? linecolor : fl_inactive(linecolor),
 							model->RectangleConfig.Line.Type, model->RectangleConfig.Line.Weight,

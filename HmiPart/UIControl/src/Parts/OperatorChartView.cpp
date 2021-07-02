@@ -280,14 +280,16 @@ namespace UI
 					Fl_Color textcolor = fl_rgb_color(RGBColor(model->OperatorConfig.TitleStringStyle.Colors));
 					
 						/*设置背景颜色*/
-					fl_color(fl_rgb_color(RGBColor(model->OperatorConfig.TitleBgColor)));
+					fl_color(active() ? fl_rgb_color(RGBColor(model->OperatorConfig.TitleBgColor)) 
+							: fl_inactive(fl_rgb_color(RGBColor(model->OperatorConfig.TitleBgColor))));
+
 					fl_rectf(model->OperatorConfig.X + model->OperatorConfig.OffX - 2,
 						model->OperatorConfig.Y + model->OperatorConfig.OffY - 2, w() + 6, h + 6);
 					/*获取关于字符串*/
 					string text = StringUtility::GetDrawString(IResourceService::Ins(), model->OperatorConfig.TitleStringRes, 0);
 					UI::IResourceService::GB2312toUtf8(text);
 					/*绘制文本*/
-					fl_color(textcolor);
+					fl_color(active() ? textcolor : fl_inactive(textcolor));
 					fl_draw(text.data(), model->OperatorConfig.X + model->OperatorConfig.OffX,
 						model->OperatorConfig.Y + model->OperatorConfig.OffY,
 						w(), h, model->OperatorConfig.TitleStringStyle.Align);	//FL_ALIGN_CENTER
@@ -309,7 +311,7 @@ namespace UI
 					gridstartcol_ = 0;
 				}
 				// BG COLOR
-					fl_color(cell_bgcolor_);
+					fl_color(active() ? cell_bgcolor_ : fl_inactive(cell_bgcolor_));
 					fl_rectf(X - 2, Y + model->OperatorConfig.TitleHeight - 2, 
 						W + 6, H - model->OperatorConfig.TitleHeight + 6);
 				// TEXT
@@ -317,7 +319,8 @@ namespace UI
 				{
 					fl_font(UI::IResourceService::GetFontIdx(model->OperatorConfig.RecordItemStringStyle.Font.Name),
 						model->OperatorConfig.RecordItemStringStyle.Font.Size);
-					fl_color(fl_rgb_color(RGBColor(model->OperatorConfig.RecordItemStringStyle.Colors)));
+					fl_color(active() ? fl_rgb_color(RGBColor(model->OperatorConfig.RecordItemStringStyle.Colors)) 
+						: fl_inactive(fl_rgb_color(RGBColor(model->OperatorConfig.RecordItemStringStyle.Colors))));
 
 					/*获取text*/
 					string text = StringUtility::GetDrawString(IResourceService::Ins(),
@@ -345,11 +348,12 @@ namespace UI
 			GraphicDrawHandle::PushClip(X, Y, W, H);
 			{
 				// BG COLOR
-				fl_color(cell_bgcolor_);
+				fl_color(active() ? cell_bgcolor_ : fl_inactive(cell_bgcolor_));
 				fl_rectf(X - 2, Y - 2, W + 6, H + 6);
 				// TEXT
 				fl_font(fontStyle_, fontSize_);
-				fl_color(fl_rgb_color(RGBColor(model->OperatorConfig.RecordItemStringStyle.Colors)));
+				fl_color(active() ? fl_rgb_color(RGBColor(model->OperatorConfig.RecordItemStringStyle.Colors)) 
+					: fl_inactive(fl_rgb_color(RGBColor(model->OperatorConfig.RecordItemStringStyle.Colors))));
 				fl_draw(text.c_str(), X, Y, W, H, model->OperatorConfig.RecordItemStringStyle.Align);
 			}
 			fl_pop_clip();

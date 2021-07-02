@@ -620,7 +620,7 @@ namespace UI
 					string text = StringUtility::GetDrawString(IResourceService::Ins(), model->DataConfig.TitleRes, 0);
 					UI::IResourceService::GB2312toUtf8(text);
 					/*绘制文本*/
-					fl_color(textcolor);
+					fl_color(active() ? textcolor : fl_inactive(textcolor));
 					fl_draw(text.data(), model->DataConfig.X + model->DataConfig.OffX,
 						model->DataConfig.Y + model->DataConfig.OffY, w(), 
 						h, model->DataConfig.TitleBarStyle.Align);	//FL_ALIGN_CENTER
@@ -636,7 +636,7 @@ namespace UI
 					// BG COLOR
 					if (model->DataConfig.Appearance)
 					{
-						fl_color(cell_bgcolor_);
+						fl_color(active() ? cell_bgcolor_ : fl_inactive(cell_bgcolor_));
 						fl_rectf(X - 2, Y - 2, W + 6, H + 6);
 					}
 					// TEXT
@@ -644,7 +644,8 @@ namespace UI
 					{
 						fl_font(UI::IResourceService::GetFontIdx(model->DataConfig.TitleBarStyle.Font.Name),
 							model->DataConfig.TitleBarStyle.Font.Size);
-						fl_color(fl_rgb_color(RGBColor(model->DataConfig.TitleBarStyle.Colors)));
+						fl_color(active() ? fl_rgb_color(RGBColor(model->DataConfig.TitleBarStyle.Colors)) : 
+							fl_inactive(fl_rgb_color(RGBColor(model->DataConfig.TitleBarStyle.Colors))));
 
 						/*获取text*/
 						string text = StringUtility::GetDrawString(IResourceService::Ins(),
@@ -677,7 +678,7 @@ namespace UI
 				// BG COLOR
 				if (model->DataConfig.Appearance)
 				{
-					fl_color(cell_bgcolor_);
+					fl_color(active() ? cell_bgcolor_ : fl_inactive(cell_bgcolor_));
 					fl_rectf(X - 2, Y - 2, W + 6, H + 6);
 				}
 				// TEXT'
@@ -686,13 +687,15 @@ namespace UI
 				{
 					fl_font(UI::IResourceService::GetFontIdx(model->DataConfig.SameFontStyle.Font.Name),
 						model->DataConfig.SameFontStyle.Font.Size);
-					fl_color(fl_rgb_color(RGBColor(model->DataConfig.SameFontStyle.Colors)));
+					fl_color(active() ? fl_rgb_color(RGBColor(model->DataConfig.SameFontStyle.Colors)) :
+						fl_inactive(fl_rgb_color(RGBColor(model->DataConfig.SameFontStyle.Colors))));
 					align = model->DataConfig.SameFontStyle.Align;
 				}
 				else
 				{
 					fl_font(fontStyle_, fontSize_);
-					fl_color(fl_rgb_color(RGBColor(model->DataConfig.ListFontStyle.Colors)));
+					fl_color(active() ? fl_rgb_color(RGBColor(model->DataConfig.ListFontStyle.Colors)) 
+						: fl_inactive(fl_rgb_color(RGBColor(model->DataConfig.ListFontStyle.Colors))));
 					align = model->DataConfig.ListFontStyle.Align;
 				}
 				fl_draw(text.c_str(), X, Y, W, H, align);

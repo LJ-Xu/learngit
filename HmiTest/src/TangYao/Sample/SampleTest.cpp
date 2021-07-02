@@ -43,8 +43,7 @@ void SampleTest::Init() {
 		res.TriggerBitMode = 1;
 		res.TriggerReadAddr = prjHelper.GetVarID("win1.var3");
 		res.BtyeCondition = Project::Conditions::LT;
-		res.BitCondition = 0;
-		res.BitCond = Project::BitConditions::ON;
+		res.BitCondition = Project::BitConditions::ON;
 		res.ComPareValue = 10;
 		// res.ComPareVar = prjHelper.GetVarID("win1.var4");
 		res.CollectTimeFrom = 0;
@@ -54,8 +53,8 @@ void SampleTest::Init() {
 		channel.Channel = 1;
 		channel.SampleAddr = prjHelper.GetVarID("win1.var5");
 		channel.WordNum = 1;
-		channel.DataStyle = "Word";
-		channel.DataFormat = "Unsigned";
+		channel.DataStyle = Project::VarDataType::DT_WORD;
+		channel.DataFormat = Project::VarNumberType::NT_Unsigned;
 		channel.Describe = "Channel1";
 		res.SimpleChannelLst.push_back(channel);
 		cfg->InfoLst.push_back(res);
