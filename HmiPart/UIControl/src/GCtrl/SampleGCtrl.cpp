@@ -19,10 +19,24 @@
 #include "FileSave.h"
 namespace UI
 {
+	void SampleSaveFunc(void *data)
+	{
+		if (Storage::FileSave::GetFileSaveTool()->ReadySaveSample())
+		{
+			Storage::FileSave::GetFileSaveTool()->SaveSample(*(SampleInfoRes*)data);
+		}
+	}
+
+	SampleGCtrl *SampleGCtrl::ctrl_ = nullptr;
+	SampleGCtrl* SampleGCtrl::Ins()
+	{
+		return ctrl_;
+	}
 	SampleGCtrl::SampleGCtrl(HMIPage * pg) : BaseGControl(pg)
 	{
 		model_ = shared_ptr<SampleGModel>(new SampleGModel());
 		InitMVCModel(model_);
+		ctrl_ = this;
 		Storage::FileSave::GetFileSaveTool();
 	}
 
@@ -258,7 +272,8 @@ namespace UI
 			
 			if (updateFlag_) {
 				DealStroeCount(model_->SampleGUnit.InfoLst[i]);
-				Storage::FileSave::GetFileSaveTool()->InsertSampleResInQueue(&model_->SampleGUnit.InfoLst[i]);
+				Win()->AddTimeout(0, SampleSaveFunc, &model_->SampleGUnit.InfoLst[i]);
+				//Storage::FileSave::GetFileSaveTool()->InsertSampleResInQueue(&model_->SampleGUnit.InfoLst[i]);
 				//MayToFile(model_->SampleGUnit.InfoLst[i]);
 				
 				model_->SampleGUnit.InfoLst[i].ChangeFlag ^= true;
@@ -445,7 +460,9 @@ namespace UI
 			{
 				sampleGroup->SampleStoreInfo.StopFlag = 0;
 			}
-			Storage::FileSave::GetFileSaveTool()->InsertSampleResInQueue(sampleGroup);
+			if(SampleGCtrl::Ins())
+				SampleGCtrl::Ins()->Win()->AddTimeout(0, SampleSaveFunc, sampleGroup);
+			//Storage::FileSave::GetFileSaveTool()->InsertSampleResInQueue(sampleGroup);
 			// 采集新数据，发送更新通知
 			sampleGroup->ChangeFlag ^= true;
 			LocalData::SetNumberData(SYS_PSB_DATASAMPLE_NOTICE, (bool)sampleGroup->ChangeFlag);

@@ -334,6 +334,11 @@ namespace Storage
 	
 	}
 
+	void OperatorStorage::QueryAll(vector<OperatorRecord> & records)
+	{
+		OperatorStorageService::Ins()->SelectOperatorRecords(records);
+	}
+
 	void OperatorStorage::QueryByTime(DDWORD stime, DDWORD etime, vector<OperatorRecord> & records)
 	{
 		OperatorStorageService::Ins()->SelectOperatorRecordsByTime(stime, etime, records);

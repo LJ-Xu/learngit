@@ -18,12 +18,12 @@
 #include "SampleInfoRes.h"
 #include "AlarmRecord.h"
 #include "AlarmInfoRes.h"
+#include "OperatorRecord.h"
 #ifdef WIN32
 #include <setupapi.h>
 #include <cfgmgr32.h>
 #include "usbiodef.h"
 #endif
-#include <thread>
 
 #pragma comment(lib, "Setupapi.lib")
 namespace Storage
@@ -35,13 +35,21 @@ namespace Storage
 		FileSave();
 	public:
 		~FileSave() {
-			IsSampleSaveThrRun = false;
+			/*IsSampleSaveThrRun = false;
 			if (nullptr!=ThrSaveSample)
 			{
 				if (ThrSaveSample->joinable())
 					ThrSaveSample->join();
-			}
+			}*/
 		}
+	public://保存主要接口
+		void SaveSample(Project::SampleInfoRes& spIfRs);
+		bool ReadySaveSample() {return IsSampleSaveAvaliable;}
+		void SaveAlarm(Project::SaveFileRes& res);
+		bool ReadySaveAlarm() { return IsAlarmSaveAvaliable; }
+		void SaveOperate(Project::SaveFileRes& res);
+		bool ReadySaveOperate() { return IsOperateSaveAvaliable; }
+	public://常规可用接口
 		static bool WriteNoRepeat(const char* fileName, char* buff, unsigned long long len);
 		static bool WriteByCover(const char* fileName, char* buff, unsigned long long len);
 		static FileSave* GetFileSaveTool();
@@ -54,10 +62,10 @@ namespace Storage
 		//生成并执行CMD以处理过期文件
 		int ExecTimingList();
 		//
-		void InsertSampleResInQueue(Project::SampleInfoRes* spIfRs);
+		//void InsertSampleResInQueue(Project::SampleInfoRes* spIfRs);
 		//void InsertAlarmResInQueue(Project::AlarmInfoRes* almIfRs);
-		void TryTrigSave(Project::SaveFileRes* res);
-		void StartKeepSave();
+		/*void TryTrigSave(Project::SaveFileRes* res);
+		void StartKeepSave();*/
 		//0有充分剩余空间1空间不足但可尝试覆盖2总空间完全不足
 		static int IsDiskEnoughSpace(DWORD bytes,int StoreSpaceLack);
 	private:
@@ -65,20 +73,27 @@ namespace Storage
 		int GetRealChannelIdFromRecord(int channel, int group, int no);
 		void FromSqlite2File(Project::SampleInfoRes& spIfRs);
 		void FromSqlite2File(Project::SaveFileRes& res);
+		void FromSqlite2OperateFile(Project::SaveFileRes& res);
 		static int CopyIntegerToChar(char* ch, int value);
 		static int CopyDataTypeStrToChar(char* dst, const Project::BaseVar* var);
 		static string GetSavePath(int pathMode, Project::DataVarId& addrPath, int nameMode, string fileName, Project::DataVarId& addrName,int needlen, int StoreSpaceLack);
 
 	private:
-		bool IsSampleSaveThrRun;
+		atomic<bool> IsSampleSaveAvaliable;
+		atomic<bool> IsAlarmSaveAvaliable;
+		atomic<bool> IsOperateSaveAvaliable;
+		/*bool IsSampleSaveThrRun;
 		bool IsAlarmSaveThrRun;
 		bool IsAlarmNewTrig;
 		std::thread* ThrSaveSample;
 		std::thread* ThrSaveAlarm;
-		std::mutex Mutex;
+		std::mutex MutexSample;
+		std::mutex MutexAlarm;
+		std::condition_variable SampleEventLock;
+		std::condition_variable AlarmEventLock;
 		std::queue<Project::SampleInfoRes*> SampleSaveList;
 
-		Project::SaveFileRes* AlarmSaveConfig;
+		Project::SaveFileRes* AlarmSaveConfig;*/
 
 		std::vector<std::pair<std::string, int>> TimingFiles;
 	};

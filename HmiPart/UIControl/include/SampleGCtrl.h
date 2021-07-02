@@ -31,6 +31,7 @@ namespace UI
 		~SampleGCtrl();
 
 	public:
+		static SampleGCtrl *Ins();
 		void CreateView() override;
 		int PeekHMIMessage(Message::Msg* msg);
 		void HandleDataNotify(Project::DataVarId vid);
@@ -45,6 +46,7 @@ namespace UI
 		shared_ptr<SampleGModel> model_;
 		BOOL currentState_ = false;
 		BOOL updateFlag_ = false;
+		static SampleGCtrl *ctrl_;
 	};
 }
 
