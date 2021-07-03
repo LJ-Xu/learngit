@@ -48,7 +48,9 @@ namespace Utility
 			}
 			case Project::DT_Byte:
 			{
-				if (info.Type == Project::NT_Unsigned) {
+				if (info.Type == Project::NT_BCD ||
+					info.Type == Project::NT_Hex ||
+					info.Type == Project::NT_Unsigned) {
 					// 转换成无符号字符
 					UINT8 ucVal = static_cast<UINT8>(val);
 					// 赋值传出数值
@@ -157,7 +159,9 @@ namespace Utility
 			}
 			case Project::DT_Byte:
 			{
-				if (info.Type == Project::NT_Unsigned) {
+				if (info.Type == Project::NT_BCD ||
+					info.Type == Project::NT_Hex ||
+					info.Type == Project::NT_Unsigned) {
 					// 转换无符号字符
 					UINT8 ucVal = static_cast<UINT8>(data & 0xFF);
 					return static_cast<T>(ucVal);
