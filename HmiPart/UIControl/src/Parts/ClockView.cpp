@@ -145,7 +145,8 @@ namespace UI
 		strmidx = len* model->ClockConfig.ClockFontStyle.Font.Size / 4;
 		int dx = FinX + model->ClockConfig.Width / 2 - strmidx;
 		int dy = FinY + model->ClockConfig.Height / 2 + strmidy;
-		fl_draw(strDate.c_str(), dx, dy);
+		//fl_draw(strDate.c_str(), dx, dy);
+		fl_draw(strDate.c_str(), FinX, FinY, model->ClockConfig.Width, model->ClockConfig.Height, model->ClockConfig.ClockFontStyle.Align);
 
 		fl_pop_clip();
 	}

@@ -110,7 +110,7 @@ namespace UI
 			{
 				if ((msg->LParam == model->PieChartUnit.ReadVars[i].Vid) && (view->ValueSnapList.size() > i))
 				{
-					int value = UIData::Number<int>(model->PieChartUnit.ReadVars[i]);
+					float value = UIData::Number<float>(model->PieChartUnit.ReadVars[i]);
 					//目前默认筛选大于零的值
 					if (value < 0) value = 0;
 					view->TotalValue = view->TotalValue - view->ValueSnapList[i] + value;
@@ -126,7 +126,7 @@ namespace UI
 				{
 					if (DataApi::GetDataFlag(model->PieChartUnit.ReadVars[i]))
 					{
-						int value = UIData::Number<int>(model->PieChartUnit.ReadVars[i]);
+						float value = UIData::Number<float>(model->PieChartUnit.ReadVars[i]);
 						view->ValueSnapList.push_back(value);
 						view->TotalValue += value;
 					}
