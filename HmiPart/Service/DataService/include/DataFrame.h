@@ -67,6 +67,8 @@ namespace UI
 		{
 			vars_ = vars;
 		}
+		/*DevRequestGroupHelper GetDevGroup(bool=false);
+		void RespDevGroup(DevRequestGroupHelper&);*/
 		/*int EachGet(std::function<void(DataRequest& req)>);*/
 		int Get(DataRequest& req);
 		int Req(DataRequest& req);
