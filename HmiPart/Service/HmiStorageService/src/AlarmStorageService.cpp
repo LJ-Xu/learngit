@@ -167,7 +167,7 @@ namespace Storage
 	{
 		char sql[SQLCMDLEN] = { 0 };
 		// 更新指定报警记录
-		snprintf(sql, sizeof(sql), "UPDATE Alarm SET StartTime = %lld, Title = '%s', Times = %d = %lld, ResolveTime = %lld, Level = %d WHERE AlarmGroup = %d AND AlarmNo = %d; UPDATE fileDb.Alarm SET StartTime = %lld, Title = '%s', Times = %d, ResolveTime = %lld, Level = %d WHERE AlarmGroup = %d AND AlarmNo = %d;",
+		snprintf(sql, sizeof(sql), "UPDATE Alarm SET StartTime = %lld, Title = '%s', Times = %d, ResolveTime = %lld, Level = %d WHERE AlarmGroup = %d AND AlarmNo = %d UPDATE fileDb.Alarm SET StartTime = %lld, Title = '%s', Times = %d, ResolveTime = %lld, Level = %d WHERE AlarmGroup = %d AND AlarmNo = %d;",
 			record.StartTick, record.Title.c_str(), record.Times,
 			record.ResolveTick, record.Level, record.AlarmGroup, record.AlarmNo,
 			record.StartTick, record.Title.c_str(), record.Times,

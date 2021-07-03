@@ -166,9 +166,10 @@ namespace UI
 			model->ValveUnit.CurrentStatus = 1;
 			break;
 		case Project::BtnAction::BtnSETOFF:	// 关闭
-		case Project::BtnAction::BtnSHORTON:	// 瞬时
 			model->ValveUnit.CurrentStatus = 0;
-
+			break;
+		case Project::BtnAction::BtnSHORTON:	// 瞬时
+			model->ValveUnit.CurrentStatus = 1;
 			break;
 		case Project::BtnAction::BtnOPPOSITE:	// 取反
 			model->ValveUnit.CurrentStatus ^= 1;
@@ -185,15 +186,15 @@ namespace UI
 
 			if (model->ValveUnit.IsRecord)
 				OperatorGControl::Ins()->AddOperatorRecord(ctrl->Page()->Winno(), model->ValveUnit.CtrlName, Storage::OperatorAction::OA_SET,
-					model->ValveUnit.WriteVar, UIData::Bit(model->ValveUnit.WriteVar), (bool)(model->ValveUnit.CurrentStatus^ model->ValveUnit.Logic));
-			UI::DataApi::AppBit(model->ValveUnit.WriteVar, (bool)model->ValveUnit.CurrentStatus^ model->ValveUnit.Logic);
+					model->ValveUnit.WriteVar, UIData::Bit(model->ValveUnit.WriteVar), (bool)(model->ValveUnit.CurrentStatus^ (bool)model->ValveUnit.Logic));
+			UI::DataApi::AppBit(model->ValveUnit.WriteVar, (bool)model->ValveUnit.CurrentStatus^ (bool)model->ValveUnit.Logic);
 		}
 		else
 		{
 			if (model->ValveUnit.IsRecord)
 				OperatorGControl::Ins()->AddOperatorRecord(ctrl->Page()->Winno(), model->ValveUnit.CtrlName, Storage::OperatorAction::OA_SET,
-					model->ValveUnit.ReadVar, UIData::Bit(model->ValveUnit.ReadVar), (bool)(model->ValveUnit.CurrentStatus^ model->ValveUnit.Logic));
-			UI::DataApi::AppBit(model->ValveUnit.ReadVar, (bool)model->ValveUnit.CurrentStatus^ model->ValveUnit.Logic);
+					model->ValveUnit.ReadVar, UIData::Bit(model->ValveUnit.ReadVar), (bool)(model->ValveUnit.CurrentStatus^ (bool)model->ValveUnit.Logic));
+			UI::DataApi::AppBit(model->ValveUnit.ReadVar, (bool)model->ValveUnit.CurrentStatus^ (bool)model->ValveUnit.Logic);
 		}
 	}
 
