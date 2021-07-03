@@ -127,11 +127,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(IncludePath);$(ProjectDir)include;$(ProjectDir)getopt\include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiCore\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\log4cpp\include;$(SolutionDir)\ThirdPart\gtest\include;$(SolutionDir)\ThirdPart\breakpad\src;$(SolutionDir)\ThirdPart\googlepinyin\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Service\HmiDataService\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)\ThirdPart\sqlite\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\SocketLib\include;$(SolutionDir)HmiPart\Service\HmiStorageService\include;$(SolutionDir)HmiPart\HmiUtility\include</IncludePath>
+    <IncludePath>$(IncludePath);$(ProjectDir)include;$(ProjectDir)getopt\include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiCore\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\log4cpp\include;$(SolutionDir)\ThirdPart\gtest\include;$(SolutionDir)\ThirdPart\breakpad\src;$(SolutionDir)\ThirdPart\googlepinyin\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Service\DataService\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)HmiPart\Service\DataClient\include;$(SolutionDir)HmiPart\Service\XJSocket\include</IncludePath>
     <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
     <PreLinkEventUseInBuild>false</PreLinkEventUseInBuild>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)ThirdPart\lib;$(SolutionDir)Lib;$(SolutionDir)Debug</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)Lib\win\debug</LibraryPath>
     <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
     <LibraryWPath>$(WindowsSDK_MetadataPath);</LibraryWPath>
   </PropertyGroup>
@@ -171,18 +171,19 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;ZMQ_STATIC;_DEBUG;_CRT_SECURE_NO_DEPRECATE;UICONTROL_EXPORTS;WIN32_EXTRA_LEAN;_WINDOWS;_USRDLL;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <CallingConvention>Cdecl</CallingConvention>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>..\Service\HmiStorageService\include;..\Project\include;src\TestHelper;src\demo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Service\HmiStorageService\include;..\Project\include;$(SolutionDir)ThirdPart\sqlite\include;$(SolutionDir)FLTK;$(SolutionDir)ThirdPart\qrcode\include;$(SolutionDir)ThirdPart\qrcodeex\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;log4cppD.lib;common.lib;crash_generation_client.lib;crash_generation_server.lib;exception_handler.lib;gtest.lib;gtest_main.lib;googlepinyind.lib;sqlited.lib;libzmqd.lib;Iphlpapi.lib;libboost_regex-vc141-mt-gd-1_65_1.lib;libboost_filesystem-vc141-mt-gd-1_65_1.lib;libboost_date_time-vc141-mt-gd-1_65_1.lib;libboost_system-vc141-mt-gd-1_65_1.lib;zint.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)ThirdPart\lib;$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;log4cppD.lib;common.lib;crash_generation_client.lib;crash_generation_server.lib;exception_handler.lib;libzmqd.lib;Iphlpapi.lib;libboost_regex-vc141-mt-gd-1_65_1.lib;libboost_filesystem-vc141-mt-gd-1_65_1.lib;libboost_date_time-vc141-mt-gd-1_65_1.lib;libboost_system-vc141-mt-gd-1_65_1.lib;zint.lib;libprotobufd.lib;XJSocketd.lib;DataClientd.lib;DataServiced.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
@@ -350,7 +351,6 @@
     <ClCompile Include="src\demo\HmiCore_Test_Run.cpp" />
     <ClCompile Include="src\demo\Log4cpp_Test_Use.cpp" />
     <ClCompile Include="src\demo\Serialize_Test_Memory.cpp" />
-    <ClCompile Include="src\demo\Sqlite_Test_Use.cpp" />
     <ClCompile Include="src\demo\TrendChart_Test_Run.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\TemplateDemo\WindowDemo.cpp" />
@@ -451,7 +451,6 @@
     <ClInclude Include="src\demo\HmiCore_Test_Run.h" />
     <ClInclude Include="src\demo\Log4cpp_Test_Use.h" />
     <ClInclude Include="src\demo\Serialize_Test_Memory.h" />
-    <ClInclude Include="src\demo\Sqlite_Test_Use.h" />
     <ClInclude Include="src\demo\TrendChart_Test_Run.h" />
     <ClInclude Include="src\TemplateDemo\WindowDemo.h" />
     <ClInclude Include="src\TestHelper\WindowTestHelper.h" />

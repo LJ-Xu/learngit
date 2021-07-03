@@ -93,7 +93,7 @@ namespace UI
 			memcpy(BuffValue, model->BarcodeConfig.ConstString.c_str(), BuffLen);
 		}
 		//ret = ZBarcode_Encode_and_Buffer(symbol, (unsigned char *)BuffValue, QRBUFFLEN,0); //±àÂë
-		ret = ZBarcode_Encode_and_Buffer(symbol, (unsigned char*)BuffValue, BuffLen, 0); //±àÂë
+		ret = ZBarcode_Encode_and_Buffer(symbol, (unsigned char*)BuffValue, -1, 0); //±àÂë
 		if (ret != 0)
 		{
 			//error

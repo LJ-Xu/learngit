@@ -63,7 +63,7 @@ namespace Storage
 			// 获取报警恢复时间
 			records[i].ResolveTick = duration_cast<MilliSecs>(system_clock::now().time_since_epoch()).count();
 			// 更新数据库记录
-			AlarmStorageService::Ins()->UpdateAlarmRecord(groupname, groupno, records[i]);
+			AlarmStorageService::Ins()->UpdateAlarmRecordByResolve(groupname, groupno, records[i]);
 		}
 	}
 	void AlarmStorage::UnConfirmByEventId(int groupname, int groupno)
@@ -73,7 +73,7 @@ namespace Storage
 			// 获取报警恢复时间
 			records[i].CheckTick = duration_cast<MilliSecs>(system_clock::now().time_since_epoch()).count();
 			// 更新数据库记录
-			AlarmStorageService::Ins()->UpdateAlarmRecord(groupname, groupno, records[i]);
+			AlarmStorageService::Ins()->UpdateAlarmRecordByConfirm(groupname, groupno, records[i]);
 		}
 	}
 
@@ -82,39 +82,39 @@ namespace Storage
 		return std::move(AlarmStorageService::Ins()->SelectAllAlarmRecords());
 	}
 
-	vector<AlarmRecord> AlarmStorage::QueryByTime(DDWORD stime, DDWORD etime)
+	vector<AlarmRecord> AlarmStorage::QueryByTime(DDWORD stime, DDWORD etime, int Record)
 	{
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByTime(stime, etime));
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByTime(stime, etime, Record));
 	}
 
-	vector<AlarmRecord> AlarmStorage::QueryByDate(DDWORD sdata, DDWORD edata)
+	vector<AlarmRecord> AlarmStorage::QueryByDate(DDWORD sdata, DDWORD edata, int Record)
 	{
 		// 获取时间段内的报警记录
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByDate(sdata, edata));
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByDate(sdata, edata,Record));
 	}
 
-	vector<AlarmRecord> AlarmStorage::QueryByGroup(uint32_t groupname, uint32_t groupno)
+	vector<AlarmRecord> AlarmStorage::QueryByGroup(uint32_t groupname, uint32_t groupno, int Record)
 	{
 		// 获取指定类型的报警记录
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByGroup(groupname, groupno));
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByGroup(groupname, groupno,Record));
 	}
 
-	vector<AlarmRecord> AlarmStorage::QueryByGroupName(uint32_t groupname)
+	vector<AlarmRecord> AlarmStorage::QueryByGroupName(uint32_t groupname, int Record)
 	{
 		// 获取指定组名的报警记录
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByGroupName(groupname));
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByGroupName(groupname,Record));
 	}
 
-	vector<AlarmRecord> AlarmStorage::QueryByGroupNo(uint32_t groupno)
+	vector<AlarmRecord> AlarmStorage::QueryByGroupNo(uint32_t groupno, int Record)
 	{
 		// 获取指定组编号的报警记录
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByGroupNo(groupno));
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByGroupNo(groupno,Record));
 	}
 
-	vector<AlarmRecord> AlarmStorage::QueryByAlarmLevel(uint32_t level)
+	vector<AlarmRecord> AlarmStorage::QueryByAlarmLevel(uint32_t level, int Record)
 	{
 		// 获取指定组保险等级的报警记录
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByAlarmLevel(level));
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByAlarmLevel(level,Record));
 	}
 	vector<AlarmRecord> AlarmStorage::QueryByHide(uint32_t hideflag)
 	{

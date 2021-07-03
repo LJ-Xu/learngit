@@ -59,7 +59,7 @@ namespace UI
 		Rectangle rect;
 		model->GetRect(rect);
 		// »ñÈ¡±ýÍ¼×Ü½Ç¶È
-		int totalAngle = model->PieChartUnit.EndAngle - model->PieChartUnit.StartAngle;
+		int totalAngle = 0;// model->PieChartUnit.EndAngle - model->PieChartUnit.StartAngle;
 		int usedAngle = 0;
 		int wSAng = 90, wEAng = 90;
 		int startAngle = 0;
@@ -71,17 +71,20 @@ namespace UI
 			wSAng -= model->PieChartUnit.EndAngle;
 			startAngle = wEAng;
 			endAngle = wSAng;
+			if (startAngle < 0)
+				startAngle += 360;
 			break;
 		case 1:
 			wSAng += model->PieChartUnit.StartAngle;
 			wEAng += model->PieChartUnit.EndAngle;
 			startAngle = wSAng;
 			endAngle = wEAng;
+			if (startAngle >= 360)
+				startAngle -= 360;
 			break;
 		}
 		vector<std::pair<int, int>>().swap(TxtPosList);
-		if (startAngle < 0)
-			startAngle += 360;
+		totalAngle = abs(startAngle - endAngle);
 		// Ìî³ä±ýÍ¼
 		for (int i = 0; i < model->PieChartUnit.Channels.size(); ++i)
 		{

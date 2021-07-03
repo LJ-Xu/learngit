@@ -134,6 +134,12 @@ namespace UI
 			PermUtility::HandleEnablePerm(model->ValveUnit.Perm, view);
 		}
 		if (varId == model->ValveUnit.ReadVar.Vid) {	// 读取数据
+
+			model->ValveUnit.Speed = UIData::Number<WORD>(model->ValveUnit.SpVar);
+			if (model->ValveUnit.Speed < 10)
+				model->ValveUnit.Speed = 10;
+			if (model->ValveUnit.Speed > 100)
+				model->ValveUnit.Speed = 100;
 			model->ValveUnit.CurrentStatus = (UIData::Number<int>(model->ValveUnit.ReadVar) ^ model->ValveUnit.Logic);
 			if (model->ValveUnit.CurrentStatus)
 			{
@@ -153,8 +159,15 @@ namespace UI
 				Page()->RemoveTimeout(FluidValveCB, (void*)view);
 
 		}
-		if (varId == model->ValveUnit.SpVar.Vid) {	// 流动速度
-			model->ValveUnit.Speed = UIDataService::Ins().GetNumber<WORD>(model->ValveUnit.SpVar);
+		if (varId == model->ValveUnit.SpVar.Vid) {	
+			// 流动速度
+			model->ValveUnit.Speed = UIData::Number<WORD>(model->ValveUnit.SpVar);
+			if (model->ValveUnit.Speed < 10)
+				model->ValveUnit.Speed = 10;
+			if (model->ValveUnit.Speed > 100)
+				model->ValveUnit.Speed = 100;
+			Page()->RemoveTimeout(FluidValveCB, (void*)view);
+			Page()->AddTimeout(10000.0 / (double)model->ValveUnit.Speed, FluidValveCB, (void*)view, true);
 		}
 		view->position(view->x(), view->y());
 		view->redraw();

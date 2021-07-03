@@ -142,12 +142,12 @@ void XYTrendTest::Init()
 		tmpline.LineColor = 0xffff0000;
 		tmpline.LineValue = 50.0;
 		tmpline.LineValueVar.Vid = prjHelper.GetVarID("win1.var8");
-		cfg->ReferenceLines.push_back(tmpline);
+		//cfg->ReferenceLines.push_back(tmpline);
 
 		tmpline.LineColor = 0xffffff00;
 		tmpline.LineValue = 70.0;
 		tmpline.LineValueVar.Vid = prjHelper.GetVarID("win1.var9");
-		cfg->ReferenceLines.push_back(tmpline);
+		//cfg->ReferenceLines.push_back(tmpline);
 
 		cfg->LineChartBackColor = 10092543;
 		cfg->ScaleAreaBackColor = 16751052;
@@ -171,7 +171,7 @@ void XYTrendTest::Init()
 		cfg->XScaleSet.UseSecondaryScaleNum = true;
 		cfg->XScaleSet.SecondaryScaleNum = 10;
 		cfg->XScaleSet.SecondaryScaleLen = 10;
-		cfg->XScaleSet.MarkType = true;
+		cfg->XScaleSet.MarkType = Project::ScaleMarkType::NumSacle;
 		cfg->XScaleSet.ScaleMarkFont = "Arial";
 		cfg->XScaleSet.ScaleMarkColor = 0;
 		cfg->XScaleSet.ScaleMarkSize = 12;
@@ -188,7 +188,7 @@ void XYTrendTest::Init()
 		cfg->YScaleSet.UseSecondaryScaleNum = true;
 		cfg->YScaleSet.SecondaryScaleNum = 10;
 		cfg->YScaleSet.SecondaryScaleLen = 10;
-		cfg->YScaleSet.MarkType = true;
+		cfg->YScaleSet.MarkType = Project::ScaleMarkType::NumSacle;
 		cfg->YScaleSet.ScaleMarkFont = "Arial";
 		cfg->YScaleSet.ScaleMarkColor = 0;
 		cfg->YScaleSet.ScaleMarkSize = 12;

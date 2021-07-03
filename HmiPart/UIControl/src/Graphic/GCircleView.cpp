@@ -86,6 +86,7 @@ namespace UI
 		point.X = model->CircleConfig.ArcRes.Center.X + model->CircleConfig.OffX;
 		point.Y = model->CircleConfig.ArcRes.Center.Y + model->CircleConfig.OffY;			//圆心坐标
 		Fl_Color linecolor = fl_rgb_color(RGBColor(model->CircleConfig.Line.Color));
+		linecolor = active() ? linecolor : fl_inactive(linecolor);
 
 		/**********************************测试使用********************************/
 		point.X = model->CircleConfig.X + model->CircleConfig.Width / 2 + model->CircleConfig.OffX;

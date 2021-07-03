@@ -521,7 +521,8 @@ namespace UI
 					if (model->RecipeConfig.AppearMode)
 					{
 						/*设置背景颜色*/
-						fl_color(fl_rgb_color(RGBColor(model->RecipeConfig.TitleBackColor)));
+						fl_color(active() ? fl_rgb_color(RGBColor(model->RecipeConfig.TitleBackColor)) 
+							: fl_inactive(fl_rgb_color(RGBColor(model->RecipeConfig.TitleBackColor))));
 						fl_rectf(model->RecipeConfig.X + model->RecipeConfig.OffX - 2,
 							model->RecipeConfig.Y + model->RecipeConfig.OffY - 2,
 							model->RecipeConfig.Width + 6, model->RecipeConfig.TitleHeight + 6);
@@ -530,7 +531,7 @@ namespace UI
 					string text = StringUtility::GetDrawString(IResourceService::Ins(), model->RecipeConfig.TxtTitle, 0);
 					UI::IResourceService::GB2312toUtf8(text);
 					/*绘制文本*/
-					fl_color(textcolor);
+					fl_color(active() ? textcolor : fl_inactive(textcolor));
 					fl_draw(text.data(),
 						model->RecipeConfig.X + model->RecipeConfig.OffX,
 						model->RecipeConfig.Y + model->RecipeConfig.OffY,
@@ -546,7 +547,8 @@ namespace UI
 					// BG COLOR
 					if (model->RecipeConfig.AppearMode)
 					{
-						fl_color(fl_rgb_color(RGBColor(model->RecipeConfig.ColTitleBackColor)));
+						fl_color(active() ? fl_rgb_color(RGBColor(model->RecipeConfig.ColTitleBackColor)) : 
+							fl_inactive(fl_rgb_color(RGBColor(model->RecipeConfig.ColTitleBackColor))));
 						fl_rectf(X - 2, Y + model->RecipeConfig.TitleHeight - 2,
 							W + 6, H - model->RecipeConfig.TitleHeight + 6);
 					}
@@ -555,7 +557,8 @@ namespace UI
 					{
 						fl_font(UI::IResourceService::GetFontIdx(model->RecipeConfig.ColTitleStyle.Font.Name),
 							model->RecipeConfig.ColTitleStyle.Font.Size);
-						fl_color(fl_rgb_color(RGBColor(model->RecipeConfig.ColTitleStyle.Colors)));
+						fl_color(active() ? fl_rgb_color(RGBColor(model->RecipeConfig.ColTitleStyle.Colors)) 
+							: fl_inactive(fl_rgb_color(RGBColor(model->RecipeConfig.ColTitleStyle.Colors))));
 
 						/*获取text*/
 						string text = StringUtility::GetDrawString(IResourceService::Ins(),
@@ -591,30 +594,30 @@ namespace UI
 					if (selectedrow_ == R)
 					{
 						if (selectedcol_ == C)
-							fl_color(focuscellcolor_);
+							fl_color(active() ? focuscellcolor_ : fl_inactive(focuscellcolor_));
 						else
-							fl_color(focusrowcolor_);
+							fl_color(active() ? focusrowcolor_ : fl_inactive(focusrowcolor_));
 					}
 					else
 					{
 						if (model->RecipeConfig.ParityDiffColor)
 						{
 							if ((R + 1) % 2 == 0)		//偶数行
-								fl_color(oddbgcolor_);
+								fl_color(active() ? oddbgcolor_ : fl_inactive(oddbgcolor_));
 							else
-								fl_color(evenbgcolor_);
+								fl_color(active() ? evenbgcolor_ : fl_inactive(evenbgcolor_));
 						}
 						else
-							fl_color(cell_bgcolor_);
+							fl_color(active() ? cell_bgcolor_ : fl_inactive(cell_bgcolor_));
 					}
 					fl_rectf(X - 2, Y - 2, W + 6, H + 6);
 				}
 				// TEXT
 					fl_font(fontStyle_, fontSize_);
 					if (selectedcol_ == C && selectedrow_ == R)
-						fl_color(focusfontcolor_);
+						fl_color(active() ? focusfontcolor_ : fl_inactive(focusfontcolor_));
 					else
-						fl_color(fontcolor_);
+						fl_color(active() ? fontcolor_ : fl_inactive(fontcolor_));
 					fl_draw(text.c_str(), X, Y, W, H, model->RecipeConfig.ListFontStyle.Align);
 			}
 			fl_pop_clip();

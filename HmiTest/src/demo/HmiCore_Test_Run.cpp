@@ -29,16 +29,14 @@ static Core::HmiCore core;
 Project::HMIProject prj;
 bool HmiCore_Test_Run::Run(int argc, char ** argv)
 {
-	google_breakpad::ExceptionHandler eh(L".", NULL, HmicoreCb, NULL,
-		google_breakpad::ExceptionHandler::HANDLER_ALL);
 	const char* path = "F:\\HMI\\source\\src\\Hmi\\Hmi\\bin\\Debug\\hmi.bin";
 	//const char* path = "C:\\Users\\PC\\source\\repos\\Hmi\\Hmi\\bin\\Debug\\Hmi.bin";
 
 	//prj.setting.hmiName = "xj-hmi";
 	//prj.ToBinFile(path);
-	RunConfig cnf(path);
-	core.Init(cnf);
-	core.Run();
+	//RunConfig cnf(path);
+	//core.Init(cnf);
+	//core.Run();
 
 	return true;
 }
