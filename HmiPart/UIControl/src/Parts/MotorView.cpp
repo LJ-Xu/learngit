@@ -35,12 +35,12 @@ namespace UI
 		//ÉÁË¸Æ¥Åä
 		switch (model->MotorConfig.CurrentStatus_)
 		{
-		case 0:
+		case 1:
 		{
 			flImgPtr = IResourceService::Ins()->GetImage(model->MotorConfig.KeyImgOn.KeyVal);
 			break;
 		}
-		case 1:
+		case 0:
 		{
 			flImgPtr = IResourceService::Ins()->GetImage(model->MotorConfig.KeyImgOff.KeyVal);
 			break;

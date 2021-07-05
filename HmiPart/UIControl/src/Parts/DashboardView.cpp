@@ -284,7 +284,7 @@ namespace UI
 				fl_line_style(0, 3);
 				fl_line(centerX + lineStartX, centerY + lineStartY, centerX + lineEndX, centerY + lineEndY);
 
-				fl_line_style(0, 2);
+				fl_line_style(0, 1);
 				if (idxM < model->DashboardConfig.MainGraduateCount - 1)
 				{
 					for (int idxS = 1; idxS <= model->DashboardConfig.SecondaryGraduateCount; ++idxS)
@@ -300,10 +300,10 @@ namespace UI
 			
 			if (model->DashboardConfig.ShowGraduateSign)
 			{
-				double startAngle = ArcStartAngle, sweepAngle = model->DashboardConfig.ArcDirection? ArcEndAngle - ArcStartAngle : ArcStartAngle - ArcEndAngle;
+				double startAngle = model->DashboardConfig.ArcDirection ? ArcStartAngle: ArcEndAngle, sweepAngle = model->DashboardConfig.ArcDirection? ArcEndAngle - ArcStartAngle : ArcStartAngle - ArcEndAngle;
 				//int cx= centerX, cy;
 
-				AdvancedGarphic::DrawScaleMark(centerX, centerY, model->DashboardConfig.TypeFaceGraduate, curGraduatePtRadius, model->DashboardConfig.MainGraduateCount, (float)this->CurrentMinValue, (float)this->CurrentMaxValue, startAngle, sweepAngle, GradFormat, model->DashboardConfig.IntegerDigit,model->DashboardConfig.ShowGraduateSign==2);
+				AdvancedGarphic::DrawScaleMark(centerX, centerY, model->DashboardConfig.TypeFaceGraduate, curGraduatePtRadius, model->DashboardConfig.MainGraduateCount, (float)this->CurrentMinValue, (float)this->CurrentMaxValue, startAngle, sweepAngle, GradFormat, model->DashboardConfig.IntegerDigit,model->DashboardConfig.ShowGraduateSign==2,active());
 
 			}
 		}

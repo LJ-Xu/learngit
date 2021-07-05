@@ -298,7 +298,7 @@ namespace UI
 			fl_color(active() ? fl_rgb_color(RGBColor(model->ChartXYLineConfig.ReferenceLines[i].LineColor))
 				: fl_inactive(fl_rgb_color(RGBColor(model->ChartXYLineConfig.ReferenceLines[i].LineColor))));
 			fl_line_style(0, 0);
-			double y0 = (double)(model->ChartXYLineConfig.ReferenceLines[i].LineValue * (double)yaxislength /
+			double y0 = (double)((model->ChartXYLineConfig.ReferenceLines[i].LineValue - model->ChartXYLineConfig.YScaleSet.LowerLimit) * (double)yaxislength /
 				(double)(model->ChartXYLineConfig.YScaleSet.UpperLimit - model->ChartXYLineConfig.YScaleSet.LowerLimit));
 			fl_begin_line();
 			fl_vertex((double)origin.X + (double)model->ChartXYLineConfig.OffX,
@@ -422,7 +422,6 @@ namespace UI
 			{
 				fl_begin_line();
 				{
-					;
 					for (int i = startnum; i < startnum + num; i++)
 					{
 						fl_color(active() ? linecolor : fl_inactive(linecolor));

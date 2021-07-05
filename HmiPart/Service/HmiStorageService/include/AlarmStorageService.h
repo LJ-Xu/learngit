@@ -43,18 +43,18 @@ namespace Storage
 		// 获取报警记录
 		vector<AlarmRecord> SelectAlarm(const char * sql);
 		// 查询报警记录
-		vector<AlarmRecord> SelectAllAlarmRecords();
-		vector<AlarmRecord> SelectAlarmRecordByGroup(int groupname, int groupno, int Recover = 0);
+		vector<AlarmRecord> SelectAllAlarmRecords(int startgroupname, int endgroupname);
+		vector<AlarmRecord> SelectAlarmRecordByGroup(int groupname, int groupno, int startgroupname, int endgroupname, int Recover = 0);
 		//Recover:0:不做判断;1:取Recoverd;2:取UnRecover;
-		vector<AlarmRecord> SelectAlarmRecordByDate(DDWORD startDate, DDWORD endDate,int Recover=0);
-		vector<AlarmRecord> SelectAlarmRecordByTime(DDWORD startTime, DDWORD endTime, int Recover = 0);
+		vector<AlarmRecord> SelectAlarmRecordByDate(DDWORD startDate, DDWORD endDate, int startgroupname, int endgroupname, int Recover=0);
+		vector<AlarmRecord> SelectAlarmRecordByTime(DDWORD startTime, DDWORD endTime, int startgroupname, int endgroupname, int Recover = 0);
 		vector<AlarmRecord> SelectAlarmRecordByResolveTick();
-		vector<AlarmRecord> SelectAlarmRecordByGroupName(int groupname, int Recover = 0);
-		vector<AlarmRecord> SelectAlarmRecordByGroupNo(int groupno, int Recover = 0);
-		vector<AlarmRecord> SelectAlarmRecordByAlarmLevel(int level, int Recover = 0);
-		vector<AlarmRecord> SelectAlarmRecordByHide(int hideflag);
-		vector<AlarmRecord> SelectAlarmRecordByUnRecover();
-		vector<AlarmRecord> SelectAlarmRecordByRecover();
+		vector<AlarmRecord> SelectAlarmRecordByGroupName(int groupname, int startgroupname, int endgroupname, int Recover = 0);
+		vector<AlarmRecord> SelectAlarmRecordByGroupNo(int groupno, int startgroupname, int endgroupname, int Recover = 0);
+		vector<AlarmRecord> SelectAlarmRecordByAlarmLevel(int level, int startgroupname, int endgroupname, int Recover = 0);
+		vector<AlarmRecord> SelectAlarmRecordByHide(int hideflag, int startgroupname, int endgroupname);
+		vector<AlarmRecord> SelectAlarmRecordByUnRecover(int startgroupname, int endgroupname);
+		vector<AlarmRecord> SelectAlarmRecordByRecover(int startgroupname, int endgroupname);
 
 	private:
 		static AlarmStorageService * ins;

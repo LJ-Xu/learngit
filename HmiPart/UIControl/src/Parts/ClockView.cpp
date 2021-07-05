@@ -69,19 +69,6 @@ namespace UI
 			break;
 		case 3:
 			sprintf(chDate, "%02d时%02d分%02d秒%s", showHour, minute, second, chsuffix);
-			/*_TCHAR tempBuff[TIMELENGTH];
-			wsprintf(tempBuff, _T("%02d%s%02d%s%02d%s%s"), showHour, _T("时"), minute, _T("分"), second, _T("秒"), chsuffix);
-			fl_utf8fromwc(chDate, TIMELENGTH, tempBuff, wcslen(tempBuff));*/
-			/*
-
-			fl_utf8fromwc(utf8, MAX, wscnBuff->c_str(), wscnBuff->size());
-			Fl_Box *box = new Fl_Box(20, 40, 260, 100, utf8);
-
-			box->box(FL_UP_BOX);
-			box->labelsize(36);
-			box->labelfont(FL_BOLD + FL_ITALIC);
-			box->labeltype(FL_SHADOW_LABEL);
-*/
 			break;
 		}
 		return std::move(std::string(chDate));
@@ -91,8 +78,6 @@ namespace UI
 		shared_ptr<ClockModel> model = BaseView.GetModel<ClockModel>();
 		shared_ptr<ClockControl> ctrl = BaseView.GetControl<ClockControl>();
 
-		//UI::PermUtility::HandleShowPerm(model->ClockConfig.Perm, this);
-		
 		if ((model->ClockConfig.Perm.RequireRegion != 0)
 			&& (!UI::PermUtility::HasUserPerm(model->ClockConfig.Perm.RequireRegion)))		//用户设置了安全权限并且没有权限
 		{
@@ -145,7 +130,8 @@ namespace UI
 		strmidx = len* model->ClockConfig.ClockFontStyle.Font.Size / 4;
 		int dx = FinX + model->ClockConfig.Width / 2 - strmidx;
 		int dy = FinY + model->ClockConfig.Height / 2 + strmidy;
-		fl_draw(strDate.c_str(), dx, dy);
+		//fl_draw(strDate.c_str(), dx, dy);
+		fl_draw(strDate.c_str(), FinX, FinY, model->ClockConfig.Width, model->ClockConfig.Height, model->ClockConfig.ClockFontStyle.Align);
 
 		fl_pop_clip();
 	}

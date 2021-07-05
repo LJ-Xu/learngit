@@ -24,7 +24,8 @@ namespace UI
 		//mlen slen:主刻度长度 副刻度长度
 		static void DrawScale(bool isHorizontal, int alignMode,int dx,int dy,int len,int mcount,int scount,int mlen,int slen,int style, int color, int widget);
 		//绘制扇形刻度
-		static void DrawScale();
+		//static void DrawScale();
+
 		//绘制扇形刻度对应的数字标签
 		//x、y:坐标系中心点坐标
 		//fontStyle:字符标签的字体
@@ -33,7 +34,7 @@ namespace UI
 		//minvalue、maxvalue:字符标签上下限
 		//startAngle、sweepAngle:起始角度、经过角度（sweepAngle为负时逆时针转）
 		//stringFormat:字符格式
-		static void DrawScaleMark(int x, int y, const Project::StringStyle &fontStyle, int radius, int count, float minvalue, float maxvalue, double startAngle, double sweepAngle, char* stringFormat,int maxDgtLen, bool ShowPercent = false);
+		static void DrawScaleMark(int x, int y, const Project::StringStyle &fontStyle, int radius, int count, float minvalue, float maxvalue, double startAngle, double sweepAngle, char* stringFormat,int maxDgtLen, bool ShowPercent = false, int active = 1);
 		//绘制直条刻度对应的数字标签
 		//direction:方向：0上 1下 2左 3右
 		//x:绘制起始坐标
@@ -46,6 +47,6 @@ namespace UI
 		//stringFormat:
 		//intDgt:
 		//decDgt:
-		static void DrawScaleMark(int direction, int x, int y,int len, const Project::StringStyle &fontStyle, int count,float minvalue, float maxvalue, char* stringFormat,int MaxDgtLen);
+		static void DrawScaleMark(int direction, int x, int y,int len, const Project::StringStyle &fontStyle, int count,float minvalue, float maxvalue, char* stringFormat,int MaxDgtLen,int active=1);
 	};
 }

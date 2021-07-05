@@ -302,7 +302,7 @@ namespace UI
 					fl_begin_points();
 					for (size_t j = 0; j < model->TrendXYConfig.ReferenceLines[i].Pts.size(); j++)
 					{
-						double y = model->TrendXYConfig.ReferenceLines[i].Pts[j].Y * (float)yaxislength /
+						double y = (model->TrendXYConfig.ReferenceLines[i].Pts[j].Y - model->TrendXYConfig.YScaleSet.LowerLimit) * (float)yaxislength /
 							(model->TrendXYConfig.YScaleSet.UpperLimit - model->TrendXYConfig.YScaleSet.LowerLimit);
 						double x = model->TrendXYConfig.ReferenceLines[i].Pts[j].X * (float)xaxislength /
 							(model->TrendXYConfig.XScaleSet.UpperLimit - model->TrendXYConfig.XScaleSet.LowerLimit);
