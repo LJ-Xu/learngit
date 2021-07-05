@@ -240,7 +240,7 @@ namespace UI
 						dir = 0;
 					break;
 				}
-				AdvancedGarphic::DrawScaleMark(((model->ScaleConfig.ScaleTp+1 )%2)*2 + (model->ScaleConfig.IsReserveMark ? 1 : 0), mx, my, len, model->ScaleConfig.MarkFontSytle, model->ScaleConfig.MainGraduateCount, (float)(CurMinValue), (float)(CurMaxValue), GradFormat,model->ScaleConfig.MarkIntegerNumber);
+				AdvancedGarphic::DrawScaleMark(((model->ScaleConfig.ScaleTp+1 )%2)*2 + (model->ScaleConfig.IsReserveMark ? 1 : 0), mx, my, len, model->ScaleConfig.MarkFontSytle, model->ScaleConfig.MainGraduateCount, (float)(CurMinValue), (float)(CurMaxValue), GradFormat,model->ScaleConfig.MarkIntegerNumber, active());
 			}
 		}
 	}
@@ -430,7 +430,7 @@ namespace UI
 					break;
 				}
 				int markRd = (model->ScaleConfig.MarkPlace != 1)?(curMainLineStartPtRadius - model ->ScaleConfig.MarkFontSytle.Font.Size- model->ScaleConfig.MajorScaleLineLength):( curMainLineStartPtRadius + model->ScaleConfig.MarkFontSytle.Font.Size);
-				AdvancedGarphic::DrawScaleMark(cx, cy,model->ScaleConfig.MarkFontSytle,  markRd, model->ScaleConfig.MainGraduateCount,(float)this->CurMinValue, (float)this->CurMaxValue, startAngle, sweepAngle, GradFormat, model->ScaleConfig.MarkIntegerNumber);
+				AdvancedGarphic::DrawScaleMark(cx, cy,model->ScaleConfig.MarkFontSytle,  markRd, model->ScaleConfig.MainGraduateCount,(float)this->CurMinValue, (float)this->CurMaxValue, startAngle, sweepAngle, GradFormat, model->ScaleConfig.MarkIntegerNumber, false,active());
 
 				}
 

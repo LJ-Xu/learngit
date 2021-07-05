@@ -815,12 +815,12 @@ namespace UI
 		return;
 	}
 
-	void AdvancedGarphic::DrawScaleMark(int cx,int cy,const Project::StringStyle &fontStyle,int radius,int count,float minvalue,float maxvalue, double startAngle, double sweepAngle,char* stringFormat, int maxDgtLen,bool ShowPercent)
+	void AdvancedGarphic::DrawScaleMark(int cx,int cy,const Project::StringStyle &fontStyle,int radius,int count,float minvalue,float maxvalue, double startAngle, double sweepAngle,char* stringFormat, int maxDgtLen,bool ShowPercent, int active)
 	{
 		/*设置字体*/
 		fl_font(fontStyle.Font.Style, fontStyle.Font.Size);
 		/*设置字体颜色*/
-		fl_color(fl_rgb_color(fontStyle.RGBColor.R, fontStyle.RGBColor.G, fontStyle.RGBColor.B));
+		fl_color(active?fl_rgb_color(fontStyle.RGBColor.R, fontStyle.RGBColor.G, fontStyle.RGBColor.B): fl_inactive(fl_rgb_color(fontStyle.RGBColor.R, fontStyle.RGBColor.G, fontStyle.RGBColor.B)));
 
 		float fValue = (float)minvalue;
 		float gradInterval = (float)((maxvalue - minvalue) / (float)(count - 1));
@@ -884,7 +884,6 @@ namespace UI
 			int modAngle = curAngle;
 			if (((int)(curAngle+90) % 180) != 0)
 			{
-
 				modAngle = curAngle - 90;
 				offX = offL * sin(arc);
 				offY = offH * cos(arc);
@@ -901,20 +900,12 @@ namespace UI
 				disY = cy - (radius - offY) * sin(arc);
 				fl_draw(cf, disX- offL, disY);
 			}
-				
-			
-
-
-			//calculatePosOnCircle(curLineAngle, curGraduatePtRadius, fontCX, fontCY);
-
-
 			fValue += gradInterval;
 			curAngle += offsetAngle;
-
 		}
 
 	}
-	void AdvancedGarphic::DrawScaleMark(int direction,int dx, int dy, int len, const Project::StringStyle & fontStyle, int count, float minvalue, float maxvalue, char * stringFormat, int maxDgtLen)
+	void AdvancedGarphic::DrawScaleMark(int direction,int dx, int dy, int len, const Project::StringStyle & fontStyle, int count, float minvalue, float maxvalue, char * stringFormat, int maxDgtLen, int active)
 	{
 		//临时的数字坐标
 		int tpDX, tpDY;
@@ -927,7 +918,7 @@ namespace UI
 		/*设置字体*/
 		fl_font(fontStyle.Font.Style, fontStyle.Font.Size);
 		/*设置字体颜色*/
-		fl_color(fl_rgb_color(fontStyle.RGBColor.R, fontStyle.RGBColor.G, fontStyle.RGBColor.B));
+		fl_color(active ? fl_rgb_color(fontStyle.RGBColor.R, fontStyle.RGBColor.G, fontStyle.RGBColor.B): fl_inactive(fl_rgb_color(fontStyle.RGBColor.R, fontStyle.RGBColor.G, fontStyle.RGBColor.B)));
 		char cf[20];
 		switch (direction)
 		{

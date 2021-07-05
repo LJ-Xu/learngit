@@ -209,7 +209,7 @@ namespace UI
 		/*设置字体*/
 		fl_font(model->DateConfig.DateFontStyle.Font.Style, model->DateConfig.DateFontStyle.Font.Size);
 		/*设置字体颜色*/
-		fl_color(fl_rgb_color(model->DateConfig.DateFontStyle.RGBColor.R, model->DateConfig.DateFontStyle.RGBColor.G, model->DateConfig.DateFontStyle.RGBColor.B));
+		fl_color(active() ? fl_rgb_color(model->DateConfig.DateFontStyle.RGBColor.R, model->DateConfig.DateFontStyle.RGBColor.G, model->DateConfig.DateFontStyle.RGBColor.B): fl_inactive(fl_rgb_color(model->DateConfig.DateFontStyle.RGBColor.R, model->DateConfig.DateFontStyle.RGBColor.G, model->DateConfig.DateFontStyle.RGBColor.B)));
 		//获取文本
 		std::string strDate = GetCurrentDate(model->DateConfig.DateFormat, model->DateConfig.ShowFullYear,model->DateConfig.ShowWeek);
 

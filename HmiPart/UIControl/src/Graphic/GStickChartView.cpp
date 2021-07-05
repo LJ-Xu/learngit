@@ -81,7 +81,7 @@ namespace UI
 			sprintf(ChPecent, "%d%%", pct);
 			fl_font(model->StickChartConfig.TypeFaceGraduate.Font.Style, model->StickChartConfig.TypeFaceGraduate.Font.Size);
 			/*设置字体颜色*/
-			fl_color(fl_rgb_color(model->StickChartConfig.TypeFaceGraduate.RGBColor.R, model->StickChartConfig.TypeFaceGraduate.RGBColor.G, model->StickChartConfig.TypeFaceGraduate.RGBColor.B));
+			fl_color(active() ? fl_rgb_color(model->StickChartConfig.TypeFaceGraduate.RGBColor.R, model->StickChartConfig.TypeFaceGraduate.RGBColor.G, model->StickChartConfig.TypeFaceGraduate.RGBColor.B): fl_inactive(fl_rgb_color(model->StickChartConfig.TypeFaceGraduate.RGBColor.R, model->StickChartConfig.TypeFaceGraduate.RGBColor.G, model->StickChartConfig.TypeFaceGraduate.RGBColor.B)));
 			fl_draw(ChPecent, (float)FinX + model->StickChartConfig.Width / 2, (float)FinY + model->StickChartConfig.Height / 2);
 		}
 	}
@@ -934,7 +934,7 @@ namespace UI
 					direct = direct % 2;
 				}
 #endif
-				AdvancedGarphic::DrawScaleMark(direct,dx, dy, len, model->StickChartConfig.TypeFaceGraduate, model->StickChartConfig.MainGraduateCount, (float)(CurMinValue_), (float)(CurMaxValue_), GradFormat, model->StickChartConfig.IntegralDigit);
+				AdvancedGarphic::DrawScaleMark(direct,dx, dy, len, model->StickChartConfig.TypeFaceGraduate, model->StickChartConfig.MainGraduateCount, (float)(CurMinValue_), (float)(CurMaxValue_), GradFormat, model->StickChartConfig.IntegralDigit,active());
 			}
 		}
 		//百分比
@@ -1154,7 +1154,7 @@ namespace UI
 				if (model->StickChartConfig.ShowGraduateSign)
 				{
 					double startAngle = realStartAngle, sweepAngle = realEndAngle-startAngle;
-					AdvancedGarphic::DrawScaleMark(centerX,centerY, model->StickChartConfig.TypeFaceGraduate, curGraduatePtRadius, model->StickChartConfig.MainGraduateCount, (float)(CurMinValue_), (float)(CurMaxValue_), startAngle, sweepAngle, GradFormat, model->StickChartConfig.IntegralDigit);
+					AdvancedGarphic::DrawScaleMark(centerX,centerY, model->StickChartConfig.TypeFaceGraduate, curGraduatePtRadius, model->StickChartConfig.MainGraduateCount, (float)(CurMinValue_), (float)(CurMaxValue_), startAngle, sweepAngle, GradFormat,false, model->StickChartConfig.IntegralDigit,active());
 				}
 			}
 		}
