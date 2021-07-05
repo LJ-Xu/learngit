@@ -30,7 +30,8 @@ namespace UI
 			if (--(res->CurBeepTime) > 0)
 			{
 				SysCtrlApi::Beep();
-				AlarmGControl::Ins()->Win()->AddTimeout(1, AlarmBeepFunc, res);
+				if(AlarmGControl::Ins())
+					AlarmGControl::Ins()->Win()->AddTimeout(1, AlarmBeepFunc, res);
 			}
 		}
 	}
@@ -42,11 +43,15 @@ namespace UI
 			AlarmGControl::Ins()->Win()->OpenDialogPage(res->PopWinNo);
 			AlarmGControl::Ins()->Win()->AddTimeout((double)res->PopTime/1000.0f, AlarmPopWinFunc, res);
 		}
-		/*else
-		{
-			AlarmGControl::Ins()->Win()->ClosePage(res->PopWinNo);
-		}*/
 	}
+	void AlarmSaveFunc(void *data)
+	{
+		if (Storage::FileSave::GetFileSaveTool()->ReadySaveAlarm())
+		{
+			Storage::FileSave::GetFileSaveTool()->SaveAlarm(*(SaveFileRes*)data);
+		}
+	}
+
 	AlarmGControl *AlarmGControl::ctrl_ = nullptr;
 
 	AlarmGControl::AlarmGControl(HMIPage * page) : BaseGControl(page) {
@@ -623,7 +628,7 @@ namespace UI
 
 		if (model_->AlarmGUnit.IsSave)
 		{
-			Storage::FileSave::GetFileSaveTool()->TryTrigSave(&model_->AlarmGUnit.SaveLst);
+			Win()->AddTimeout(0, AlarmSaveFunc, &model_->AlarmGUnit.SaveLst);
 		}
 	}
 

@@ -42,7 +42,7 @@ namespace UI
 	private:
 		//static std::vector<DevCommStateInfo> devstate_;
 		static Semaphore* sem_;
-		static std::vector<char> devcondition_;
+		static std::vector<unsigned int> devcondition_;
 	};
 }
 

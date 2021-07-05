@@ -129,6 +129,9 @@ namespace UI
 				model->WaterPumpUnit.Speed = 10;
 			if (model->WaterPumpUnit.Speed > 100)
 				model->WaterPumpUnit.Speed = 100;
+			Page()->RemoveTimeout(FluidCB, (void*)view);
+			Page()->AddTimeout(10000.0 / (double)model->WaterPumpUnit.Speed, FluidCB, (void*)view, true);
+
 		}
 		if (varId == model->WaterPumpUnit.ReadVar.Vid) {
 			//model->WaterPumpUnit.CurrentStatus = UIData::Number<WORD>(model->WaterPumpUnit.ReadVar);

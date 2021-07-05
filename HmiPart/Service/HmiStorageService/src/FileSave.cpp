@@ -16,6 +16,7 @@
 #include "System.h"
 #include "SampleStorage.h"
 #include "AlarmStorage.h"
+#include "OperatorStorage.h"
 #include "UIData.h"
 #ifndef WIN32
 #include <unistd.h>
@@ -33,6 +34,7 @@
 #include "UIData.h"
 #include "DataApi.h"
 #define LINELENGTH 128
+#define OPERLINELENGTH  200
 using namespace std;
 namespace Storage
 {
@@ -165,6 +167,27 @@ namespace Storage
 #endif
 	}
 
+	void FileSave::SaveSample(Project::SampleInfoRes & spIfRs)
+	{
+		IsSampleSaveAvaliable = false;
+		FromSqlite2File(spIfRs);
+		IsSampleSaveAvaliable = true;
+	}
+
+	void FileSave::SaveAlarm(Project::SaveFileRes & res)
+	{
+		IsAlarmSaveAvaliable = false;
+		FromSqlite2File(res);
+		IsAlarmSaveAvaliable = true;
+	}
+
+	void FileSave::SaveOperate(Project::SaveFileRes & res)
+	{
+		IsAlarmSaveAvaliable = false;
+		FromSqlite2File(res);
+		IsAlarmSaveAvaliable = true;
+	}
+
 	//重复的文件名则保存为*(1~N).*这样的格式
 	bool FileSave::WriteNoRepeat(const char* fileName,char* buff,unsigned long long len)
 	{
@@ -210,8 +233,10 @@ namespace Storage
 	}
 	FileSave::FileSave()
 	{
+		IsSampleSaveAvaliable = true;
+		IsAlarmSaveAvaliable = true;
 		ReadTimingFilesFromIni();
-		StartKeepSave();
+		//StartKeepSave();
 	}
 	FileSave * FileSave::GetFileSaveTool()
 	{
@@ -467,33 +492,6 @@ namespace Storage
 	}
 	void FileSave::FromSqlite2File(Project::SaveFileRes & res)
 	{
-		/*bool DoSave = false;
-		switch (res.StoreTrigMode)
-		{
-		case Project::StoreTrigMode::STM_ByCount:
-		{
-			if (AlarmStorage::Ins()->GetAllCountByNo(spIfRs.SimpleGroupName, spIfRs.SimpleGroupNo, spIfRs.SampleStoreInfo.StoreFileInfo.SavedFlag) >= (spIfRs.SampleStoreInfo.StoreFileInfo.SaveTrigCount))
-			{
-				DoSave = true;
-			}
-			break;
-		}
-		case Project::StoreTrigMode::STM_ByAddr:
-		{
-			if (NULL_VID_VALUE != spIfRs.SampleStoreInfo.StoreFileInfo.SaveTrigAddr.Vid)
-			{
-				if (UI::DataApi::AppBit(spIfRs.SampleStoreInfo.StoreFileInfo.SaveTrigAddr) == true)
-				{
-					DoSave = true;
-				}
-			}
-			break;
-		}
-		default:
-			return;
-		}
-		if (!DoSave)
-			return;*/
 		string filePath;
 		vector<Storage::AlarmRecord> vecAlmRec;
 		vecAlmRec = AlarmStorage::Ins()->QueryAll();
@@ -624,63 +622,158 @@ namespace Storage
 		}
 		filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen,res.StoreSpaceLack);
 		LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0,0);
-		IsAlarmNewTrig = false;
+		//IsAlarmNewTrig = false;
 	}
-	void FileSave::InsertSampleResInQueue(Project::SampleInfoRes * spIfRs)
+	void FileSave::FromSqlite2OperateFile(Project::SaveFileRes& res)
 	{
-		if (!spIfRs->SampleStoreInfo.IsSave)
-		{
+		string filePath;
+		vector<Storage::OperatorRecord> vecOptRec;
+		OperatorStorage::Ins()->QueryAll(vecOptRec);
+		if (!vecOptRec.size())
 			return;
-		}
-		SampleSaveList.push(spIfRs);
-	}
-	void FileSave::TryTrigSave(Project::SaveFileRes * res)
-	{
-		IsAlarmNewTrig = true;
-		if (IsAlarmSaveThrRun)
-			return;
-		IsAlarmSaveThrRun = true;
-		AlarmSaveConfig = res;
-		////???????
-		ThrSaveAlarm = new std::thread([&]
+		unsigned long long buflen = (vecOptRec.size() + 1)*LINELENGTH;
+		char* buff = new char[buflen];
+		memset(buff, 0, buflen);
+		char* tembuf = buff;
+		//int id = 1;
+		memcpy(tembuf, "记录编号,",9);
+		tembuf += 9;
+		memcpy(tembuf, "操作日期,", 9);
+		tembuf += 9;
+		memcpy(tembuf, "操作时间,", 9);
+		tembuf += 9;
+		memcpy(tembuf, "用户名称,", 9);
+		tembuf += 9;
+		memcpy(tembuf, "操作权限,", 9);
+		tembuf += 9;
+		memcpy(tembuf, "操作窗口,", 9);
+		tembuf += 9;
+		memcpy(tembuf, "控件名称,", 9);
+		tembuf += 9;
+		memcpy(tembuf, "对象描述,", 9);
+		tembuf += 9;
+		memcpy(tembuf, "操作动作,", 9);
+		tembuf += 9;
+		memcpy(tembuf, "操作地址,", 9);
+		tembuf += 9;
+		memcpy(tembuf, "操作信息,", 9);
+		tembuf += 9;
+		//--tembuf;
+		memcpy(tembuf, "\n", 2);
+		tembuf += 2;
+		for (size_t i = 0; i < vecOptRec.size(); ++i)
 		{
-			while (IsAlarmSaveThrRun)
-			{
-				if(IsAlarmNewTrig)
-					FromSqlite2File(*AlarmSaveConfig);
-#ifdef WIN32
-				Sleep(1500);
-#else
-                usleep(1500000);
-#endif
-			}
+			tembuf += CopyIntegerToChar(tembuf, vecOptRec[i].ID);
+			memset(tembuf++, 44, 1);
+
+			string strSD = System::GetDateToString(vecOptRec[i].Date / 1000);
+			memcpy(tembuf, strSD.c_str(), strSD.size());
+			tembuf += strSD.size();
+			memset(tembuf++, 44, 1);
+
+			string strST = System::GetTimeToString(vecOptRec[i].Time / 1000);
+			memcpy(tembuf, strST.c_str(), strST.size());
+			tembuf += strST.size();
+			memset(tembuf++, 44, 1);
+
+			memcpy(tembuf, vecOptRec[i].UserName.c_str(), vecOptRec[i].UserName.size());
+			tembuf += vecOptRec[i].UserName.size();
+			memset(tembuf++, 44, 1);
+
+			memcpy(tembuf, vecOptRec[i].Class.c_str(), vecOptRec[i].Class.size());
+			tembuf += vecOptRec[i].Class.size();
+			memset(tembuf++, 44, 1);
+
+			tembuf += CopyIntegerToChar(tembuf, vecOptRec[i].Window);
+			memset(tembuf++, 44, 1);
+
+			memcpy(tembuf, vecOptRec[i].CtrlName.c_str(), vecOptRec[i].CtrlName.size());
+			tembuf += vecOptRec[i].CtrlName.size();
+			memset(tembuf++, 44, 1);
+
+			memcpy(tembuf, vecOptRec[i].Comment.c_str(), vecOptRec[i].Comment.size());
+			tembuf += vecOptRec[i].Comment.size();
+			memset(tembuf++, 44, 1);
+
+			memcpy(tembuf, vecOptRec[i].Action.c_str(), vecOptRec[i].Action.size());
+			tembuf += vecOptRec[i].Action.size();
+			memset(tembuf++, 44, 1);
+
+			memcpy(tembuf, vecOptRec[i].Address.c_str(), vecOptRec[i].Address.size());
+			tembuf += vecOptRec[i].Address.size();
+			memset(tembuf++, 44, 1);
+
+			memcpy(tembuf, vecOptRec[i].Information.c_str(), vecOptRec[i].Information.size());
+			tembuf += vecOptRec[i].Information.size();
+			memset(tembuf++, 44, 1);
+			//--tembuf;
+			memcpy(tembuf, "\n", 2);
+			tembuf += 2;
 		}
-		);
-		ThrSaveAlarm->detach();
+		filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+		LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
 	}
-	void FileSave::StartKeepSave()
-	{
-		IsSampleSaveThrRun = true;
-		ThrSaveSample = new std::thread([&]
-		{
-			while (IsSampleSaveThrRun)
-			{
-#ifdef WIN32
-				Sleep(500);
-#else
-                usleep(500000);
-#endif
-				while (!SampleSaveList.empty())
-				{
-					auto itor = SampleSaveList.front();
-					FromSqlite2File(*itor);
-					SampleSaveList.pop();
-				}
-			}
-		}
-		);
-		ThrSaveSample->detach();
-	}
+	//void FileSave::InsertSampleResInQueue(Project::SampleInfoRes * spIfRs)
+	//{
+	//	if (!spIfRs->SampleStoreInfo.IsSave)
+	//	{
+	//		return;
+	//	}
+	//	SampleSaveList.push(spIfRs);
+	//	SampleEventLock.notify_all();
+	//}
+//	void FileSave::TryTrigSave(Project::SaveFileRes * res)
+//	{
+//		IsAlarmNewTrig = true;
+//		AlarmEventLock.notify_all();
+//		if (IsAlarmSaveThrRun)
+//			return;
+//		IsAlarmSaveThrRun = true;
+//		AlarmSaveConfig = res;
+//		////???????
+//		ThrSaveAlarm = new std::thread([&]
+//		{
+//			while (IsAlarmSaveThrRun)
+//			{
+//				if(IsAlarmNewTrig)
+//					FromSqlite2File(*AlarmSaveConfig);
+//				std::unique_lock<std::mutex> lck(MutexAlarm);
+//				AlarmEventLock.wait(lck);
+////#ifdef WIN32
+////				Sleep(1500);
+////#else
+////                usleep(1500000);
+////#endif
+//			}
+//		}
+//		);
+//		ThrSaveAlarm->detach();
+//	}
+//	void FileSave::StartKeepSave()
+//	{
+//		IsSampleSaveThrRun = true;
+//		ThrSaveSample = new std::thread([&]
+//		{
+//			while (IsSampleSaveThrRun)
+//			{
+////#ifdef WIN32
+////				Sleep(500);
+////#else
+////                usleep(500000);
+////#endif
+//				while (!SampleSaveList.empty())
+//				{
+//					auto itor = SampleSaveList.front();
+//					FromSqlite2File(*itor);
+//					SampleSaveList.pop();
+//				}
+//				std::unique_lock<std::mutex> lck(MutexSample);
+//				SampleEventLock.wait(lck);
+//			}
+//		}
+//		);
+//		ThrSaveSample->detach();
+//	}
 
 #ifdef WIN32
 	BOOL get_disk_space(char driver, unsigned long long& allSpace, unsigned long long& freeSpace)

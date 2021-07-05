@@ -73,13 +73,13 @@ namespace UI
 			{
 				memcpy(chweek, "星期三", 6);
 			}
-			break;
+			break;	
 		case 4:
 			if (FormatType != 3)
 				memcpy(chweek, "Thu", 4);
 			else
 			{
-				memcpy(chweek, "星期四", 5);
+				memcpy(chweek, "星期四", 6);
 			}
 			break;
 		case 5:
@@ -95,7 +95,7 @@ namespace UI
 				memcpy(chweek, "Sat", 4);
 			else
 			{
-				memcpy(chweek, "星期六", 5);
+				memcpy(chweek, "星期六", 6);
 			}
 				
 			break;
@@ -220,8 +220,8 @@ namespace UI
 		strmidx = len * model->DateConfig.DateFontStyle.Font.Size / 4;
 		int dx = FinX + model->DateConfig.Width / 2 - strmidx;
 		int dy = FinY + model->DateConfig.Height / 2 + strmidy;
-		fl_draw(strDate.c_str(), dx, dy);
-
+		//fl_draw(strDate.c_str(), dx, dy);
+		fl_draw(strDate.c_str(), FinX, FinY, model->DateConfig.Width, model->DateConfig.Height, model->DateConfig.DateFontStyle.Align);
 		fl_pop_clip();
 
 	}

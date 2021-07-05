@@ -37,8 +37,8 @@ namespace UI
 
 	public:
 		BasicView BaseView;
-		std::vector<int> ValueSnapList;
-		int TotalValue;
+		std::vector<float> ValueSnapList;
+		float TotalValue;
 		vector<std::pair<int, int>> TxtPosList;
 	};
 }
