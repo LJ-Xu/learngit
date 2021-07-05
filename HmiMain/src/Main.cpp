@@ -172,7 +172,7 @@ int OPEN_DATASERVER()
 	si.wShowWindow = SW_HIDE;
 	PROCESS_INFORMATION PI;
 	//TCHAR szCommandLine[] = TEXT("HmiDataServer.exe -f Hmi.bin -d Run");
-	TCHAR szCommandLine[] = TEXT("HmiDataServer.exe");
+	TCHAR szCommandLine[] = TEXT("HmiDataServer.exe" );
 	if (CreateProcess(NULL, szCommandLine, NULL, NULL,
 		FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &PI))
 	{
@@ -182,9 +182,69 @@ int OPEN_DATASERVER()
 #endif
 		return 1;
 }
+#ifdef WIN32
+#define DS_EVENT "XINJE_EVENT_8452941-7892-5523-5671-AA-DATASERVER"
+#define UI_EVENT "XINJE_EVENT_8452941-7892-5523-5671-AA-UIMAIN"
+//HANDLE dsEvent;
+HANDLE uiEvent;
+int UIMainEvent()
+{
+	//dsEvent = OpenEvent(EVENT_ALL_ACCESS, FALSE, DS_EVENT);
+	uiEvent = OpenEvent(EVENT_ALL_ACCESS, FALSE, UI_EVENT);
+	if (uiEvent == NULL)
+	{
+		OutputDebugStringA("Open Event Failed Go Create\n");
+		uiEvent = CreateEvent(NULL, FALSE, FALSE, UI_EVENT);
+		if (uiEvent == NULL)
+		{
+			OutputDebugStringA("CreateEvent FAILED , m_hEncEvent == NULL!\n");
+			return -1;
+		}
+		OutputDebugStringA("Create Event SUCCEED\n");
+	}
+	
+	return 0;
+}
+#endif
 void CLOSE_DATASERVER()
 {
 #ifdef WIN32
+
+#if 1
+	UIMainEvent();
+	//判断当前有没有uimian进程，有的话就
+	if (uiEvent!=NULL)
+	{
+		if (/*not has uimain process*/true)
+		{
+			SetEvent(uiEvent);
+			ResetEvent(uiEvent);
+		}
+		CloseHandle(uiEvent);
+	}
+	
+	//HANDLE hEvent = OpenEvent(EVENT_ALL_ACCESS, FALSE, DS_EVENT);
+	//if (hEvent == NULL)
+	//{
+	//	/*OutputDebugStringA("Open Event Failed Go Create\n");
+	//	hEvent = CreateEvent(NULL, TRUE, FALSE, MYEVENT);
+	//	if (hEvent == NULL)
+	//	{
+	//		OutputDebugStringA("CreateEvent FAILED , m_hEncEvent == NULL!\n");
+	//		return;
+	//	}
+	//	OutputDebugStringA("Create Event SUCCEED\n");*/
+	//	
+	//}
+	//else
+	//{
+	//	//ResetEvent(hEvent);
+	//	SetEvent(hEvent);
+	//}
+	//	
+	//CloseHandle(hEvent);
+#else
+
 	HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 	if (INVALID_HANDLE_VALUE == hSnapshot) {
 		return;
@@ -200,9 +260,10 @@ void CLOSE_DATASERVER()
 			WaitForSingleObject(handle, INFINITE);
 		}
 	}
-
+#endif
 #endif
 }
+ 
 static void LoadParam(Param& param, int argc, char ** argv)
 {
 	
@@ -225,13 +286,16 @@ static void LoadParam(Param& param, int argc, char ** argv)
 #define xTEST
 int main(int argc, char ** argv) {
 	InitBreakpad();
+	
+
 	Param param;	
 	LoadParam(param, argc, argv);
 	LOG_INFO("Start HmiMain.exe\n");
 	//CLOSE_DATASERVER();
-
-	//if (!OPEN_DATASERVER())
-	//	return 0;
+//#ifdef _MSC_VER
+//	if (dsEvent==NULL&&!OPEN_DATASERVER())
+//		return 0;
+//#endif
 #ifndef TEST
 	if (!RunEnv::Cnf.BinPath.empty())
 	{
