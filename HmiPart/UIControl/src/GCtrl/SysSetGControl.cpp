@@ -25,6 +25,8 @@
 #include <Windows.h>
 #else
 #include <X11/Xcursor/Xcursor.h>
+#include <X11/Xlib.h>
+#include <X11/extensions/Xfixes.h>
 #endif // WIN32
 
 namespace UI
