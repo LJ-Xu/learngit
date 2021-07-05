@@ -58,7 +58,7 @@ namespace UI
 				if (model->TransferRecipeConfig.IsRecord)
 					OperatorGControl::Ins()->AddOperatorRecord(ctrl->Page()->Winno(), model->TransferRecipeConfig.CtrlName, model->TransferRecipeConfig.PlcVarIdRef,
 						Storage::OperatorAction::OA_DOWNLOND, model->TransferRecipeConfig.RecipeId, model->TransferRecipeConfig.RecipeCount);
-				DataApi::RecipeToPLC(model->TransferRecipeConfig.RecipeId, model->TransferRecipeConfig.RecipeCount * row, index,
+				DataApi::RecipeToPLC(model->TransferRecipeConfig.RecipeId, model->TransferRecipeConfig.RecipeCount, index,
 					model->TransferRecipeConfig.PlcVarIdRef, ColInfo, model->TransferRecipeConfig.CompleteVarIdRef);
 			}
 			else if (model->TransferRecipeConfig.TransmitMode == Project::RecipeTransferAction::UpLoadFromPLC)
@@ -67,7 +67,7 @@ namespace UI
 				if (model->TransferRecipeConfig.IsRecord)
 					OperatorGControl::Ins()->AddOperatorRecord(ctrl->Page()->Winno(), model->TransferRecipeConfig.CtrlName, model->TransferRecipeConfig.PlcVarIdRef,
 						Storage::OperatorAction::OA_UPLOAD, model->TransferRecipeConfig.RecipeId, model->TransferRecipeConfig.RecipeCount);
-				DataApi::RecipeFromPLC(model->TransferRecipeConfig.RecipeId, model->TransferRecipeConfig.RecipeCount * row, index,
+				DataApi::RecipeFromPLC(model->TransferRecipeConfig.RecipeId, model->TransferRecipeConfig.RecipeCount, index,
 					model->TransferRecipeConfig.PlcVarIdRef, ColInfo, model->TransferRecipeConfig.CompleteVarIdRef);
 			}
 			PermUtility::QuitLimitPerm(model->TransferRecipeConfig.Perm);

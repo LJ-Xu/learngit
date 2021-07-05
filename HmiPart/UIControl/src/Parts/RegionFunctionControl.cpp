@@ -518,7 +518,7 @@ namespace UI
 		else
 			index = UI::UIData::Number<short>(indexvar);
 		int row = Storage::RecipeStorage::Ins()->GetCountByRepiceName(param.DownloadRecipe.RecipeName);
-		DataApi::RecipeFromPLC(param.DownloadRecipe.RecipeName, param.DownloadRecipe.Size * row, index,
+		DataApi::RecipeToPLC(param.DownloadRecipe.RecipeName, param.DownloadRecipe.Size, index,
 			param.DownloadRecipe.RegVar, colinfo, param.DownloadRecipe.TransferVarIdRef);
 	}
 	void RegionFunctionControl::HandleUploadRecipe(Project::FunctionSetup param)
@@ -532,7 +532,7 @@ namespace UI
 		else
 			index = UI::UIData::Number<short>(indexvar);
 		int row = Storage::RecipeStorage::Ins()->GetCountByRepiceName(param.UploadRecipe.RecipeName);
-		DataApi::RecipeToPLC(param.UploadRecipe.RecipeName, param.UploadRecipe.Size * row, index,
+		DataApi::RecipeFromPLC(param.UploadRecipe.RecipeName, param.UploadRecipe.Size, index,
 			param.UploadRecipe.RegVar, colinfo, param.UploadRecipe.TransferVarIdRef);
 	}
 	void RegionFunctionControl::HandleCallbackFunc(Project::FunctionSetup param)

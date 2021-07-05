@@ -48,7 +48,7 @@ namespace Project
 		{
 			archive(CycTime, UseDelay, DelayExecutionCycle, MarkVar, StartConditions, 
 				StartVar, BitTriggerCond, UseValueEqual, ComPareValue, EndConditions, 
-				EndVar, BitEndCond, PreconditionConstant, PresetTimeNotifyVar,
+				EndVar, BitEndCond, PreconditionConstant, PreconditionVar, PresetTimeNotifyVar,
 				NotifyMode, AlreadTimeVar, UseReset, ResetVar, ResetCond,
 				VOffX, VOffY, Perm, Width, Height, X, Y, IsEnable, IsRecord, CtrlName);
 		}
