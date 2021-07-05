@@ -66,33 +66,8 @@ namespace UI
 			UI::PermUtility::HandleShowPerm(mode_->StickChartConfig.Perm, pView_);
 		if (mode_->StickChartConfig.Perm.EnableVID.Cmp(varId))
 			UI::PermUtility::HandleEnablePerm(mode_->StickChartConfig.Perm, pView_);
-		///算值
-		//当前数值
-		pView->CurValue_ = UIData::Number<int>(mode_->StickChartConfig.BarVar);
-		//当前最大值
-		pView->CurMaxValue_ = mode_->StickChartConfig.UseMaxAddr ? UIData::Number<int>(mode_->StickChartConfig.MaxData) : mode_->StickChartConfig.MaxValue;
-		//当前最小值
-		pView->CurMinValue_ = mode_->StickChartConfig.UseMinAddr ? UIData::Number<int>(mode_->StickChartConfig.MinData) : mode_->StickChartConfig.MinValue;
-		//限制范围
-		pView->CurValue_ = pView->CurValue_ > pView->CurMaxValue_ ? pView->CurMaxValue_ : pView->CurValue_;
-		pView->CurValue_ = pView->CurValue_ < pView->CurMinValue_ ? pView->CurMinValue_ : pView->CurValue_;
-		//目标区间
-		if (mode_->StickChartConfig.UseDstField)
-		{
-			//当前目标区间
-			pView->CurDstValue_ = mode_->StickChartConfig.UseDstValueByAddr ? UIDataService::Ins().GetNumber<int>(mode_->StickChartConfig.DstValueAddr) : mode_->StickChartConfig.DstValue;
-			//当前误差范围
-			pView->CurRangeValue_ = mode_->StickChartConfig.UseDstRangeByAddr ? UIDataService::Ins().GetNumber<int>(mode_->StickChartConfig.DstValueAddr) : mode_->StickChartConfig.DstRange;
-		}
-		//范围报警
-		if (mode_->StickChartConfig.UseRangeWarn)
-		{
-			//当前上警报值
-			pView->CurUpperValue_ = mode_->StickChartConfig.UseUpperWarnAddr ? UIDataService::Ins().GetNumber<int>(mode_->StickChartConfig.UpperWarnAddr) : mode_->StickChartConfig.UpperWarnValue;
-			//当前下警报值
-			pView->CurLowerValue_ = mode_->StickChartConfig.UseLowerWarnAddr ? UIDataService::Ins().GetNumber<int>(mode_->StickChartConfig.LowerWarnAddr) : mode_->StickChartConfig.LowerWarnValue;
 
-		}
+		pView->HmiMainMode = true;
 
 		pView->damage();
 		pView->redraw();
