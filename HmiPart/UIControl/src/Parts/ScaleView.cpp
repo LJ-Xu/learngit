@@ -425,7 +425,7 @@ namespace UI
 					}
 					else
 					{
-						startAngle = realStartAngle;
+						startAngle = realStartAngle + realSweepAngle;
 						sweepAngle = -realSweepAngle;
 					}
 					break;

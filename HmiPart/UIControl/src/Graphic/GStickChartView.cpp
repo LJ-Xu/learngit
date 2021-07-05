@@ -607,15 +607,18 @@ namespace UI
 	{
 		//当前应显示的填充色
 		CurBarColor_ = model->StickChartConfig.FIllinColor;
+		IsSpecialValue_ = false;
 		//报警色
 		if (model->StickChartConfig.UseRangeWarn)
 		{
 			if (CurValue_ >= CurUpperValue_)
 			{
+				IsSpecialValue_ = true;
 				CurBarColor_ = model->StickChartConfig.UpperWarnFillinColor;
 			}
 			else if (CurValue_ <= CurLowerValue_)
 			{
+				IsSpecialValue_ = true;
 				CurBarColor_ = model->StickChartConfig.LowerWarnFillinColor;
 			}
 		}
@@ -624,6 +627,7 @@ namespace UI
 		{
 			if ((CurValue_ <= CurDstValue_ + CurRangeValue_) && (CurValue_ >= CurDstValue_ - CurRangeValue_))
 			{
+				IsSpecialValue_ = true;
 				CurBarColor_ = model->StickChartConfig.DstColor;
 			}
 		}
@@ -669,7 +673,7 @@ namespace UI
 				flImgPtr->draw(FinX, FinY, model->StickChartConfig.Width, model->StickChartConfig.Height);
 
 				//绘制液体区
-				if (bUseImage)//渐变色或花纹
+				if (bUseImage && !IsSpecialValue_)//渐变色或花纹
 				{
 					Fl_Image* flImgPtr = IResourceService::Ins()->GetImage(model->StickChartConfig.LinearGradientRes.KeyVal);
 					getstraightfadeimgaera(flImgPtr, curX - BarX, curY - BarY, curBarWidth, curBarHeight);
@@ -763,7 +767,7 @@ namespace UI
 
 			calcustarightfillinfield(model->StickChartConfig.BarDirection, BarX, BarY, BarWidth, BarHeight, bUseImage, curX, curY, curBarWidth, curBarHeight);
 			//绘制液体区
-			if (bUseImage)//渐变色或花纹
+			if (bUseImage && !IsSpecialValue_)//渐变色或花纹
 			{
 				Fl_Image* flImgPtr = IResourceService::Ins()->GetImage(model->StickChartConfig.LinearGradientRes.KeyVal);
 				getstraightfadeimgaera(flImgPtr, curX - FinX, curY - FinY, curBarWidth, curBarHeight);
@@ -1021,7 +1025,7 @@ namespace UI
 			fl_end_polygon();
 		}
 		//绘制液体区
-		if (bUseImg)//渐变色
+		if (bUseImg&&!IsSpecialValue_)//渐变色
 		{
 			Fl_Image* flImgPtr = IResourceService::Ins()->GetImage(model->StickChartConfig.LinearGradientRes.KeyVal);
 			getsectorfadeimgaera(flImgPtr, curdiam,curStartAngle,curEndAnlge);
