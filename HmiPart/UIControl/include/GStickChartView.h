@@ -68,5 +68,6 @@ namespace UI
 		int CurUpperValue_;//当前上警报值
 		int CurLowerValue_;//当前下警报值
 		int CurBarColor_; //当前棒色
+		bool IsSpecialValue_;//当前是否为特殊值（上下危险区、上下警报、目标区间）
 	};
 }
