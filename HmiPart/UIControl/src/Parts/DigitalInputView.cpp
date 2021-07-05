@@ -216,11 +216,15 @@ namespace UI
 				InitStartInput();
 				return 0;
 			}
+			else if (OpenKeypage)
+			{
+				Fl::focus(this);
+			}
 			return 1;
 		}
 		case FL_UNFOCUS:
 		{
-			if (Fl::focus() != this)
+			if (Fl::focus() != this && model->InputNumConfig.KeyMethod.KeypadSrc)
 				OpenKeypage = false;
 			return  HMIBaseInput::handle(event);
 		}
@@ -404,10 +408,13 @@ namespace UI
 				//LocalData::SetString(SYS_PSW_INPUTKEY_CURVAL, value());
 				return 1;
 			}
-			return HMIBaseInput::handle(event);
+			//return HMIBaseInput::handle(event);
+			return 1;
 		}
 		default:
-			return HMIBaseInput::handle(event);
+			return 1;
+
+			//return HMIBaseInput::handle(event);
 		}
 		return 1;
 	}

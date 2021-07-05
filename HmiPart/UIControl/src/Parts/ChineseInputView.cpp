@@ -256,11 +256,15 @@ namespace UI
 				InitStartInput();
 				return 1;
 			}
-			return 0;
+			else if (OpenKeypage)
+			{
+				Fl::focus(this);
+			}
+			return 1;
 		}
 		case FL_UNFOCUS:
 		{
-			if (Fl::focus() != this)
+			if (Fl::focus() != this && model->InputChineseConfig.KeyMethod.KeypadSrc)
 				OpenKeypage = false;
 			return  HMIBaseInput::handle(event);
 		}
@@ -328,8 +332,11 @@ namespace UI
 						PinYin = pinyin;
 					}*/
 					//ÉèÖÃÆ´Òô×Ö·û´®
-					PinYin += ascii;
-					LocalData::SetString(SYS_PSW_PINYIN_CURVAL, PinYin.c_str());
+					if (HasPinYinpage)
+					{
+						PinYin += ascii;
+						LocalData::SetString(SYS_PSW_PINYIN_CURVAL, PinYin.c_str());
+					}
 				}
 				else if ((ascii >= '0' && ascii <= '9') && HasPinYinpage)
 				{
@@ -460,10 +467,14 @@ namespace UI
 				KeyInputUtility::SetUpperState();
 				return 1;
 			}
-			return HMIBaseInput::handle(event);
+			return 1;
+
+			//return HMIBaseInput::handle(event);
 		}
 		default:
-			HMIBaseInput::handle(event);
+			return 1;
+
+			//HMIBaseInput::handle(event);
 		}
 		return 1;
 	}
