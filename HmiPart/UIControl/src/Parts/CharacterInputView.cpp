@@ -264,11 +264,15 @@ namespace UI
 				InitStartInput();
 				return 0;
 			}
+			else if (OpenKeypage)
+			{
+				Fl::focus(this);
+			}
 			return 1;
 		}
 		case FL_UNFOCUS:
 		{
-			if (Fl::focus() != this)
+			if (Fl::focus() != this && model->InputStrConfig.KeyMethod.KeypadSrc)
 				OpenKeypage = false;
 			return  HMIBaseInput::handle(event);
 		}
@@ -368,10 +372,13 @@ namespace UI
 
 				return 1;
 			}
-			return HMIBaseInput::handle(event);
+			return 1;
+			//return HMIBaseInput::handle(event);
 		}
 		default:
-			return HMIBaseInput::handle(event);
+			return 1;
+
+			//return HMIBaseInput::handle(event);
 		}
 		return 1;
 	}

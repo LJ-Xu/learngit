@@ -66,6 +66,10 @@ namespace UI
 			wVar_ = wvar;
 		}
 		void draw();
+		int handle(int);
+		void clear();
+		void remove(int index);
+
 		/**********************************/
 
 	 
@@ -193,6 +197,8 @@ namespace UI
 		void CloseEx();
 		void NotifySysChangeEx(SysChangeEM ctg);
 		void ChangePosEx(int offx, int offy);		
+		Fl_Widget* prefocus_;
+
 	};
 
  

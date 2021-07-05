@@ -190,6 +190,8 @@ namespace UI
 							{
 								//µ¯³ö¼üÅÌ
 								selectresinfo_ = RecipeDT::Ins()->GetDataType(model->RecipeConfig.RecipeGroupId, model->RecipeConfig.InfoLst[selectedcol_].ProjectName);
+								if (!selectresinfo_)
+									return 1;
 								if (selectresinfo_->Editable)
 								{
 									ctrl->Win()->OpenDialogPage(25006);

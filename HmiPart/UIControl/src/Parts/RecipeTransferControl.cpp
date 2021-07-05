@@ -145,7 +145,7 @@ namespace UI
 						index = LocalData::GetNumberData<short>(SYS_PSW_RecipeIndex);
 					else
 						index = UI::UIData::Number<short>(indexvar);
-					DataApi::RecipeFromPLC(mode_->TransferRecipeConfig.RecipeId, mode_->TransferRecipeConfig.RecipeCount * row, index,
+					DataApi::RecipeFromPLC(mode_->TransferRecipeConfig.RecipeId, mode_->TransferRecipeConfig.RecipeCount, index,
 						mode_->TransferRecipeConfig.PlcVarIdRef, pView->ColInfo, mode_->TransferRecipeConfig.CompleteVarIdRef);
 				}
 				if (pView->UploadRecipe && pView->active())
@@ -157,7 +157,7 @@ namespace UI
 						index = LocalData::GetNumberData<short>(SYS_PSW_RecipeIndex);
 					else
 						index = UI::UIData::Number<short>(indexvar);
-					DataApi::RecipeToPLC(mode_->TransferRecipeConfig.RecipeId, mode_->TransferRecipeConfig.RecipeCount * row, index,
+					DataApi::RecipeToPLC(mode_->TransferRecipeConfig.RecipeId, mode_->TransferRecipeConfig.RecipeCount, index,
 						mode_->TransferRecipeConfig.PlcVarIdRef, pView->ColInfo, mode_->TransferRecipeConfig.CompleteVarIdRef);
 				}
 			}

@@ -63,7 +63,8 @@ namespace UI
 	void TimerCountCb(void *data)
 	{
 		TimerControl *ctrl = (TimerControl *)data;
-		ctrl->HandleTime();
+		if(ctrl)
+			ctrl->HandleTime();
 	}
 	
 
@@ -103,7 +104,7 @@ namespace UI
 			{
 				hastimer_ = true;
 				TimeCount = 0;
-				Page()->AddTimeout(100, TimerCountCb, (void *)this, true);
+				Page()->AddTimeout(100, TimerCountCb, (void *)this, false);
 				if (!mode_->TimerConfig.UseDelay)							//不使用延时
 				{
 					UI::UIData::Bit(mode_->TimerConfig.MarkVar, true);		//开始定时
@@ -154,16 +155,11 @@ namespace UI
 				starttimer_ = true;
 			}
 		}
+		if (starttimer_ && mode_->TimerConfig.AlreadTimeVar != Project::DataVarId::NullId)
+			UI::UIData::Number(mode_->TimerConfig.AlreadTimeVar, (int)((TimeCount * 100) / mode_->TimerConfig.CycTime));
 
 		if (starttimer_ && TimeCount * 100 == mode_->TimerConfig.CycTime * mode_->TimerConfig.PreconditionConstant)		//满足时间
 		{
-			if (mode_->TimerConfig.EndConditions == Project::TimerStopCond::StopReachTime)		//停止定时
-			{
-				hastimer_ = false;
-				Page()->RemoveTimeout(TimerCountCb,(void *)this);
-				UI::UIData::Bit(mode_->TimerConfig.MarkVar, false);
-				starttimer_ = false;TimeCount = 0;
-			}
 			if (mode_->TimerConfig.PresetTimeNotifyVar != Project::DataVarId::NullId)
 			{
 				if (mode_->TimerConfig.NotifyMode == 0)
@@ -171,9 +167,18 @@ namespace UI
 				else
 					UI::UIData::Bit(mode_->TimerConfig.PresetTimeNotifyVar, false);
 			}
+			if (mode_->TimerConfig.EndConditions == Project::TimerStopCond::StopReachTime)		//停止定时
+			{
+				hastimer_ = false;
+				UI::UIData::Bit(mode_->TimerConfig.MarkVar, false);
+				printf("ReachTime\n");
+				starttimer_ = false;TimeCount = 0;
+				//Page()->RemoveTimeout(TimerCountCb, (void *)this);
+				return;
+			}
+			
 		}
-		if (starttimer_ && mode_->TimerConfig.AlreadTimeVar != Project::DataVarId::NullId)
-			UI::UIData::Number(mode_->TimerConfig.AlreadTimeVar, (int)((TimeCount * 100) / mode_->TimerConfig.CycTime));
+		Page()->AddTimeout(100, TimerCountCb, (void *)this, false);
 	}
 	void TimerControl::HandleDataVar(Project::DataVarId &varId)
 	{
@@ -214,7 +219,7 @@ namespace UI
 				{
 					if (!mode_->TimerConfig.Perm.IsEnableVerity || pView->active())
 					{
-						Page()->AddTimeout(100, TimerCountCb, (void *)this, true);
+						Page()->AddTimeout(100, TimerCountCb, (void *)this, false);
 						TimeCount = 0;
 						hastimer_ = true;
 						if (!mode_->TimerConfig.UseDelay)							//不使用延时
@@ -251,7 +256,7 @@ namespace UI
 							starttimer_ = true;
 						}
 						TimeCount = 0;
-						Page()->AddTimeout(100, TimerCountCb, (void *)this, true);
+						Page()->AddTimeout(100, TimerCountCb, (void *)this, false);
 						hastimer_ = true;
 					}
 				}
