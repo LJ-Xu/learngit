@@ -77,58 +77,58 @@ namespace Storage
 		}
 	}
 
-	vector<AlarmRecord> AlarmStorage::QueryAll() {
+	vector<AlarmRecord> AlarmStorage::QueryAll(int startgroupname, int endgroupname) {
 		// 获取报警记录
-		return std::move(AlarmStorageService::Ins()->SelectAllAlarmRecords());
+		return std::move(AlarmStorageService::Ins()->SelectAllAlarmRecords(startgroupname, endgroupname));
 	}
 
-	vector<AlarmRecord> AlarmStorage::QueryByTime(DDWORD stime, DDWORD etime, int Record)
+	vector<AlarmRecord> AlarmStorage::QueryByTime(DDWORD stime, DDWORD etime, int startgroupname, int endgroupname, int Record)
 	{
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByTime(stime, etime, Record));
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByTime(stime, etime, startgroupname, endgroupname, Record));
 	}
 
-	vector<AlarmRecord> AlarmStorage::QueryByDate(DDWORD sdata, DDWORD edata, int Record)
+	vector<AlarmRecord> AlarmStorage::QueryByDate(DDWORD sdata, DDWORD edata, int startgroupname, int endgroupname, int Record)
 	{
 		// 获取时间段内的报警记录
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByDate(sdata, edata,Record));
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByDate(sdata, edata, startgroupname, endgroupname, Record));
 	}
 
-	vector<AlarmRecord> AlarmStorage::QueryByGroup(uint32_t groupname, uint32_t groupno, int Record)
+	vector<AlarmRecord> AlarmStorage::QueryByGroup(uint32_t groupname, uint32_t groupno, int startgroupname, int endgroupname, int Record)
 	{
 		// 获取指定类型的报警记录
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByGroup(groupname, groupno,Record));
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByGroup(groupname, groupno, startgroupname, endgroupname, Record));
 	}
 
-	vector<AlarmRecord> AlarmStorage::QueryByGroupName(uint32_t groupname, int Record)
+	vector<AlarmRecord> AlarmStorage::QueryByGroupName(uint32_t groupname, int startgroupname, int endgroupname, int Record)
 	{
 		// 获取指定组名的报警记录
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByGroupName(groupname,Record));
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByGroupName(groupname, startgroupname, endgroupname, Record));
 	}
 
-	vector<AlarmRecord> AlarmStorage::QueryByGroupNo(uint32_t groupno, int Record)
+	vector<AlarmRecord> AlarmStorage::QueryByGroupNo(uint32_t groupno, int startgroupname, int endgroupname, int Record)
 	{
 		// 获取指定组编号的报警记录
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByGroupNo(groupno,Record));
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByGroupNo(groupno, startgroupname, endgroupname, Record));
 	}
 
-	vector<AlarmRecord> AlarmStorage::QueryByAlarmLevel(uint32_t level, int Record)
+	vector<AlarmRecord> AlarmStorage::QueryByAlarmLevel(uint32_t level, int startgroupname, int endgroupname, int Record)
 	{
 		// 获取指定组保险等级的报警记录
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByAlarmLevel(level,Record));
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByAlarmLevel(level,Record, startgroupname, endgroupname));
 	}
-	vector<AlarmRecord> AlarmStorage::QueryByHide(uint32_t hideflag)
+	vector<AlarmRecord> AlarmStorage::QueryByHide(uint32_t hideflag, int startgroupname, int endgroupname)
 	{
 		// 获取指定隐藏的报警记录
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByHide(hideflag));
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByHide(hideflag, startgroupname, endgroupname));
 	}
-	vector<AlarmRecord> AlarmStorage::QueryByUnRecover()
+	vector<AlarmRecord> AlarmStorage::QueryByUnRecover(int startgroupname, int endgroupname)
 	{
 		// 获取未恢复的报警记录
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByUnRecover());
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByUnRecover(startgroupname, endgroupname));
 	}
-	vector<AlarmRecord> AlarmStorage::QueryByRecover()
+	vector<AlarmRecord> AlarmStorage::QueryByRecover(int startgroupname, int endgroupname)
 	{
 		// 获取已恢复的报警记录
-		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByRecover());
+		return std::move(AlarmStorageService::Ins()->SelectAlarmRecordByRecover(startgroupname, endgroupname));
 	}
 }

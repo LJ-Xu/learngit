@@ -217,179 +217,232 @@ namespace Storage
 	 * @return : int
 	 * @birth  : created by TangYao on 2021/02/04
 	 */
-	vector<AlarmRecord> AlarmStorageService::SelectAllAlarmRecords() {
+	vector<AlarmRecord> AlarmStorageService::SelectAllAlarmRecords(int startgroupname, int endgroupname) {
 		char sql[SQLCMDLEN] = { 0 };
-		snprintf(sql, sizeof(sql), "SELECT * FROM Alarm union all SELECT * FROM fileDb.Alarm");
+
+		if(startgroupname == -1 || endgroupname == -1)
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm union all SELECT * FROM fileDb.Alarm");
+		else
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup BETWEEN %d AND %d union all\
+						SELECT * FROM fileDb.Alarm WHERE AlarmGroup BETWEEN %d AND %d",
+			startgroupname, endgroupname, startgroupname, endgroupname);
 		return SelectAlarm(sql);
 	}
 
-	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByGroup(int groupname, int groupno, int Recover) {
+	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByGroup(int groupname, int groupno, int startgroupname, int endgroupname, int Recover) {
 		char sql[SQLCMDLEN] = { 0 };
-		switch (Recover)
+		if (startgroupname == -1 || endgroupname == -1)
 		{
-		case 0:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d AND AlarmNo = %d union all \
+			switch (Recover)
+			{
+			case 0:
+				snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d AND AlarmNo = %d union all \
 									SELECT * FROM fileDb.Alarm WHERE AlarmGroup = %d AND AlarmNo = %d;",
-				groupname, groupno, groupname, groupno);
-			break;
-		case 1:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d AND AlarmNo = %d AND ResolveTime <> 0 union all \
+					groupname, groupno, groupname, groupno);
+				break;
+			case 1:
+				snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d AND AlarmNo = %d AND ResolveTime <> 0 union all \
 									SELECT * FROM fileDb.Alarm WHERE AlarmGroup = %d AND AlarmNo = %d AND ResolveTime <> 0;",
-				groupname, groupno, groupname, groupno);
-			break;
-		case 2:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d AND AlarmNo = %d AND ResolveTime = 0 union all \
+					groupname, groupno, groupname, groupno);
+				break;
+			case 2:
+				snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d AND AlarmNo = %d AND ResolveTime = 0 union all \
 									SELECT * FROM fileDb.Alarm WHERE AlarmGroup = %d AND AlarmNo = %d AND ResolveTime = 0;",
-				groupname, groupno, groupname, groupno);
+					groupname, groupno, groupname, groupno);
+				break;
+			}
+		}
+		else
+		{
+			switch (Recover)
+			{
+			case 0:
+				snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d AND AlarmNo = %d AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE AlarmGroup = %d AND AlarmNo = %d AND AlarmGroup BETWEEN %d AND %d;",
+					groupname, groupno, startgroupname, endgroupname, groupname, groupno, startgroupname, endgroupname);
+				break;
+			case 1:
+				snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d AND AlarmNo = %d AND ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE AlarmGroup = %d AND AlarmNo = %d AND ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d;",
+					groupname, groupno, startgroupname, endgroupname, groupname, groupno, startgroupname, endgroupname);
+				break;
+			case 2:
+				snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d AND AlarmNo = %d AND ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE AlarmGroup = %d AND AlarmNo = %d AND ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d;",
+					groupname, groupno, startgroupname, endgroupname, groupname, groupno, startgroupname, endgroupname);
+				break;
+			}
+		}
+		return SelectAlarm(sql);
+	}
+
+	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByGroupName(int groupname, int startgroupname, int endgroupname, int Recover) {
+		char sql[SQLCMDLEN] = { 0 };
+		switch (Recover)
+		{
+		case 0:
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE AlarmGroup = %d AND AlarmGroup BETWEEN %d AND %d;",
+				groupname, startgroupname, endgroupname, groupname, startgroupname, endgroupname);
+			break;
+		case 1:
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d AND ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE AlarmGroup = %d AND ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d;",
+				groupname, startgroupname, endgroupname, groupname, startgroupname, endgroupname);
+			break;
+		case 2:
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d AND ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE AlarmGroup = %d AND ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d;",
+				groupname, startgroupname, endgroupname, groupname, startgroupname, endgroupname);
 			break;
 		}
 		return SelectAlarm(sql);
 	}
 
-	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByGroupName(int groupname, int Recover) {
+	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByGroupNo(int groupno, int startgroupname, int endgroupname, int Recover) {
 		char sql[SQLCMDLEN] = { 0 };
 		switch (Recover)
 		{
 		case 0:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d union all \
-									SELECT * FROM fileDb.Alarm WHERE AlarmGroup = %d;", groupname, groupname);
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmNo = %d AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE AlarmNo = %d AND AlarmGroup BETWEEN %d AND %d;",
+				groupno, startgroupname, endgroupname, groupno, startgroupname, endgroupname);
 			break;
 		case 1:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d AND ResolveTime <> 0 union all \
-									SELECT * FROM fileDb.Alarm WHERE AlarmGroup = %d AND ResolveTime <> 0;", groupname, groupname);
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmNo = %d AND ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE AlarmNo = %d AND ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d ;", 
+				groupno, startgroupname, endgroupname, groupno, startgroupname, endgroupname);
 			break;
 		case 2:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmGroup = %d AND ResolveTime = 0 union all \
-									SELECT * FROM fileDb.Alarm WHERE AlarmGroup = %d AND ResolveTime = 0;", groupname, groupname);
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmNo = %d AND ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE AlarmNo = %d AND ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d;", 
+				groupno, startgroupname, endgroupname, groupno, startgroupname, endgroupname);
 			break;
 		}
 		return SelectAlarm(sql);
 	}
 
-	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByGroupNo(int groupno, int Recover) {
+	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByAlarmLevel(int level, int startgroupname, int endgroupname, int Recover) {
 		char sql[SQLCMDLEN] = { 0 };
 		switch (Recover)
 		{
 		case 0:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmNo = %d union all \
-									SELECT * FROM fileDb.Alarm WHERE AlarmNo = %d;", groupno, groupno);
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE Level = %d AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE Level = %d AND AlarmGroup BETWEEN %d AND %d;", 
+				level, startgroupname, endgroupname, level, startgroupname, endgroupname);
 			break;
 		case 1:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmNo = %d AND ResolveTime <> 0 union all \
-									SELECT * FROM fileDb.Alarm WHERE AlarmNo = %d AND ResolveTime <> 0 ;", groupno, groupno);
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE Level = %d AND ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE Level = %d AND ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d;", 
+				level, startgroupname, endgroupname, level, startgroupname, endgroupname);
 			break;
 		case 2:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE AlarmNo = %d AND ResolveTime = 0 union all \
-									SELECT * FROM fileDb.Alarm WHERE AlarmNo = %d AND ResolveTime = 0;", groupno, groupno);
-			break;
-		}
-		return SelectAlarm(sql);
-	}
-
-	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByAlarmLevel(int level, int Recover) {
-		char sql[SQLCMDLEN] = { 0 };
-		switch (Recover)
-		{
-		case 0:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE Level = %d union all \
-									SELECT * FROM fileDb.Alarm WHERE Level = %d;", level, level);
-			break;
-		case 1:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE Level = %d AND ResolveTime <> 0 union all \
-									SELECT * FROM fileDb.Alarm WHERE Level = %d AND ResolveTime <> 0;", level, level);
-			break;
-		case 2:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE Level = %d AND ResolveTime = 0 union all \
-									SELECT * FROM fileDb.Alarm WHERE Level = %d AND ResolveTime = 0;", level, level);
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE Level = %d AND ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE Level = %d AND ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d;", 
+				level, startgroupname, endgroupname, level, startgroupname, endgroupname);
 			break;
 		}
 		
 		return SelectAlarm(sql);
 	}
 
-	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByHide(int hideflag) {
+	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByHide(int hideflag, int startgroupname, int endgroupname) {
 		char sql[SQLCMDLEN] = { 0 };
 		switch (hideflag & 0x7)
 		{
 		case 1:			//bit0 = 1 隐藏已确认信息(获取未确认信息)
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE CheckTime = 0 union all \
-									SELECT * FROM fileDb.Alarm WHERE CheckTime = 0;");
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE CheckTime = 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE CheckTime = 0 AND AlarmGroup BETWEEN %d AND %d;",
+				startgroupname, endgroupname, startgroupname, endgroupname);
 			break;
 		case 2:			//bit1 = 1 隐藏已恢复信息(获取未恢复信息)
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE ResolveTime = 0 union all \
-									SELECT * FROM fileDb.Alarm WHERE ResolveTime = 0;");
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d;",
+				startgroupname, endgroupname, startgroupname, endgroupname);
 			break;
 		case 3:			//bit0 = 1，bit1 = 1 隐藏已确认和已恢复信息(获取未恢复信息或未确认信息)
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE ResolveTime = 0 OR CheckTime = 0 union all \
-									SELECT * FROM fileDb.Alarm WHERE RResolveTime = 0 OR CheckTime = 0;");
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE ResolveTime = 0 OR CheckTime = 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE RResolveTime = 0 OR CheckTime AND AlarmGroup BETWEEN %d AND %d = 0;", 
+				startgroupname, endgroupname, startgroupname, endgroupname);
 			break;
 		case 4:			//bit2 = 1 隐藏未恢复信息(获取已恢复的)
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE ResolveTime <> 0 union all \
-									SELECT * FROM fileDb.Alarm WHERE ResolveTime <> 0;");
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d;",
+				startgroupname, endgroupname, startgroupname, endgroupname);
 			break;
 		case 5:			//bit0 = 1 bit2 = 1  隐藏已确认和未恢复信息（获取未确认或已恢复的信息）
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE ResolveTime <> 0 OR CheckTime = 0 union all \
-									SELECT * FROM fileDb.Alarm WHERE RResolveTime <> 0 OR CheckTime = 0;");
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d\
+										 OR CheckTime = 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE RResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d \
+										 OR CheckTime = 0 AND AlarmGroup BETWEEN %d AND %d;", 
+				startgroupname, endgroupname, startgroupname, endgroupname);
 			break;
 		case 6:			//bit1 = 1 bit2 = 1 隐藏已恢复和未恢复信息
 		case 7:			//bit0 = 1 bit1 = 1 bit2 = 1 隐藏已确认、已恢复和未恢复信息
 			return vector<AlarmRecord>();
 		default:
-			return SelectAllAlarmRecords();
+			return SelectAllAlarmRecords(startgroupname, endgroupname);
 		}
 		return SelectAlarm(sql);
 	}
 
-	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByUnRecover() {
+	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByUnRecover(int startgroupname, int endgroupname) {
 		char sql[SQLCMDLEN] = { 0 };
-		snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE ResolveTime = 0 union all \
-									SELECT * FROM fileDb.Alarm WHERE ResolveTime = 0;");
+		snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d;",
+			startgroupname, endgroupname, startgroupname, endgroupname);
 		return SelectAlarm(sql);
 	}
 
-	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByRecover() {
+	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByRecover(int startgroupname, int endgroupname) {
 		char sql[SQLCMDLEN] = { 0 };
-		snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE ResolveTime <> 0 union all \
-									SELECT * FROM fileDb.Alarm WHERE ResolveTime <> 0;");
+		snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d union all \
+									SELECT * FROM fileDb.Alarm WHERE ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d;");
 		return SelectAlarm(sql);
 	}
 
-	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByDate(DDWORD startDate, DDWORD endDate, int Recover) {
+	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByDate(DDWORD startDate, DDWORD endDate, int startgroupname, int endgroupname,int Recover) {
 		char sql[SQLCMDLEN] = { 0 };
 		switch (Recover)
 		{
 		case 0:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE StartTime BETWEEN %lld AND %lld union all  SELECT * FROM fileDb.Alarm WHERE StartTime BETWEEN %lld AND %lld;",
-				startDate, endDate, startDate, endDate);
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE StartTime BETWEEN %lld AND %lld AND AlarmGroup BETWEEN %d AND %d union all\
+				  SELECT * FROM fileDb.Alarm WHERE StartTime BETWEEN %lld AND %lld AND AlarmGroup BETWEEN %d AND %d;",
+				startDate, endDate, startgroupname, endgroupname, startDate, endDate, startgroupname, endgroupname);
 			break;
 		case 1:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime <> 0 union all  SELECT * FROM fileDb.Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime <> 0;",
-				startDate, endDate, startDate, endDate);
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d union all\
+				  SELECT * FROM fileDb.Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d;",
+				startDate, endDate, startgroupname, endgroupname, startDate, endDate, startgroupname, endgroupname);
 			break;
 		case 2:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime = 0 union all  SELECT * FROM fileDb.Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime = 0;",
-				startDate, endDate, startDate, endDate);
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d union all \
+				  SELECT * FROM fileDb.Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d;",
+				startDate, endDate, startgroupname, endgroupname, startDate, endDate, startgroupname, endgroupname);
 			break;
 		}
 		
 		return SelectAlarm(sql);
 	}
 
-	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByTime(DDWORD startTime, DDWORD endTime, int Recover) {
+	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByTime(DDWORD startTime, DDWORD endTime, int startgroupname, int endgroupname,int Recover) {
 		char sql[SQLCMDLEN] = { 0 };
 		switch (Recover)
 		{
 		case 0:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE StartTime BETWEEN %lld AND %lld union all SELECT * FROM fileDb.Alarm WHERE StartTime BETWEEN %lld AND %lld",
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE StartTime BETWEEN %lld AND %lld AND AlarmGroup BETWEEN %d AND %d union all\
+			 SELECT * FROM fileDb.Alarm WHERE StartTime BETWEEN %lld AND %lld AND AlarmGroup BETWEEN %d AND %d",
 				startTime, endTime, startTime, endTime);
 			break;
 		case 1:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime <> 0 union all SELECT * FROM fileDb.Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime <> 0",
-				startTime, endTime, startTime, endTime);
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d union all\
+			 SELECT * FROM fileDb.Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime <> 0 AND AlarmGroup BETWEEN %d AND %d",
+				startTime, endTime, startgroupname, endgroupname, startTime, endTime, startgroupname, endgroupname);
 			break;
 		case 2:
-			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime = 0 union all SELECT * FROM fileDb.Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime = 0",
-				startTime, endTime, startTime, endTime);
+			snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d union all\
+			SELECT * FROM fileDb.Alarm WHERE StartTime BETWEEN %lld AND %lld AND ResolveTime = 0 AND AlarmGroup BETWEEN %d AND %d",
+				startTime, endTime, startgroupname, endgroupname, startTime, endTime, startgroupname, endgroupname);
 			break;
 		}
 		
@@ -398,8 +451,6 @@ namespace Storage
 
 	vector<AlarmRecord> AlarmStorageService::SelectAlarmRecordByResolveTick()
 	{
-		/*char sql[256] = { 0 };
-		snprintf(sql, sizeof(sql), "SELECT * FROM Alarm WHERE ResolveTime > 0  \ SELECT * FROM fileDb.Alarm WHERE ResolveTime > 0");*/
 		return SelectAlarm("SELECT * FROM Alarm WHERE ResolveTime = 0;");
 	}
 }

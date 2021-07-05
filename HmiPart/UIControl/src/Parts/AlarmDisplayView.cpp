@@ -314,15 +314,15 @@ namespace UI
 		case Project::AlarmDisMode::REALTIME:
 		{
 			/*只显示未恢复消息*/
-			DisplayInfo = Storage::AlarmStorage::Ins()->QueryByUnRecover();
+			DisplayInfo = Storage::AlarmStorage::Ins()->QueryByUnRecover(model->AlarmDisConfig.StartGroupName, model->AlarmDisConfig.EndGroupName);
 			break;
 		}
 		case Project::AlarmDisMode::HISTORY:
 		{
 			if (model->AlarmDisConfig.IsInfoHideCtrl)		//隐藏控制
-				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByHide(HideFlag);
+				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByHide(HideFlag, model->AlarmDisConfig.StartGroupName, model->AlarmDisConfig.EndGroupName);
 			else
-				DisplayInfo = Storage::AlarmStorage::Ins()->QueryAll();
+				DisplayInfo = Storage::AlarmStorage::Ins()->QueryAll(model->AlarmDisConfig.StartGroupName, model->AlarmDisConfig.EndGroupName);
 			break;
 		}
 		case Project::AlarmDisMode::SEARCH:
@@ -336,31 +336,34 @@ namespace UI
 			{
 				LOG_INFO("Alarm Seek DATE = %ld\n", model->AlarmDisConfig.SearchDate);
 				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByDate(model->AlarmDisConfig.SearchDate,
-					model->AlarmDisConfig.SearchDate + (DDWORD)86400000, record);
+					model->AlarmDisConfig.SearchDate + (DDWORD)86400000, model->AlarmDisConfig.StartGroupName, model->AlarmDisConfig.EndGroupName, record);
 				break;
 			}
 			case Project::AlarmSeekTIME:
 			{
 				LOG_INFO("Alarm Seek Time %ld to %ld\n", model->AlarmDisConfig.SearchTimeStart, model->AlarmDisConfig.SearchTimeEnd);
 				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByTime(model->AlarmDisConfig.SearchTimeStart,
-					model->AlarmDisConfig.SearchTimeEnd, record);
+					model->AlarmDisConfig.SearchTimeEnd, model->AlarmDisConfig.StartGroupName, model->AlarmDisConfig.EndGroupName, record);
 				break;
 			}
 			case Project::AlarmSeekGROUP:
 			{
 				LOG_INFO("Alarm Seek Group %d\n", model->AlarmDisConfig.SearchGroup);
-				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByGroupName(model->AlarmDisConfig.SearchGroup, record);
+				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByGroupName(model->AlarmDisConfig.SearchGroup,
+					model->AlarmDisConfig.StartGroupName, model->AlarmDisConfig.EndGroupName, record);
 				break;
 			}
 			case Project::AlarmSeekNUM:
 			{
 				LOG_INFO("Alarm Seek Num %d\n", model->AlarmDisConfig.SearchNo);
-				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByGroupNo(model->AlarmDisConfig.SearchNo, record);
+				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByGroupNo(model->AlarmDisConfig.SearchNo, 
+					model->AlarmDisConfig.StartGroupName, model->AlarmDisConfig.EndGroupName, record);
 				break;
 			}
 			case Project::AlarmSeekLEVEL:
 				LOG_INFO("Alarm Seek Level %d\n", model->AlarmDisConfig.SearchLevel);
-				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByAlarmLevel(model->AlarmDisConfig.SearchLevel, record);
+				DisplayInfo = Storage::AlarmStorage::Ins()->QueryByAlarmLevel(model->AlarmDisConfig.SearchLevel,
+					model->AlarmDisConfig.StartGroupName, model->AlarmDisConfig.EndGroupName, record);
 				break;
 			default:
 				break;
