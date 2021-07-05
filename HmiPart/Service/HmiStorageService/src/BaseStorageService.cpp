@@ -70,11 +70,14 @@ namespace Storage
 		}
 		char * errMsg = NULL;
 		// ÷¥––Sql”Ôæ‰
+		printf(sql);
+		printf("\n");
 		int ret = sqlite3_exec(db, sql, NULL, NULL, &errMsg);
 		if (ret != SQLITE_OK) {
 			const char * file = strrchr(__FILE__, '\\') + 1;
 			fprintf(stderr, "%s[%d] ErrCode[%d] Msg: %s\n", file, __LINE__, ret, errMsg);
 		}
+		printf("sql exec success!\n");
 		return ret;
 	}
 
