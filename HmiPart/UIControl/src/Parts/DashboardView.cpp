@@ -284,7 +284,7 @@ namespace UI
 				fl_line_style(0, 3);
 				fl_line(centerX + lineStartX, centerY + lineStartY, centerX + lineEndX, centerY + lineEndY);
 
-				fl_line_style(0, 2);
+				fl_line_style(0, 1);
 				if (idxM < model->DashboardConfig.MainGraduateCount - 1)
 				{
 					for (int idxS = 1; idxS <= model->DashboardConfig.SecondaryGraduateCount; ++idxS)
