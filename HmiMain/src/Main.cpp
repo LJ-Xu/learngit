@@ -16,8 +16,8 @@
 #include "HMIProject.h"
 #include "Param.h"
 #include "Logger.h"
-
-
+#include "CodeFormatUtility.h"
+#include "IResourceService.h"
 static Core::HmiCore core;
 //Project::HMIProject prj;
 //int GenerateMiniDump(HANDLE hFile, PEXCEPTION_POINTERS pExceptionPointers, const char* pwAppName)
@@ -203,10 +203,22 @@ void CLOSE_DATASERVER()
 
 #endif
 }
+static void ChangeDbFilePathCode()
+{
+	if (!UI::CodeFormatUtility::IsStrUtf8(RunEnv::Cnf.AlarmPath.c_str()))
+		UI::IResourceService::GB2312toUtf8(RunEnv::Cnf.AlarmPath);
+	//if (!UI::CodeFormatUtility::IsStrUtf8(RunEnv::Cnf.SamplePath.c_str()))
+		UI::IResourceService::GB2312toUtf8(RunEnv::Cnf.SamplePath);
+	if (!UI::CodeFormatUtility::IsStrUtf8(RunEnv::Cnf.OperationPath.c_str()))
+		UI::IResourceService::GB2312toUtf8(RunEnv::Cnf.OperationPath);
+	if (!UI::CodeFormatUtility::IsStrUtf8(RunEnv::Cnf.RecipePath.c_str()))
+		UI::IResourceService::GB2312toUtf8(RunEnv::Cnf.RecipePath);
+}
 static void LoadParam(Param& param, int argc, char ** argv)
 {
 	
 	RunEnv::Init();
+	ChangeDbFilePathCode();
 	param.ParseParam(argc, argv);
 	/*if (!param.Cnf.BinPath.empty())
 		RunEnv::Cnf.BinPath = param.Cnf.BinPath;
