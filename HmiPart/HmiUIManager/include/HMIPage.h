@@ -66,10 +66,11 @@ namespace UI
 			wVar_ = wvar;
 		}
 		void draw();
+#ifdef WIN32
 		int handle(int);
 		void clear();
 		void remove(int index);
-
+#endif
 		/**********************************/
 
 	 

@@ -21,6 +21,12 @@
 #include "System.h"
 #include "Logger.h"
 #include "ScreenSaver.h"
+#ifdef WIN32
+#include <Windows.h>
+#else
+#include <X11/Xcursor/Xcursor.h>
+#endif // WIN32
+
 namespace UI
 {
 	SysSetGControl::SysSetGControl(HMIPage* w) :BaseGControl(w)
@@ -84,6 +90,15 @@ namespace UI
 		Project::HMIProject* prj = Win()->HMIProject();
 		ScreenSaverClickTime  = System::GetCurrentTimeStampMs();
 		/*设置鼠标*/
+		if (prj->SysSetting.Param.IsHideCursor)		//隐藏鼠标
+		{
+#ifndef WIN32
+			int root_window = DefaultRootWindow(fl_display);        //获取当前窗
+			XFixesShowCursor(fl_display, root_window);
+			XFixesHideCursor(fl_display, root_window);
+#endif // WIN32
+
+		}
 		/*设置蜂鸣器*/
 		if (prj->SysSetting.Param.DisableBuzzer)			//不使能蜂鸣器
 			LocalData::SetBit(SYS_PSB_BEEP_DISABLE, true);

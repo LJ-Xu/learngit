@@ -27,6 +27,7 @@ namespace UI
 		
 		Fl_Group::draw_children();
 	}
+#ifdef WIN32
 
 	void HMIPage::remove(int index) {
 		if (index < 0 || index >= children()) return;
@@ -47,7 +48,7 @@ namespace UI
 		switch (event) {
 
 		case FL_FOCUS:
-			if (prefocus_ && prefocus_->take_focus()) 
+			if (prefocus_ && prefocus_->take_focus())
 				return Fl_Group::handle(event);
 		case FL_UNFOCUS:
 			prefocus_ = fl_oldfocus;
@@ -55,6 +56,9 @@ namespace UI
 		}
 		return Fl_Group::handle(event);
 	}
+#endif // WIN32
+
+	
 	std::shared_ptr<BaseControl> HMIPage::NewCtr(Project::UnitInfo &unintInfo, UI::HMIPage* uipage)
 	{
 		std::shared_ptr<BaseControl> ctrl(IControlFactory::Ins()->GetNewControlByName(unintInfo.CtrName));
