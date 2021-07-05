@@ -607,15 +607,18 @@ namespace UI
 	{
 		//当前应显示的填充色
 		CurBarColor_ = model->StickChartConfig.FIllinColor;
+		IsSpecialValue_ = false;
 		//报警色
 		if (model->StickChartConfig.UseRangeWarn)
 		{
 			if (CurValue_ >= CurUpperValue_)
 			{
+				IsSpecialValue_ = true;
 				CurBarColor_ = model->StickChartConfig.UpperWarnFillinColor;
 			}
 			else if (CurValue_ <= CurLowerValue_)
 			{
+				IsSpecialValue_ = true;
 				CurBarColor_ = model->StickChartConfig.LowerWarnFillinColor;
 			}
 		}
@@ -624,6 +627,7 @@ namespace UI
 		{
 			if ((CurValue_ <= CurDstValue_ + CurRangeValue_) && (CurValue_ >= CurDstValue_ - CurRangeValue_))
 			{
+				IsSpecialValue_ = true;
 				CurBarColor_ = model->StickChartConfig.DstColor;
 			}
 		}
@@ -669,7 +673,7 @@ namespace UI
 				flImgPtr->draw(FinX, FinY, model->StickChartConfig.Width, model->StickChartConfig.Height);
 
 				//绘制液体区
-				if (bUseImage)//渐变色或花纹
+				if (bUseImage && !IsSpecialValue_)//渐变色或花纹
 				{
 					Fl_Image* flImgPtr = IResourceService::Ins()->GetImage(model->StickChartConfig.LinearGradientRes.KeyVal);
 					getstraightfadeimgaera(flImgPtr, curX - BarX, curY - BarY, curBarWidth, curBarHeight);
@@ -763,7 +767,7 @@ namespace UI
 
 			calcustarightfillinfield(model->StickChartConfig.BarDirection, BarX, BarY, BarWidth, BarHeight, bUseImage, curX, curY, curBarWidth, curBarHeight);
 			//绘制液体区
-			if (bUseImage)//渐变色或花纹
+			if (bUseImage && !IsSpecialValue_)//渐变色或花纹
 			{
 				Fl_Image* flImgPtr = IResourceService::Ins()->GetImage(model->StickChartConfig.LinearGradientRes.KeyVal);
 				getstraightfadeimgaera(flImgPtr, curX - FinX, curY - FinY, curBarWidth, curBarHeight);
@@ -1021,7 +1025,7 @@ namespace UI
 			fl_end_polygon();
 		}
 		//绘制液体区
-		if (bUseImg)//渐变色
+		if (bUseImg&&!IsSpecialValue_)//渐变色
 		{
 			Fl_Image* flImgPtr = IResourceService::Ins()->GetImage(model->StickChartConfig.LinearGradientRes.KeyVal);
 			getsectorfadeimgaera(flImgPtr, curdiam,curStartAngle,curEndAnlge);
@@ -1210,10 +1214,37 @@ namespace UI
 			sectorstyle(model);
 			break;
 		}
-
 		}
 
 
+	}
+	void GStickChartView::initvalue(GStickChartControl * ctrl, GStickChartModel * mode_)
+	{///算值
+		//当前数值
+		//当前最大值
+		this->CurMaxValue_ = HmiMainMode ? mode_->StickChartConfig.UseMaxAddr ? UIData::Number<int>(mode_->StickChartConfig.MaxData) : mode_->StickChartConfig.MaxValue : mode_->StickChartConfig.MaxValue;
+		//当前最小值
+		this->CurMinValue_ = HmiMainMode ? mode_->StickChartConfig.UseMinAddr ? UIData::Number<int>(mode_->StickChartConfig.MinData) : mode_->StickChartConfig.MinValue : mode_->StickChartConfig.MinValue;
+		this->CurValue_ = HmiMainMode ? UIData::Number<int>(mode_->StickChartConfig.BarVar) : ((this->CurMaxValue_- this->CurMinValue_)/2);
+		//限制范围
+		this->CurValue_ = this->CurValue_ > this->CurMaxValue_ ? this->CurMaxValue_ : this->CurValue_;
+		this->CurValue_ = this->CurValue_ < this->CurMinValue_ ? this->CurMinValue_ : this->CurValue_;
+		//目标区间
+		if (mode_->StickChartConfig.UseDstField)
+		{
+			//当前目标区间
+			this->CurDstValue_ = HmiMainMode ? mode_->StickChartConfig.UseDstValueByAddr ? UIDataService::Ins().GetNumber<int>(mode_->StickChartConfig.DstValueAddr) : mode_->StickChartConfig.DstValue : mode_->StickChartConfig.DstValue;
+			//当前误差范围
+			this->CurRangeValue_ = HmiMainMode ? mode_->StickChartConfig.UseDstRangeByAddr ? UIDataService::Ins().GetNumber<int>(mode_->StickChartConfig.DstValueAddr) : mode_->StickChartConfig.DstRange : mode_->StickChartConfig.DstRange;
+		}
+		//范围报警
+		if (mode_->StickChartConfig.UseRangeWarn)
+		{
+			//当前上警报值
+			this->CurUpperValue_ = HmiMainMode ? mode_->StickChartConfig.UseUpperWarnAddr ? UIDataService::Ins().GetNumber<int>(mode_->StickChartConfig.UpperWarnAddr) : mode_->StickChartConfig.UpperWarnValue : mode_->StickChartConfig.UpperWarnValue;
+			//当前下警报值
+			this->CurLowerValue_ = HmiMainMode ? mode_->StickChartConfig.UseLowerWarnAddr ? UIDataService::Ins().GetNumber<int>(mode_->StickChartConfig.LowerWarnAddr) : mode_->StickChartConfig.LowerWarnValue : mode_->StickChartConfig.LowerWarnValue;
+		}
 	}
 	void GStickChartView::draw()
 	{
@@ -1221,6 +1252,7 @@ namespace UI
 		shared_ptr<GStickChartModel> model = BaseView.GetModel<GStickChartModel>();
 		FinX = model->StickChartConfig.X + model->StickChartConfig.OffX;
 		FinY = model->StickChartConfig.Y + model->StickChartConfig.OffY;
+		initvalue(ctrl.get(), model.get());
 		DrawStickChart(ctrl.get(), model.get());
 	}
 }

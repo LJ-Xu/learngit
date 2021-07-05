@@ -16,6 +16,7 @@ namespace UI
 		void draw() override;
 		void DrawStickChart(GStickChartControl* ctrl, GStickChartModel* model);
 	private:
+		void initvalue(GStickChartControl* ctrl,GStickChartModel* model);
 		//求正方形中，包含特定两个夹角所在的扇形区域的矩形区域，ptS为左上角，ptE为右下角
 		//   ---------
 		//	 |   |   |
@@ -60,6 +61,7 @@ namespace UI
 		int FinX;
 		int FinY;
 	public:
+		bool HmiMainMode;//上位机模式（不读取地址）
 		int CurValue_;//当前数值
 		int CurMaxValue_; //当前最大值
 		int CurMinValue_; //当前最小值
@@ -68,5 +70,6 @@ namespace UI
 		int CurUpperValue_;//当前上警报值
 		int CurLowerValue_;//当前下警报值
 		int CurBarColor_; //当前棒色
+		bool IsSpecialValue_;//当前是否为特殊值（上下危险区、上下警报、目标区间）
 	};
 }

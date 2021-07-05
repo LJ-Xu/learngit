@@ -134,13 +134,13 @@ namespace UI
 			{
 			case model->ScaleConfig.Vertical:
 				len = FinH;
-				if (model->ScaleConfig.MarkPlace)
+				if (model->ScaleConfig.MarkPlace==1)
 					sx = FinX + FinW - model->ScaleConfig.MajorScaleLineLength;
 				break;
 			case model->ScaleConfig.Horizontal:
 				len = FinW;
 				ishor = true;
-				if (model->ScaleConfig.MarkPlace)
+				if (model->ScaleConfig.MarkPlace==1)
 					sy = FinY + FinH - model->ScaleConfig.MajorScaleLineLength;
 				break;
 			default:
@@ -154,7 +154,7 @@ namespace UI
 				switch (model->ScaleConfig.ScaleTp)
 				{
 				case model->ScaleConfig.Vertical:
-					if (model->ScaleConfig.MarkPlace)
+					if (model->ScaleConfig.MarkPlace==1)
 					{
 						sx = FinX + FinW - model->ScaleConfig.MajorScaleLineLength;
 						mx = sx - marksz;
@@ -186,7 +186,7 @@ namespace UI
 					}
 					break;
 				case model->ScaleConfig.Horizontal:
-					if (model->ScaleConfig.MarkPlace)
+					if (model->ScaleConfig.MarkPlace == 1)
 					{
 						my = sy - model->ScaleConfig.MarkFontSytle.Font.Size;
 						//»æÖÆÖáÏß
@@ -285,7 +285,6 @@ namespace UI
 			realSweepAngle = model->ScaleConfig.CircularEndAngle- model->ScaleConfig.CircularStartAngle;
 			centerX = FinX + FinW / 2;
 			centerY = FinY + FinH/2;
-			break;
 			break;
 		default:
 			return;
@@ -425,7 +424,7 @@ namespace UI
 					}
 					else
 					{
-						startAngle = realStartAngle;
+						startAngle = realStartAngle + realSweepAngle;
 						sweepAngle = -realSweepAngle;
 					}
 					break;

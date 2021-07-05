@@ -665,7 +665,7 @@ namespace UI
 		vector<Project::ColDataTypeInfo> colinfo;
 		RecipeDT::Ins()->GetDataTypes(param.DownloadRecipe.RecipeName, colinfo);
 		int row = Storage::RecipeStorage::Ins()->GetCountByRepiceName(param.DownloadRecipe.RecipeName);
-		LOG_INFO("Upload Recipe %s Form PLC ,count = %d\n", param.DownloadRecipe.RecipeName, param.DownloadRecipe.Size * row);
+		LOG_INFO("Upload Recipe %s Form PLC ,count = %d\n", param.DownloadRecipe.RecipeName, param.DownloadRecipe.Size);
 		short index;
 		DataVarId indexvar = RecipeDT::Ins()->GetIndexVar(param.DownloadRecipe.RecipeName);
 		if (indexvar == DataVarId::NullId)
@@ -673,7 +673,7 @@ namespace UI
 		else
 			index = UI::UIData::Number<short>(indexvar);
 		
-		DataApi::RecipeFromPLC(param.DownloadRecipe.RecipeName, param.DownloadRecipe.Size * row, index,
+		DataApi::RecipeToPLC(param.DownloadRecipe.RecipeName, param.DownloadRecipe.Size, index,
 			param.DownloadRecipe.RegVar, colinfo, param.DownloadRecipe.TransferVarIdRef);
 	}
 	void BtnFunctionControl::HandleUploadRecipe(Project::FunctionSetup param)
@@ -681,7 +681,7 @@ namespace UI
 		vector<Project::ColDataTypeInfo> colinfo;
 		RecipeDT::Ins()->GetDataTypes(param.UploadRecipe.RecipeName, colinfo);
 		int row = Storage::RecipeStorage::Ins()->GetCountByRepiceName(param.UploadRecipe.RecipeName);
-		LOG_INFO("Download Recipe %s To PLC ,count = %d\n", param.UploadRecipe.RecipeName, param.UploadRecipe.Size * row);
+		LOG_INFO("Download Recipe %s To PLC ,count = %d\n", param.UploadRecipe.RecipeName, param.UploadRecipe.Size);
 		short index;
 		DataVarId indexvar = RecipeDT::Ins()->GetIndexVar(param.UploadRecipe.RecipeName);
 		if (indexvar == DataVarId::NullId)
@@ -689,7 +689,7 @@ namespace UI
 		else
 			index = UI::UIData::Number<short>(indexvar);
 
-		DataApi::RecipeToPLC(param.UploadRecipe.RecipeName, param.UploadRecipe.Size * row, index,
+		DataApi::RecipeFromPLC(param.UploadRecipe.RecipeName, param.UploadRecipe.Size, index,
 			param.UploadRecipe.RegVar, colinfo, param.UploadRecipe.TransferVarIdRef);
 	}
 	void BtnFunctionControl::HandleCallbackFunc(Project::FunctionSetup param)
