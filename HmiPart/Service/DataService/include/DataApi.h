@@ -132,9 +132,9 @@ namespace UI
 		/*从PSW下载配方记录*/
 		static int RecipeFromPLC(string groupname, int count, Project::DataVarId srcvar, vector<Project::ColDataTypeInfo> datatype, Project::DataVarId flagvar);
 		
-		/*上传配方记录到PSW---配方索引*/
+		/*上传配方记录到PSW*/
 		static int RecipeToPLC(string groupname, int count, int index, Project::DataVarId dstvar, vector<Project::ColDataTypeInfo> datatype, Project::DataVarId flagvar);
-		/*从PSW下载配方记录---配方索引*/
+		/*从PSW下载配方记录*/
 		static int RecipeFromPLC(string groupname, int count, int index, Project::DataVarId srcvar, vector<Project::ColDataTypeInfo> datatype, Project::DataVarId flagvar);
 
 		/******************************CSV操作*********************************/

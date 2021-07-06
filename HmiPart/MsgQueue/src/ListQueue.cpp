@@ -91,23 +91,28 @@ namespace Message
 	ListQueue::~ListQueue()
 	{
 		ListQueueItem* tmp = head_.Next;
-		ListQueueItem* tp;
-		while (tmp)
+		ListQueueItem* tp = nullptr;
+		int i = 2;
+		while(i--)
 		{
-			tp = tmp->Next;
-			if (!tp)break;
-			if ((unsigned int)tp >= (unsigned int)items_ &&
-				(unsigned int)tp < (unsigned int)&items_[size_])
+			while (tmp)
 			{
-				//不需要删除
+				tp = tmp->Next;
+				if (!tp)break;
+				if ((unsigned int)tp >= (unsigned int)items_ &&
+					(unsigned int)tp < (unsigned int)&items_[size_])
+				{
+					//不需要删除
+				}
+				else
+				{
+					delete tmp;
+				}
+				tmp = tp;
 			}
-			else
-			{
-				delete tmp;
-			}
-
-			tmp = tp;
-		}
+			tmp = free_.Next;
+		} 		
+ 
 		if (items_)
 			delete[]items_;
 	}
