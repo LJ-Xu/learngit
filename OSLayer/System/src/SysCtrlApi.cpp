@@ -14,7 +14,7 @@
 #include <iostream>
 #include <thread>
 #define event_name "/dev/input/event1"
-
+#define brightness_name  "/sys/class/backlight/backlight_gpio/brightness"
 void BeepHelper::Start()
 {
 	runflag_ = true;
@@ -86,6 +86,28 @@ void SysCtrlApi::Beep(int ms, int hz)
 	event.value = 0;
 	ret = write(fd, &event, sizeof(struct input_event));
 
+	close(fd);
+#endif
+}
+void SysCtrlApi::OpenBacklight()
+{
+#ifndef WIN32
+	int fd, ret;
+	if ((fd = open(brightness_name, O_RDWR)) < 0)
+		return;
+	int open = 1;
+	ret = write(fd, &open, sizeof(open));
+	close(fd);
+#endif
+}
+void SysCtrlApi::CloseBacklight()
+{
+#ifndef WIN32
+	int fd, ret;
+	if ((fd = open(brightness_name, O_RDWR)) < 0)
+		return;
+	int open = 0;
+	ret = write(fd, &open, sizeof(open));
 	close(fd);
 #endif
 }
