@@ -16,6 +16,8 @@ class SysCtrlApi
 public:
 	static void Beep();
 	static void Beep(int time, int hz = 0);
+	static void OpenBacklight();
+	static void CloseBacklight();
 	//0[¹Ø]-100[¿ª]  
 	static void Backlight(int percent);
 	static void SetTime(int h, int m, int s);

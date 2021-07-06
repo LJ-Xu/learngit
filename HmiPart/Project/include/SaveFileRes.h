@@ -9,6 +9,17 @@ namespace Project
 		SL_USB,
 		SL_RegString
 	};
+	enum OperatorCmd:int
+	{
+		Record_Save,
+		Record_Enable,
+		Record_Unable,
+		Record_Clear,
+		Record_CopyToU,
+		Record_CopyToSD,
+		Record_CopyToUAndClear,
+		Record_CopyToSdAndClear
+	};
 	enum StoreTrigMode:char
 	{
 		STM_ByCount=0,//满足一定采集数量时自动触发
@@ -32,6 +43,7 @@ namespace Project
 #define MAXSQLCOUNT     100//触发保存的最大条目数
 	struct SaveFileRes
 	{
+		OperatorCmd SaveCmd;
 		StoreLocat StoreLocation;//保存位置 1:HMI 2:SD卡 3:U盘 4:寄存器指定位置（字符串地址）
 		DataVarId StorePosVarId;//动态存储位置
 		vector<string> Contents;//需要保存信息名称
