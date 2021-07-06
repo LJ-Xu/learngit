@@ -21,6 +21,7 @@
 #include "System.h"
 #include "Logger.h"
 #include "ScreenSaver.h"
+#include "SysCtrlApi.h"
 #ifdef WIN32
 #include <Windows.h>
 #else
@@ -66,6 +67,8 @@ namespace UI
 			LOG_INFO("Enter ScreenSaver %d\n", prj->SysSetting.Param.ViewPageIndex);
 			Win()->OpenDialogPage(prj->SysSetting.Param.ViewPageIndex);
 		}
+		else if (prj->SysSetting.Param.IsOffBgLed)
+			SysCtrlApi::CloseBacklight();
 	}
 
 	void SysSetGControl::CloseScreenSaver(int mode, int winno)
@@ -76,6 +79,8 @@ namespace UI
 			LOG_INFO("Exit ScreenSaver %d\n", prj->SysSetting.Param.ViewPageIndex);
 			Win()->ClosePage(prj->SysSetting.Param.ViewPageIndex);
 		}
+		else if (prj->SysSetting.Param.IsOffBgLed)
+			SysCtrlApi::OpenBacklight();
 		ScreenSaverClickTime = System::GetCurrentTimeStampMs();			//¼ÇÂ¼Ê±¼ä
 		if (mode)
 			Win()->SwitchPage(winno);

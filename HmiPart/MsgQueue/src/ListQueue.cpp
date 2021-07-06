@@ -45,11 +45,10 @@ namespace Message
 	{
 		ListQueueItem* tmp;//mtx_
 		ListQueueItem* item;
-		mtx_.lock();
+		std::lock_guard<std::mutex> lck(mtx_);
 		item = NewItem();
 		if (!item)
 		{
-			mtx_.unlock();
 			return false;
 		}
 		item->Msg.Hwnd = hwnd;
@@ -61,14 +60,20 @@ namespace Message
 
 		tail_->Next = item;
 		tail_ = item;
-		mtx_.unlock();
 		return true;
 
 	}
+	/*bool ListQueue::FreeMsg(Msg* msg)
+	{
+		std::lock_guard<std::mutex> lck(mtx_);
+		ListQueueItem * lqt = free_.Next;
+		((ListQueueItem *)msg)->Next = lqt;
+		free_.Next =(ListQueueItem *) msg;
+	}*/
 	bool ListQueue::GetMsg(Msg& msg)
 	{
 		ListQueueItem* tmp;
-		mtx_.lock();
+		std::lock_guard<std::mutex> lck(mtx_);
 		if (head_.Next)
 		{
 			tmp = head_.Next;
@@ -76,32 +81,38 @@ namespace Message
 			if (!head_.Next)
 				tail_ = &head_;
 			msg = tmp->Msg;
-			mtx_.unlock();
+			//放入空闲列表
+			tmp->Next = free_.Next;
+			free_.Next = tmp;
 			return true;
 		}
-		mtx_.unlock();
 		return false;
 	}
 	ListQueue::~ListQueue()
 	{
 		ListQueueItem* tmp = head_.Next;
-		ListQueueItem* tp;
-		while (tmp)
+		ListQueueItem* tp = nullptr;
+		int i = 2;
+		while(i--)
 		{
-			tp = tmp->Next;
-			if (!tp)break;
-			if ((unsigned int)tp >= (unsigned int)items_ &&
-				(unsigned int)tp < (unsigned int)&items_[size_])
+			while (tmp)
 			{
-				//不需要删除
+				tp = tmp->Next;
+				if (!tp)break;
+				if ((unsigned int)tp >= (unsigned int)items_ &&
+					(unsigned int)tp < (unsigned int)&items_[size_])
+				{
+					//不需要删除
+				}
+				else
+				{
+					delete tmp;
+				}
+				tmp = tp;
 			}
-			else
-			{
-				delete tmp;
-			}
-
-			tmp = tp;
-		}
+			tmp = free_.Next;
+		} 		
+ 
 		if (items_)
 			delete[]items_;
 	}

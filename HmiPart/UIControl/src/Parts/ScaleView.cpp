@@ -78,10 +78,11 @@ namespace UI
 		FinW = model->ScaleConfig.Width;
 		FinH = model->ScaleConfig.Height;
 		GraphicDrawHandle::PushClip(FinX, FinY, FinW, FinH);
-		/*FinX += model->ScaleConfig.MarkFontSytle.Font.Size;
-		FinY += model->ScaleConfig.MarkFontSytle.Font.Size;
-		FinW -= model->ScaleConfig.MarkFontSytle.Font.Size * 4;
-		FinH -= model->ScaleConfig.MarkFontSytle.Font.Size * 4;*/
+		int modfixlen = model->ScaleConfig.MarkFontSytle.Font.Size * 3;
+		FinX += modfixlen /2;
+		FinY += modfixlen /2;
+		FinW -= modfixlen;
+		FinH -= modfixlen;
 		DrawStickChart(ctrl.get(), model.get());
 		fl_pop_clip();
 	}
@@ -125,6 +126,7 @@ namespace UI
 	{
 		if (model->ScaleConfig.MainGraduateCount > 1)
 		{
+			int drawlineleng = model->ScaleConfig.MajorScaleLineLength;
 			int sx = FinX, sy = FinY;
 			bool ishor = false;
 			int len = 0;
@@ -133,15 +135,17 @@ namespace UI
 			switch (model->ScaleConfig.ScaleTp)
 			{
 			case model->ScaleConfig.Vertical:
+				drawlineleng = FinW < model->ScaleConfig.MajorScaleLineLength ? FinW : model->ScaleConfig.MajorScaleLineLength;
 				len = FinH;
 				if (model->ScaleConfig.MarkPlace==1)
-					sx = FinX + FinW - model->ScaleConfig.MajorScaleLineLength;
+					sx = FinX + FinW - drawlineleng;
 				break;
 			case model->ScaleConfig.Horizontal:
+				drawlineleng = FinH < model->ScaleConfig.MajorScaleLineLength ? FinH : model->ScaleConfig.MajorScaleLineLength;
 				len = FinW;
 				ishor = true;
 				if (model->ScaleConfig.MarkPlace==1)
-					sy = FinY + FinH - model->ScaleConfig.MajorScaleLineLength;
+					sy = FinY + FinH - drawlineleng;
 				break;
 			default:
 				return;
@@ -156,7 +160,7 @@ namespace UI
 				case model->ScaleConfig.Vertical:
 					if (model->ScaleConfig.MarkPlace==1)
 					{
-						sx = FinX + FinW - model->ScaleConfig.MajorScaleLineLength;
+						sx = FinX + FinW - drawlineleng;
 						mx = sx - marksz;
 						//绘制轴线
 						if (model->ScaleConfig.IsDisplayAxis)
@@ -172,7 +176,7 @@ namespace UI
 					}
 					else
 					{
-						mx = sx + model->ScaleConfig.MajorScaleLineLength;
+						mx = sx + drawlineleng;
 						//绘制轴线
 						if(model->ScaleConfig.IsDisplayAxis)
 						{
@@ -202,7 +206,7 @@ namespace UI
 					}
 					else
 					{
-						my = sy + model->ScaleConfig.MajorScaleLineLength+ model->ScaleConfig.MarkFontSytle.Font.Size;
+						my = sy + drawlineleng+ model->ScaleConfig.MarkFontSytle.Font.Size;
 						//绘制轴线
 						if (model->ScaleConfig.IsDisplayAxis)
 						{
@@ -220,7 +224,7 @@ namespace UI
 				}
 			}
 			
-			AdvancedGarphic::DrawScale(ishor, (model->ScaleConfig.MarkPlace+1)%2, sx, sy, len, model->ScaleConfig.MainGraduateCount, model->ScaleConfig.UseSecondaryScale?model->ScaleConfig.SecondaryScaleCutCount:0, model->ScaleConfig.MajorScaleLineLength, model->ScaleConfig.SecondaryScaleLength, model->ScaleConfig.LineStyle, model->ScaleConfig.LineColor, model->ScaleConfig.LineWidth);
+			AdvancedGarphic::DrawScale(ishor, (model->ScaleConfig.MarkPlace+1)%2, sx, sy, len, model->ScaleConfig.MainGraduateCount, model->ScaleConfig.UseSecondaryScale?model->ScaleConfig.SecondaryScaleCutCount:0, drawlineleng, model->ScaleConfig.SecondaryScaleLength, model->ScaleConfig.LineStyle, model->ScaleConfig.LineColor, model->ScaleConfig.LineWidth);
 			//数字标记
 			if ((model->ScaleConfig.IsDisplayMark) && (model->ScaleConfig.MainGraduateCount > 1) && GradFormat[0] != '0')
 			{

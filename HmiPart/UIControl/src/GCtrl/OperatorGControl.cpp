@@ -71,12 +71,28 @@ namespace UI
 		if (model_->OperatorGConfig.CmdIdRef.Cmp(id))		//ÃüÁî¼Ä´æÆ÷
 		{
 			int cmd = UI::UIData::Number<int>(model_->OperatorGConfig.CmdIdRef);
-			if (cmd == 1)
-				DeleteAllRecord();
-			else if(cmd == 6)
+			switch ((Project::OperatorCmd)cmd)
+			{
+			case Project::Record_Enable:
 				startrecord_ = true;
-			else if(cmd == 7)
+				break;
+			case Project::Record_Unable:
 				startrecord_ = false;
+				break;
+			case Project::Record_CopyToUAndClear:
+			case Project::Record_CopyToSdAndClear:
+			case Project::Record_Clear:
+				DeleteAllRecord();
+			case Project::Record_CopyToU:
+			case Project::Record_CopyToSD:
+			{
+				model_->OperatorGConfig.SaveLst.SaveCmd = (Project::OperatorCmd)cmd;
+				Win()->AddTimeout(0, OperatorSaveFunc,(void *)&model_->OperatorGConfig.SaveLst);
+				break;
+			}
+			default:
+				break;
+			}
 		}
 		//if (model_->OperatorGConfig.ControlIdRef.Cmp(id))	//¿ØÖÆ¼Ä´æÆ÷
 		//	startrecord_ = UI::UIData::Bit(model_->OperatorGConfig.ControlIdRef);
@@ -140,6 +156,9 @@ namespace UI
 			bool noticebit = LocalData::GetBit(SYS_PSB_OperatorRECORD_NOTICE);
 			noticebit = !noticebit;
 			LocalData::SetBit(SYS_PSB_OperatorRECORD_NOTICE, noticebit);
+			/*±£´æ*/
+			model_->OperatorGConfig.SaveLst.SaveCmd = Project::OperatorCmd::Record_Save;
+			Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
 		}
 		delete[] username;
 	}
@@ -166,6 +185,8 @@ namespace UI
 			bool noticebit = LocalData::GetBit(SYS_PSB_OperatorRECORD_NOTICE);
 			noticebit = !noticebit;
 			LocalData::SetBit(SYS_PSB_OperatorRECORD_NOTICE, noticebit);
+			model_->OperatorGConfig.SaveLst.SaveCmd = Project::OperatorCmd::Record_Save;
+			Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
 		}
 		delete[] username;
 	}
@@ -191,6 +212,10 @@ namespace UI
 			bool noticebit = LocalData::GetBit(SYS_PSB_OperatorRECORD_NOTICE);
 			noticebit = !noticebit;
 			LocalData::SetBit(SYS_PSB_OperatorRECORD_NOTICE, noticebit);
+			/*±£´æ*/
+			model_->OperatorGConfig.SaveLst.SaveCmd = Project::OperatorCmd::Record_Save;
+			Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
+
 		}
 		delete[] username;
 	}
@@ -212,6 +237,10 @@ namespace UI
 			bool noticebit = LocalData::GetBit(SYS_PSB_OperatorRECORD_NOTICE);
 			noticebit = !noticebit;
 			LocalData::SetBit(SYS_PSB_OperatorRECORD_NOTICE, noticebit);
+			/*±£´æ*/
+			model_->OperatorGConfig.SaveLst.SaveCmd = Project::OperatorCmd::Record_Save;
+			Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
+
 		}
 		delete[] username;
 	}
@@ -234,6 +263,9 @@ namespace UI
 			bool noticebit = LocalData::GetBit(SYS_PSB_OperatorRECORD_NOTICE);
 			noticebit = !noticebit;
 			LocalData::SetBit(SYS_PSB_OperatorRECORD_NOTICE, noticebit);
+			/*±£´æ*/
+			model_->OperatorGConfig.SaveLst.SaveCmd = Project::OperatorCmd::Record_Save;
+			Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
 		}
 		delete[] username;
 	}

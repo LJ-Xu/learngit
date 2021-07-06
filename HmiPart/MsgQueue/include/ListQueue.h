@@ -11,9 +11,8 @@ namespace Message
 	//	int    LParam; //消息的参数2  
 	//	void*  Data;
 	//};
-	class ListQueueItem
+	struct ListQueueItem
 	{
-	public:
 		struct Msg Msg;
 		ListQueueItem * Next;
 	};
@@ -27,7 +26,7 @@ namespace Message
 		void Init(int cnt);
 		bool SendMsg(HWND hwnd, int msgcode, WPARAM wparam, LPARAM lparam, void* pdata = nullptr);
 		bool GetMsg(Msg& msg);
-
+		//bool FreeMsg(Msg* msg);
 	private:
 		ListQueueItem* items_;
 		ListQueueItem* NewItem();
