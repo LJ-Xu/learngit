@@ -189,6 +189,16 @@ namespace Storage
 		return SelectRecords(sql, records);
 	}
 
+	int OperatorStorageService::SelectOperatorRecordsByLimit(int startIndex, int count, vector<OperatorRecord>& records)
+	{
+		char sql[512] = { 0 };
+		if(count ==0)
+			snprintf(sql, sizeof(sql), "SELECT * FROM Operation union all SELECT * FROM fileDb.Operation;",startIndex);
+		else
+			snprintf(sql, sizeof(sql), "SELECT * FROM Operation union all SELECT * FROM fileDb.Operation;", startIndex, count);
+		return SelectRecords(sql, records);
+	}
+
 	int OperatorStorageService::SelectOperatorRecordsByUser(const char * userName, vector<OperatorRecord> & records) {
 		char sql[512] = { 0 };
 		snprintf(sql, sizeof(sql), 

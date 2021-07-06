@@ -1,15 +1,14 @@
 #pragma once
 #include <BaseControl.h>
-#include "AlarmBarModel.h"
-#include "AlarmInfoRes.h"
+#include "DynamicTextBarModel.h"
 #include "StatusRes.h"
 namespace UI
 {
-	class AlarmBarControl :public BaseControl
+	class DynamicTextBarControl :public BaseControl
 	{
 	public:
-		AlarmBarControl() :AlarmBarControl(nullptr) {}
-		AlarmBarControl(HMIPage*);
+		DynamicTextBarControl() :DynamicTextBarControl(nullptr) {}
+		DynamicTextBarControl(HMIPage*);
 		void CreateView()override;
 		void StartScoll();
 		void Stop();
@@ -21,7 +20,6 @@ namespace UI
 	private:
 		//void InitAlarmData(Project::DataVarId& varid);
 	public:
-		bool IsNewAlarm;
 		bool IsRuning;
 	};
 }

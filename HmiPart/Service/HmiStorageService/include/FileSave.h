@@ -54,6 +54,11 @@ namespace Storage
 		static bool WriteByCover(const char* fileName, char* buff, unsigned long long len);
 		static FileSave* GetFileSaveTool();
 		//导出到本地文件
+		//filePath:包含最终文件名的完整路径
+		//buf:保存内容
+		//len:长度
+		//keepDay:保存天数
+		//savenorepeat:非零时每次保存都会生成新的文件，零时自动覆盖同一个文件
 		int LocalExportFile(std::string filePath,char* buf, unsigned long long len,int keepDay,int savenorepeat=1);
 		//添加删除信息到ini
 		int AddDeleteTiming(std::string filePath, int keepDay);
@@ -61,12 +66,7 @@ namespace Storage
 		int ReadTimingFilesFromIni();
 		//生成并执行CMD以处理过期文件
 		int ExecTimingList();
-		//
-		//void InsertSampleResInQueue(Project::SampleInfoRes* spIfRs);
-		//void InsertAlarmResInQueue(Project::AlarmInfoRes* almIfRs);
-		/*void TryTrigSave(Project::SaveFileRes* res);
-		void StartKeepSave();*/
-		//0有充分剩余空间1空间不足但可尝试覆盖2总空间完全不足
+		//bytes:0有充分剩余空间1空间不足但可尝试覆盖2总空间完全不足
 		static int IsDiskEnoughSpace(DWORD bytes,int StoreSpaceLack);
 	private:
 		//void HandleExportCSVdata(ExportCSVdata csvData);

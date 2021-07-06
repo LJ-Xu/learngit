@@ -622,10 +622,14 @@ namespace Storage
 		}
 		filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen,res.StoreSpaceLack);
 		LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0,0);
+
 		//IsAlarmNewTrig = false;
 	}
 	void FileSave::FromSqlite2OperateFile(Project::SaveFileRes& res)
 	{
+		//unable直接退出
+		if (res.SaveCmd == OperatorCmd::Record_Unable)
+			return;
 		string filePath;
 		vector<Storage::OperatorRecord> vecOptRec;
 		OperatorStorage::Ins()->QueryAll(vecOptRec);
@@ -710,8 +714,60 @@ namespace Storage
 			memcpy(tembuf, "\n", 2);
 			tembuf += 2;
 		}
-		filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
-		LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
+		switch (res.SaveCmd)
+		{
+		case OperatorCmd::Record_Save:
+			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			//正常保存就覆盖写入
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
+			break;
+		case OperatorCmd::Record_Enable:
+			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			//这里也理解为正常保存
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
+		case OperatorCmd::Record_Unable:
+			//在函数开头已经返回了
+			break;
+		case OperatorCmd::Record_Clear:
+			//先保存到文件再清除数据库内容(非重复写入)
+			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			//这里也理解为正常保存
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
+			OperatorStorage::Ins()->CleanRcd();
+			break;
+		case OperatorCmd::Record_CopyToU:
+			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			//这里也理解为正常保存
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
+			filePath = GetSavePath(3, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
+			break;
+		case OperatorCmd::Record_CopyToSD:
+			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			//这里也理解为正常保存
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
+			filePath = GetSavePath(2, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
+			break;
+		case OperatorCmd::Record_CopyToUAndClear:
+			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			//这里也理解为正常保存
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
+			filePath = GetSavePath(3, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
+			OperatorStorage::Ins()->CleanRcd();
+			break;
+		case OperatorCmd::Record_CopyToSdAndClear:
+			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			//这里也理解为正常保存
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
+			filePath = GetSavePath(2, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
+			OperatorStorage::Ins()->CleanRcd();
+			break;
+		}
+		
+		
 	}
 	//void FileSave::InsertSampleResInQueue(Project::SampleInfoRes * spIfRs)
 	//{
