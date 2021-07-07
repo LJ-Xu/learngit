@@ -333,6 +333,11 @@ namespace Storage
 	{
 	
 	}
+	
+	void OperatorStorage::QueryByLimit(DDWORD startIndex, DDWORD count, vector<OperatorRecord> & records)
+	{
+		OperatorStorageService::Ins()->SelectOperatorRecordsByLimit(startIndex, count,records);
+	}
 
 	void OperatorStorage::QueryAll(vector<OperatorRecord> & records)
 	{

@@ -43,7 +43,6 @@ namespace Project
 #define MAXSQLCOUNT     100//触发保存的最大条目数
 	struct SaveFileRes
 	{
-		OperatorCmd SaveCmd;
 		StoreLocat StoreLocation;//保存位置 1:HMI 2:SD卡 3:U盘 4:寄存器指定位置（字符串地址）
 		DataVarId StorePosVarId;//动态存储位置
 		vector<string> Contents;//需要保存信息名称
@@ -55,7 +54,11 @@ namespace Project
 		bool IsFileSaveTimeLimit;//是否限制数据保留时限
 		int SaveDays;//数据保留时限(天)
 		char SaveFormat[10];//存储格式
-		//非配置信息(当前)
+
+
+
+		//非配置变量(数据不是来自上位机)
+		OperatorCmd SaveCmd = Record_Save;
 		int UpperLmt;//存储上限
         Project::StoreTrigMode StoreTrigMode= Project::StoreTrigMode::STM_ByCount;
 		int SaveTrigCount= MAXSQLCOUNT;//允许的最大未保存条目数
