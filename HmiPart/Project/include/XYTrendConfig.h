@@ -25,7 +25,7 @@ namespace Project
 		Conditions ConditionWord;			//字触发条件
 		double TriggerData;					//触发判断数据
 		DataVarId TriggerDataVar;			//触发对比数据地址
-		int  ConditionBit;					//位触发条件	0：ON->OFF 1：OFF->ON
+		int  ConditionBit;					//位触发条件	0：上升沿 1：下降沿
 		bool UseZoom;						//使用缩放
 		int ZoomPercent;					//缩放百分比
 		int PageControlStyle;				//翻页模式 0：滚动条 1：寄存器

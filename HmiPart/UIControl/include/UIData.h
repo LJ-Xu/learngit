@@ -47,6 +47,7 @@ namespace UI
 #define SYS_FULLKEY_PAGENUM				25007			//全拼键盘编号
 
 #define SYS_PSB_HASLOGINUSER			TP_SPSB,0		//用户权限登录标志位
+#define SYS_PSB_COMMPORT_FAIL			TP_SPSB,23		//通讯失败
 #define SYS_PSB_DATASAMPLE_NOTICE		TP_SPSB,100		//采集数据更新通知
 #define SYS_PSB_ALARMRECORD_NOTICE		TP_SPSB,101		//报警数据更新通知
 #define SYS_PSB_LOGINUSER				TP_SPSB,102		//login动作标志位

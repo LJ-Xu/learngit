@@ -112,7 +112,7 @@ namespace UI
 						return HMIBaseButton::handle(event);
 					}
 					else
-						return 1;
+						return 0;
 				}
 				else
 					redraw();

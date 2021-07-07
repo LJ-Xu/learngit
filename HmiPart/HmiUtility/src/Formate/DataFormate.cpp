@@ -23,7 +23,28 @@ namespace Utility
 			if (info.Type == Project::NT_Signed) {
 				INT8 v = (INT8)db;
 				ss << v;
-			} else {
+			}
+			else if (info.Type == Project::NT_Hex) {
+				UINT16 v = (UINT8)db;
+				ss << std::hex << v;
+				//ss << hex << v;
+			}
+			else if (info.Type == Project::NT_BCD) {
+				UINT16 v = (UINT8)db;
+				ss << std::hex << v;
+
+				//ss << hex << v;
+				string str = ss.str();
+				for (size_t i = 0; i < str.size(); i++)
+				{
+					if ((str[i] >= 'A'&& str[i] <= 'F') || (str[i] >= 'a'&& str[i] <= 'f'))
+					{
+						string data = string(fmt.Num1, '*');
+						return data;
+					}
+				}
+			}
+			else {
 				UINT8 v = (UINT8)db;
 				ss << v;
 			}
