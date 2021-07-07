@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "HMIWindow.h"
-#include "DynamicTextBarControl.h"
-#include "DynamicTextBarView.h"
+#include "DynamicTextContextControl.h"
+#include "DynamicTextContextView.h"
 #include "Message.h"
 #include "SysCtrlApi.h"
 #include "HMIPage.h"
@@ -15,19 +15,19 @@ namespace UI
 {
 	void UpdateDynamicContext(void *data)
 	{
-		DynamicTextBarControl* pControl = (DynamicTextBarControl*)data;
+		DynamicTextContextControl* pControl = (DynamicTextContextControl*)data;
 		pControl->HandleSysChange(Permission);
 	}
 
 	static shared_ptr<DynamicTextBarModel> Mode;
-	DynamicTextBarControl::DynamicTextBarControl(HMIPage* w) :BaseControl(w), IsNewAlarm(false)
+	DynamicTextContextControl::DynamicTextContextControl(HMIPage* w) :BaseControl(w), IsNewAlarm(false)
 	{
 		//创建DynamicTextBarModel
 		Mode = std::shared_ptr < DynamicTextBarModel>(new DynamicTextBarModel());
 		InitMVCModel(Mode);
 	}
 
-	void DynamicTextBarControl::CreateView()
+	void DynamicTextContextControl::CreateView()
 	{
 		//初始化VIEW
 		DynamicTextBarView* view = new DynamicTextBarView(Mode->DynamicTextBarUnit.X, Mode->DynamicTextBarUnit.Y,
@@ -35,7 +35,7 @@ namespace UI
 		InitMVCView(view);
 	}
 
-	int DynamicTextBarControl::PeekHMIMessage(Message::Msg* msg)
+	int DynamicTextContextControl::PeekHMIMessage(Message::Msg* msg)
 	{
 		Project::DataVarId varId;
 		switch (msg->Code)
@@ -50,7 +50,7 @@ namespace UI
 		return 1;//handled;
 	}
 
-	void DynamicTextBarControl::StartScoll()
+	void DynamicTextContextControl::StartScoll()
 	{
 		if (IsRuning)
 		{
@@ -62,7 +62,7 @@ namespace UI
 		pView_->redraw();*/
 		Page()->AddTimeout(100, UpdateDynamicContext, (void*)this, true);
 	}
-	void DynamicTextBarControl::Stop()
+	void DynamicTextContextControl::Stop()
 	{
 		if (!IsRuning)
 		{
@@ -71,12 +71,12 @@ namespace UI
 		IsRuning = false;
 		Page()->RemoveTimeout(UpdateDynamicContext, this);
 	}
-	void DynamicTextBarControl::OnReady()
+	void DynamicTextContextControl::OnReady()
 	{
 		HandleSysChange(Permission);
 		StartScoll();
 	}
-	void DynamicTextBarControl::HandleDataVar(Project::DataVarId &varId)
+	void DynamicTextContextControl::HandleDataVar(Project::DataVarId &varId)
 	{
 		DynamicTextBarView* pView = static_cast<DynamicTextBarView*>(pView_);
 		if (Mode->DynamicTextBarUnit.VOffX.Cmp(varId))
@@ -94,7 +94,7 @@ namespace UI
 		if (Mode->DynamicTextBarUnit.Perm.EnableVID.Cmp(varId))
 			UI::PermUtility::HandleEnablePerm(Mode->DynamicTextBarUnit.Perm, pView_);
 	}
-	void DynamicTextBarControl::HandleSysChange(SysChangeEM catogray)
+	void DynamicTextContextControl::HandleSysChange(SysChangeEM catogray)
 	{
 		DynamicTextBarModel* mode_ = static_cast<DynamicTextBarModel*>(pModel_.get());
 		switch (catogray)

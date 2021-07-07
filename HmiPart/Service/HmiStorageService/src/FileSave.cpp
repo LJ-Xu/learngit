@@ -35,6 +35,7 @@
 #include "DataApi.h"
 #define LINELENGTH 128
 #define OPERLINELENGTH  200
+#define EXECTASKINTHREAD 1
 using namespace std;
 namespace Storage
 {
@@ -167,25 +168,27 @@ namespace Storage
 #endif
 	}
 
-	void FileSave::SaveSample(Project::SampleInfoRes & spIfRs)
+	void FileSave::SaveSample(Project::SampleInfoRes* spIfRs)
 	{
+#if EXECTASKINTHREAD
+		std::lock_guard<std::mutex> lck(Mutex);		
+		SampleSaveList.push(spIfRs);
+		TaskDispatcher.notify_all();
+#else
 		IsSampleSaveAvaliable = false;
 		FromSqlite2File(spIfRs);
 		IsSampleSaveAvaliable = true;
+#endif
 	}
 
-	void FileSave::SaveAlarm(Project::SaveFileRes & res)
+	void FileSave::InitAlarm(Project::SaveFileRes * res)
 	{
-		IsAlarmSaveAvaliable = false;
-		FromSqlite2File(res);
-		IsAlarmSaveAvaliable = true;
+		AlarmSaveList = res;
 	}
 
-	void FileSave::SaveOperate(Project::SaveFileRes & res)
+	void FileSave::InitOperate(Project::SaveFileRes * res)
 	{
-		IsAlarmSaveAvaliable = false;
-		FromSqlite2File(res);
-		IsAlarmSaveAvaliable = true;
+		OperateSaveList = res;
 	}
 
 	//重复的文件名则保存为*(1~N).*这样的格式
@@ -830,6 +833,44 @@ namespace Storage
 //		);
 //		ThrSaveSample->detach();
 //	}
+
+	void FileSave::StartKeepSave()
+	{
+		RunTask = true;
+		SaveFileTask = new std::thread([&]
+		{
+			while (RunTask)
+			{
+				std::unique_lock<std::mutex> unique_lck(Mutex);
+
+				TaskDispatcher.wait(unique_lck);
+				while (!SampleSaveList.empty())
+				{
+					auto itor = SampleSaveList.front();
+					FromSqlite2File(*itor);
+					SampleSaveList.pop();
+				}
+				if (AlarmSaveList)
+				{
+					FromSqlite2File(*AlarmSaveList);
+				}
+
+				if (OperateSaveList)
+				{
+					FromSqlite2OperateFile(*OperateSaveList);
+				}
+
+#ifdef WIN32
+				Sleep(500);
+#else
+				usleep(500000);
+#endif
+				
+			}
+		}
+		);
+		SaveFileTask->detach();
+	}
 
 #ifdef WIN32
 	BOOL get_disk_space(char driver, unsigned long long& allSpace, unsigned long long& freeSpace)

@@ -4,11 +4,11 @@
 #include "StatusRes.h"
 namespace UI
 {
-	class DynamicTextBarControl :public BaseControl
+	class DynamicTextContextControl :public BaseControl
 	{
 	public:
-		DynamicTextBarControl() :DynamicTextBarControl(nullptr) {}
-		DynamicTextBarControl(HMIPage*);
+		DynamicTextContextControl() :DynamicTextContextControl(nullptr) {}
+		DynamicTextContextControl(HMIPage*);
 		void CreateView()override;
 		void StartScoll();
 		void Stop();

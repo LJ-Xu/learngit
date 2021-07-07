@@ -19,13 +19,13 @@
 #include "FileSave.h"
 namespace UI
 {
-	void SampleSaveFunc(void *data)
+	/*void SampleSaveFunc(void *data)
 	{
 		if (Storage::FileSave::GetFileSaveTool()->ReadySaveSample())
 		{
 			Storage::FileSave::GetFileSaveTool()->SaveSample(*(SampleInfoRes*)data);
 		}
-	}
+	}*/
 
 	SampleGCtrl *SampleGCtrl::ctrl_ = nullptr;
 	SampleGCtrl* SampleGCtrl::Ins()
@@ -272,7 +272,8 @@ namespace UI
 			
 			if (updateFlag_) {
 				DealStroeCount(model_->SampleGUnit.InfoLst[i]);
-				Win()->AddTimeout(0, SampleSaveFunc, &model_->SampleGUnit.InfoLst[i]);
+				//Win()->AddTimeout(0, SampleSaveFunc, &model_->SampleGUnit.InfoLst[i]);
+				Storage::FileSave::GetFileSaveTool()->SaveSample(&model_->SampleGUnit.InfoLst[i]);
 				//Storage::FileSave::GetFileSaveTool()->InsertSampleResInQueue(&model_->SampleGUnit.InfoLst[i]);
 				//MayToFile(model_->SampleGUnit.InfoLst[i]);
 				
@@ -461,7 +462,9 @@ namespace UI
 				sampleGroup->SampleStoreInfo.StopFlag = 0;
 			}
 			if(SampleGCtrl::Ins())
-				SampleGCtrl::Ins()->Win()->AddTimeout(0, SampleSaveFunc, sampleGroup);
+
+				Storage::FileSave::GetFileSaveTool()->SaveSample(sampleGroup);
+				//SampleGCtrl::Ins()->Win()->AddTimeout(0, SampleSaveFunc, sampleGroup);
 			//Storage::FileSave::GetFileSaveTool()->InsertSampleResInQueue(sampleGroup);
 			// 采集新数据，发送更新通知
 			sampleGroup->ChangeFlag ^= true;

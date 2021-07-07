@@ -10,17 +10,18 @@ using namespace std::chrono;
 typedef std::chrono::milliseconds MilliSecs;
 namespace UI
 {
-	class DynamicTextBarControl;
-	class DynamicTextBarModel;
-	class DynamicTextBarView : public HMIBaseView
+	class DynamicTextContextControl;
+	class DynamicTextContextModel;
+	class DynamicTextContextView : public HMIBaseView
 	{
 	public:
-		DynamicTextBarView(int X, int Y, int W, int H);
-		~DynamicTextBarView();
+		DynamicTextContextView(int X, int Y, int W, int H);
+		~DynamicTextContextView();
 		BasicView BaseView;
 	protected:
 		void draw() override;
-		void DrawStickChart(DynamicTextBarControl* ctrl, DynamicTextBarModel* model);
+		void 
+		void DrawStickChart(DynamicTextContextControl* ctrl, DynamicTextContextModel* model);
 	private:
 	private:
 		bool Inited;
@@ -30,6 +31,7 @@ namespace UI
 		int CurAlarmIndex;
 		std::string DrawString;
 	public:
+		int IntervalCharSize;//间隔的字符数，由设定的间隔像素和字体大小转换而来
 		int CurDx;//当前滚动偏移（以图形左上角为起点向左正数）
 		std::vector<std::string> ContextStrList;
 	};

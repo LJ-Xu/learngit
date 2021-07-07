@@ -43,12 +43,15 @@ namespace Storage
 			}*/
 		}
 	public://保存主要接口
-		void SaveSample(Project::SampleInfoRes& spIfRs);
-		bool ReadySaveSample() {return IsSampleSaveAvaliable;}
-		void SaveAlarm(Project::SaveFileRes& res);
-		bool ReadySaveAlarm() { return IsAlarmSaveAvaliable; }
-		void SaveOperate(Project::SaveFileRes& res);
-		bool ReadySaveOperate() { return IsOperateSaveAvaliable; }
+		void SaveSample(Project::SampleInfoRes* spIfRs);
+		//bool ReadySaveSample() {return IsSampleSaveAvaliable;}
+		void InitAlarm(Project::SaveFileRes* res);
+		//bool ReadySaveAlarm() { return IsAlarmSaveAvaliable; }
+		void InitOperate(Project::SaveFileRes* res);
+		//bool ReadySaveOperate() { return IsOperateSaveAvaliable; }
+		void DoSave(){
+			TaskDispatcher.notify_all();
+		}
 	public://常规可用接口
 		static bool WriteNoRepeat(const char* fileName, char* buff, unsigned long long len);
 		static bool WriteByCover(const char* fileName, char* buff, unsigned long long len);
@@ -77,8 +80,17 @@ namespace Storage
 		static int CopyIntegerToChar(char* ch, int value);
 		static int CopyDataTypeStrToChar(char* dst, const Project::BaseVar* var);
 		static string GetSavePath(int pathMode, Project::DataVarId& addrPath, int nameMode, string fileName, Project::DataVarId& addrName,int needlen, int StoreSpaceLack);
+		void StartKeepSave();
 
 	private:
+		std::thread* SaveFileTask;
+		atomic<bool> RunTask;
+		std::mutex Mutex;
+		std::condition_variable TaskDispatcher;
+		std::queue<Project::SampleInfoRes*> SampleSaveList;
+		Project::SaveFileRes* AlarmSaveList;
+		Project::SaveFileRes* OperateSaveList;
+
 		atomic<bool> IsSampleSaveAvaliable;
 		atomic<bool> IsAlarmSaveAvaliable;
 		atomic<bool> IsOperateSaveAvaliable;
@@ -91,7 +103,6 @@ namespace Storage
 		std::mutex MutexAlarm;
 		std::condition_variable SampleEventLock;
 		std::condition_variable AlarmEventLock;
-		std::queue<Project::SampleInfoRes*> SampleSaveList;
 
 		Project::SaveFileRes* AlarmSaveConfig;*/
 
