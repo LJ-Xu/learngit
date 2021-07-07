@@ -67,7 +67,30 @@ namespace Project
 			archive(BasicParam, NetParam, UartParam);
 		}
 	};
+	enum ByteSwapMode
+	{
+		CHANGE_BIT = 0x01,           //默认低位在前
+		CHANGE_BYTE = 0x02,			 //默认小端模式，内存低字节在前
+		CHANGE_WORD = 0x04,			 //默认小端模式，内存低字节在前
+		CHANGE_DWORD = 0x08,		 //默认小端模式，内存低字节在前
+	};
 
+	struct HighLowByteSet
+	{
+		//字节序转换
+		int WordEndian;
+		int WordStringEndian;
+		int DWordEndian;
+		int DWordStringEndian;
+		int DDWordEndian;
+		int DDWordStringEndian;
+		template<class Archive>
+		void serialize(Archive & archive)
+		{
+			archive(WordEndian, WordStringEndian, DWordEndian, DWordStringEndian,
+				DDWordEndian, DDWordStringEndian);
+		}
+	};
 	// 端口对应的设备接口
 	struct PrjDev
 	{
@@ -77,11 +100,12 @@ namespace Project
 		short StaNo;//默认设备站号  
 		string ProtocolId;//设备的通信协议Id
 		PrjCommParam CommParam;//该接口的通信参数
+		HighLowByteSet HighLowByte;
 		vector<char> DevParamData;//私有配置参数param data信息 通过该信息和ProtocolId可以转换为具体结构
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
-			archive(DevName, PortID, Point, StaNo, ProtocolId, CommParam, DevParamData);
+			archive(DevName, PortID, Point, StaNo, ProtocolId, CommParam, HighLowByte, DevParamData);
 		}
 		void Parse(rapidjson::Value& jsonObj);
 		static void Parse(std::vector<PrjDev>& vector, rapidjson::Value& jsonObj);

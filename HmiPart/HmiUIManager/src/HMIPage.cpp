@@ -48,8 +48,12 @@ namespace UI
 		switch (event) {
 
 		case FL_FOCUS:
-			if (prefocus_ && prefocus_->take_focus())
-				return Fl_Group::handle(event);
+		{
+			if (prefocus_ && prefocus_ != this)
+				prefocus_->take_focus();
+			return Fl_Group::handle(event);
+		}
+			
 		case FL_UNFOCUS:
 			prefocus_ = fl_oldfocus;
 			return Fl_Group::handle(event);
