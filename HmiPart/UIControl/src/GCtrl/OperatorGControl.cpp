@@ -21,13 +21,13 @@
 namespace UI
 {
 
-	void OperatorSaveFunc(void *data)
+	/*void OperatorSaveFunc(void *data)
 	{
 		if (Storage::FileSave::GetFileSaveTool()->ReadySaveOperate())
 		{
 			Storage::FileSave::GetFileSaveTool()->SaveOperate(*(SaveFileRes*)data);
 		}
-	}
+	}*/
 
 
 	OperatorGControl *OperatorGControl::ctrl_ = nullptr;
@@ -35,6 +35,7 @@ namespace UI
 	OperatorGControl::OperatorGControl(HMIPage * page) : BaseGControl(page) {
 		model_ = shared_ptr<OperatorGModel>(new OperatorGModel());
 		InitMVCModel(model_);
+		Storage::FileSave::GetFileSaveTool()->InitOperate(&model_->OperatorGConfig.SaveLst);
 		ctrl_ = this;
 	}
 	OperatorGControl *OperatorGControl::Ins()
@@ -87,7 +88,9 @@ namespace UI
 			case Project::Record_CopyToSD:
 			{
 				model_->OperatorGConfig.SaveLst.SaveCmd = (Project::OperatorCmd)cmd;
-				Win()->AddTimeout(0, OperatorSaveFunc,(void *)&model_->OperatorGConfig.SaveLst);
+
+				Storage::FileSave::GetFileSaveTool()->DoSave();
+				//Win()->AddTimeout(0, OperatorSaveFunc,(void *));
 				break;
 			}
 			default:
@@ -158,7 +161,8 @@ namespace UI
 			LocalData::SetBit(SYS_PSB_OperatorRECORD_NOTICE, noticebit);
 			/*保存*/
 			model_->OperatorGConfig.SaveLst.SaveCmd = Project::OperatorCmd::Record_Save;
-			Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
+			Storage::FileSave::GetFileSaveTool()->DoSave();
+			//Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
 		}
 		delete[] username;
 	}
@@ -186,7 +190,8 @@ namespace UI
 			noticebit = !noticebit;
 			LocalData::SetBit(SYS_PSB_OperatorRECORD_NOTICE, noticebit);
 			model_->OperatorGConfig.SaveLst.SaveCmd = Project::OperatorCmd::Record_Save;
-			Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
+			Storage::FileSave::GetFileSaveTool()->DoSave();
+			//Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
 		}
 		delete[] username;
 	}
@@ -214,7 +219,8 @@ namespace UI
 			LocalData::SetBit(SYS_PSB_OperatorRECORD_NOTICE, noticebit);
 			/*保存*/
 			model_->OperatorGConfig.SaveLst.SaveCmd = Project::OperatorCmd::Record_Save;
-			Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
+			Storage::FileSave::GetFileSaveTool()->DoSave();
+			//Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
 
 		}
 		delete[] username;
@@ -239,7 +245,8 @@ namespace UI
 			LocalData::SetBit(SYS_PSB_OperatorRECORD_NOTICE, noticebit);
 			/*保存*/
 			model_->OperatorGConfig.SaveLst.SaveCmd = Project::OperatorCmd::Record_Save;
-			Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
+			Storage::FileSave::GetFileSaveTool()->DoSave();
+			//Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
 
 		}
 		delete[] username;
@@ -265,7 +272,8 @@ namespace UI
 			LocalData::SetBit(SYS_PSB_OperatorRECORD_NOTICE, noticebit);
 			/*保存*/
 			model_->OperatorGConfig.SaveLst.SaveCmd = Project::OperatorCmd::Record_Save;
-			Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
+			Storage::FileSave::GetFileSaveTool()->DoSave();
+			//Win()->AddTimeout(0, OperatorSaveFunc, (void *)&model_->OperatorGConfig.SaveLst);
 		}
 		delete[] username;
 	}

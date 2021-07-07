@@ -68,7 +68,7 @@ namespace Storage
 		char sql[SQLCMDLEN] = { 0 };
 		snprintf(sql, sizeof(sql), "INSERT INTO Sample VALUES(%d, %lld, %d, %d, %lld)",
 			record.Channel, record.Data, record.Type.Cls, record.Type.Type, record.Date);
-		printf("InsertSampleRecord:value = %d.\n",record.Data);
+		//printf("InsertSampleRecord:value = %d.\n",record.Data);
 		return ExecuteSql(sql);
 	}
 
@@ -84,12 +84,12 @@ namespace Storage
 			//SelectSample("SELECT  * FROM Sample WHERE ( ChannelNo & 0 = 0 and ChannelNo & 0 = 0 )ORDER BY Date LIMIT 1");
 			snprintf(sql, sizeof(sql), "UPDATE Sample SET ChannelNo = %d,ChannelData = %lld, DataType = %d, Format = %d, Date = %lld WHERE ( ChannelNo  = %d and Date= (SELECT  Date FROM Sample WHERE  ChannelNo = %d ORDER BY Date LIMIT 1))", record.Channel,
 				record.Data, record.Type.Cls, record.Type.Type, record.Date, record.Channel, record.Channel);
-			printf("0InsertSampleRecord:value = %lld.\n",record.Data);
+			//printf("0InsertSampleRecord:value = %lld.\n",record.Data);
 
 			//snprintf(sql, sizeof(sql), "UPDATE Sample SET ChannelNo = %d,ChannelData = %lld, DataType = %d, Format = %d, Date = %lld WHERE ( ChannelNo & %d = %d and ChannelNo & %d = %d and (Date IN (SELECT MIN(DATE) FROM Sample)) ;UPDATE fileDb.Sample SET ChannelNo = %d, ChannelData = %lld, DataType = %d, Format = %d, Date = %lld WHERE ( ChannelNo & %d = %d and ChannelNo & %d = %d and (Date IN (SELECT MIN(DATE) FROM Sample));", record.Channel,record.Data, record.Type.Cls, record.Type.Type, record.Date,gName, gName, gNo, gNo, record.Channel,record.Data, record.Type.Cls, record.Type.Type, record.Date, gName, gName, gNo, gNo);
 			//(Date IN (SELECT MIN(DATE) FROM Sample))
 			int ret = ExecuteSql(sql);
-			printf("0InsertSampleRecord:retvalue = %d.\n",ret);
+			//printf("0InsertSampleRecord:retvalue = %d.\n",ret);
 			return ret;
 		}
 		else
@@ -123,9 +123,11 @@ namespace Storage
 		char * errMsg = NULL;
 		char sql[SQLCMDLEN] = { 0 };
 		int gnm = gName << 16;
+		int matchnm = gName == 0 ? (0xff << 16) : gnm;
 		int gno = gNo << 24;
+		int matchno = gNo == 0 ? (0xff << 24) : gno;
 		snprintf(sql, sizeof(sql), "DELETE FROM Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d ; \
-			DELETE FROM fileDb.Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d ", gnm, gnm, gno, gno, gnm, gnm, gno, gno);
+			DELETE FROM fileDb.Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d ", matchnm, gnm, matchno, gno, matchnm, gnm, matchno, gno);
 		return ExecuteSql(sql);
 	}
 
@@ -209,8 +211,10 @@ namespace Storage
 	{
 		char sql[SQLCMDLEN] = { 0 };
 		int gnm = gName << 16;
+		int matchnm = gName == 0 ? (0xff << 16) : gnm;
 		int gno = gNo << 24;
-		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d union all SELECT * FROM fileDb.Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d ORDER BY Date ", gnm, gnm, gno, gno, gnm, gnm, gno, gno);
+		int matchno = gNo == 0 ? (0xff << 24) : gno;
+		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d union all SELECT * FROM fileDb.Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d ORDER BY Date ", matchnm, gnm, matchno, gno, matchnm, gnm, matchno, gno);
 		return SelectSample(sql);
 	}
 
@@ -218,8 +222,12 @@ namespace Storage
 	{
 		char sql[SQLCMDLEN] = { 0 };
 		int gnm = gName << 16;
+		int matchnm = gName == 0 ? (0xff << 16) : gnm;
 		int gno = gNo << 24;
-		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE (ChannelNo & %d = %d and ChannelNo & %d = %d and Date > %lld) union all SELECT * FROM fileDb.Sample WHERE (ChannelNo & %d = %d and ChannelNo & %d = %d and Date > %lld) ORDER BY Date", gnm, gnm, gno, gno, startTime, gnm, gnm, gno, gno, startTime);
+		int matchno = gNo == 0 ? (0xff << 24) : gno;
+		//snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE (ChannelNo & %d = %d and ChannelNo & %d = %d and Date > %lld) union all SELECT * FROM fileDb.Sample WHERE (ChannelNo & %d = %d and ChannelNo & %d = %d and Date > %lld) ORDER BY Date", gnm, gnm, gno, gno, startTime, gnm, gnm, gno, gno, startTime);
+		//snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE (ChannelNo =%d and Date > %lld) union all SELECT * FROM fileDb.Sample WHERE (ChannelNo = %d and Date > %lld) ORDER BY Date", gnm|gno, startTime, gnm|gno, startTime);
+		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE (ChannelNo & %d = %d and ChannelNo & %d = %d and Date > %lld) union all SELECT * FROM fileDb.Sample WHERE (ChannelNo & %d = %d and ChannelNo & %d = %d and Date > %lld) ORDER BY Date", matchnm, gnm, matchno, gno, startTime, matchnm, gnm, matchno, gno, startTime);
 		return SelectSample(sql);
 	}
 
@@ -286,8 +294,10 @@ namespace Storage
 		char sql[SQLCMDLEN] = { 0 };
 		struct sqlite3_stmt *stmt;
 		int gnm = gName << 16;
+		int matchnm = gName == 0 ? (0xff << 16) : gnm;
 		int gno = gNo << 24;
-		snprintf(sql, sizeof(sql), "SELECT COUNT(*) FROM Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d  and Date > %lld ", gnm, gnm, gno, gno,date);
+		int matchno = gNo == 0 ? (0xff << 24) : gno;
+		snprintf(sql, sizeof(sql), "SELECT COUNT(*) FROM Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d  and Date > %lld ", matchnm, gnm, matchno, gno,date);
 		int ret = sqlite3_prepare_v2(db, sql, strlen(sql), &stmt, NULL);
 		if (ret != SQLITE_OK) {
 			fprintf(stderr, "Sql Error: %s\n", sqlite3_errmsg(db));

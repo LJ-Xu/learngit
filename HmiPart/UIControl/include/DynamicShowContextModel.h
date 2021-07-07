@@ -8,11 +8,11 @@ using namespace std;
 
 namespace UI
 {
-	class DynamicTextBarModel : public BaseModel
+	class DynamicTextContextModel : public BaseModel
 	{
 	public:
-		DynamicTextBarModel();
-		~DynamicTextBarModel();
+		DynamicTextContextModel();
+		~DynamicTextContextModel();
 
 		void GetRect(Rectangle & rect) 
 		{

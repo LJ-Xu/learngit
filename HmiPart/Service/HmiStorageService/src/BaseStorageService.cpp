@@ -34,8 +34,8 @@ namespace Storage
 		// 打开内存数据库
 		int ret = sqlite3_open(":memory:", &db);
 		if (ret != SQLITE_OK) {
-			const char * file = strrchr(__FILE__, '\\') + 1;
-			fprintf(stderr, "%s[%d] ErrCode[%d] Msg: %s\n", file, __LINE__, ret, sqlite3_errmsg(db));
+			//const char * file = strrchr(__FILE__, '\\') + 1;
+			//fprintf(stderr, "%s[%d] ErrCode[%d] Msg: %s\n", file, __LINE__, ret, sqlite3_errmsg(db));
 			sqlite3_close(db);
 		}
 		// 数据库是否打开
@@ -64,20 +64,20 @@ namespace Storage
 	int BaseStorageService::ExecuteSql(const char * sql) {
 		// 校验参数合法性
 		if (sql == nullptr || strlen(sql) == 0) {
-			const char * file = strrchr(__FILE__, '\\') + 1;
-			fprintf(stderr, "%s[%d] Sql statements is empty\n", file, __LINE__);
+			//const char * file = strrchr(__FILE__, '\\') + 1;
+			//fprintf(stderr, "%s[%d] Sql statements is empty\n", file, __LINE__);
 			return -1;
 		}
 		char * errMsg = NULL;
 		// 执行Sql语句
-		printf(sql);
-		printf("\n");
+		//printf(sql);
+		//printf("\n");
 		int ret = sqlite3_exec(db, sql, NULL, NULL, &errMsg);
 		if (ret != SQLITE_OK) {
-			const char * file = strrchr(__FILE__, '\\') + 1;
-			fprintf(stderr, "%s[%d] ErrCode[%d] Msg: %s\n", file, __LINE__, ret, errMsg);
+			//const char * file = strrchr(__FILE__, '\\') + 1;
+			//fprintf(stderr, "%s[%d] ErrCode[%d] Msg: %s\n", file, __LINE__, ret, errMsg);
 		}
-		printf("sql exec success!\n");
+		//printf("sql exec success!\n");
 		return ret;
 	}
 
