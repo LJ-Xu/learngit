@@ -47,6 +47,7 @@ namespace Storage
 		// ²éÑ¯²Ù×÷¼ÇÂ¼
 		int SelectRecords(const char * sql, vector<OperatorRecord> & records);
 		int SelectOperatorRecords(vector<OperatorRecord> & records);
+		int SelectOperatorRecordsByLimit(int startIndex,int count, vector<OperatorRecord> &  records);
 		int SelectOperatorRecordsByUser(const char * userName, vector<OperatorRecord> & records);
 		int SelectOperatorRecordsByDate(DDWORD sDate, DDWORD eDate, vector<OperatorRecord> & records);
 		int SelectOperatorRecordsByTime(DDWORD sTime, DDWORD eTime, vector<OperatorRecord> & records);

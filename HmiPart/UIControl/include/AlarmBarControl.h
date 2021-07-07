@@ -19,7 +19,7 @@ namespace UI
 		int PeekHMIMessage(Message::Msg* msg) override;
 		void HandleDataVar(Project::DataVarId &varId);
 	private:
-		void InitAlarmData(Project::DataVarId& varid);
+		//void InitAlarmData(Project::DataVarId& varid);
 	public:
 		bool IsNewAlarm;
 		bool IsRuning;

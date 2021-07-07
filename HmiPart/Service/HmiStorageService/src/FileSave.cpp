@@ -35,6 +35,7 @@
 #include "DataApi.h"
 #define LINELENGTH 128
 #define OPERLINELENGTH  200
+#define EXECTASKINTHREAD 1
 using namespace std;
 namespace Storage
 {
@@ -167,25 +168,27 @@ namespace Storage
 #endif
 	}
 
-	void FileSave::SaveSample(Project::SampleInfoRes & spIfRs)
+	void FileSave::SaveSample(Project::SampleInfoRes* spIfRs)
 	{
+#if EXECTASKINTHREAD
+		std::lock_guard<std::mutex> lck(Mutex);		
+		SampleSaveList.push(spIfRs);
+		TaskDispatcher.notify_all();
+#else
 		IsSampleSaveAvaliable = false;
 		FromSqlite2File(spIfRs);
 		IsSampleSaveAvaliable = true;
+#endif
 	}
 
-	void FileSave::SaveAlarm(Project::SaveFileRes & res)
+	void FileSave::InitAlarm(Project::SaveFileRes * res)
 	{
-		IsAlarmSaveAvaliable = false;
-		FromSqlite2File(res);
-		IsAlarmSaveAvaliable = true;
+		AlarmSaveList = res;
 	}
 
-	void FileSave::SaveOperate(Project::SaveFileRes & res)
+	void FileSave::InitOperate(Project::SaveFileRes * res)
 	{
-		IsAlarmSaveAvaliable = false;
-		FromSqlite2File(res);
-		IsAlarmSaveAvaliable = true;
+		OperateSaveList = res;
 	}
 
 	//重复的文件名则保存为*(1~N).*这样的格式
@@ -622,10 +625,14 @@ namespace Storage
 		}
 		filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen,res.StoreSpaceLack);
 		LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0,0);
+
 		//IsAlarmNewTrig = false;
 	}
 	void FileSave::FromSqlite2OperateFile(Project::SaveFileRes& res)
 	{
+		//unable直接退出
+		if (res.SaveCmd == OperatorCmd::Record_Unable)
+			return;
 		string filePath;
 		vector<Storage::OperatorRecord> vecOptRec;
 		OperatorStorage::Ins()->QueryAll(vecOptRec);
@@ -710,8 +717,60 @@ namespace Storage
 			memcpy(tembuf, "\n", 2);
 			tembuf += 2;
 		}
-		filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
-		LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
+		switch (res.SaveCmd)
+		{
+		case OperatorCmd::Record_Save:
+			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			//正常保存就覆盖写入
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
+			break;
+		case OperatorCmd::Record_Enable:
+			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			//这里也理解为正常保存
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
+		case OperatorCmd::Record_Unable:
+			//在函数开头已经返回了
+			break;
+		case OperatorCmd::Record_Clear:
+			//先保存到文件再清除数据库内容(非重复写入)
+			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			//这里也理解为正常保存
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
+			OperatorStorage::Ins()->CleanRcd();
+			break;
+		case OperatorCmd::Record_CopyToU:
+			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			//这里也理解为正常保存
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
+			filePath = GetSavePath(3, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
+			break;
+		case OperatorCmd::Record_CopyToSD:
+			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			//这里也理解为正常保存
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
+			filePath = GetSavePath(2, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
+			break;
+		case OperatorCmd::Record_CopyToUAndClear:
+			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			//这里也理解为正常保存
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
+			filePath = GetSavePath(3, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
+			OperatorStorage::Ins()->CleanRcd();
+			break;
+		case OperatorCmd::Record_CopyToSdAndClear:
+			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			//这里也理解为正常保存
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
+			filePath = GetSavePath(2, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
+			OperatorStorage::Ins()->CleanRcd();
+			break;
+		}
+		
+		
 	}
 	//void FileSave::InsertSampleResInQueue(Project::SampleInfoRes * spIfRs)
 	//{
@@ -774,6 +833,44 @@ namespace Storage
 //		);
 //		ThrSaveSample->detach();
 //	}
+
+	void FileSave::StartKeepSave()
+	{
+		RunTask = true;
+		SaveFileTask = new std::thread([&]
+		{
+			while (RunTask)
+			{
+				std::unique_lock<std::mutex> unique_lck(Mutex);
+
+				TaskDispatcher.wait(unique_lck);
+				while (!SampleSaveList.empty())
+				{
+					auto itor = SampleSaveList.front();
+					FromSqlite2File(*itor);
+					SampleSaveList.pop();
+				}
+				if (AlarmSaveList)
+				{
+					FromSqlite2File(*AlarmSaveList);
+				}
+
+				if (OperateSaveList)
+				{
+					FromSqlite2OperateFile(*OperateSaveList);
+				}
+
+#ifdef WIN32
+				Sleep(500);
+#else
+				usleep(500000);
+#endif
+				
+			}
+		}
+		);
+		SaveFileTask->detach();
+	}
 
 #ifdef WIN32
 	BOOL get_disk_space(char driver, unsigned long long& allSpace, unsigned long long& freeSpace)
