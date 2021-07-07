@@ -12,6 +12,7 @@ struct RunConfig
 	unsigned short   UIPort;
 	std::string LogCnfPath;
 	bool IsDebug; //是否为debug方式运行
+	bool IsOffLine;		//是否离线模式
 	std::string AlarmPath;
 	std::string SamplePath;
 	std::string OperationPath;
