@@ -40,6 +40,7 @@ using namespace std;
 namespace Storage
 {
 	static FileSave* FileSaveTool = nullptr;
+	
 	//创建路径
 	bool CreateFolder(string strFilePath)
 	{
@@ -190,7 +191,10 @@ namespace Storage
 	{
 		OperateSaveList = res;
 	}
-
+	void FileSave::DoSave()
+	{
+		TaskDispatcher.notify_all();
+	}
 	//重复的文件名则保存为*(1~N).*这样的格式
 	bool FileSave::WriteNoRepeat(const char* fileName,char* buff,unsigned long long len)
 	{

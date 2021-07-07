@@ -49,9 +49,7 @@ namespace Storage
 		//bool ReadySaveAlarm() { return IsAlarmSaveAvaliable; }
 		void InitOperate(Project::SaveFileRes* res);
 		//bool ReadySaveOperate() { return IsOperateSaveAvaliable; }
-		void DoSave(){
-			TaskDispatcher.notify_all();
-		}
+		void DoSave();
 	public://常规可用接口
 		static bool WriteNoRepeat(const char* fileName, char* buff, unsigned long long len);
 		static bool WriteByCover(const char* fileName, char* buff, unsigned long long len);
