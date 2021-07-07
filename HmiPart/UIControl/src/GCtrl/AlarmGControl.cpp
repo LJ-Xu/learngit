@@ -44,19 +44,20 @@ namespace UI
 			AlarmGControl::Ins()->Win()->AddTimeout((double)res->PopTime/1000.0f, AlarmPopWinFunc, res);
 		}
 	}
-	void AlarmSaveFunc(void *data)
+	/*void AlarmSaveFunc(void *data)
 	{
 		if (Storage::FileSave::GetFileSaveTool()->ReadySaveAlarm())
 		{
 			Storage::FileSave::GetFileSaveTool()->SaveAlarm(*(SaveFileRes*)data);
 		}
-	}
+	}*/
 
 	AlarmGControl *AlarmGControl::ctrl_ = nullptr;
 
 	AlarmGControl::AlarmGControl(HMIPage * page) : BaseGControl(page) {
 		model_ = shared_ptr<AlarmGModel>(new AlarmGModel());
 		InitMVCModel(model_);
+		Storage::FileSave::GetFileSaveTool()->InitAlarm(&model_->AlarmGUnit.SaveLst);
 		ctrl_ = this;
 		Storage::FileSave::GetFileSaveTool();
 	}
@@ -168,6 +169,7 @@ namespace UI
 		AlarmGView* view = new AlarmGView(0, 0, 0, 0);
 
 		InitMVCView(view);
+
 	}
 
 	int AlarmGControl::PeekHMIMessage(Message::Msg * msg) {
@@ -492,7 +494,8 @@ namespace UI
 
 		if (model_->AlarmGUnit.IsSave)
 		{
-			Win()->AddTimeout(0, AlarmSaveFunc, &model_->AlarmGUnit.SaveLst);
+			//Win()->AddTimeout(0, AlarmSaveFunc, &model_->AlarmGUnit.SaveLst);
+			Storage::FileSave::GetFileSaveTool()->DoSave();
 		}
 	}
 
