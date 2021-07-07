@@ -7,6 +7,7 @@ namespace UI
 #define SafeTipsWinNum	25002
 #define SafeLoginWinNum 25001
 #define SafeConfirmWinNum 25010
+#define COMMUFailWinNum	  25011
 	enum PremConfirm { OverTime, TriggerOperate, ConfirmOperate, CancelOperate, ConfirmParam};
 	class PermUtility
 	{

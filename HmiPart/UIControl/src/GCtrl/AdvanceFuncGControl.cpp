@@ -161,8 +161,13 @@ namespace UI
 			default:
 				break;
 			}
-		
+
 			//GetCommandDatas[param.CallSystemCommand.CommandName]("", data);
+		}
+		if (name == "PopCommuFailWin")
+		{
+			LocalData::SetBit(SYS_PSB_COMMPORT_FAIL, false);
+			Win()->OpenDialogPage(COMMUFailWinNum);
 		}
 	}
 
