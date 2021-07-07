@@ -9,7 +9,7 @@
 //#include "SampleInfoRes.h"
 //#include "AlarmRecord.h"
 //#include "AlarmInfoRes.h"
-//#include <thread>
+#include <thread>
 #ifdef WIN32
 #include <windows.h> 
 #endif
@@ -24,7 +24,7 @@
 #include <cfgmgr32.h>
 #include "usbiodef.h"
 #endif
-
+#include <condition_variable>
 #pragma comment(lib, "Setupapi.lib")
 namespace Storage
 {
