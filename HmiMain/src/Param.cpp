@@ -5,7 +5,7 @@ static const struct option lopts[] = {
 			{ "filepath",  1, 0, 'f' },
 			{ "ip",  1, 0, 'i' },
 			{ "port",  1, 0, 'p' },
-			{ "on-line",  1, 0, 'b' },
+			{ "on-line",  1, 0, 'c' },
 			{ "help",  1, 0, 'h' },
 			{ nullptr, 0, 0, 0 },
 };
@@ -24,7 +24,7 @@ bool Param::ParseParam(int argc, char **argv)
 {
 	int c;
 	while (1) {
-		c = getopt_long(argc, argv, "f:h:i:p:b:",lopts, nullptr);
+		c = getopt_long(argc, argv, "f:h:i:p:c:",lopts, nullptr);
 		if (c == -1)
 			break;
 		switch (c) {
@@ -37,7 +37,7 @@ bool Param::ParseParam(int argc, char **argv)
 		case 'i':
 			RunEnv::Cnf.SrvIP = std::string(optarg);
 			break;
-		case 'b':
+		case 'c':
 			RunEnv::Cnf.IsOffLine = false;
 			break;
 		case 'h':
