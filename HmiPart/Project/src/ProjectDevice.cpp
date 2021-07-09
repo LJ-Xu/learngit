@@ -320,6 +320,30 @@ namespace Project
 			}
 		}
 	}
+
+	void OfferLineSimInitMessage::Parse(rapidjson::Value & jsonObj)
+	{
+		if (jsonObj.HasMember("DevDbId"))
+			DevDbId = (short)jsonObj["DevDbId"].GetInt();
+		if (jsonObj.HasMember("RegType"))
+			RegType = (short)jsonObj["RegType"].GetInt();
+		if (jsonObj.HasMember("RegMaxCount"))
+			RegMaxCount = jsonObj["RegMaxCount"].GetInt();
+	}
+	void OfferLineSimInitMessage::Parse(std::vector<OfferLineSimInitMessage>& vector, rapidjson::Value & jsonObj)
+	{
+		std::vector<OfferLineSimInitMessage>().swap(vector);
+
+		for (unsigned i = 0; i < jsonObj.Size(); i++)
+		{
+			if (!jsonObj[i].IsNull())
+			{
+				Project::OfferLineSimInitMessage res;
+				res.Parse(jsonObj[i]);
+				vector.push_back(res);
+			}
+		}
+	}
 	void ProjectDevice::InitData(std::string jstr)
 	{
 		Document json;
@@ -334,6 +358,9 @@ namespace Project
 				HMIPort::Parse(Ports, json["Ports"]);
 			if (json.HasMember("Devs") && json["Devs"].IsObject())
 				PrjDev::Parse(Devs, json["Devs"]);
+			if (json.HasMember("OfferLineInitMsgs") && json["OfferLineInitMsgs"].IsArray())
+				OfferLineSimInitMessage::Parse(OfferLineInitMsgs, json["OfferLineInitMsgs"]);
 		}
 	}
+	
 }

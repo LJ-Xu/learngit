@@ -168,12 +168,26 @@ namespace Project
 		static void Parse(std::vector<HMIPort>& vector, rapidjson::Value& jsonObj);
 
 	};
+	struct OfferLineSimInitMessage
+	{
+		short DevDbId;
+		short RegType;
+		int RegMaxCount;
+		template<class Archive>
+		void serialize(Archive & archive)
+		{
+			archive(DevDbId, RegType, RegMaxCount);
+		}
+		void Parse(rapidjson::Value& jsonObj);
+		static void Parse(std::vector<OfferLineSimInitMessage>& vector, rapidjson::Value& jsonObj);
 
+	};
 	struct ProjectDevice
 	{
 		// 每个port下可能有多个接口设备
 		std::vector<HMIPort> Ports;
-		std::vector<PrjDev> Devs; //设备节点 device ID 为索引号         
+		std::vector<PrjDev> Devs; //设备节点 device ID 为索引号       
+		std::vector<OfferLineSimInitMessage> OfferLineInitMsgs;
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
