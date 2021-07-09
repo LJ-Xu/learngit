@@ -200,13 +200,11 @@ namespace UI
 			? model->KeypadConfig.PicKey.size() : model->KeypadConfig.StrStyles.size());
 
 		int status = CurrentStatus;
-		//判断当前状态是否越界
-		if ((size_t)status >= model->KeypadConfig.PicKey.size() || (size_t)status >= model->KeypadConfig.StrStyles.size())
-			return;
 		//获取当前状态图片key值
-		//if (model->KeypadConfig.PicKey.size() == 0 || model->KeypadConfig.StrStyles.size() == 0)
-		//	return;
-		Fl_Image * btnImage = IResourceService::Ins()->GetImage(model->KeypadConfig.PicKey[status].KeyVal);
+		Fl_Image * btnImage = nullptr;
+		if((size_t)status < model->KeypadConfig.PicKey.size())
+			btnImage = IResourceService::Ins()->GetImage(model->KeypadConfig.PicKey[status].KeyVal);
+		//Fl_Image * btnImage = IResourceService::Ins()->GetImage(model->KeypadConfig.PicKey[status].KeyVal);
 		if (!btnImage) {
 			LOG_INFO_("btn Image is NULL\n");
 		}
@@ -217,6 +215,9 @@ namespace UI
 		}
 		//绘制图片框体
 		draw_box();
+		//判断当前状态是否越界
+		if ((size_t)status >= model->KeypadConfig.StrStyles.size())
+			return;
 		//获取当前状态下文字
 		string text = StringUtility::GetDrawString(IResourceService::Ins(),
 			model->KeypadConfig.Txt, status);

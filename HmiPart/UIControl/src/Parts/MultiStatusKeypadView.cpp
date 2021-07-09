@@ -166,14 +166,11 @@ namespace UI
 		//判断当前状态是否越界
 		IResourceService::Ins()->SetRenderStatus(CurrentStatus, model->MultiStatusKeypadConfig.Action.size());
 		int status = CurrentStatus;
-		//判断当前状态是否越界
-		if ((size_t)status >= model->MultiStatusKeypadConfig.Action.size())
-			return;
-
-		//if ((size_t)CurrentStatus >= model->MultiStatusKeypadConfig.Action.size())
-			//return;
+	
 		//获取当前图片
-		Fl_Image *rgbImage = IResourceService::Ins()->GetImage(model->MultiStatusKeypadConfig.Action[status].PicKey.KeyVal);
+		Fl_Image *rgbImage = nullptr;
+		if ((size_t)status < model->MultiStatusKeypadConfig.Action.size())
+			rgbImage = IResourceService::Ins()->GetImage(model->MultiStatusKeypadConfig.Action[status].PicKey.KeyVal);
 		if (!rgbImage) {
 			LOG_INFO_("Multi Status Keypad Pic is NULL\n");
 		}
@@ -185,6 +182,9 @@ namespace UI
 		//绘制图片框体
 		draw_box();
 		//获取当前状态下文字
+			//判断当前状态是否越界
+		if ((size_t)status >= model->MultiStatusKeypadConfig.Action.size())
+			return;
 		string text = StringUtility::GetDrawString(IResourceService::Ins(),
 			model->MultiStatusKeypadConfig.Txt, status);
 		UI::IResourceService::GB2312toUtf8(text);

@@ -134,17 +134,13 @@ namespace UI
 		IResourceService::Ins()->SetRenderStatus(status,
 			model->FuncBtnConfig.PicKey.size() < model->FuncBtnConfig.StrStyles.size()
 			? model->FuncBtnConfig.PicKey.size() : model->FuncBtnConfig.StrStyles.size());		//获取当前状态
-		//判断当前状态是否越界
-		if ((size_t)status > model->FuncBtnConfig.PicKey.size() || (size_t)status > model->FuncBtnConfig.StrStyles.size())
-			return;
-		
+
 		//获取当前状态图片key值
-		if (model->FuncBtnConfig.PicKey.size() == 0 || model->FuncBtnConfig.StrStyles.size() == 0)
-			return;
-		Fl_Image * btnImage = IResourceService::Ins()->GetImage(model->FuncBtnConfig.PicKey[status].KeyVal);
+		Fl_Image * btnImage = nullptr;
+		if ((size_t)status < model->FuncBtnConfig.PicKey.size())
+			btnImage = IResourceService::Ins()->GetImage(model->FuncBtnConfig.PicKey[status].KeyVal);
 		if (!btnImage) {
 			LOG_INFO_("Btn Function Pic is NULL\n");
-			//box(FL_FLAT_BOX);
 		}
 		else {
 			image(btnImage);
@@ -153,12 +149,14 @@ namespace UI
 		}
 		//绘制图片框体
 		draw_box();
+		//判断当前状态是否越界
+		if ((size_t)status >= model->FuncBtnConfig.StrStyles.size())
+			return;
 		//获取当前状态下文字
 		string text = StringUtility::GetDrawString(IResourceService::Ins(),
 			model->FuncBtnConfig.Txt, model->FuncBtnConfig.CurrentStatus);
 		//string text = GetDrawString(model.get());
 		UI::IResourceService::GB2312toUtf8(text);
-
 
 		/*设置字体样式及大小*/
 		fl_font(UI::IResourceService::GetFontIdx(model->FuncBtnConfig.StrStyles[status].Font.Name),
@@ -168,7 +166,6 @@ namespace UI
 		Fl_Color textcolor = fl_rgb_color(RGBColor(model->FuncBtnConfig.StrStyles[status].Colors));
 		//fl_color(textcolor);
 		fl_color(active() ? textcolor : fl_inactive(textcolor));
-
 
 		/*绘制文本*/
 		fl_draw(text.data(), model->FuncBtnConfig.X + model->FuncBtnConfig.OffX,
