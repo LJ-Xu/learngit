@@ -81,26 +81,36 @@ namespace Project
 		}
 	};
 	enum ClockWriteMode :char { ClockWriteContinue, ClockWriteTrigger, ClockWriteCycle };
+	struct WritePlcDevicesSet
+	{
+		int ClockWriteViewFormat;		//时钟写入格式 0:十进制	1:十六进制
+		vector<DataVarId> TimeVids;
+		template<class Archive>
+		void serialize(Archive & archive)
+		{
+			archive(ClockWriteViewFormat, TimeVids);
+		}
+	};
 	struct ClockSet
 	{
 		bool IsbanClockSet;			//是否禁止时钟设置
-		int ClockViewFormat;		//时钟显示格式
+		int ClockViewFormat;		//时钟读取格式 0:十进制	1:十六进制
 		int ClockSource;			//时钟来源 0：HMI内部 1：外部设备
-		DataVarId OutDeviceVarId;	//外部设备寄存器地址
+		vector<DataVarId> OutDeviceVarId;	//外部设备寄存器地址
 		bool IsClockWriteinPlc;		//是否讲HMI时钟写入外部设备
-		ClockWriteMode WriteStyle;				//写入方式
+		ClockWriteMode WriteMode;				//写入方式
 		DataVarId TriReadAddrVarId;	//触发写入模式下用于触发的寄存器
 		int TriPattern;				//触发模式 0:上升沿 1:下降沿
 		int WriteCycle;				//写入周期
 		int CycleUnit;				//写入周期单位 ms
 		DataVarId CycleVarId;		//读取写入周期的寄存器
 		int WriteInPlcDevicesNum;	//同步设备数
-		vector<DataVarId> WriteInPlcDevices;	//同步设备寄存器设置
+		vector<WritePlcDevicesSet> WriteInPlcDevices;	//同步设备寄存器设置
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
-			archive(IsbanClockSet, ClockViewFormat, ClockSource, OutDeviceVarId,
-				IsClockWriteinPlc, WriteStyle, TriReadAddrVarId, TriPattern, WriteCycle,
+			archive(IsbanClockSet, ClockViewFormat, ClockSource, OutDeviceVarId, 
+				IsClockWriteinPlc, WriteMode, TriReadAddrVarId, TriPattern, WriteCycle,
 				CycleUnit, CycleVarId, WriteInPlcDevicesNum, WriteInPlcDevices);
 		}
 	};

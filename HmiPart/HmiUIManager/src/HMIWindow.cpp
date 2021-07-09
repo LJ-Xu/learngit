@@ -464,6 +464,7 @@ namespace UI
 		if (prj_->SysSetting.Exchange.IsReportCurPageNo
 			&& prj_->SysSetting.Exchange.ReportCurPageNoVarId != Project::DataVarId::NullId)
 			UI::UIData::Number(prj_->SysSetting.Exchange.ReportCurPageNoVarId, page->Winno());
+		LocalData::SetNumberData<int>(SYS_PSW_CURRENT_WINNO, page->Winno());
 		page->Open();
 		/*add(page);
 		page->visible();

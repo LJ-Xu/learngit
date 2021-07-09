@@ -93,12 +93,13 @@ namespace Project
 					Clock.ClockViewFormat = system["ClockViewFormat"].GetInt();
 				if (system.HasMember("ClockSource"))
 					Clock.ClockSource = system["ClockSource"].GetInt();
-				if (system.HasMember("OutDeviceVarId") && system["OutDeviceVarId"].IsObject())
-					Clock.OutDeviceVarId.Parse(system["OutDeviceVarId"]);
+				if (system.HasMember("OutDeviceVarId") && system["OutDeviceVarId"].IsArray())
+					Project::DataVarId::Parse(Clock.OutDeviceVarId, system["OutDeviceVarId"]);
+					//Clock.OutDeviceVarId.Parse(system["OutDeviceVarId"]);
 				if (system.HasMember("IsClockWriteinPlc"))
 					Clock.IsClockWriteinPlc = system["IsClockWriteinPlc"].GetBool();
 				if (system.HasMember("WriteStyle"))
-					Clock.WriteStyle = (ClockWriteMode)system["WriteStyle"].GetInt();
+					Clock.WriteMode = (ClockWriteMode)system["WriteStyle"].GetInt();
 				if (system.HasMember("TriReadAddrVarId") && system["TriReadAddrVarId"].IsObject())
 					Clock.TriReadAddrVarId.Parse(system["TriReadAddrVarId"]);
 				if (system.HasMember("TriPattern"))
@@ -111,13 +112,16 @@ namespace Project
 					Clock.CycleVarId.Parse(system["CycleVarId"]);
 				if (system.HasMember("WriteInPlcDevices") && system["WriteInPlcDevices"].IsArray())
 				{
-					vector<DataVarId>().swap(Clock.WriteInPlcDevices);
+					vector<Project::WritePlcDevicesSet>().swap(Clock.WriteInPlcDevices);
 					for (size_t i = 0; i < system["WriteInPlcDevices"].Size(); i++)
 					{
-						DataVarId tmpvarid;
+						Project::WritePlcDevicesSet tmpvarid;
+						if (system["WriteInPlcDevices"][i].HasMember("ClockWriteViewFormat"))
+							tmpvarid.ClockWriteViewFormat = system["WriteInPlcDevices"][i]["ClockWriteViewFormat"].GetInt();
 						if (system["WriteInPlcDevices"][i].HasMember("DeviceVarId") &&
-							system["WriteInPlcDevices"][i]["DeviceVarId"].IsObject())
-							tmpvarid.Parse(system["WriteInPlcDevices"][i]["DeviceVarId"]);
+							system["WriteInPlcDevices"][i]["DeviceVarId"].IsArray())
+							Project::DataVarId::Parse(tmpvarid.TimeVids, system["WriteInPlcDevices"][i]["DeviceVarId"]);
+							//tmpvarid.Parse(system["WriteInPlcDevices"][i]["DeviceVarId"]);
 						Clock.WriteInPlcDevices.push_back(tmpvarid);
 					}
 				}

@@ -86,11 +86,51 @@ namespace UI
 			Win()->SwitchPage(winno);
 	}
 
+	void SysSetGControl::GetSysTime(int mode,vector<int>& time)
+	{
+		if (mode)	//十六进制
+		{
+			for (size_t i = 0; i < 6; i++)
+				time.push_back(LocalData::GetNumberData<int>(SYS_PSW_TIME_DEC+1));
+		}
+		else
+		{
+			for (size_t i = 0; i < 6; i++)
+				time.push_back(LocalData::GetNumberData<int>(SYS_PSW_TIME_HEX + 1));
+		}
+	}
+
+	void SysSetGControl::GetExternalTime(vector<int>& time)
+	{
+		int size = mode_->SysSetGUnit.Clock.OutDeviceVarId.size() > 6 ? 6 : mode_->SysSetGUnit.Clock.OutDeviceVarId.size();
+		for (size_t i = 0; i < size; i++)
+			time.push_back(DataApi::AppNumber<int>(mode_->SysSetGUnit.Clock.OutDeviceVarId[i]));
+	}
+
+	bool SysSetGControl::WriteTimeToPlc()
+	{
+		for (size_t i = 0; i < mode_->SysSetGUnit.Clock.WriteInPlcDevices.size(); i++)
+		{
+			vector<int> time;
+			GetSysTime(mode_->SysSetGUnit.Clock.WriteInPlcDevices[i].ClockWriteViewFormat, time);
+			for (size_t j = 0; j < mode_->SysSetGUnit.Clock.WriteInPlcDevices[i].TimeVids.size(); j++)
+			{
+				if(time.size() > j)
+					DataApi::AppNumber(mode_->SysSetGUnit.Clock.WriteInPlcDevices[i].TimeVids[j], time[j]);
+			}
+		}
+		return true;
+	}
 	void ScreenSaverTimer(void *param)
 	{
 		SysSetGControl *ctrl = (SysSetGControl *)param;
 		if(ctrl->AchieveScreenSaverTime())
 			ctrl->TriggerScreenSaver();	//触发屏保
+	}
+	void HandleSetTimer(void *param)
+	{
+		SysSetGControl *ctrl = (SysSetGControl *)param;
+			ctrl->WriteTimeToPlc();	//写入时间
 	}
 	void SysSetGControl::OnReady()
 	{
@@ -111,6 +151,42 @@ namespace UI
 			LocalData::SetBit(SYS_PSB_BEEP_DISABLE, true);
 		else
 			LocalData::SetBit(SYS_PSB_BEEP_DISABLE, false);
+		/*设置时间*/
+		if (!mode_->SysSetGUnit.Clock.IsbanClockSet)
+		{
+			/*获取时钟*/
+			if (mode_->SysSetGUnit.Clock.ClockSource)	//外部时钟
+			{
+				vector<int> time;
+				GetExternalTime(time);
+				SysCtrlApi::SwitchSysTime(mode_->SysSetGUnit.Clock.ClockSource, mode_->SysSetGUnit.Clock.ClockViewFormat, &time);
+			}
+			else //内部时钟
+				SysCtrlApi::SwitchSysTime(mode_->SysSetGUnit.Clock.ClockSource, mode_->SysSetGUnit.Clock.ClockViewFormat);
+
+			/*写入时钟*/
+			if (mode_->SysSetGUnit.Clock.IsClockWriteinPlc &&
+				mode_->SysSetGUnit.Clock.WriteInPlcDevicesNum != 0)		//写入外部
+			{
+				switch (mode_->SysSetGUnit.Clock.WriteMode)
+				{
+				case Project::ClockWriteMode::ClockWriteContinue:
+					Page()->AddTimeout(500, HandleSetTimer, (void *)this, true);
+					break;
+				case Project::ClockWriteMode::ClockWriteCycle:
+					if (mode_->SysSetGUnit.Clock.CycleVarId != Project::DataVarId::NullId)
+						mode_->SysSetGUnit.Clock.CycleUnit = UI::DataApi::AppNumber<int>(mode_->SysSetGUnit.Clock.CycleVarId);
+					if(mode_->SysSetGUnit.Clock.CycleUnit > 0)
+						Page()->AddTimeout(mode_->SysSetGUnit.Clock.CycleUnit, HandleSetTimer, (void *)this, true);
+					break;
+				case Project::ClockWriteMode::ClockWriteTrigger:
+					preclockflag_ = UI::DataApi::AppBit(mode_->SysSetGUnit.Clock.TriReadAddrVarId);
+					break;
+				default:
+					break;
+				}
+			}
+		}
 		/*设置屏保*/
 		if (prj->SysSetting.Param.WaitTime != 0)
 			Page()->AddTimeout(1000, ScreenSaverTimer, (void *)this, true);
@@ -122,6 +198,23 @@ namespace UI
 		{
 			int winno = UI::UIData::Number<int>(mode_->SysSetGUnit.Exchange.CtrlPageExchangeVarId);
 			Win()->SwitchPage(winno);
+		}
+		if (mode_->SysSetGUnit.Clock.CycleVarId.Cmp(id))
+		{
+			mode_->SysSetGUnit.Clock.CycleUnit = DataApi::AppNumber<int>(mode_->SysSetGUnit.Clock.CycleVarId);
+			if (mode_->SysSetGUnit.Clock.CycleUnit > 0)
+			{
+				Page()->RemoveTimeout(HandleSetTimer, (void *)this);
+				Page()->AddTimeout(mode_->SysSetGUnit.Clock.CycleUnit, ScreenSaverTimer, (void *)this, true);
+			}
+		}
+		if (mode_->SysSetGUnit.Clock.TriReadAddrVarId.Cmp(id))
+		{
+			bool state = DataApi::AppBit(mode_->SysSetGUnit.Clock.TriReadAddrVarId);
+			if ((state == false && preclockflag_ == true && mode_->SysSetGUnit.Clock.TriPattern == 1) ||
+				(state == true && preclockflag_ == false && mode_->SysSetGUnit.Clock.TriPattern == 0))	 //上升沿
+				WriteTimeToPlc();
+			preclockflag_ = state;
 		}
 	}
 	int SysSetGControl::PeekHMIMessage(Message::Msg* msg)
