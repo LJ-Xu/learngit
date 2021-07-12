@@ -11,6 +11,7 @@
 #include <condition_variable>
 #include <thread>
 #include <functional>
+#include <vector>
 class SysCtrlApi
 {
 public:
@@ -18,6 +19,12 @@ public:
 	static void Beep(int time, int hz = 0);
 	static void OpenBacklight();
 	static void CloseBacklight();
+	/*
+	*	src : 0--内部时钟 1--外部时钟
+	*	mode：0--十进制	  1--十六进制
+	*
+	*/
+	static void SwitchSysTime(int src, int mode, std::vector<int>* time = nullptr);
 	//0[关]-100[开]  
 	static void Backlight(int percent);
 	static void SetTime(int h, int m, int s);

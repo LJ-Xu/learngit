@@ -13,6 +13,7 @@
 #endif
 #include <iostream>
 #include <thread>
+
 #define event_name "/dev/input/event1"
 #define brightness_name  "/sys/class/backlight/backlight_gpio/brightness"
 void BeepHelper::Start()
@@ -110,6 +111,9 @@ void SysCtrlApi::CloseBacklight()
 	ret = write(fd, &open, sizeof(open));
 	close(fd);
 #endif
+}
+void SysCtrlApi::SwitchSysTime(int src, int mode, std::vector<int>* time)
+{
 }
 //0[关]-100[开]  
 void SysCtrlApi::Backlight(int percent)
