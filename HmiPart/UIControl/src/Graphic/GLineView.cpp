@@ -149,6 +149,8 @@ namespace UI
 		/*²âÊÔÊ¹ÓÃ*/
 		pointX = (startx + endx) / 2.0;
 		pointY = (starty + endy) / 2.0;
+		GraphicDrawHandle::Ins()->SetBrushStyle(active() ? lineColor : fl_inactive(lineColor),
+			model->LineConfig.Line.Type, model->LineConfig.Line.Weight, model->LineConfig.Line.Alpha);
 		GraphicDrawHandle::Ins()->DrawLine(startx, starty, endx, endy);
 		GraphicDrawHandle::Ins()->EndPopMatrix();
 		//fl_pop_matrix();

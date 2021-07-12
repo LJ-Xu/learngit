@@ -697,6 +697,7 @@ namespace UI
 			int pointy = (int)fl_transform_y(x, y);
 			graphics->FillPie(brush, pointx - size / 2, pointy - size / 2, size, size, 0, 360);
 #else
+			fl_line_style(0,0);
 			fl_pie(x - size / 2, y - size / 2, size, size, 0, 360);
 #endif
 			break;
