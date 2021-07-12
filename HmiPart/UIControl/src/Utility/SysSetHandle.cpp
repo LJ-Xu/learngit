@@ -1,13 +1,13 @@
-#include "ScreenSaver.h"
+#include "SysSetHandle.h"
 #include "System.h"
 namespace UI
 {
-	SysSetGControl *ScreenSaver::sysctrl_ = nullptr;
-	void ScreenSaver::SetIns(SysSetGControl * ctrl)
+	SysSetGControl *SysSetHandle::sysctrl_ = nullptr;
+	void SysSetHandle::SetIns(SysSetGControl * ctrl)
 	{
 		sysctrl_ = ctrl;
 	}
-	bool ScreenSaver::CheckScreenSaver()
+	bool SysSetHandle::CheckScreenSaver()
 	{
 		if (!sysctrl_)
 			return false;
@@ -18,5 +18,9 @@ namespace UI
 			return true;
 		}
 		return false;
+	}
+	void SysSetHandle::ReportCurrentWinno(int winno)
+	{
+		sysctrl_->ReportWinno(winno);
 	}
 }

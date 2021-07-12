@@ -20,7 +20,7 @@
 #include "XJMacro.h"
 #include "System.h"
 #include "Logger.h"
-#include "ScreenSaver.h"
+#include "SysSetHandle.h"
 #include "SysCtrlApi.h"
 #ifdef WIN32
 #include <Windows.h>
@@ -36,7 +36,7 @@ namespace UI
 	{
 		mode_ = shared_ptr<SysSetGModel>(new SysSetGModel());
 		InitMVCModel(mode_);
-		ScreenSaver::SetIns(this);
+		SysSetHandle::SetIns(this);
 	}
 
 	void SysSetGControl::CreateView() {	}
@@ -120,6 +120,13 @@ namespace UI
 			}
 		}
 		return true;
+	}
+	void SysSetGControl::ReportWinno(int winno)
+	{
+		if (mode_->SysSetGUnit.Exchange.IsReportCurPageNo
+			&&mode_->SysSetGUnit.Exchange.ReportCurPageNoVarId != Project::DataVarId::NullId)
+			UI::UIData::Number(mode_->SysSetGUnit.Exchange.ReportCurPageNoVarId, winno);
+		LocalData::SetNumberData<int>(SYS_PSW_CURRENT_WINNO, winno);
 	}
 	void ScreenSaverTimer(void *param)
 	{

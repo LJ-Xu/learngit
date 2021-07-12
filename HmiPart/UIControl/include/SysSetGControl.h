@@ -41,6 +41,9 @@ namespace UI
 		void GetSysTime(int mode, vector<int>& time);
 		void GetExternalTime(vector<int>& time);
 		bool WriteTimeToPlc();
+
+
+		void ReportWinno(int winno);
 	private:
 		shared_ptr<SysSetGModel> mode_;
 		bool preclockflag_;
