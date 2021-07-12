@@ -91,6 +91,21 @@ namespace Project
 				DDWordEndian, DDWordStringEndian);
 		}
 	};
+	struct OfferLineSimInitMessage
+	{
+		short RegType;
+		short RegDataType;
+		int RegMaxCount;
+		template<class Archive>
+		void serialize(Archive & archive)
+		{
+			archive(RegType, RegDataType, RegMaxCount);
+		}
+		void Parse(rapidjson::Value& jsonObj);
+		static void Parse(std::vector<OfferLineSimInitMessage>& vector, rapidjson::Value& jsonObj);
+
+	};
+
 	// 端口对应的设备接口
 	struct PrjDev
 	{
@@ -100,12 +115,14 @@ namespace Project
 		short StaNo;//默认设备站号  
 		string ProtocolId;//设备的通信协议Id
 		PrjCommParam CommParam;//该接口的通信参数
+		std::vector<OfferLineSimInitMessage> OfferLineInitMsgs;
 		HighLowByteSet HighLowByte;
 		vector<char> DevParamData;//私有配置参数param data信息 通过该信息和ProtocolId可以转换为具体结构
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
-			archive(DevName, PortID, Point, StaNo, ProtocolId, CommParam, HighLowByte, DevParamData);
+			archive(DevName, PortID, Point, StaNo, ProtocolId, CommParam,
+				/*OfferLineInitMsgs, */HighLowByte, DevParamData);
 		}
 		void Parse(rapidjson::Value& jsonObj);
 		static void Parse(std::vector<PrjDev>& vector, rapidjson::Value& jsonObj);
@@ -168,26 +185,11 @@ namespace Project
 		static void Parse(std::vector<HMIPort>& vector, rapidjson::Value& jsonObj);
 
 	};
-	struct OfferLineSimInitMessage
-	{
-		short DevDbId;
-		short RegType;
-		int RegMaxCount;
-		template<class Archive>
-		void serialize(Archive & archive)
-		{
-			archive(DevDbId, RegType, RegMaxCount);
-		}
-		void Parse(rapidjson::Value& jsonObj);
-		static void Parse(std::vector<OfferLineSimInitMessage>& vector, rapidjson::Value& jsonObj);
-
-	};
 	struct ProjectDevice
 	{
 		// 每个port下可能有多个接口设备
 		std::vector<HMIPort> Ports;
 		std::vector<PrjDev> Devs; //设备节点 device ID 为索引号       
-		std::vector<OfferLineSimInitMessage> OfferLineInitMsgs;
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
