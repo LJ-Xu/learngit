@@ -200,6 +200,9 @@ namespace UI
 				//	model->PolyLineConfig.Points[num - 1].Y + model->PolyLineConfig.OffY, 1);
 			}
 		}
+		GraphicDrawHandle::Ins()->SetBrushStyle(active() ? linecolor : fl_inactive(linecolor),
+			model->PolyLineConfig.LineStyle.Type, model->PolyLineConfig.LineStyle.Weight,
+			model->PolyLineConfig.LineStyle.Alpha);
 		GraphicDrawHandle::Ins()->DrawPolyLine(model->PolyLineConfig.Mode, points);
 
 		GraphicDrawHandle::Ins()->EndPopMatrix();

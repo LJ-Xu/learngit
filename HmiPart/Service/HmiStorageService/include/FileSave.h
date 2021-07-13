@@ -9,7 +9,7 @@
 //#include "SampleInfoRes.h"
 //#include "AlarmRecord.h"
 //#include "AlarmInfoRes.h"
-//#include <thread>
+#include <thread>
 #ifdef WIN32
 #include <windows.h> 
 #endif
@@ -24,7 +24,7 @@
 #include <cfgmgr32.h>
 #include "usbiodef.h"
 #endif
-
+#include <condition_variable>
 #pragma comment(lib, "Setupapi.lib")
 namespace Storage
 {
@@ -57,9 +57,7 @@ namespace Storage
 		//bool ReadySaveAlarm() { return IsAlarmSaveAvaliable; }
 		void InitOperate(Project::SaveFileRes* res);
 		//bool ReadySaveOperate() { return IsOperateSaveAvaliable; }
-		void DoSave(){
-			TaskDispatcher.notify_all();
-		}
+		void DoSave()
 		//检测文件是否已存在，同名文件已存在时返回true,否则false
 		bool IsFileExact(std::string filePath);
 		//加载csv文件的内容

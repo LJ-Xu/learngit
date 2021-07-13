@@ -40,6 +40,7 @@ using namespace std;
 namespace Storage
 {
 	static FileSave* FileSaveTool = nullptr;
+	
 	//´´½¨Â·¾¶
 	bool FileSave::CreateFolder(string strFilePath)
 	{
@@ -189,6 +190,10 @@ namespace Storage
 	void FileSave::InitOperate(Project::SaveFileRes * res)
 	{
 		OperateSaveList = res;
+	}
+	void FileSave::DoSave()
+	{
+		TaskDispatcher.notify_all();
 	}
 
 	bool FileSave::IsFileExact(std::string filePath)

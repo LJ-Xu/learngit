@@ -32,8 +32,7 @@ namespace UI
 		if (CurrentFlash == 0)
 			return;
 		IResourceService::Ins()->SetRenderStatus(CurrentStatus, model->MPLampconfig.Action.size());
-		if (CurrentStatus >= (int)model->MPLampconfig.Action.size() )
-			return;
+
 		if (CurrentStatus == -1)	//错误状态
 		{
 			Fl_Image *lampImage = IResourceService::Ins()->GetImage(model->MPLampconfig.ErrState.StatusKey.KeyVal);
@@ -67,7 +66,9 @@ namespace UI
 		}
 		else
 		{
-			Fl_Image *lampImage = IResourceService::Ins()->GetImage(model->MPLampconfig.Action[CurrentStatus].StatusKey.KeyVal);
+			Fl_Image *lampImage = nullptr;
+			if (CurrentStatus < (int)model->MPLampconfig.Action.size())
+				lampImage = IResourceService::Ins()->GetImage(model->MPLampconfig.Action[CurrentStatus].StatusKey.KeyVal);
 			if (!lampImage) {
 				LOG_INFO("Multi Pilot Lamp Stats%d Pic is NULL\n", CurrentStatus);
 			}
@@ -78,6 +79,8 @@ namespace UI
 			}
 			//绘制图片框体
 			draw_box();
+			if (CurrentStatus >= (int)model->MPLampconfig.Action.size())
+				return;
 			//获取当前状态下文字
 			string text = StringUtility::GetDrawString(IResourceService::Ins(),
 				model->MPLampconfig.Text, CurrentStatus);

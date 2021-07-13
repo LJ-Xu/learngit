@@ -138,22 +138,23 @@ namespace UI
 			LOG_INFO_("Key Btn Pic is NULL\n");
 
 		//绘制图片框体
-		box(FL_FLAT_BOX);
+		//box(FL_FLAT_BOX);
 		draw_box();
+
+		//判断当前状态是否越界
+		if ((size_t)status >= model->KeyBtnConfig.StrStyles.size())
+			return;
 		//获取当前状态下文字
 		string text = StringUtility::GetDrawString(IResourceService::Ins(),
 			model->KeyBtnConfig.Txt, status);
 		UI::IResourceService::GB2312toUtf8(text);
-		//判断当前状态是否越界
-		if ((size_t)status >= model->KeyBtnConfig.StrStyles.size())
-			return;
+
 		/*设置字体样式及大小*/
 		fl_font(UI::IResourceService::GetFontIdx(model->KeyBtnConfig.StrStyles[status].Font.Name),
 			model->KeyBtnConfig.StrStyles[status].Font.Size);
 
 		/*设置字体颜色*/
 		Fl_Color textcolor = fl_rgb_color(RGBColor(model->KeyBtnConfig.StrStyles[status].Colors));
-		//fl_color(textcolor);
 		fl_color(active() ? textcolor : fl_inactive(textcolor));
 
 		/*绘制文本*/

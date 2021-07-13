@@ -172,13 +172,10 @@ namespace UI
 		IResourceService::Ins()->SetRenderStatus(status,
 			model->TransferRecipeConfig.PicKey.size() < model->TransferRecipeConfig.StrStyles.size()
 			? model->TransferRecipeConfig.PicKey.size(): model->TransferRecipeConfig.StrStyles.size());
-		//判断当前状态是否越界
-		if ((size_t)status >= model->TransferRecipeConfig.PicKey.size() || (size_t)status >= model->TransferRecipeConfig.StrStyles.size())
-			return;
 		//获取当前状态图片key值
-		//if (model->TransferRecipeConfig.PicKey.size() == 0 || model->TransferRecipeConfig.StrStyles.size() == 0)
-		//	return;
-		Fl_Image * btnImage = IResourceService::Ins()->GetImage(model->TransferRecipeConfig.PicKey[status].KeyVal);
+		Fl_Image * btnImage = nullptr;
+		if ((size_t)status < model->TransferRecipeConfig.PicKey.size())
+			btnImage = IResourceService::Ins()->GetImage(model->TransferRecipeConfig.PicKey[status].KeyVal);
 		if (!btnImage) {
 			LOG_INFO_("RecipeBtn image is NULL\n");
 		}
@@ -189,6 +186,9 @@ namespace UI
 		}
 		//绘制图片框体
 		draw_box();
+		//判断当前状态是否越界
+		if ((size_t)status >= model->TransferRecipeConfig.StrStyles.size())
+			return;
 		//获取当前状态下文字
 		string text = StringUtility::GetDrawString(IResourceService::Ins(),
 			model->TransferRecipeConfig.Txt, status);

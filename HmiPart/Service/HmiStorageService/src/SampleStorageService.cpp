@@ -68,7 +68,7 @@ namespace Storage
 		char sql[SQLCMDLEN] = { 0 };
 		snprintf(sql, sizeof(sql), "INSERT INTO Sample VALUES(%d, %lld, %d, %d, %lld)",
 			record.Channel, record.Data, record.Type.Cls, record.Type.Type, record.Date);
-		printf("InsertSampleRecord:value = %d.\n",record.Data);
+		//printf("InsertSampleRecord:value = %d.\n",record.Data);
 		return ExecuteSql(sql);
 	}
 
@@ -84,12 +84,12 @@ namespace Storage
 			//SelectSample("SELECT  * FROM Sample WHERE ( ChannelNo & 0 = 0 and ChannelNo & 0 = 0 )ORDER BY Date LIMIT 1");
 			snprintf(sql, sizeof(sql), "UPDATE Sample SET ChannelNo = %d,ChannelData = %lld, DataType = %d, Format = %d, Date = %lld WHERE ( ChannelNo  = %d and Date= (SELECT  Date FROM Sample WHERE  ChannelNo = %d ORDER BY Date LIMIT 1))", record.Channel,
 				record.Data, record.Type.Cls, record.Type.Type, record.Date, record.Channel, record.Channel);
-			printf("0InsertSampleRecord:value = %lld.\n",record.Data);
+			//printf("0InsertSampleRecord:value = %lld.\n",record.Data);
 
 			//snprintf(sql, sizeof(sql), "UPDATE Sample SET ChannelNo = %d,ChannelData = %lld, DataType = %d, Format = %d, Date = %lld WHERE ( ChannelNo & %d = %d and ChannelNo & %d = %d and (Date IN (SELECT MIN(DATE) FROM Sample)) ;UPDATE fileDb.Sample SET ChannelNo = %d, ChannelData = %lld, DataType = %d, Format = %d, Date = %lld WHERE ( ChannelNo & %d = %d and ChannelNo & %d = %d and (Date IN (SELECT MIN(DATE) FROM Sample));", record.Channel,record.Data, record.Type.Cls, record.Type.Type, record.Date,gName, gName, gNo, gNo, record.Channel,record.Data, record.Type.Cls, record.Type.Type, record.Date, gName, gName, gNo, gNo);
 			//(Date IN (SELECT MIN(DATE) FROM Sample))
 			int ret = ExecuteSql(sql);
-			printf("0InsertSampleRecord:retvalue = %d.\n",ret);
+			//printf("0InsertSampleRecord:retvalue = %d.\n",ret);
 			return ret;
 		}
 		else

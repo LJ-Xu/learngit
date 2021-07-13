@@ -220,16 +220,18 @@ namespace UI
 		}
 		else	//获取通道数据
 		{
-			int channelNo = atoi(&projectname.back());
+			int diaplayno = atoi(&projectname.back());
+			int channelNo = GetChannelNo(diaplayno);
+			//channelNo = GetChannelNo(channelNo);
 			for (size_t i = 0; i < ChannelData.size(); i++)
 			{
 				if (ChannelData[i].empty() || (size_t)row >= ChannelData[i].size())
-					return text;
+					continue;
 				if (ChannelData[i][row].Channel == channelNo)
 				{
 					for (size_t j = 0; j < model->ReportConfig.ReportChannelLst.size(); j++)
 					{
-						if (model->ReportConfig.ReportChannelLst[j].Channel == channelNo)
+						if (model->ReportConfig.ReportChannelLst[j].Channel == diaplayno)
 						{
 							Utility::NumberFmtInfo fmt;
 							fmt.IsFillZero = model->ReportConfig.ReportChannelLst[j].IsLead;

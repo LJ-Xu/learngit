@@ -206,7 +206,7 @@ namespace UI
 				if (mode_->TrendXYConfig.TriggerType == 0)	//位寄存器
 				{
 					bool status = UIDataService::Ins().GetBit(mode_->TrendXYConfig.TriggerTypeVar);
-					if (mode_->TrendXYConfig.ConditionBit == 0)	//下降沿触发
+					if (mode_->TrendXYConfig.ConditionBit == 1)	//下降沿触发
 					{
 						if (preSampleStatus_ == true && status == false)
 							GetSampleData();		//采样数据

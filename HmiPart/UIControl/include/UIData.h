@@ -30,6 +30,9 @@ namespace UI
 		static void Bit(Project::DataVarId& vid, bool val);
 	};
 
+#define SYS_PSW_TIME_DEC				TP_SPSW,16				//十进制系统时间
+#define SYS_PSW_TIME_HEX				TP_SPSW,23				//十六进制系统时间
+#define SYS_PSW_CURRENT_WINNO			TP_SPSW,30				//当前窗口号
 #define SYS_PSW_INPUTKEY_LOWERLMT		TP_SPSW,100				//输入键盘显示下限（占用4寄存器，8btye）
 #define SYS_PSW_INPUTKEY_UPPERERLMT		TP_SPSW,104				//输入键盘显示上限（占用4寄存器，8btye）
 #define SYS_PSW_INPUTKEY_CURVAL			TP_SPSW,108,16*2		//输入键盘实时显示内容
@@ -47,6 +50,7 @@ namespace UI
 #define SYS_FULLKEY_PAGENUM				25007			//全拼键盘编号
 
 #define SYS_PSB_HASLOGINUSER			TP_SPSB,0		//用户权限登录标志位
+#define SYS_PSB_COMMPORT_FAIL			TP_SPSB,23		//通讯失败
 #define SYS_PSB_DATASAMPLE_NOTICE		TP_SPSB,100		//采集数据更新通知
 #define SYS_PSB_ALARMRECORD_NOTICE		TP_SPSB,101		//报警数据更新通知
 #define SYS_PSB_LOGINUSER				TP_SPSB,102		//login动作标志位

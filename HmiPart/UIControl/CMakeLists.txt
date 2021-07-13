@@ -264,7 +264,7 @@ add_library(UIControl STATIC
 	src/Utility/PermUtility.cpp
 	src/Utility/ViewShowUtility.cpp
 	src/Utility/SysSetApi.cpp
-	src/Utility/ScreenSaver.cpp
+	src/Utility/SysSetHandle.cpp
 
 
 

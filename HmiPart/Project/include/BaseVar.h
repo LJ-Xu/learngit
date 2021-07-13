@@ -19,7 +19,7 @@ namespace Project
 	{
 		VarState_OK, VarState_WAITING
 	};
-	enum VarDataType : char
+	enum VarDataType : short
 	{
 		DT_Bit = 1,
 		DT_Byte = 2,
@@ -28,6 +28,9 @@ namespace Project
 		DT_DDWORD = 16,
 		DT_String = 32,
 		DT_Bytes = 64,
+		DT_WORDS = 128,
+		DT_DWORDS = 256,
+		DT_DDWORDS = 512,
 	};
 	enum VarNumberType : char
 	{

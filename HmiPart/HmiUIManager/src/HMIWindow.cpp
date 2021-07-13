@@ -42,7 +42,7 @@
 #include <X11/extensions/XTest.h>
 #endif
 #include "UIData.h"
-#include "ScreenSaver.h"
+#include "SysSetHandle.h"
 #include "System.h"
 unsigned long long ScreenSaverClickTime = 0;
 namespace UI
@@ -119,7 +119,7 @@ namespace UI
 		case FL_KEYBOARD:
 		case FL_MOUSEWHEEL:
 		{
-			if (ScreenSaver::CheckScreenSaver())
+			if (SysSetHandle::CheckScreenSaver())
 				return 1;
 			ScreenSaverClickTime = System::GetCurrentTimeStampMs();			//¼ÇÂ¼Ê±¼ä
 			break;
@@ -461,10 +461,8 @@ namespace UI
 	}
 	void HMIWindow::ShowPage(HMIPage* page)
 	{
-		if (prj_->SysSetting.Exchange.IsReportCurPageNo
-			&& prj_->SysSetting.Exchange.ReportCurPageNoVarId != Project::DataVarId::NullId)
-			UI::UIData::Number(prj_->SysSetting.Exchange.ReportCurPageNoVarId, page->Winno());
 		page->Open();
+		SysSetHandle::ReportCurrentWinno(page->Winno());
 		/*add(page);
 		page->visible();
 		page->show();

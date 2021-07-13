@@ -41,6 +41,145 @@ namespace Project
 			StopBits = jsonObj["StopBits"].GetInt();
 		
 	}
+	void InitModbusEndian(HighLowByteSet* param)
+	{
+		//16位数值
+		switch (param->WordEndian)
+		{
+		case 1:
+			//BA	
+			param->WordEndian = 0;
+			break;
+		default:
+			//AB		
+			param->WordEndian = CHANGE_BYTE;
+			break;
+		}
+		//16位字符
+		switch (param->WordStringEndian)
+		{
+		case 1:
+			//BA
+			param->WordStringEndian = 0;
+			break;
+		default:
+			//AB		
+			param->WordStringEndian = CHANGE_BYTE;
+			break;
+		}
+		//32位数值
+		switch (param->DWordEndian)
+		{
+		case 1:
+			//BADC
+			param->DWordEndian = 0;
+			break;
+		case 2:
+			//CDAB
+			param->DWordEndian = CHANGE_BYTE | CHANGE_WORD;
+			break;
+		case 3:
+			//DCBA
+			param->DWordEndian = CHANGE_WORD;
+			break;
+		default:
+			//ABCD
+			param->DWordEndian = CHANGE_BYTE;
+			break;
+		}
+		//32位字符
+		switch (param->DWordStringEndian)
+		{
+		case 1:
+			//BADC
+			param->DWordStringEndian = 0;
+			break;
+		case 2:
+			//CDAB
+			param->DWordStringEndian = CHANGE_BYTE | CHANGE_WORD;
+			break;
+		case 3:
+			//DCBA
+			param->DWordStringEndian = CHANGE_WORD;
+			break;
+		default:
+			//ABCD
+			param->DWordStringEndian = CHANGE_BYTE;
+			break;
+		}
+		//64位数值
+		switch (param->DDWordEndian)
+		{
+		case 1:
+			//BADCFEGH
+			param->DDWordEndian = 0;
+			break;
+		case 2:
+			//CDABGHEF
+			param->DDWordEndian = CHANGE_BYTE | CHANGE_WORD;
+			break;
+		case 3:
+			//DCBAHGFE
+			param->DDWordEndian = CHANGE_WORD;
+			break;
+		case 4:
+			//EFGHABCD
+			param->DDWordEndian = CHANGE_BYTE | CHANGE_DWORD;
+			break;
+		case 5:
+			//FEHGBADC
+			param->DDWordEndian = CHANGE_DWORD;
+			break;
+		case 6:
+			//GHEFCDAB
+			param->DDWordEndian = CHANGE_BYTE | CHANGE_WORD | CHANGE_DWORD;
+			break;
+		case 7:
+			//HGFEDCBA
+			param->DDWordEndian = CHANGE_WORD | CHANGE_DWORD;
+			break;
+		default:
+			//ABCDEFGH
+			param->DDWordEndian = CHANGE_BYTE;
+			break;
+		}
+		//64位字符
+		switch (param->DDWordStringEndian)
+		{
+		case 1:
+			//BADCFEGH
+			param->DDWordStringEndian = 0;
+			break;
+		case 2:
+			//CDABGHEF
+			param->DDWordStringEndian = CHANGE_BYTE | CHANGE_WORD;
+			break;
+		case 3:
+			//DCBAHGFE
+			param->DDWordStringEndian = CHANGE_WORD;
+			break;
+		case 4:
+			//EFGHABCD
+			param->DDWordStringEndian = CHANGE_BYTE | CHANGE_DWORD;
+			break;
+		case 5:
+			//FEHGBADC
+			param->DDWordStringEndian = CHANGE_DWORD;
+			break;
+		case 6:
+			//GHEFCDAB
+			param->DDWordStringEndian = CHANGE_BYTE | CHANGE_WORD | CHANGE_DWORD;
+			break;
+		case 7:
+			//HGFEDCBA
+			param->DDWordStringEndian = CHANGE_WORD | CHANGE_DWORD;
+			break;
+		default:
+			//ABCDEFGH
+			param->DDWordStringEndian = CHANGE_BYTE;
+			break;
+		}
+	}
 	void PrjDev::Parse(rapidjson::Value& jsonObj)
 	{
 		if (jsonObj.HasMember("DevName") && !jsonObj["DevName"].IsNull())
@@ -53,6 +192,8 @@ namespace Project
 			StaNo = jsonObj["StaNo"].GetInt();
 		if (jsonObj.HasMember("ProtocolId") && !jsonObj["ProtocolId"].IsNull())
 			ProtocolId = jsonObj["ProtocolId"].GetString();
+		if (jsonObj.HasMember("OfferLineSimInitMessages") && jsonObj["OfferLineSimInitMessages"].IsArray())
+			OfferLineSimInitMessage::Parse(OfferLineInitMsgs, jsonObj["OfferLineSimInitMessages"]);
 		if (jsonObj.HasMember("CommParam") && jsonObj["CommParam"].IsObject())
 		{
 			if (jsonObj["CommParam"].HasMember("BasicParam") && jsonObj["CommParam"]["BasicParam"].IsObject())
@@ -63,6 +204,27 @@ namespace Project
 				CommParam.UartParam.Parse(jsonObj["CommParam"]["UartParam"]);
 			if (jsonObj["CommParam"].HasMember("seniorSetPara") && jsonObj["CommParam"]["seniorSetPara"].IsObject())
 			{
+				if (jsonObj["CommParam"]["seniorSetPara"].HasMember("AdvanceSetUp") &&
+					jsonObj["CommParam"]["seniorSetPara"]["AdvanceSetUp"].IsObject())
+				{
+					Value &advanceset = jsonObj["CommParam"]["seniorSetPara"]["AdvanceSetUp"];
+					if (advanceset.HasMember("HighLowByte") && advanceset["HighLowByte"].IsObject())
+					{
+						if (advanceset["HighLowByte"].HasMember("SixteenInteger"))
+							HighLowByte.WordEndian = advanceset["HighLowByte"]["SixteenInteger"].GetInt();
+						if (advanceset["HighLowByte"].HasMember("SixteenChars"))
+							HighLowByte.WordStringEndian = advanceset["HighLowByte"]["SixteenChars"].GetInt();
+						if (advanceset["HighLowByte"].HasMember("ThirtytwoInteger"))
+							HighLowByte.DWordEndian = advanceset["HighLowByte"]["ThirtytwoInteger"].GetInt();
+						if (advanceset["HighLowByte"].HasMember("ThirtytwoChars"))
+							HighLowByte.DWordStringEndian = advanceset["HighLowByte"]["ThirtytwoChars"].GetInt();
+						if (advanceset["HighLowByte"].HasMember("SixtyfourInteger"))
+							HighLowByte.DDWordEndian = advanceset["HighLowByte"]["SixtyfourInteger"].GetInt();
+						if (advanceset["HighLowByte"].HasMember("SixtyfourChars"))
+							HighLowByte.DDWordStringEndian = advanceset["HighLowByte"]["SixtyfourChars"].GetInt();
+						InitModbusEndian(&HighLowByte);
+					}
+				}
 				if (jsonObj["CommParam"]["seniorSetPara"].HasMember("AdvanceConfig") &&
 					!jsonObj["CommParam"]["seniorSetPara"]["AdvanceConfig"].IsNull())
 				{
@@ -160,6 +322,30 @@ namespace Project
 			}
 		}
 	}
+
+	void OfferLineSimInitMessage::Parse(rapidjson::Value & jsonObj)
+	{
+		if (jsonObj.HasMember("Regdatatype"))
+			RegDataType = (short)jsonObj["Regdatatype"].GetInt();
+		if (jsonObj.HasMember("RegType"))
+			RegType = (short)jsonObj["RegType"].GetInt();
+		if (jsonObj.HasMember("RegMaxCount"))
+			RegMaxCount = jsonObj["RegMaxCount"].GetInt();
+	}
+	void OfferLineSimInitMessage::Parse(std::vector<OfferLineSimInitMessage>& vector, rapidjson::Value & jsonObj)
+	{
+		std::vector<OfferLineSimInitMessage>().swap(vector);
+
+		for (unsigned i = 0; i < jsonObj.Size(); i++)
+		{
+			if (!jsonObj[i].IsNull())
+			{
+				Project::OfferLineSimInitMessage res;
+				res.Parse(jsonObj[i]);
+				vector.push_back(res);
+			}
+		}
+	}
 	void ProjectDevice::InitData(std::string jstr)
 	{
 		Document json;
@@ -174,6 +360,8 @@ namespace Project
 				HMIPort::Parse(Ports, json["Ports"]);
 			if (json.HasMember("Devs") && json["Devs"].IsObject())
 				PrjDev::Parse(Devs, json["Devs"]);
+			
 		}
 	}
+	
 }

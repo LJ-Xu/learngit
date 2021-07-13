@@ -36,8 +36,17 @@ namespace UI
 		bool AchieveScreenSaverTime();
 		void TriggerScreenSaver();
 		void CloseScreenSaver(int mode = 0, int winno = 0);
+
+		/*mode: 时钟格式 0-十进制 1-十六进制*/
+		void GetSysTime(int mode, vector<int>& time);
+		void GetExternalTime(vector<int>& time);
+		bool WriteTimeToPlc();
+
+
+		void ReportWinno(int winno);
 	private:
 		shared_ptr<SysSetGModel> mode_;
+		bool preclockflag_;
 	};
 }
 

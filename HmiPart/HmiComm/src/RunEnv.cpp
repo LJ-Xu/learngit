@@ -15,7 +15,7 @@ bool RunEnv::Init()
 	Cnf.SrvIP = "127.0.0.1";
 	Cnf.SrvPort = 8800;
 	Cnf.UIPort = 9000;
-	Cnf.IsOffLine = true;
+	Cnf.IsOffLine = false;
 	if (rc < 0)
 	{
 		//ÅäÖÃÎÄ¼þ´íÎó
