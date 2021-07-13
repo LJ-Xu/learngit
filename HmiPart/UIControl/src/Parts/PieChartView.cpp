@@ -190,7 +190,9 @@ namespace UI
 			fl_color(centerColor);
 			// 绘制内部圆心
 			//fl_pie(model->PieChartUnit.X + (model->PieChartUnit.Width - model->PieChartUnit.CenterRadius) / 2,model->PieChartUnit.Y + (model->PieChartUnit.Height - model->PieChartUnit.CenterRadius) /2 ,model->PieChartUnit.CenterRadius, model->PieChartUnit.CenterRadius, 0, 360);
-			fl_pie(model->PieChartUnit.X + model->PieChartUnit.Width / 2-model->PieChartUnit.CenterRadius,model->PieChartUnit.Y + model->PieChartUnit.Height / 2 - model->PieChartUnit.CenterRadius,model->PieChartUnit.CenterRadius*2, model->PieChartUnit.CenterRadius*2,
+			int piewidth = model->PieChartUnit.Width*model->PieChartUnit.CenterRadiusPecent/2;
+			int pieheight = model->PieChartUnit.Height*model->PieChartUnit.CenterRadiusPecent / 2;
+			fl_pie(model->PieChartUnit.X+ model->PieChartUnit.Width/2-piewidth,model->PieChartUnit.Y+ model->PieChartUnit.Height/2- pieheight, piewidth*2, pieheight*2,
 				wSAng,
 				wEAng);
 
@@ -200,9 +202,9 @@ namespace UI
 				model->PieChartUnit.CenterEdgeColor.B);
 			fl_color(centerEdgeColor);
 			// 绘制内部边框
-			fl_arc(model->PieChartUnit.X + model->PieChartUnit.Width / 2 - model->PieChartUnit.CenterRadius,
-				model->PieChartUnit.Y + model->PieChartUnit.Height / 2 - model->PieChartUnit.CenterRadius,
-				model->PieChartUnit.CenterRadius * 2, model->PieChartUnit.CenterRadius * 2,
+			fl_arc(model->PieChartUnit.X + model->PieChartUnit.Width / 2 - piewidth,
+				model->PieChartUnit.Y + model->PieChartUnit.Height / 2 - pieheight,
+				piewidth*2, pieheight*2,
 				wSAng,
 				wEAng);
 
@@ -212,10 +214,10 @@ namespace UI
 				double edArc = wEAng * M_PI / 180;
 				int centerX = model->PieChartUnit.X + model->PieChartUnit.Width / 2;
 				int centerY = model->PieChartUnit.Y + model->PieChartUnit.Height / 2;
-				int sy = centerY - sin(stArc)*model->PieChartUnit.CenterRadius;
-				int sx = centerX + cos(stArc)*model->PieChartUnit.CenterRadius;
-				int ey = centerY - sin(edArc)*model->PieChartUnit.CenterRadius;
-				int ex = centerX + cos(edArc)*model->PieChartUnit.CenterRadius;
+				int sy = centerY - sin(stArc)*pieheight;
+				int sx = centerX + cos(stArc)*piewidth;
+				int ey = centerY - sin(edArc)*pieheight;
+				int ex = centerX + cos(edArc)*piewidth;
 
 				fl_line(centerX, centerY, sx, sy);
 				fl_line(centerX, centerY, ex, ey);

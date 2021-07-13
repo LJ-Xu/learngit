@@ -53,8 +53,8 @@ namespace Project
 		void serialize(Archive & archive) {
 			archive(ReadVars, ChannelNum, Dir, StartAngle, EndAngle, Alpha,
 					CenterRadius, CenterColor, CenterEdgeColor, BorderColor, 
-					Channels, Mode, Bct, TextStyle,
-					VOffX, VOffY, Perm, Width, Height, X, Y, IsEnable, CtrlName, IsRecord, CtrlName);
+					Channels, Mode, Bct, TextStyle, CenterRadiusPecent,
+					VOffX, VOffY, Perm, Width, Height, X, Y, IsEnable, CtrlName, IsRecord);
 		}
 
 	public:
@@ -65,6 +65,7 @@ namespace Project
 		int EndAngle = 360;			// 终止角度
 		int Alpha = 255;			// 透明度
 		float CenterRadius = 0;		// 内部圆心半径
+		float CenterRadiusPecent;	// 圆心半径比例	
 		Color CenterColor;			// 圆心内部颜色
 		Color CenterEdgeColor;		// 圆心边框颜色		
 		Color BorderColor;			// 饼图边框颜色	
