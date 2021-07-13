@@ -23,8 +23,8 @@ namespace Storage
 		void Destroy();
 		// 创建操作录入内存数据库
 		int Create();
+		
 	public:
-
 		// 插入采集记录
 		int InsertSampleRecord(const SampleRecord & record);
 		// 插入采集记录

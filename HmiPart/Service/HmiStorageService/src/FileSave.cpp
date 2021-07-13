@@ -33,7 +33,7 @@
 //#include "../../DataService/include/DataApi.h"
 #include "UIData.h"
 #include "DataApi.h"
-#define LINELENGTH 128
+#define LINELENGTH 512
 #define OPERLINELENGTH  200
 #define EXECTASKINTHREAD 1
 using namespace std;
@@ -41,7 +41,7 @@ namespace Storage
 {
 	static FileSave* FileSaveTool = nullptr;
 	//创建路径
-	bool CreateFolder(string strFilePath)
+	bool FileSave::CreateFolder(string strFilePath)
 	{
 #ifdef WIN32
 		string strpathsymbol = "\\";
@@ -125,7 +125,7 @@ namespace Storage
 		return true;
 	}
 	//获取文件夹下文件名
-	void getFile(const string& path, string file)
+	void FileSave::GetFile(const string& path, string file)
 	{
 #ifdef WIN32
 		//文件句柄
@@ -142,7 +142,7 @@ namespace Storage
 				if ((fileinfo.attrib &  _A_SUBDIR))
 				{
 					if (strcmp(fileinfo.name, ".") != 0 && strcmp(fileinfo.name, "..") != 0)
-						getFile(p.assign(path).append("\\").append(fileinfo.name), file);
+						GetFile(p.assign(path).append("\\").append(fileinfo.name), file);
 				}
 				else
 				{
@@ -191,8 +191,73 @@ namespace Storage
 		OperateSaveList = res;
 	}
 
+	bool FileSave::IsFileExact(std::string filePath)
+	{
+		return std::ifstream(filePath).good();
+	}
+
+	bool FileSave::LoadCSVData(FileType type,Project::SaveFileRes* res)
+	{
+		std::vector<BYTE>  listcol;
+		std::vector<std::string> strlinelist;
+		std::string csvfilename = GetSavePath(res->StoreLocation, res->StorePosVarId, res->FileNameMode, res->FileName, res->FileNameDataVar);
+		string::size_type size = csvfilename.find_last_of(".");
+		string tempFN = csvfilename.substr(size + 1);
+		if (tempFN.compare("csv"))
+		{
+			return false;
+		}
+		std::ifstream ifcsv;
+		ifcsv.open(csvfilename.c_str());
+		if (!ifcsv.is_open())
+		{
+			printf("LoadCSVData from %s false!\n", csvfilename.c_str());
+			return false;
+		}
+		int indexline = 0;
+		char bufline[LINELENGTH] = {0};
+		while (ifcsv.getline(bufline, LINELENGTH))
+		{
+			if (indexline == 0)
+			{
+				switch (type)
+				{
+				case FileType::FileType_Alarm:
+					listcol = ParseAlarmCol(std::string(bufline));
+					break;
+				case FileType::FileType_Sample:
+					listcol = ParseSampleCol(std::string(bufline));
+					break;
+				case FileType::FileType_Operate:
+					break;
+				}
+			}
+			else
+				strlinelist.push_back(std::string(bufline));
+			++indexline;
+		}
+		switch (type)
+		{
+		case FileType::FileType_Alarm:
+			
+			break;
+		case FileType::FileType_Sample:
+			//SampleStorageService::Ins()->LoadHistory(listcol, strlinelist);
+			break;
+		case FileType::FileType_Operate:
+			break;
+		}
+		return false;
+	}
+
+	bool FileSave::Export2SampleBin(vector<SampleRecord>& records)
+	{
+		//
+		return false;
+	}
+
 	//重复的文件名则保存为*(1~N).*这样的格式
-	bool FileSave::WriteNoRepeat(const char* fileName,char* buff,unsigned long long len)
+	bool FileSave::WriteAddOn(const char* fileName,char* buff,unsigned long long len)
 	{
 		FileSave::GetFileSaveTool()->ExecTimingList();
 		string strFileName(fileName);
@@ -203,15 +268,15 @@ namespace Storage
 		int newIdx = 1;
 		char idxCh[10];
 		string tempFN = strFileName;
-		while (ifstream(tempFN).good())
+		/*while (ifstream(tempFN).good())
 		{
 			tempFN = strFileName;
 			string::size_type size = strFileName.find_last_of(".");
 			snprintf(idxCh, 10, "(%d)", newIdx++);
 			tempFN.insert(size, idxCh);
-		}
+		}*/
 		ofstream ofs;
-		ofs.open(tempFN.c_str(), ios::out | ios::binary);
+		ofs.open(tempFN.c_str(), ios::out | ios::binary|ios::app);
 		if (!ofs.is_open())
 			return false;
 		ofs.write(buff, len);
@@ -239,6 +304,7 @@ namespace Storage
 		IsSampleSaveAvaliable = true;
 		IsAlarmSaveAvaliable = true;
 		ReadTimingFilesFromIni();
+		StartKeepSave();
 		//StartKeepSave();
 	}
 	FileSave * FileSave::GetFileSaveTool()
@@ -253,7 +319,7 @@ namespace Storage
 			return 0;
 		if (savenorepeat)
 		{
-			if (!WriteNoRepeat(filePath.c_str(), buf, len))
+			if (!WriteAddOn(filePath.c_str(), buf, len))
 				return 0;
 		}
 		else
@@ -380,54 +446,58 @@ namespace Storage
 		}
 		if (!DoSave)
 			return;
-		string filePath;
 		vector<Storage::SampleRecord> vecSpRec;
 		vecSpRec = SampleStorage::Ins()->QueryByGroupByTime(spIfRs.SimpleGroupName, spIfRs.SimpleGroupNo, spIfRs.SampleStoreInfo.StoreFileInfo.SavedFlag);
 		if (!vecSpRec.size())
 			return;
+
+		string filePath = GetSavePath(spIfRs.SampleStoreInfo.StoreFileInfo.StoreLocation, spIfRs.SampleStoreInfo.StoreFileInfo.StorePosVarId, spIfRs.SampleStoreInfo.StoreFileInfo.FileNameMode, spIfRs.SampleStoreInfo.StoreFileInfo.FileName, spIfRs.SampleStoreInfo.StoreFileInfo.FileNameDataVar);
 		unsigned long long buflen = (vecSpRec.size() + 1)*LINELENGTH;
 		char* buff = new char[buflen];
 		memset(buff, 0, buflen);
 		char* tembuf = buff;
 		int id = 1;
-		for (char* chfmt = spIfRs.SampleStoreInfo.StoreFileInfo.SaveFormat; *chfmt != 0; ++chfmt)
+		if (!IsFileExact(filePath))
 		{
-			switch (*chfmt)
+			for (char* chfmt = spIfRs.SampleStoreInfo.StoreFileInfo.SaveFormat; *chfmt != 0; ++chfmt)
 			{
-			case 0://
-				break;
-			case 1://序号
-				memcpy(tembuf, "序号,", 5);
-				tembuf += 5;
-				break;
-			case 2://日期
-				memcpy(tembuf, "日期,", 5);
-				tembuf += 5;
-				break;
-			case 3://时间
-				memcpy(tembuf, "时间,", 5);
-				tembuf += 5;
-				break;
-			case 4://地址
-				memcpy(tembuf, "地址,", 5);
-				tembuf += 5;
-				break;
-			case 5://采集数据
-				memcpy(tembuf, "采集数据,", 9);
-				tembuf += 9;
-				break;
+				switch (*chfmt)
+				{
+				case 0://
+					break;
+				case 1://序号
+					memcpy(tembuf, "序号,", 5);
+					tembuf += 5;
+					break;
+				case 2://日期
+					memcpy(tembuf, "日期,", 5);
+					tembuf += 5;
+					break;
+				case 3://时间
+					memcpy(tembuf, "时间,", 5);
+					tembuf += 5;
+					break;
+				case 4://地址
+					memcpy(tembuf, "地址,", 5);
+					tembuf += 5;
+					break;
+				case 5://采集数据
+					memcpy(tembuf, "采集数据,", 9);
+					tembuf += 9;
+					break;
+				}
 			}
+			//--tembuf;
+			memcpy(tembuf, "\n", 2);
+			tembuf += 2;
 		}
-		//--tembuf;
-		memcpy(tembuf, "\n", 2);
-		tembuf += 2;
 		for (size_t i = 0; i < vecSpRec.size(); ++i)
 		{
 			string strDT = System::GetDateTimeToString(vecSpRec[i].Date/1000);
 			for (char* chfmt = spIfRs.SampleStoreInfo.StoreFileInfo.SaveFormat; *chfmt != 0; ++chfmt)
 			{
-				int channel = GetRealChannelIdFromRecord(vecSpRec[i].Channel, spIfRs.SimpleGroupName, spIfRs.SimpleGroupNo) - 1;
-				if (channel > spIfRs.SimpleChannelLst.size())
+				int channel = GetRealChannelIdFromRecord(vecSpRec[i].Channel) - 1;
+				if (channel > spIfRs.SimpleChannelLst.size()-1)
 				{
 					LOG_ERROR("Wrong Channel Id:%d in FileSave::FromSqlite2File(&).", vecSpRec[i].Channel);
 					continue;
@@ -437,13 +507,14 @@ namespace Storage
 				{
 				case 1://序号
 					tembuf += CopyIntegerToChar(tembuf, id++);
+					//tembuf += CopyIntegerToChar(tembuf, vecSpRec[i].Channel);
 					memset(tembuf++, 44, 1);
 					//sprintf(buff, "%s%d,",buff, i+1);
 					break;
 				case 2://日期
 				{
 					//string str = System::GetDateToString(vecSpRec[i].Date);
-					string str = strDT.substr(0,strDT.find_first_of(" ") - 1);
+					string str = strDT.substr(0,strDT.find_first_of(" "));
 					memcpy(tembuf, str.c_str(), str.size());
 					tembuf += str.size();
 					memset(tembuf++, 44, 1);
@@ -463,7 +534,8 @@ namespace Storage
 					memset(tembuf++, 44, 1);
 					break;
 				case 5://采集数据
-					std::string str = UI::DataApi::AppString(vid);
+					//std::string str = UI::DataApi::AppString(vid);
+					std::string str = std::to_string(vecSpRec[i].Data);
 					if (0< str.size()&&(str.size() <= sizeof(DWORD)))
 					{
 						int* dgt = new int();
@@ -485,8 +557,7 @@ namespace Storage
 			memcpy(tembuf, "\n", 2);
 			tembuf += 2;
 		}
-		filePath = GetSavePath(spIfRs.SampleStoreInfo.StoreFileInfo.StoreLocation, spIfRs.SampleStoreInfo.StoreFileInfo.StorePosVarId, spIfRs.SampleStoreInfo.StoreFileInfo.FileNameMode, spIfRs.SampleStoreInfo.StoreFileInfo.FileName, spIfRs.SampleStoreInfo.StoreFileInfo.FileNameDataVar, buflen, spIfRs.SampleStoreInfo.StoreFileInfo.StoreSpaceLack);
-		if (LocalExportFile(filePath, buff, buflen, spIfRs.SampleStoreInfo.StoreFileInfo.IsFileSaveTimeLimit?spIfRs.SampleStoreInfo.StoreFileInfo.SaveDays:0))
+		if (LocalExportFile(filePath, buff, (int)tembuf-(int)buff, spIfRs.SampleStoreInfo.StoreFileInfo.IsFileSaveTimeLimit?spIfRs.SampleStoreInfo.StoreFileInfo.SaveDays:0))
 		{
 			spIfRs.SampleStoreInfo.StoreFileInfo.SavedCount += vecSpRec.size();
 			spIfRs.SampleStoreInfo.StoreFileInfo.SavedFlag = vecSpRec[vecSpRec.size() - 1].Date;
@@ -495,7 +566,6 @@ namespace Storage
 	}
 	void FileSave::FromSqlite2File(Project::SaveFileRes & res)
 	{
-		string filePath;
 		vector<Storage::AlarmRecord> vecAlmRec;
 		vecAlmRec = AlarmStorage::Ins()->QueryAll();
 		if (!vecAlmRec.size())
@@ -505,45 +575,49 @@ namespace Storage
 		memset(buff, 0, buflen);
 		char* tembuf = buff;
 		//int id = 1;
-		for (char* chfmt = res.SaveFormat; *chfmt != 0; ++chfmt)
+		string filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar);
+		if (!IsFileExact(filePath))
 		{
-			switch (*chfmt)
+			for (char* chfmt = res.SaveFormat; *chfmt != 0; ++chfmt)
 			{
-			case 0://
-				break;
-			case 1://序号
-				memcpy(tembuf, "序号,", 5);
-				tembuf += 5;
-				break;
-			case 2://报警触发日期
-				memcpy(tembuf, "报警触发日期,", 13);
-				tembuf += 13;
-				break;
-			case 3://报警触发时间
-				memcpy(tembuf, "报警触发时间,", 13);
-				tembuf += 13;
-				break;
-			case 4://报警信息
-				memcpy(tembuf, "报警信息,", 9);
-				tembuf += 9;
-				break;
-			case 5://报警次数
-				memcpy(tembuf, "报警次数,", 9);
-				tembuf += 9;
-				break;
-			case 6://确认时间
-				memcpy(tembuf, "确认时间,", 9);
-				tembuf += 9;
-				break;
-			case 7://报警恢复时间
-				memcpy(tembuf, "报警恢复时间,", 13);
-				tembuf += 13;
-				break;
+				switch (*chfmt)
+				{
+				case 0://
+					break;
+				case 1://序号
+					memcpy(tembuf, "序号,", 5);
+					tembuf += 5;
+					break;
+				case 2://报警触发日期
+					memcpy(tembuf, "报警触发日期,", 13);
+					tembuf += 13;
+					break;
+				case 3://报警触发时间
+					memcpy(tembuf, "报警触发时间,", 13);
+					tembuf += 13;
+					break;
+				case 4://报警信息
+					memcpy(tembuf, "报警信息,", 9);
+					tembuf += 9;
+					break;
+				case 5://报警次数
+					memcpy(tembuf, "报警次数,", 9);
+					tembuf += 9;
+					break;
+				case 6://确认时间
+					memcpy(tembuf, "确认时间,", 9);
+					tembuf += 9;
+					break;
+				case 7://报警恢复时间
+					memcpy(tembuf, "报警恢复时间,", 13);
+					tembuf += 13;
+					break;
+				}
 			}
+			//--tembuf;
+			memcpy(tembuf, "\n", 2);
+			tembuf += 2;
 		}
-		//--tembuf;
-		memcpy(tembuf, "\n", 2);
-		tembuf += 2;
 		for (size_t i = 0; i < vecAlmRec.size(); ++i)
 		{
 			string strSDT = System::GetDateTimeToString(vecAlmRec[i].StartTick / 1000);
@@ -623,7 +697,6 @@ namespace Storage
 			memcpy(tembuf, "\n", 2);
 			tembuf += 2;
 		}
-		filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen,res.StoreSpaceLack);
 		LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0,0);
 
 		//IsAlarmNewTrig = false;
@@ -642,32 +715,35 @@ namespace Storage
 		char* buff = new char[buflen];
 		memset(buff, 0, buflen);
 		char* tembuf = buff;
-		//int id = 1;
-		memcpy(tembuf, "记录编号,",9);
-		tembuf += 9;
-		memcpy(tembuf, "操作日期,", 9);
-		tembuf += 9;
-		memcpy(tembuf, "操作时间,", 9);
-		tembuf += 9;
-		memcpy(tembuf, "用户名称,", 9);
-		tembuf += 9;
-		memcpy(tembuf, "操作权限,", 9);
-		tembuf += 9;
-		memcpy(tembuf, "操作窗口,", 9);
-		tembuf += 9;
-		memcpy(tembuf, "控件名称,", 9);
-		tembuf += 9;
-		memcpy(tembuf, "对象描述,", 9);
-		tembuf += 9;
-		memcpy(tembuf, "操作动作,", 9);
-		tembuf += 9;
-		memcpy(tembuf, "操作地址,", 9);
-		tembuf += 9;
-		memcpy(tembuf, "操作信息,", 9);
-		tembuf += 9;
-		//--tembuf;
-		memcpy(tembuf, "\n", 2);
-		tembuf += 2;
+		filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar);
+		if (!IsFileExact(filePath))
+		{
+			memcpy(tembuf, "记录编号,", 9);
+			tembuf += 9;
+			memcpy(tembuf, "操作日期,", 9);
+			tembuf += 9;
+			memcpy(tembuf, "操作时间,", 9);
+			tembuf += 9;
+			memcpy(tembuf, "用户名称,", 9);
+			tembuf += 9;
+			memcpy(tembuf, "操作权限,", 9);
+			tembuf += 9;
+			memcpy(tembuf, "操作窗口,", 9);
+			tembuf += 9;
+			memcpy(tembuf, "控件名称,", 9);
+			tembuf += 9;
+			memcpy(tembuf, "对象描述,", 9);
+			tembuf += 9;
+			memcpy(tembuf, "操作动作,", 9);
+			tembuf += 9;
+			memcpy(tembuf, "操作地址,", 9);
+			tembuf += 9;
+			memcpy(tembuf, "操作信息,", 9);
+			tembuf += 9;
+			//--tembuf;
+			memcpy(tembuf, "\n", 2);
+			tembuf += 2;
+		}
 		for (size_t i = 0; i < vecOptRec.size(); ++i)
 		{
 			tembuf += CopyIntegerToChar(tembuf, vecOptRec[i].ID);
@@ -720,12 +796,10 @@ namespace Storage
 		switch (res.SaveCmd)
 		{
 		case OperatorCmd::Record_Save:
-			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
 			//正常保存就覆盖写入
 			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
 			break;
 		case OperatorCmd::Record_Enable:
-			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
 			//这里也理解为正常保存
 			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
 		case OperatorCmd::Record_Unable:
@@ -733,109 +807,43 @@ namespace Storage
 			break;
 		case OperatorCmd::Record_Clear:
 			//先保存到文件再清除数据库内容(非重复写入)
-			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
 			//这里也理解为正常保存
 			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
 			OperatorStorage::Ins()->CleanRcd();
 			break;
 		case OperatorCmd::Record_CopyToU:
-			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
 			//这里也理解为正常保存
 			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
-			filePath = GetSavePath(3, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			filePath = GetSavePath(3, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar);
 			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
 			break;
 		case OperatorCmd::Record_CopyToSD:
-			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
 			//这里也理解为正常保存
 			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
-			filePath = GetSavePath(2, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			filePath = GetSavePath(2, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar);
 			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 0);
 			break;
 		case OperatorCmd::Record_CopyToUAndClear:
-			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
 			//这里也理解为正常保存
 			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
-			filePath = GetSavePath(3, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			filePath = GetSavePath(3, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar);
 			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
 			OperatorStorage::Ins()->CleanRcd();
 			break;
 		case OperatorCmd::Record_CopyToSdAndClear:
-			filePath = GetSavePath(res.StoreLocation, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
 			//这里也理解为正常保存
 			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
-			filePath = GetSavePath(2, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar, buflen, res.StoreSpaceLack);
+			filePath = GetSavePath(2, res.StorePosVarId, res.FileNameMode, res.FileName, res.FileNameDataVar);
 			LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0, 1);
 			OperatorStorage::Ins()->CleanRcd();
 			break;
 		}
-		
-		
 	}
-	//void FileSave::InsertSampleResInQueue(Project::SampleInfoRes * spIfRs)
-	//{
-	//	if (!spIfRs->SampleStoreInfo.IsSave)
-	//	{
-	//		return;
-	//	}
-	//	SampleSaveList.push(spIfRs);
-	//	SampleEventLock.notify_all();
-	//}
-//	void FileSave::TryTrigSave(Project::SaveFileRes * res)
-//	{
-//		IsAlarmNewTrig = true;
-//		AlarmEventLock.notify_all();
-//		if (IsAlarmSaveThrRun)
-//			return;
-//		IsAlarmSaveThrRun = true;
-//		AlarmSaveConfig = res;
-//		////???????
-//		ThrSaveAlarm = new std::thread([&]
-//		{
-//			while (IsAlarmSaveThrRun)
-//			{
-//				if(IsAlarmNewTrig)
-//					FromSqlite2File(*AlarmSaveConfig);
-//				std::unique_lock<std::mutex> lck(MutexAlarm);
-//				AlarmEventLock.wait(lck);
-////#ifdef WIN32
-////				Sleep(1500);
-////#else
-////                usleep(1500000);
-////#endif
-//			}
-//		}
-//		);
-//		ThrSaveAlarm->detach();
-//	}
-//	void FileSave::StartKeepSave()
-//	{
-//		IsSampleSaveThrRun = true;
-//		ThrSaveSample = new std::thread([&]
-//		{
-//			while (IsSampleSaveThrRun)
-//			{
-////#ifdef WIN32
-////				Sleep(500);
-////#else
-////                usleep(500000);
-////#endif
-//				while (!SampleSaveList.empty())
-//				{
-//					auto itor = SampleSaveList.front();
-//					FromSqlite2File(*itor);
-//					SampleSaveList.pop();
-//				}
-//				std::unique_lock<std::mutex> lck(MutexSample);
-//				SampleEventLock.wait(lck);
-//			}
-//		}
-//		);
-//		ThrSaveSample->detach();
-//	}
 
 	void FileSave::StartKeepSave()
 	{
+		if (RunTask)
+			return;
 		RunTask = true;
 		SaveFileTask = new std::thread([&]
 		{
@@ -859,12 +867,12 @@ namespace Storage
 				{
 					FromSqlite2OperateFile(*OperateSaveList);
 				}
-
+/*
 #ifdef WIN32
 				Sleep(500);
 #else
 				usleep(500000);
-#endif
+#endif*/
 				
 			}
 		}
@@ -930,7 +938,7 @@ namespace Storage
 			return 1;
 	}
 
-	int FileSave::GetRealChannelIdFromRecord(int channel, int group, int no)
+	int FileSave::GetRealChannelIdFromRecord(int channel)
 	{
 		//return channel ^ (group << 16 | no << 24);
 		return channel & 0xff;
@@ -979,7 +987,7 @@ namespace Storage
 		pos += CopyIntegerToChar(dst + pos, var->Addr);
 		return pos;
 	}
-	string FileSave::GetSavePath(int pathMode, Project::DataVarId & addrPath, int nameMode, string fileName, Project::DataVarId & addrName,int needlen, int StoreSpaceLack)
+	string FileSave::GetSavePath(int pathMode, Project::DataVarId & addrPath, int nameMode, string fileName, Project::DataVarId & addrName)
 	{
 #ifdef WIN32
 		std::string filePath = System::GetCurDir().append("\\");
@@ -1038,6 +1046,7 @@ namespace Storage
 			break;
 		}
 #endif
+#if 0
 		int spacemark = IsDiskEnoughSpace(needlen,StoreSpaceLack);
 		if (spacemark==1)
 		{
@@ -1081,7 +1090,118 @@ namespace Storage
 			}
 			filePath.append(".csv");
 		}
-		
+#else
+		switch (nameMode)
+		{
+		case 1://固定文件名
+			filePath.append(fileName);
+			break;
+		case 2://日期指定
+			filePath.append(System::GetCurrentDateToString());
+			break;
+		case 3://动态文件名
+			if (NULL_VID_VALUE != addrName.Vid)
+			{
+				filePath.append(UI::DataApi::AppString(addrName));
+				//filePath.append("\\");
+			}
+			break;
+		}
+		filePath.append(".csv");
+#endif
+
 		return filePath;
+	}
+	std::vector<BYTE> FileSave::ParseSampleCol(const std::string& strheadline)
+	{
+		std::vector<BYTE> vecret;
+		vecret.resize(5);
+		std::string tempstr = strheadline;
+		int idx = 0;
+		while (idx < 5)
+		{
+			int uidxh = tempstr.find_first_of(',');
+			std::string pice;
+			if (uidxh == -1)
+			{
+				pice = tempstr;
+			}
+			else if (uidxh != 0)
+			{
+				pice = tempstr.substr(0, uidxh);
+			}
+			if (!pice.compare("序号"))
+			{
+				vecret[idx++] = 1;
+			}
+			else if (!pice.compare("日期"))
+			{
+				vecret[idx++] = 2;
+			}
+			else if (!pice.compare("时间"))
+			{
+				vecret[idx++] = 3;
+			}
+			else if (!pice.compare("地址"))
+			{
+				vecret[idx++] = 4;
+			}
+			else if (!pice.compare("采集数据"))
+			{
+				vecret[idx++] = 5;
+			}
+			if (uidxh == -1)
+				break;
+			tempstr = tempstr.substr(uidxh + 1);
+		}
+		return vecret;
+	}
+	std::vector<BYTE> FileSave::ParseAlarmCol(const std::string& strheadline)
+	{
+		std::vector<BYTE> vecret;
+		vecret.resize(7);
+		std::string tempstr = strheadline;
+		int idx = 0;
+		while (idx < 7)
+		{
+			int uidxh = tempstr.find_first_of(',');
+			std::string pice;
+			if (uidxh == -1)
+				pice = tempstr;
+			else if (uidxh != 0)
+				pice = tempstr.substr(0, uidxh);
+			if (!pice.compare("序号"))
+			{
+				vecret[idx++] = 1;
+			}
+			else if (!pice.compare("报警触发日期"))
+			{
+				vecret[idx++] = 2;
+			}
+			else if (!pice.compare("报警触发时间"))
+			{
+				vecret[idx++] = 3;
+			}
+			else if (!pice.compare("报警信息"))
+			{
+				vecret[idx++] = 4;
+			}
+			else if (!pice.compare("报警次数"))
+			{
+				vecret[idx++] = 5;
+			}
+			else if (!pice.compare("确认时间"))
+			{
+				vecret[idx++] = 6;
+			}
+			else if (!pice.compare("报警恢复时间"))
+			{
+				vecret[idx++] = 7;
+			}
+			if (uidxh == -1)
+				break;
+			tempstr = tempstr.substr(uidxh + 1);
+		}
+		return vecret;
 	}
 }
