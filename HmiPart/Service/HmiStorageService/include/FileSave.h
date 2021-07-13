@@ -57,7 +57,7 @@ namespace Storage
 		//bool ReadySaveAlarm() { return IsAlarmSaveAvaliable; }
 		void InitOperate(Project::SaveFileRes* res);
 		//bool ReadySaveOperate() { return IsOperateSaveAvaliable; }
-		void DoSave()
+		void DoSave();
 		//检测文件是否已存在，同名文件已存在时返回true,否则false
 		bool IsFileExact(std::string filePath);
 		//加载csv文件的内容
