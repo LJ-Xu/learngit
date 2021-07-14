@@ -69,14 +69,18 @@ namespace UI
 		row_height_all((model->AlarmDisConfig.Height - model->AlarmDisConfig.TitleHeight - model->AlarmDisConfig.EachColTitleHeight) / model->AlarmDisConfig.PageNum);
 		//ÉèÖÃÁÐ¿í
 		if (IResourceService::Ins()->IsRenderMode())
+		{
 			Fl::scrollbar_size(0);
+			vscrollbar->hide();
+			hscrollbar->hide();
+		}
 		else
 			Fl::scrollbar_size(16);
 		int allcolwidth = 0;
 		for (unsigned i = 0; i < model->AlarmDisConfig.AlarmOptions.size(); i++)
 		{
 			//col_width(i, model->AlarmDisConfig.AlarmOptions[i].ColWidth);
-			if (i == model->AlarmDisConfig.AlarmOptions.size() - 1)
+			if ((i == model->AlarmDisConfig.AlarmOptions.size() - 1) && model->AlarmDisConfig.Width - Fl::scrollbar_size() - allcolwidth > 0)
 				col_width(i, (model->AlarmDisConfig.Width - Fl::scrollbar_size() - allcolwidth));
 			else
 				col_width(i, model->AlarmDisConfig.AlarmOptions[i].ColWidth);
@@ -471,9 +475,18 @@ namespace UI
 			
 			GraphicDrawHandle::PushClip(X, Y + model->AlarmDisConfig.TitleHeight, W, H - model->AlarmDisConfig.TitleHeight);
 			{
+				if (X <= model->AlarmDisConfig.X + model->AlarmDisConfig.OffX)
+				{
+					gridstartx_ = X;//X - model->AlarmDisConfig.X - model->AlarmDisConfig.OffX;
+					gridstartcol_ = C;
+				}
+				if (IResourceService::Ins()->IsRenderMode() || !hscrollbar->visible())
+				{
+					gridstartx_ = model->AlarmDisConfig.X + model->AlarmDisConfig.OffX;
+					gridstartcol_ = 0;
+				}
 				// BG COLOR
 				fl_color(active() ? cell_bgcolor_ : fl_inactive(cell_bgcolor_));
-				//fl_color(cell_bgcolor_);
 				fl_rectf(X - 2, Y + model->AlarmDisConfig.TitleHeight - 2, W + 6, H - model->AlarmDisConfig.TitleHeight + 6);
 				fl_color(active() ? fl_rgb_color(RGBColor(model->AlarmDisConfig.FrameStyle.Color)) : 
 					fl_inactive(fl_rgb_color(RGBColor(model->AlarmDisConfig.FrameStyle.Color))));
@@ -611,10 +624,15 @@ namespace UI
 						model->AlarmDisConfig.X + model->AlarmDisConfig.OffX + model->AlarmDisConfig.Width - model->AlarmDisConfig.FrameStyle.Weight - Fl::scrollbar_size(),
 						model->AlarmDisConfig.Y + model->AlarmDisConfig.OffY + model->AlarmDisConfig.TitleHeight + model->AlarmDisConfig.EachColTitleHeight);
 
+				int vscrollsize, hscrollsize;
+				vscrollsize = vscrollbar->visible() ? 16 : 0;
+				hscrollsize = hscrollbar->visible() ? 16 : 0;
+				if (IResourceService::Ins()->IsRenderMode())
+					vscrollsize = 0;
 				GraphicDrawHandle::PushClip(model->AlarmDisConfig.X + model->AlarmDisConfig.OffX + model->AlarmDisConfig.FrameStyle.Weight / 2,
 					model->AlarmDisConfig.Y + model->AlarmDisConfig.OffY + model->AlarmDisConfig.TitleHeight,
-					model->AlarmDisConfig.Width - Fl::scrollbar_size() - model->AlarmDisConfig.FrameStyle.Weight,
-					model->AlarmDisConfig.Height - model->AlarmDisConfig.TitleHeight);
+					model->AlarmDisConfig.Width - vscrollsize - model->AlarmDisConfig.FrameStyle.Weight,
+					model->AlarmDisConfig.Height - hscrollsize - model->AlarmDisConfig.TitleHeight);
 				{
 					for (int rowY = gridstarty_ + col_header_height(); rowY < model->AlarmDisConfig.Height;)
 					{
@@ -624,13 +642,11 @@ namespace UI
 							model->AlarmDisConfig.Y + model->AlarmDisConfig.OffY + rowY);
 						rowY += row_height(0);
 					}
-					for (int rowX = 0, i = 0; i < cols() - 1;i++)
+					for (int rowX = gridstartx_, i = gridstartcol_; i < cols();i++)
 					{
+						fl_line(rowX, model->AlarmDisConfig.Y + model->AlarmDisConfig.OffY,
+							rowX, model->AlarmDisConfig.Y + model->AlarmDisConfig.OffY + model->AlarmDisConfig.Height);
 						rowX += col_width(i);
-						fl_line(model->AlarmDisConfig.X + model->AlarmDisConfig.OffX + rowX,
-							model->AlarmDisConfig.Y + model->AlarmDisConfig.OffY,
-							model->AlarmDisConfig.X + model->AlarmDisConfig.OffX + rowX,
-							model->AlarmDisConfig.Y + model->AlarmDisConfig.OffY + model->AlarmDisConfig.Height);
 					}
 				}
 				fl_pop_clip();

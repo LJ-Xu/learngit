@@ -122,7 +122,7 @@ namespace Project
 		void serialize(Archive & archive)
 		{
 			archive(DevName, PortID, Point, StaNo, ProtocolId, CommParam,
-				/*OfferLineInitMsgs, */HighLowByte, DevParamData);
+				OfferLineInitMsgs, HighLowByte, DevParamData);
 		}
 		void Parse(rapidjson::Value& jsonObj);
 		static void Parse(std::vector<PrjDev>& vector, rapidjson::Value& jsonObj);

@@ -39,6 +39,8 @@ namespace UI
 		Fl_Color fontColor_;			//列表文字颜色
 		int fontAlign_;					//列表文字对齐方式
 		int gridstarty_ = 0;
+		int gridstartx_ = 0;
+		int gridstartcol_ = 0;
 
 		Fl_Color cell_bgcolor_;			//列表背景颜色
 		Fl_Color triggerTextColor_;		//报警触发时文字颜色
