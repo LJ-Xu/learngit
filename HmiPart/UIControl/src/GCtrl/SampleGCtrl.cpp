@@ -38,6 +38,15 @@ namespace UI
 		InitMVCModel(model_);
 		ctrl_ = this;
 		Storage::FileSave::GetFileSaveTool();
+		/*for (size_t i = 0; i < model_->SampleGUnit.InfoLst.size(); ++i)
+		{
+			if (model_->SampleGUnit.InfoLst[i].SampleStoreInfo.IsSave)
+			{
+				Storage::FileSave::GetFileSaveTool()->LoadCSVData(Storage::FileType_Sample, &model_->SampleGUnit.InfoLst[i].SampleStoreInfo.StoreFileInfo);
+			}
+			
+		}*/
+		
 	}
 
 	SampleGCtrl::~SampleGCtrl()

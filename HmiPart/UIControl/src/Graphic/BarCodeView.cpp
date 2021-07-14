@@ -20,7 +20,7 @@ namespace UI
 	{
 		BuffValue[0] = 48;
 		BuffLen = QRBUFFLEN;
-		memset(BuffValue, 0, BuffLen);
+		memset(BuffValue+1, 0, BuffLen-1);
 	}
 
 

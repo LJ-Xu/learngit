@@ -16,7 +16,11 @@
 #include <iostream>
 #include "sqlite3.h"
 #include "RunEnv.h"
-#define SQLCMDLEN 512
+#define SQLCMDLEN 512//sql语句最大长度
+#define BINCOUNT 10//每个sql能拥有的BIN文件数
+#define BINSIZE  1000//每个bin文件的最大条目数
+#define MAXCOUNT 10000//内存数据库最大条目数
+#define FLUSHTIMEOUT 600000//两次FLUSH到Bin文件行为的最大间隔时间
 using namespace std;
 
 namespace Storage

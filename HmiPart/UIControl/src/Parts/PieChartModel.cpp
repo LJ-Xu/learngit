@@ -96,7 +96,8 @@ namespace UI
 			}
 			// 圆心内部颜色
 			if (json.HasMember("Rad")) {
-				PieChartUnit.CenterRadius = (float)PieChartUnit.Width * json["Rad"].GetInt() / 200;
+				PieChartUnit.CenterRadiusPecent = (float)json["Rad"].GetInt() / 100.0f;
+				PieChartUnit.CenterRadius = (float)PieChartUnit.Width * PieChartUnit.CenterRadiusPecent/2;
 			}
 			// 圆心内部颜色
 			if (json.HasMember("InnerColor")) {

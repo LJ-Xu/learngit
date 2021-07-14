@@ -1,5 +1,5 @@
 #include "SampleStorageService.h"
-
+#include "FileSave.h"
 #include <string.h>
 namespace Storage
 {
@@ -122,12 +122,13 @@ namespace Storage
 		int ret = 0;
 		char * errMsg = NULL;
 		char sql[SQLCMDLEN] = { 0 };
-		int gnm = gName << 16;
-		int matchnm = gName == 0 ? (0xff << 16) : gnm;
-		int gno = gNo << 24;
-		int matchno = gNo == 0 ? (0xff << 24) : gno;
-		snprintf(sql, sizeof(sql), "DELETE FROM Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d ; \
-			DELETE FROM fileDb.Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d ", matchnm, gnm, matchno, gno, matchnm, gnm, matchno, gno);
+		//int gnm = gName << 16;
+		//int matchnm = gName == 0 ? (0xff << 16) : gnm;
+		//int gno = gNo << 24;
+		//int matchno = gNo == 0 ? (0xff << 24) : gno;
+		int matchnm = gName | (gNo << 8);
+		snprintf(sql, sizeof(sql), "DELETE FROM Sample WHERE ChannelNo>>16 = %d; \
+			DELETE FROM fileDb.Sample WHERE ChannelNo>>16 = %d", matchnm, matchnm);
 		return ExecuteSql(sql);
 	}
 
@@ -210,24 +211,26 @@ namespace Storage
 	vector<SampleRecord> SampleStorageService::SelectSampleRecordByNO(int gName, int gNo)
 	{
 		char sql[SQLCMDLEN] = { 0 };
-		int gnm = gName << 16;
+		/*int gnm = gName << 16;
 		int matchnm = gName == 0 ? (0xff << 16) : gnm;
 		int gno = gNo << 24;
-		int matchno = gNo == 0 ? (0xff << 24) : gno;
-		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d union all SELECT * FROM fileDb.Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d ORDER BY Date ", matchnm, gnm, matchno, gno, matchnm, gnm, matchno, gno);
+		int matchno = gNo == 0 ? (0xff << 24) : gno;*/
+		int matchnm = gName | (gNo << 8);
+		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE ChannelNo>>16 = %d union all SELECT * FROM fileDb.Sample WHERE ChannelNo>>16 = %d  ORDER BY Date ", matchnm, matchnm);
 		return SelectSample(sql);
 	}
 
 	vector<SampleRecord> SampleStorageService::SelectSampleRecordByNO(int gName, int gNo, unsigned long long startTime)
 	{
 		char sql[SQLCMDLEN] = { 0 };
-		int gnm = gName << 16;
+		/*int gnm = gName << 16;
 		int matchnm = gName == 0 ? (0xff << 16) : gnm;
 		int gno = gNo << 24;
-		int matchno = gNo == 0 ? (0xff << 24) : gno;
+		int matchno = gNo == 0 ? (0xff << 24) : gno;*/
+		int matchnm = gName | (gNo << 8);
 		//snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE (ChannelNo & %d = %d and ChannelNo & %d = %d and Date > %lld) union all SELECT * FROM fileDb.Sample WHERE (ChannelNo & %d = %d and ChannelNo & %d = %d and Date > %lld) ORDER BY Date", gnm, gnm, gno, gno, startTime, gnm, gnm, gno, gno, startTime);
 		//snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE (ChannelNo =%d and Date > %lld) union all SELECT * FROM fileDb.Sample WHERE (ChannelNo = %d and Date > %lld) ORDER BY Date", gnm|gno, startTime, gnm|gno, startTime);
-		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE (ChannelNo & %d = %d and ChannelNo & %d = %d and Date > %lld) union all SELECT * FROM fileDb.Sample WHERE (ChannelNo & %d = %d and ChannelNo & %d = %d and Date > %lld) ORDER BY Date", matchnm, gnm, matchno, gno, startTime, matchnm, gnm, matchno, gno, startTime);
+		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE (ChannelNo>>16 = %d  AND Date > %lld) union all SELECT * FROM fileDb.Sample WHERE (ChannelNo>>16 = %d AND Date > %lld) ORDER BY Date", matchnm,  startTime, matchnm, startTime);
 		return SelectSample(sql);
 	}
 
@@ -293,11 +296,12 @@ namespace Storage
 	int SampleStorageService::GetAllCountByNo(int gName,int gNo, unsigned long long date) {
 		char sql[SQLCMDLEN] = { 0 };
 		struct sqlite3_stmt *stmt;
-		int gnm = gName << 16;
+		/*int gnm = gName << 16;
 		int matchnm = gName == 0 ? (0xff << 16) : gnm;
 		int gno = gNo << 24;
-		int matchno = gNo == 0 ? (0xff << 24) : gno;
-		snprintf(sql, sizeof(sql), "SELECT COUNT(*) FROM Sample WHERE ChannelNo & %d = %d and ChannelNo & %d = %d  and Date > %lld ", matchnm, gnm, matchno, gno,date);
+		int matchno = gNo == 0 ? (0xff << 24) : gno;*/
+		int matchnm = gName |(gNo << 8);
+		snprintf(sql, sizeof(sql), "SELECT COUNT(*) FROM Sample WHERE ChannelNo>>16 =%d  and Date > %lld ", matchnm,date);
 		int ret = sqlite3_prepare_v2(db, sql, strlen(sql), &stmt, NULL);
 		if (ret != SQLITE_OK) {
 			fprintf(stderr, "Sql Error: %s\n", sqlite3_errmsg(db));

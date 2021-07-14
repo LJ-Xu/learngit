@@ -1,5 +1,4 @@
 #include "SampleGModel.h"
-
 namespace UI
 {
 	SampleGModel::SampleGModel() {
