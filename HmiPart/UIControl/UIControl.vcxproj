@@ -510,9 +510,9 @@
     <ClCompile Include="src\Utility\PermUtility.cpp" />
     <ClCompile Include="src\Utility\RotatePic.cpp" />
     <ClCompile Include="src\Utility\RowTable.cpp" />
-    <ClCompile Include="src\Utility\ScreenSaver.cpp" />
     <ClCompile Include="src\Utility\StringUtility.cpp" />
     <ClCompile Include="src\Utility\SysSetApi.cpp" />
+    <ClCompile Include="src\Utility\SysSetHandle.cpp" />
     <ClCompile Include="src\Utility\TableBase.cpp" />
     <ClCompile Include="src\Utility\ViewShowUtility.cpp" />
   </ItemGroup>
@@ -688,7 +688,6 @@
     <ClInclude Include="include\RegionFunctionView.h" />
     <ClInclude Include="include\RowTable.h" />
     <ClInclude Include="include\SampleGModel.h" />
-    <ClInclude Include="include\ScreenSaver.h" />
     <ClInclude Include="include\ServiceHelper.h" />
     <ClInclude Include="include\SlideInputControl.h" />
     <ClInclude Include="include\SlideInputModel.h" />

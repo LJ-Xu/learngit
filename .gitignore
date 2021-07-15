@@ -5806,3 +5806,6 @@ build
 /HMI_Debug/DataClientd.lib
 /HmiMain/HMIMain.ini
 /WIN32Lib/HmiRenderLib/Resource/Pic/User/Project.ico
+/HmiMain/Sample
+/HmiMain/Operation
+/HmiMain/DB

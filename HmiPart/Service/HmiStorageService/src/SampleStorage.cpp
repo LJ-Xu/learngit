@@ -52,7 +52,7 @@ namespace Storage
 		record.Data = data;
 		record.Type = type;
 		record.Date = date;
-		SampleStorageService::Ins()->InsertSampleRecord(record,maxcount);
+		SampleStorageService::Ins()->InsertSampleRecordByLimit(record,maxcount);
 	}
 
 	void SampleStorage::Flush() {
@@ -64,14 +64,9 @@ namespace Storage
 		SampleStorageService::Ins()->DeleteSampleRecordByGroup(gName, gNo);
 	}
 
-	vector<SampleRecord> SampleStorage::QueryByGroup(int gName, int gNo)
-	{
-		return std::move(SampleStorageService::Ins()->SelectSampleRecordByNO(gName, gNo));
-	}
-
 	vector<SampleRecord> SampleStorage::QueryByGroupByTime(int gName, int gNo, unsigned long long startTime)
 	{
-		return std::move(SampleStorageService::Ins()->SelectSampleRecordByNO(gName, gNo, startTime));
+		return std::move(SampleStorageService::Ins()->SelectSampleRecordByStTm(gName, gNo, startTime));
 	}
 
 	vector<SampleRecord> SampleStorage::QueryByChannel(int channel)
@@ -137,6 +132,6 @@ namespace Storage
 
 
 	int SampleStorage::GetAllCountByNo(int gName,int gNo, unsigned long long date) {
-		return SampleStorageService::Ins()->GetAllCountByNo(gName, gNo,date);
+		return SampleStorageService::Ins()->GetChannelCountByDate(gName, gNo,date);
 	}
 }

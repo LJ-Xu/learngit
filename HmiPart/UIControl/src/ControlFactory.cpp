@@ -57,7 +57,7 @@
 #include "BarCodeControl.h"
 #include "AlarmBarControl.h"
 #include "AlarmGControl.h"
-
+#include "GFuncControl.h"
 #include "GifPicControl.h"
 #include "DateControl.h"
 #include "ClockControl.h"
@@ -229,7 +229,7 @@ namespace UI
 		{"TimerControl",[]() {return NewControl<TimerControl>(); }  },
 		{"BackLightControl",[]() {return NewControl<BackLightControl>(); }  },
 		{"SysSetGControl",[]() {return NewControl<SysSetGControl>(); }  },
-		
+		{ "MacroMapControl",[]() {return NewControl<GFuncControl>(); } },
 		{"StirrerControl", []() {return NewControl<StirrerControl>(); }},
 		{"PieChartControl", []() {return NewControl<PieChartControl>(); }},
 		{"WaterPumpControl", []() {return NewControl<WaterPumpControl>(); }},
