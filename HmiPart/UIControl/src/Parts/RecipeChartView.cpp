@@ -15,6 +15,8 @@
 #include "RecipeStorage.h"
 #include "PermUtility.h"
 #include "SysSetApi.h"
+#include "DataTableView.h"
+#include "RecipeUtility.h"
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 namespace UI
@@ -149,6 +151,87 @@ namespace UI
 		}
 		return true;
 	}
+	void RecipeChartView::EnterValue()
+	{
+		shared_ptr<RecipeChartModel> model = BaseView.GetModel<RecipeChartModel>();
+		//string datastr;
+		if (selectresinfo_->DataType != Project::VarDataType::DT_String
+			&& selectresinfo_->DataType != Project::VarDataType::DT_Bytes) //数值
+		{
+			if (!inputtext_.empty())
+			{
+				//double data = stod(inputtext_);
+				//XJDataType tmptp;
+				//tmptp.Cls = selectresinfo_->DataType;
+				//tmptp.Type = selectresinfo_->DataFmt;
+				Utility::NumberFmtInfo fmt;
+				fmt.IsFillZero = false;
+				fmt.Num1 = selectresinfo_->IntegerNum;
+				fmt.Num2 = selectresinfo_->DecimalNum;
+				int pos = inputtext_.find('.');
+				if (pos != string::npos) {
+					inputtext_ = inputtext_.erase(pos - 1, 1);
+					pos--;
+				}
+				else {
+					pos = inputtext_.length();
+					if (fmt.Num2 > 0) {
+						inputtext_ = inputtext_ + '.' + string(fmt.Num2, '0');
+					}
+				}
+				// 限制整数位个数
+				if (pos > fmt.Num1) {
+					inputtext_ = inputtext_.erase(0, pos - fmt.Num1);
+				}
+				// 是否前导0
+				if (fmt.IsFillZero && pos < fmt.Num1) {
+					inputtext_ = string(fmt.Num1 - pos, '0') + inputtext_;
+				}
+
+				//datastr = Utility::DataFormate::StrFmt(inputtext_, tmptp, fmt);
+			}
+		}
+		//else		//字符串
+			//datastr = inputtext_;
+		UI::RecipeUtility::Ins().UpdateData(model->RecipeConfig.RecipeGroupId,
+			model->RecipeConfig.InfoLst[selectedcol_].ProjectName, selectedrow_, inputtext_);
+
+		PermUtility::QuitLimitPerm(model->RecipeConfig.Perm);
+	}
+	void RecipeChartView::InitStartInput(int mx, int my)
+	{
+		shared_ptr<RecipeChartControl> ctrl = BaseView.GetControl<RecipeChartControl>();
+		if (!HandleOperatePerm())		//没有权限则返回
+			return;
+		ctrl->Win()->OpenDialogPage(SYS_FULLKEY_PAGENUM, nullptr,
+			mx + col_width(callback_col()) / 2, my + row_height(callback_row()) / 2);
+		vector<int>().swap(languageflag_);
+		haskeyboard_ = true;
+		inputtext_ = "";
+	}
+	bool RecipeChartView::HandleOperateConfirm()
+	{
+		shared_ptr<RecipeChartModel> model = BaseView.GetModel<RecipeChartModel>();
+		shared_ptr<RecipeChartControl> ctrl = BaseView.GetControl<RecipeChartControl>();
+		if (!PermUtility::HandleConfirmPerm(model->RecipeConfig.Perm, ctrl->CtrlId()))
+			return false;
+		else
+		{
+			EnterValue();
+			return true;
+		}
+
+	}
+	void RecipeChartView::EndInput()
+	{
+		shared_ptr<RecipeChartModel> model = BaseView.GetModel<RecipeChartModel>();
+		shared_ptr<RecipeChartControl> ctrl = BaseView.GetControl<RecipeChartControl>();
+		ctrl->Win()->ClosePage(SYS_FULLKEY_PAGENUM);
+		ctrl->Win()->ClosePage(SYS_PINYIN_PAGENUM);
+		hasPinYinpage = false;
+		haskeyboard_ = false;
+		redraw();
+	}
 	int RecipeChartView::handle(int event) {
 		shared_ptr<RecipeChartModel> model = BaseView.GetModel<RecipeChartModel>();
 		shared_ptr<RecipeChartControl> ctrl = BaseView.GetControl<RecipeChartControl>();
@@ -161,11 +244,23 @@ namespace UI
 		//TableContext context = cursor2rowcol(R, C, resizeflag);
 
 		switch (event) {
+		case FL_FOCUS:
+		{
+			if (haskeyboard_)
+				Fl::focus(this);
+			return 1;
+		}
 		case FL_PUSH:						//控件按下
 		{
+			Fl::focus(this);
+
 			SysSetApi::TriggerBeep();
 			if (!HandleOperatePerm())		//没有权限则返回
 				return 1;	
+			/*记录当前行列*/
+			RecipeUtility::Ins().RecordFocus(model->RecipeConfig.RecipeGroupId, selectedrow_);
+			int mx = Fl::event_x();
+			int my = Fl::event_y();
 			if (!haskeyboard_)
 			{
 				pushTime_ = high_resolution_clock::now();
@@ -190,14 +285,8 @@ namespace UI
 							{
 								//弹出键盘
 								selectresinfo_ = RecipeDT::Ins()->GetDataType(model->RecipeConfig.RecipeGroupId, model->RecipeConfig.InfoLst[selectedcol_].ProjectName);
-								if (!selectresinfo_)
-									return 1;
-								if (selectresinfo_->Editable)
-								{
-									ctrl->Win()->OpenDialogPage(25006);
-									haskeyboard_ = true;
-									firstopen_ = true;
-								}
+								if (selectresinfo_ && selectresinfo_->Editable)
+									InitStartInput(mx, my);	//弹出键盘
 							}
 						}
 					}
@@ -226,58 +315,88 @@ namespace UI
 		}
 		case FL_KEYBOARD:
 		{
-			if (!haskeyboard_ || !selectresinfo_->Editable)
+			if (!haskeyboard_ || !selectresinfo_->Editable || !selectresinfo_)
 				return 1;
 			/*处理键值*/
+			XJDataType tp;
+			tp.Cls = selectresinfo_->DataType;
+			tp.Type = selectresinfo_->DataFmt;
 			if (firstopen_)
 			{
 				inputtext_ = "";
 				firstopen_ = false;
 			}
+			int MaxValue = 65536, MinValue;
+			if (tp.Type == Project::NT_Unsigned)
+				MinValue = 0;
+			else
+				MinValue = -65536;
 			char ascii = Fl::event_text()[0];		//获取输入键值
 			int del;
 			if (Fl::compose(del)) {
 				if (selectresinfo_->DataType != Project::VarDataType::DT_String
-					&& selectresinfo_->DataType != Project::VarDataType::DT_Bytes)			//数值
+					&& selectresinfo_->DataType != Project::VarDataType::DT_Bytes)
 				{
-					int MaxValue = 65536;
-					if (((ascii == '-')) || (ascii >= '0' && ascii <= '9') || (ascii == '.'))
+					string tmpstr = inputtext_;
+					if (((ascii == '-' && tmpstr.empty())) || (ascii >= '0' && ascii <= '9') || (ascii == '.')
+						|| (tp.Type == Project::NT_Hex && ((ascii >= 'A'&& ascii <= 'F') || (ascii >= 'a'&& ascii <= 'f'))))
 					{
 						if (ascii == '.')
 						{
-							if (inputtext_.find(".") == -1 && selectresinfo_->DecimalNum != 0) 	//判断当前是否含有小数点
-								inputtext_ += ascii;
+							if (tmpstr.find(".") == -1 && selectresinfo_->DecimalNum != 0) 	//判断当前是否含有小数点
+								tmpstr += ascii;
 						}
 						else
 						{
-							string tmpstr = inputtext_ + ascii;
-							int pos = tmpstr.find(".");
-							int act, bct;
-							if (pos == 0)	//小数点在头部
-							{
-								act = 0;
-								bct = (tmpstr.substr(pos + 1, tmpstr.size())).size();
-							}
-							else if (pos == -1)
-							{
-								act = tmpstr.size();
-								bct = 0;
-							}
+							tmpstr = tmpstr + ascii;
+						}
+						int pos = tmpstr.find(".");
+						int act, bct;
+						if (pos == 0)	//小数点在头部
+						{
+							act = 0;
+							bct = (tmpstr.substr(pos + 1, tmpstr.size())).size();
+						}
+						else if (pos == -1)
+						{
+							act = tmpstr.size();
+							bct = 0;
+						}
+						else
+						{
+							act = (tmpstr.substr(0, pos)).size();
+							bct = (tmpstr.substr(pos + 1, tmpstr.size())).size();
+						}
+						if (tmpstr != "-" && tmpstr != "." && tmpstr != "-.")
+						{
+							double data;
+							if (tp.Type == Project::NT_Hex || tp.Type == Project::NT_BCD)
+								data = stoi(tmpstr, nullptr, 16);
 							else
-							{
-								act = (tmpstr.substr(0, pos)).size();
-								bct = (tmpstr.substr(pos + 1, tmpstr.size())).size();
-							}
-							if (act < selectresinfo_->IntegerNum || bct < selectresinfo_->DecimalNum
-								|| stod(tmpstr.c_str()) < MaxValue)
+								data = stod(tmpstr.c_str());
+							if (act <= selectresinfo_->IntegerNum && bct <= selectresinfo_->DecimalNum
+								&& data <= MaxValue)
+								inputtext_ = tmpstr;
+						}
+						else
+						{
+							if (((tmpstr == "-" || tmpstr != "-.") && MinValue < 0) || tmpstr == ".")
 								inputtext_ = tmpstr;
 						}
 						return 1;
 					}
 				}
-				else  if(selectresinfo_->DataType == Project::VarDataType::DT_String
-					|| selectresinfo_->DataType == Project::VarDataType::DT_Bytes)//字符串
+				else		 //字符串
 				{
+					/*将字符切换大小写*/
+					if ((ascii >= 'A'&& ascii <= 'Z') || (ascii >= 'a'&& ascii <= 'z'))
+					{
+						if (KeyInputUtility::IsUpper() && (ascii >= 'a'&& ascii <= 'z'))		//大写
+							ascii -= 32;
+						if (!KeyInputUtility::IsUpper() && (ascii >= 'A'&& ascii <= 'Z'))		//小写
+							ascii += 32;
+					}
+
 					if (KeyInputUtility::IsChinese())		//中文输入
 					{
 						if ((ascii >= 'A'&& ascii <= 'Z') || (ascii >= 'a'&& ascii <= 'z'))
@@ -296,8 +415,11 @@ namespace UI
 							if (PinYinPageView::Ins()->ChineseString.size() > (size_t)(ascii - '1'))
 							{
 								string tmpstr = inputtext_ + PinYinPageView::Ins()->ChineseString[ascii - '1'];
-								if (tmpstr.size() < (size_t)(selectresinfo_->RegCount * 2))
+								if (tmpstr.size() < selectresinfo_->RegCount * 2)
+								{
 									inputtext_ = tmpstr;
+									languageflag_.push_back(Chineseinput);
+								}
 								hasPinYinpage = false;
 								ctrl->Win()->ClosePage(SYS_PINYIN_PAGENUM);
 								pinyin_.clear();
@@ -306,101 +428,73 @@ namespace UI
 					}
 					else
 					{
-						if ((ascii >= 'A'&& ascii <= 'Z') || (ascii >= 'a'&& ascii <= 'z'))
-						{
-							if (KeyInputUtility::IsUpper() && (ascii >= 'a'&& ascii <= 'z'))		//大写
-								ascii -= 32;
-							if (!KeyInputUtility::IsUpper() && (ascii >= 'A'&& ascii <= 'Z'))		//小写
-								ascii += 32;
-						}
 						string tmpstr = inputtext_ + ascii;
-						if (tmpstr.size() < (size_t)(selectresinfo_->RegCount * 2))
-							inputtext_ = ascii;
+						if (tmpstr.size() <= (size_t)(selectresinfo_->RegCount * 2))
+						{
+							inputtext_ = tmpstr;
+							languageflag_.push_back(Charactinput);
+						}
 					}
 				}
-				int len = LocalData::GetLocalVarLen(SYS_PSW_INPUTKEY_CURVAL);
-				char *data = new char[len + 1];
-				memset(data, '\0', len + 1);
-				memcpy(data, inputtext_.c_str(), inputtext_.size() > len ? len : inputtext_.size());
+				char *data = new char[33];
+				memset(data, '\0', 33);
+				memcpy(data, inputtext_.c_str(), inputtext_.size() > 32 ? 32 : inputtext_.size());
+
+				//memcpy(data, inputtext_.c_str(),32);
 				LocalData::SetString(SYS_PSW_INPUTKEY_CURVAL, data);
 				delete[] data;
-				//LocalData::SetString(SYS_PSW_INPUTKEY_CURVAL, inputtext_.c_str());
+				return 1;
 			}
+			
 			if (Fl::event_key() == FL_Enter || Fl::event_key() == FL_KP_Enter)
 			{
-				if(selectresinfo_->DataType != Project::VarDataType::DT_String
-					&& selectresinfo_->DataType != Project::VarDataType::DT_Bytes) //数值
-				{
-					if (!inputtext_.empty())
-					{
-						//double data = stod(inputtext_);
-						XJDataType tmptp;
-						tmptp.Cls = selectresinfo_->DataType;
-						tmptp.Type = selectresinfo_->DataFmt;
-						Utility::NumberFmtInfo fmt;
-						fmt.IsFillZero = false;
-						fmt.Num1 = selectresinfo_->IntegerNum;
-						fmt.Num2 = selectresinfo_->DecimalNum;
-
-						string datastr = Utility::DataFormate::StrFmt(inputtext_, tmptp, fmt);
-						UI::DataApi::RecipeDataSet(model->RecipeConfig.RecipeGroupId,
-							model->RecipeConfig.InfoLst[selectedcol_].ProjectName, selectedrow_ + 1, datastr);
-						
-						ctrl->Win()->ClosePage(25006);
-
-						//RecipeDT::Ins()->SetRecipeData(model->RecipeConfig.RecipeGroupId,
-						//				model->RecipeConfig.InfoLst[selectedcol_].ProjectName, selectedrow_, datastr);
-					}
-				}
-				else		//字符串
-					UI::DataApi::RecipeDataSet(model->RecipeConfig.RecipeGroupId,
-						model->RecipeConfig.InfoLst[selectedcol_].ProjectName, selectedrow_ + 1, inputtext_);
-				//	RecipeDT::Ins()->SetRecipeData(model->RecipeConfig.RecipeGroupId,
-				//		model->RecipeConfig.InfoLst[selectedcol_].ProjectName, selectedrow_, inputtext_);
-				ctrl->Win()->ClosePage(25001);
-				ctrl->Win()->ClosePage(SYS_PINYIN_PAGENUM);
-				hasPinYinpage = false;
-				haskeyboard_ = false;
+				EndInput();
+				HandleOperateConfirm();
 				redraw();
+				return 1;
 			}
 			if (Fl::event_key() == FL_BackSpace)	//删除按键
 			{
-				if (KeyInputUtility::IsChinese())		//中文
+				if (!pinyin_.empty())
 				{
-					if (!inputtext_.empty())
+					pinyin_.pop_back();
+					LocalData::SetString(SYS_PSW_PINYIN_CURVAL, pinyin_.c_str());
+					if (pinyin_.empty())
 					{
-						inputtext_.pop_back();
-						LocalData::SetString(SYS_PSW_PINYIN_CURVAL, inputtext_.c_str());
-						if (inputtext_.empty())
-						{
-							hasPinYinpage = false;
-							ctrl->Win()->ClosePage(SYS_PINYIN_PAGENUM);
-						}
+						hasPinYinpage = false;
+						ctrl->Win()->ClosePage(SYS_PINYIN_PAGENUM);
 					}
-					else
-					{
-						char inputchar[32] = { 0 };
-						LocalData::GetBytes(SYS_PSW_INPUTKEY_CURVAL, inputchar);
-						string inputstring = inputchar;
-						if (!UI::CodeFormatUtility::IsStrUtf8(inputstring.c_str()))
-							UI::IResourceService::GB2312toUtf8(inputstring);
-						if (!inputstring.empty())
-							inputstring = inputstring.substr(0, inputstring.size() - 3);
-						int len = LocalData::GetLocalVarLen(SYS_PSW_INPUTKEY_CURVAL);
-						char *data = new char[len + 1];
-						memset(data, '\0', len + 1);
-						memcpy(data, inputstring.c_str(), inputstring.size() > len ? len : inputstring.size());
-						LocalData::SetString(SYS_PSW_INPUTKEY_CURVAL, data);
-						delete[] data;
-						//LocalData::SetString(SYS_PSW_INPUTKEY_CURVAL, inputstring.c_str());
-					}
-					return 1;
 				}
 				else
 				{
-					if (!inputtext_.empty())
-						inputtext_.pop_back();
+					if (!inputtext_.empty() && !languageflag_.empty())
+					{
+						if (languageflag_[languageflag_.size() - 1] == Chineseinput
+							&& inputtext_.size() >= 3)		//中文
+						{
+							languageflag_.pop_back();
+							inputtext_ = inputtext_.substr(0, inputtext_.size() - 3);
+						}
+						if (languageflag_[languageflag_.size() - 1] == Charactinput)
+						{
+							languageflag_.pop_back();
+							inputtext_.pop_back();
+						}
+					}
+					int len = LocalData::GetLocalVarLen(SYS_PSW_INPUTKEY_CURVAL);
+					char *data = new char[len + 1];
+					memset(data, '\0', len + 1);
+					memcpy(data, inputtext_.c_str(), inputtext_.size() > len ? len : inputtext_.size());
+					LocalData::SetString(SYS_PSW_INPUTKEY_CURVAL, data);
+					delete[] data;
+					//LocalData::SetString(SYS_PSW_INPUTKEY_CURVAL, inputtext_.c_str());
 				}
+				return 1;
+			}
+			if (Fl::event_key() == FL_Escape)	//退出按键
+			{
+				EndInput();
+				return 1;
 			}
 			if (Fl::event_key() == FL_Shift_L || Fl::event_key() == FL_Shift_R)	//Shift按键，切换中英文
 			{
@@ -480,16 +574,15 @@ namespace UI
 		case CONTEXT_STARTPAGE:
 		{
 			//获取数据
-			int num;
 			if (IResourceService::Ins()->IsRenderMode())
-				num = 0;
+				rownum = 0;
 			else
 			{
 				if (DisplayMode)	//查询模式
 					GetSearchData();
 				else
 					RecipeDatas = Storage::RecipeStorage::Ins()->QueryByRepiceName(model->RecipeConfig.RecipeGroupId, datacol_);
-				num = RecipeDatas.size();
+				rownum = RecipeDatas.size();
 			}
 			//绘制背景
 			if (model->RecipeConfig.AppearMode == 0)
@@ -505,8 +598,13 @@ namespace UI
 				}
 				draw_box();
 			}
-			if (num > model->RecipeConfig.PerPageRowCount)
-				rows(num);
+			if (rownum > model->RecipeConfig.PerPageRowCount)
+				rows(rownum);
+			else if (rownum > model->RecipeConfig.TotalRowCount)
+			{
+				rownum = model->RecipeConfig.TotalRowCount;
+				rows(rownum);
+			}
 			return;
 		}
 		case CONTEXT_COL_HEADER:						//绘制标题及列标题

@@ -18,6 +18,11 @@ namespace UI
 		void GetSearchData();
 		string GetDrawString(string projectname, int row);
 		bool HandleOperatePerm();
+		void InitStartInput(int mx, int my);
+		void EndInput();
+		void EnterValue();
+		bool HandleOperateConfirm();
+
 
 		BasicView BaseView;
 		int DisplayMode = 0;					//0:正常模式 1:查询模式
@@ -30,6 +35,8 @@ namespace UI
 			int R = 0, int C = 0, int X = 0, int Y = 0, int W = 0, int H = 0);
 		int handle(int event);
 	private:
+		int rownum;								//行数
+
 		int fontSize_;							//列表文字大小
 		int fontStyle_;							//列表字体
 		Fl_Color fontcolor_;
@@ -59,5 +66,7 @@ namespace UI
 		string inputtext_;
 		bool hasPinYinpage = false;
 		string pinyin_;
+		vector<int> languageflag_;				//true：中文，false：字符
+
 	};
 }

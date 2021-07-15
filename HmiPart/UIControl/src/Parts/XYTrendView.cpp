@@ -205,8 +205,8 @@ namespace UI
 					if (i == model->TrendXYConfig.YScaleInfo.size() - 1)
 						num = (float)model->TrendXYConfig.YScaleSet.UpperLimit;
 				}
-				if (i == model->TrendXYConfig.YScaleInfo.size() - 1)
-					num = (float)model->TrendXYConfig.YScaleSet.UpperLimit;
+				//if (i == model->TrendXYConfig.YScaleInfo.size() - 1)
+				//	num = (float)model->TrendXYConfig.YScaleSet.UpperLimit;
 				model->TrendXYConfig.YScaleInfo[i].ScaleContent = ChangeDisplayFormat(num, model->TrendXYConfig.YScaleSet);
 				fl_draw(model->TrendXYConfig.YScaleInfo[i].ScaleContent.data(),
 					model->TrendXYConfig.YScaleInfo[i].Coordinate.X + model->TrendXYConfig.OffX,
@@ -399,8 +399,8 @@ namespace UI
 					if (i == model->TrendXYConfig.XScaleInfo.size() - 1)
 						num = (float)model->TrendXYConfig.XScaleSet.UpperLimit;
 				}
-				if (i == model->TrendXYConfig.XScaleInfo.size() - 1)
-					num = (float)model->TrendXYConfig.XScaleSet.UpperLimit;
+				//if (i == model->TrendXYConfig.XScaleInfo.size() - 1)
+				//	num = (float)model->TrendXYConfig.XScaleSet.UpperLimit;
 				model->TrendXYConfig.XScaleInfo[i].ScaleContent = ChangeDisplayFormat(num, model->TrendXYConfig.XScaleSet);
 				fl_draw(model->TrendXYConfig.XScaleInfo[i].ScaleContent.data(),
 					model->TrendXYConfig.XScaleInfo[i].Coordinate.X + model->TrendXYConfig.OffX,

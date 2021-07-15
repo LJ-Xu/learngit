@@ -17,7 +17,6 @@
 #include "RecipeStorage.h"
 #include <algorithm>
 #include <iostream>
-
 namespace Storage
 {
 	RecipeStorage * RecipeStorage::instance_ = nullptr;
@@ -41,6 +40,41 @@ namespace Storage
 	vector<vector<string>> RecipeStorage::QueryByValue(string recipename, vector<string> key, vector<string> colname)
 	{
 		return std::move(RecipeStorageService::Ins()->SelectRecipeRecordByValue(recipename, key, colname));
+	}
+	bool RecipeStorage::DeleteRecord(string name, int row)
+	{
+		return  RecipeStorageService::Ins()->DeleteRecipeRecord(name, row);
+	}
+	bool RecipeStorage::AddRecord(string name)
+	{
+		int row = RecipeStorageService::Ins()->GetRecipeDataNum(name) + 1;
+		return RecipeStorageService::Ins()->AddRecipeRecord(name, row);
+	}
+	bool RecipeStorage::InsertRecord(string name, int row)
+	{
+		return RecipeStorageService::Ins()->InsertRecipeRecord(name, row);
+	}
+	bool RecipeStorage::CopyRecord(string name, int row, vector<Project::ColDataTypeInfo>& colnames)
+	{
+		vector<string> data = RecipeStorageService::Ins()->SelectRecipeRecordByRow(name,row,colnames.size());
+		return RecipeStorageService::Ins()->CopyRecipeRecord(name, row, data, colnames);
+	}
+	bool RecipeStorage::MoveUpRecord(string name, int row)
+	{
+		if (row < 0)
+			return false;
+		return RecipeStorageService::Ins()->MoveUpRecipeRecord(name, row);
+	}
+	bool RecipeStorage::MoveDownRecord(string name, int row)
+	{
+		int allrow = RecipeStorageService::Ins()->GetRecipeDataNum(name);
+		if (row >= allrow)
+			return false;
+		return RecipeStorageService::Ins()->MoveDownRecipeRecord(name, row);
+	}
+	bool RecipeStorage::UpdateRecord(string groupname, string colname, unsigned int rowno, string data)
+	{
+		return RecipeStorageService::Ins()->UpdateRecipeRecord(groupname, colname, rowno, data);
 	}
 	int  RecipeStorage::GetCountByRepiceName(string name)
 	{

@@ -55,6 +55,7 @@ namespace UI
 		void HandleUploadRecipe(Project::FunctionSetup param);
 		void HandleCallbackFunc(Project::FunctionSetup param);
 		void HandlePrintScreen(Project::FunctionSetup param);
+		void HandleEditRecipe(Project::FunctionSetup param);
 
 		bool needswitchwin_ = false;
 		int switchwinno_ = 0;

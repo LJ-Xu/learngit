@@ -508,9 +508,10 @@
     <ClCompile Include="src\Utility\KeyInputUtility.cpp" />
     <ClCompile Include="src\Utility\NoticesUtility.cpp" />
     <ClCompile Include="src\Utility\PermUtility.cpp" />
+    <ClCompile Include="src\Utility\RecipeUtility.cpp" />
     <ClCompile Include="src\Utility\RotatePic.cpp" />
     <ClCompile Include="src\Utility\RowTable.cpp" />
-    <ClCompile Include="src\Utility\ScreenSaver.cpp" />
+    <ClCompile Include="src\Utility\SysSetHandle.cpp" />
     <ClCompile Include="src\Utility\StringUtility.cpp" />
     <ClCompile Include="src\Utility\SysSetApi.cpp" />
     <ClCompile Include="src\Utility\TableBase.cpp" />
@@ -683,12 +684,13 @@
     <ClInclude Include="include\RecipeTransferControl.h" />
     <ClInclude Include="include\RecipeTransferModel.h" />
     <ClInclude Include="include\RecipeTransferView.h" />
+    <ClInclude Include="include\RecipeUtility.h" />
     <ClInclude Include="include\RegionFunctionControl.h" />
     <ClInclude Include="include\RegionFunctionModel.h" />
     <ClInclude Include="include\RegionFunctionView.h" />
     <ClInclude Include="include\RowTable.h" />
     <ClInclude Include="include\SampleGModel.h" />
-    <ClInclude Include="include\ScreenSaver.h" />
+    <ClInclude Include="include\SysSetHandle.h" />
     <ClInclude Include="include\ServiceHelper.h" />
     <ClInclude Include="include\SlideInputControl.h" />
     <ClInclude Include="include\SlideInputModel.h" />
