@@ -212,6 +212,7 @@
     <ClCompile Include="src\GCtrl\SysSetGModel.cpp" />
     <ClCompile Include="src\Utility\SysSetApi.cpp" />
     <ClCompile Include="src\Utility\SysSetHandle.cpp" />
+    <ClCompile Include="src\Utility\RecipeUtility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ControlFactory.cpp">
@@ -559,5 +560,7 @@
     <ClInclude Include="include\SysSetGControl.h" />
     <ClInclude Include="include\SysSetGModel.h" />
     <ClInclude Include="include\SysSetApi.h" />
+    <ClInclude Include="include\SysSetHandle.h" />
+    <ClInclude Include="include\RecipeUtility.h" />
   </ItemGroup>
 </Project>

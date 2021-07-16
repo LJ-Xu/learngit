@@ -29,6 +29,14 @@ namespace Storage
 		vector<vector<string>>  QueryByRepiceName(string name, int col);
 		vector<vector<string>>  QueryByKey(string recipename, string key, vector<string> colname);
 		vector<vector<string>>  QueryByValue(string recipename, vector<string> key, vector<string> colname);
+
+		bool DeleteRecord(string name, int row);
+		bool AddRecord(string name);
+		bool InsertRecord(string name, int row);
+		bool CopyRecord(string name, int row, vector<Project::ColDataTypeInfo>& data);
+		bool MoveUpRecord(string name, int row);
+		bool MoveDownRecord(string name, int row);
+		bool UpdateRecord(string groupname, string colname, unsigned int rowno, string data);
 		int  GetCountByRepiceName(string name);
 		// 创建存取对象
 		static RecipeStorage * Ins();

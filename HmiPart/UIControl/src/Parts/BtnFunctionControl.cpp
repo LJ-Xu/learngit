@@ -27,6 +27,7 @@
 #include "RecipeStorage.h"
 #include "OperatorGControl.h"
 #include "Logger.h"
+#include "RecipeUtility.h"
 namespace UI
 {
 	BtnFunctionControl::BtnFunctionControl(HMIPage* w) :BaseControl(w)
@@ -191,6 +192,8 @@ namespace UI
 					HandleCallbackFunc(mode_->FuncBtnConfig.Press[i].FunctionParam);
 				if (mode_->FuncBtnConfig.Press[i].FunctionName == "PrintScreen")
 					HandlePrintScreen(mode_->FuncBtnConfig.Press[i].FunctionParam);
+				if (mode_->FuncBtnConfig.Press[i].FunctionName == "EditRecipe")
+					HandleEditRecipe(mode_->FuncBtnConfig.Press[i].FunctionParam);
 			}
 			if (mode_->FuncBtnConfig.IsRecord)
 				OperatorGControl::Ins()->AddOperatorRecord(Page()->Winno(), mode_->FuncBtnConfig.CtrlName,
@@ -247,6 +250,8 @@ namespace UI
 					HandleCallbackFunc(mode_->FuncBtnConfig.Release[i].FunctionParam);
 				if (mode_->FuncBtnConfig.Release[i].FunctionName == "PrintScreen")
 					HandlePrintScreen(mode_->FuncBtnConfig.Release[i].FunctionParam);
+				if (mode_->FuncBtnConfig.Press[i].FunctionName == "EditRecipe")
+					HandleEditRecipe(mode_->FuncBtnConfig.Press[i].FunctionParam);
 			}
 			if (mode_->FuncBtnConfig.IsRecord)
 				OperatorGControl::Ins()->AddOperatorRecord(Page()->Winno(), mode_->FuncBtnConfig.CtrlName,
@@ -713,6 +718,33 @@ namespace UI
 		if (!target)
 			target = Win()->ProducePage(winno);
 		PrintSetControl::PrintWinPic(target);
+	}
+
+	void BtnFunctionControl::HandleEditRecipe(Project::FunctionSetup param)
+	{
+		switch (param.EditRecipe.Action)
+		{
+		case Project::AddRecipe:
+			RecipeUtility::Ins().Add();
+			break;
+		case Project::InsertRecipe:
+			RecipeUtility::Ins().Insert();
+			break;
+		case Project::DeleteRecipe:
+			RecipeUtility::Ins().Delete();
+			break;
+		case Project::CopyRecipe:
+			RecipeUtility::Ins().Copy();
+			break;
+		case Project::MoveUpRecipe:
+			RecipeUtility::Ins().MoveUp();
+			break;
+		case Project::MoveDownRecipe:
+			RecipeUtility::Ins().MoveDown();
+			break;
+		default:
+			break;
+		}
 	}
 
 	

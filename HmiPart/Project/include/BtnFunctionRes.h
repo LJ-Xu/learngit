@@ -48,7 +48,15 @@ namespace Project
 	enum FlieLocation :char { USB, SD, HMI, FileREG };
 	enum FlieNameType :char { FIX, DATA, DYNAMIC };
 	enum WinSrc :char { CURRENT, REGVAR, WINNO };
-	
+
+	enum RecipeEditAction:char{
+		AddRecipe,			//添加
+		InsertRecipe,		//插入
+		DeleteRecipe,		//删除
+		CopyRecipe,			//复制
+		MoveUpRecipe,		//上移
+		MoveDownRecipe		//下移
+	};
 	struct DataContent
 	{
 		int Id;
@@ -344,7 +352,17 @@ namespace Project
 			}
 
 		}PrintScreen;
+		struct EditRecipe
+		{
+			RecipeEditAction Action;
+			void Parse(rapidjson::Value& jsonObj);
 
+			template<class Archive>
+			void serialize(Archive & archive)
+			{
+				archive(Action);
+			}
+		}EditRecipe;
 		FunctionSetup() {};
 		~FunctionSetup() {};
 
@@ -353,7 +371,7 @@ namespace Project
 		{
 			archive(SetCoil, SetData, Arithmetic, SendData, SwitchScreen,
 				OpenWin, CloseWin, ImportCSVdata, ExportCSVdata, DownloadRecipe,
-				UploadRecipe, CallbackFunc, PrintScreen);
+				UploadRecipe, CallbackFunc, PrintScreen, EditRecipe);
 		}
 	};
 	struct BtnFunctionRes

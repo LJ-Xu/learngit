@@ -324,6 +324,11 @@ namespace Project
 			PrintMode = jsonObj["PrintMode"].GetInt();
 		
 	}
+	void FunctionSetup::EditRecipe::Parse(rapidjson::Value& jsonObj)
+	{
+		if (jsonObj.HasMember("RecipeEditAction"))
+			Action = (RecipeEditAction)jsonObj["RecipeEditAction"].GetInt();
+	}
 	void BtnFunctionRes::Parse(std::vector<BtnFunctionRes>& vector, rapidjson::Value& jsonObj)
 	{
 		std::vector<BtnFunctionRes>().swap(vector);
@@ -359,6 +364,8 @@ namespace Project
 					tmpFunc.FunctionParam.CallbackFunc.Parse(jsonObj[i]);
 				if (tmpFunc.FunctionName == "PrintScreen")
 					tmpFunc.FunctionParam.PrintScreen.Parse(jsonObj[i]);
+				if (tmpFunc.FunctionName == "EditRecipe")
+					tmpFunc.FunctionParam.EditRecipe.Parse(jsonObj[i]);
 			}
 			if (jsonObj[i].HasMember("PromptNoPerm"))
 				tmpFunc.PopTipWin = jsonObj[i]["PromptNoPerm"].GetBool();

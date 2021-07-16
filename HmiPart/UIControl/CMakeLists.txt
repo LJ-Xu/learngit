@@ -265,6 +265,7 @@ add_library(UIControl STATIC
 	src/Utility/ViewShowUtility.cpp
 	src/Utility/SysSetApi.cpp
 	src/Utility/SysSetHandle.cpp
+	src/Utility/RecipeUtility.cpp
 
 
 
