@@ -132,7 +132,7 @@ namespace Project
 				BitCondition = (Project::BitConditions)jsonObj["TrrigerSimpleMode"].GetInt();
 		}
 		if (jsonObj.HasMember("TrigerValue"))
-			ComPareValue = jsonObj["TrigerValue"].GetDouble();
+			ComPareValue = jsonObj["TrigerValue"].GetFloat();
 		if (jsonObj.HasMember("TrigerValueVarId") && jsonObj["TrigerValueVarId"].IsObject())
 			ComPareVar.Parse(jsonObj["TrigerValueVarId"]);
 		if (jsonObj.HasMember("CollectTimeFrom"))

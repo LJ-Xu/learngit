@@ -18,13 +18,11 @@ namespace Storage
 
 	OperatorStorageService::OperatorStorageService() : 
 		//BaseStorageService("././HMI/Operation.db", "Operation") {
-		BaseStorageService(RunEnv::Cnf.OperationPath, "Operation") {
+		BaseStorageService("Operation") {
 		//BaseStorageService("..\\..\\HMI\\Operation.db", "Operation") {
 		// 创建内存数据库
 		if (Create())
 			Close();
-		// 附加文件数据库
-		Attach();
 	}
 
 	OperatorStorageService * OperatorStorageService::Ins() {
@@ -53,25 +51,90 @@ namespace Storage
 	 * @birth  : created by TangYao on 2021/02/04
 	 */
 	int OperatorStorageService::Create() {
-		int ret = 0;
-		char sql[512] = { 0 };
-		// 操作记录内存表SQL语句
-		snprintf(sql, sizeof(sql), 
-			"CREATE TABLE Operation ("
-			"\n\tID INT NOT NULL,"
-			"\n\tDate INT64 NOT NULL,"
-			"\n\tTime INT64 NOT NULL,"
-			"\n\tUserName Text NOT NULl,"
-			"\n\tClass Text NOT NULL,"
-			"\n\tWindow INT NOT NULL,"
-			"\n\tObjectName Text NOT NULL,"
-			"\n\tComment Text NOT NULL,"
-			"\n\tAction Text NOT NULL,"
-			"\n\tAddress Text NOT NULL,"
-			"\n\tInformation Text NOT NULL);");
-		// 创建操作记录内存表
-		ret = ExecuteSql(sql);
+		std::string sql;
+		sql.append("CREATE TABLE ").append(tbName);
+		sql.append("(ID INTEGER primary key AUTOINCREMENT,");
+		sql.append("Date INT64 NOT NULL,");
+		sql.append("Date INT64 NOT NULL,");
+		sql.append("Time INT64 NOT NULL,");
+		sql.append("UserName Text NOT NULl,");
+		sql.append("Class Text NOT NULL,");
+		sql.append("Window INT NOT NULL,");
+		sql.append("ObjectName Text NOT NULL,");
+		sql.append("Comment Text NOT NULL,");
+		sql.append("Action Text NOT NULL,");
+		sql.append("Address Text NOT NULL,");
+		sql.append("Information Text NOT NULL);");
+		char* errmsg;
+		int ret = sqlite3_exec(db, sql.c_str(), 0, 0, &errmsg);
+		if (ret != SQLITE_OK)
+		{
+			std::cout << "Operatedb create fail: " << sqlite3_errmsg(db);
+			return ret;
+		}
+		//Prepare
+		Init();
 		return ret;
+	}
+
+	int OperatorStorageService::Init()
+	{
+		std::string sql;
+		//Insert
+		{
+			sql.clear();
+			sql.append("INSERT INTO ").append(tbName).append(" VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+			if (!NewFMT(INS_InsertRecord, sql.c_str(), sizeof(sql)))
+				return INS_InsertRecord;
+		}
+		//Delete
+		{
+			sql.clear();
+			sql.append("DELETE FROM ").append(tbName);
+			if (!NewFMT(DEL_DeleteRecords, sql.c_str(), sizeof(sql)))
+				return DEL_DeleteRecords;
+		}
+		//Update
+		{
+			sql.clear();
+			sql.append("UPDATE ").append(tbName).append(" SET Date = ?,Time = ?,UserName = '?',Class = '?',Window = ?,ObjectName = '?',Comment = '?',Action = '?',Address = '?',Information = '?' WHERE ID = ?;");
+			if (!NewFMT(UPD_UpdateRecord, sql.c_str(), sizeof(sql)))
+				return UPD_UpdateRecord;
+		}
+		//Select
+		{
+			sql.clear();
+			sql.append("SELECT * FROM ").append(tbName);
+			if (!NewFMT(SEL_SelectRecords, sql.c_str(), sizeof(sql)))
+				return SEL_SelectRecords;
+
+			sql.clear();
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ID >= ?;");
+			if (!NewFMT(SEL_SelectRecordsFromId, sql.c_str(), sizeof(sql)))
+				return SEL_SelectRecordsFromId;
+
+			sql.clear();
+			sql.append("SELECT * FROM ").append(tbName).append("  LIMIT ?,?;");
+			if (!NewFMT(SEL_SelectRecordsFromIdLimitByCount, sql.c_str(), sizeof(sql)))
+				return SEL_SelectRecordsFromIdLimitByCount;
+
+			sql.clear();
+			sql.append("SELECT * FROM ").append(tbName).append("   WHERE UserName = '?';");
+			if (!NewFMT(SEL_SelectRecordsByUserName, sql.c_str(), sizeof(sql)))
+				return SEL_SelectRecordsByUserName;
+
+			sql.clear();
+			sql.append("SELECT * FROM ").append(tbName).append("   WHERE Date BETWEEN ? AND ?;");
+			if (!NewFMT(SEL_SelectRecordsByDate, sql.c_str(), sizeof(sql)))
+				return SEL_SelectRecordsByDate;
+
+			sql.clear();
+			sql.append("SELECT * FROM ").append(tbName).append("   WHERE Date BETWEEN ? AND ?;");
+			if (!NewFMT(SEL_SelectRecordsByTime, sql.c_str(), sizeof(sql)))
+				return SEL_SelectRecordsByTime;
+		}
+		sqlite3_exec(db, "PRAGMA synchronous = OFF;", NULL, NULL, NULL);
+		return 0;
 	}
 
 	/**
@@ -81,16 +144,29 @@ namespace Storage
 	 * @birth  : created by TangYao on 2021/02/04
 	 */
 	int OperatorStorageService::InsertOperatorRecord(OperatorRecord & record) {
-		char sql[512] = { 0 };
-		// 添加操作记录
-		snprintf(sql, sizeof(sql), "INSERT INTO Operation VALUES("
-			"%d, %lld, %lld, '%s', '%s', %d, '%s', '%s', '%s', '%s', '%s');",
-			record.ID, record.Date, record.Time,
-			record.UserName.c_str(), record.Class.c_str(),
-			record.Window, record.CtrlName.c_str(),
-			record.Comment.c_str(), record.Action.c_str(),
-			record.Address.c_str(), record.Information.c_str());
-		return ExecuteSql(sql);
+		sqlite3_stmt* stmt = GetSTMT(INS_InsertRecord);
+		if (stmt == nullptr)
+			return -1;
+		int ret = sqlite3_reset(stmt);
+		if (!ret)
+		{
+			int i = 1;
+			sqlite3_bind_int(stmt, i++, record.ID);
+			sqlite3_bind_int64(stmt, i++, record.Date);
+			sqlite3_bind_int64(stmt, i++, record.Time);
+			sqlite3_bind_text(stmt, i++, record.UserName.c_str(), record.UserName.size(), nullptr);
+			sqlite3_bind_text(stmt, i++, record.Class.c_str(), record.Class.size(), nullptr);
+			sqlite3_bind_int(stmt, i++, record.Window);
+			sqlite3_bind_text(stmt, i++, record.CtrlName.c_str(), record.CtrlName.size(), nullptr);
+			sqlite3_bind_text(stmt, i++, record.Comment.c_str(), record.Comment.size(), nullptr);
+			sqlite3_bind_text(stmt, i++, record.Action.c_str(), record.Action.size(), nullptr);
+			sqlite3_bind_text(stmt, i++, record.Address.c_str(), record.Address.size(), nullptr);
+			sqlite3_bind_text(stmt, i++, record.Information.c_str(), record.Information.size(), nullptr);
+			ret = sqlite3_step(stmt);
+			if (!ret)
+				curId++;
+		}
+		return ret;
 	}
 
 	/**
@@ -99,10 +175,10 @@ namespace Storage
 	 * @birth  : created by TangYao on 2021/02/04
 	 */
 	int OperatorStorageService::DeleteOperatorRecords() {
-		char sql[512] = { 0 };
-		// 删除全部操作记录
-		snprintf(sql, sizeof(sql), "DELETE FROM Operation;DELETE FROM fileDb.Operation;");
-		return ExecuteSql(sql);
+		sqlite3_stmt* stmt = GetSTMT(DEL_DeleteRecords);
+		if (stmt == nullptr)
+			return -1;
+		return sqlite3_step(stmt);
 	}
 
 	/**
@@ -113,36 +189,27 @@ namespace Storage
 	 * @birth  : created by TangYao on 2021/02/04
 	 */
 	int OperatorStorageService::UpdateOperatorRecord(int id, OperatorRecord & record) {
-		char sql[512] = { 0 };
-		// 更新指定操作记录
-		snprintf(sql, sizeof(sql), 
-			"UPDATE Operation SET Date = %lld, "
-			"Time = %lld, "
-			"UserName = '%s', "
-			"Class = '%s', "
-			"Window = %d, "
-			"ObjectName = '%s', "
-			"Comment = '%s', "
-			"Action = '%s', "
-			"Address = '%s', "
-			"Information = '%s' WHERE ID = %d;"
-			"UPDATE fileDb.Operation SET Date = %lld, "
-			"Time = %lld, "
-			"UserName = '%s', "
-			"Class = '%s', "
-			"Window = %d, "
-			"ObjectName = '%s', "
-			"Comment = '%s', "
-			"Action = '%s', "
-			"Address = '%s', "
-			"Information = '%s' WHERE ID = %d;",
-			record.Date, record.Time, record.UserName.c_str(), record.Class.c_str(),
-			record.Window, record.CtrlName.c_str(), record.Comment.c_str(),
-			record.Action.c_str(), record.Address.c_str(), record.Information.c_str(), record.ID,
-			record.Date, record.Time, record.UserName.c_str(), record.Class.c_str(),
-			record.Window, record.CtrlName.c_str(), record.Comment.c_str(),
-			record.Action.c_str(), record.Address.c_str(), record.Information.c_str(), record.ID);
-		return ExecuteSql(sql);
+		sqlite3_stmt* stmt = GetSTMT(UPD_UpdateRecord);
+		if (stmt == nullptr)
+			return -1;
+		int ret = sqlite3_reset(stmt);
+		if (!ret)
+		{
+			int i = 1;
+			sqlite3_bind_int64(stmt, i++, record.Date);
+			sqlite3_bind_int64(stmt, i++, record.Time);
+			sqlite3_bind_text(stmt, i++, record.UserName.c_str(), record.UserName.size(), nullptr);
+			sqlite3_bind_text(stmt, i++, record.Class.c_str(), record.Class.size(), nullptr);
+			sqlite3_bind_int(stmt, i++, record.Window);
+			sqlite3_bind_text(stmt, i++, record.CtrlName.c_str(), record.CtrlName.size(), nullptr);
+			sqlite3_bind_text(stmt, i++, record.Comment.c_str(), record.Comment.size(), nullptr);
+			sqlite3_bind_text(stmt, i++, record.Action.c_str(), record.Action.size(), nullptr);
+			sqlite3_bind_text(stmt, i++, record.Address.c_str(), record.Address.size(), nullptr);
+			sqlite3_bind_text(stmt, i++, record.Information.c_str(), record.Information.size(), nullptr);
+			sqlite3_bind_int(stmt, i++, record.ID);
+			ret = sqlite3_step(stmt);
+		}
+		return ret;
 	}
 
 	/**
@@ -152,16 +219,8 @@ namespace Storage
 	 * @return : int
 	 * @birth  : created by TangYao on 2021/02/04
 	 */
-	int OperatorStorageService::SelectRecords(const char * sql, vector<OperatorRecord> & records) {
+	int OperatorStorageService::SelectRecords(sqlite3_stmt *stmt, vector<OperatorRecord> & records) {
 		int ret = 0;
-		struct sqlite3_stmt * stmt;
-		// 获取操作记录
-		ret = sqlite3_prepare_v2(db, sql, strlen(sql), &stmt, NULL);
-		if (ret != SQLITE_OK) {
-			const char * file = strrchr(__FILE__, '\\') + 1;
-			fprintf(stderr, "%s[%d] ErrCode[%d] Msg: %s\n", file, __LINE__, ret, sqlite3_errmsg(db));
-			return ret;
-		}
 		// 解析结果集
 		while (sqlite3_step(stmt) == SQLITE_ROW) {
 			OperatorRecord record;
@@ -184,46 +243,57 @@ namespace Storage
 	}
 
 	int OperatorStorageService::SelectOperatorRecords(vector<OperatorRecord> & records) {
-		char sql[512] = { 0 };
-		snprintf(sql, sizeof(sql), "SELECT * FROM Operation union all SELECT * FROM fileDb.Operation;");
-		return SelectRecords(sql, records);
+		sqlite3_stmt* stmt = GetSTMT(SEL_SelectRecords);
+		if (stmt == nullptr)
+			return -1;
+		return SelectRecords(stmt, records);
 	}
 
 	int OperatorStorageService::SelectOperatorRecordsByLimit(int startIndex, int count, vector<OperatorRecord>& records)
 	{
-		char sql[512] = { 0 };
-		if(count ==0)
-			snprintf(sql, sizeof(sql), "SELECT * FROM Operation union all SELECT * FROM fileDb.Operation;",startIndex);
+		if (count == 0)
+		{
+			sqlite3_stmt* stmt = GetSTMT(SEL_SelectRecordsFromId);
+			if (stmt == nullptr)
+				return -1;
+			sqlite3_bind_int(stmt, 1, startIndex);
+			return SelectRecords(stmt, records);
+		}
 		else
-			snprintf(sql, sizeof(sql), "SELECT * FROM Operation union all SELECT * FROM fileDb.Operation;", startIndex, count);
-		return SelectRecords(sql, records);
+		{
+			sqlite3_stmt* stmt = GetSTMT(SEL_SelectRecordsFromIdLimitByCount);
+			if (stmt == nullptr)
+				return -1;
+			sqlite3_bind_int(stmt, 1, startIndex);
+			sqlite3_bind_int(stmt, 2, count);
+			return SelectRecords(stmt, records);
+		}
 	}
 
 	int OperatorStorageService::SelectOperatorRecordsByUser(const char * userName, vector<OperatorRecord> & records) {
-		char sql[512] = { 0 };
-		snprintf(sql, sizeof(sql), 
-			"SELECT * FROM Operation WHERE UserName = '%s' union all "
-			"SELECT * FROM fileDb.Operation WHERE UserName = '%s';",
-			userName, userName);
-		return SelectRecords(sql, records);
+		sqlite3_stmt* stmt = GetSTMT(SEL_SelectRecordsByUserName);
+		if (stmt == nullptr)
+			return -1;
+		sqlite3_bind_text(stmt,1, userName,strlen(userName),nullptr);
+		return SelectRecords(stmt, records);
 	}
 
 	int OperatorStorageService::SelectOperatorRecordsByDate(DDWORD sDate, DDWORD eDate, vector<OperatorRecord> & records) {
-		char sql[512] = { 0 };
-		snprintf(sql, sizeof(sql), 
-			"SELECT * FROM Operation WHERE Date BETWEEN %lld AND %lld union all "
-			"SELECT * FROM fileDb.Operation WHERE Date BETWEEN %lld AND %lld;",
-			sDate, eDate, sDate, eDate);
-		return SelectRecords(sql, records);
+		sqlite3_stmt* stmt = GetSTMT(SEL_SelectRecordsByDate);
+		if (stmt == nullptr)
+			return -1;
+		sqlite3_bind_int64(stmt, 1, sDate);
+		sqlite3_bind_int64(stmt, 2, eDate);
+		return SelectRecords(stmt, records);
 	}
 
 	int OperatorStorageService::SelectOperatorRecordsByTime(DDWORD sTime, DDWORD eTime, vector<OperatorRecord> & records) {
-		char sql[512] = { 0 };
-		snprintf(sql, sizeof(sql),
-			"SELECT * FROM Operation WHERE Time BETWEEN %lld AND %lld union all "
-			"SELECT * FROM fileDb.Operation WHERE Time BETWEEN %lld AND %lld;",
-			sTime, eTime, sTime, eTime);
-		return SelectRecords(sql, records);
+		sqlite3_stmt* stmt = GetSTMT(SEL_SelectRecordsByTime);
+		if (stmt == nullptr)
+			return -1;
+		sqlite3_bind_int64(stmt, 1, sTime);
+		sqlite3_bind_int64(stmt, 2, eTime);
+		return SelectRecords(stmt, records);
 	}
 }
 

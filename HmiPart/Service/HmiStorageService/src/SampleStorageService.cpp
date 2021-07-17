@@ -6,15 +6,10 @@ namespace Storage
 	SampleStorageService * SampleStorageService::ins = nullptr;
 
 	SampleStorageService::SampleStorageService() : 
-		//BaseStorageService("Sample.db", "Sample") {
-		BaseStorageService(RunEnv::Cnf.SamplePath, "Sample") {
-		//BaseStorageService("././HMI/Sample.db", "Sample") {
-		// 创建内存数据库
+		BaseStorageService("Sample") {
 		if (Create()) {
 			Close();
 		}
-		// 附加文件数据库
-		Attach();
 	}
 
 	SampleStorageService * SampleStorageService::Ins() {
@@ -43,18 +38,109 @@ namespace Storage
 	 * @birth  : created by TangYao on 2021/02/04
 	 */
 	int SampleStorageService::Create() {
-		int ret = 0;
-		char sql[SQLCMDLEN] = { 0 };
-		// 操作记录内存表SQL语句
-		snprintf(sql, sizeof(sql), "CREATE TABLE Sample ("
-			"\n\tChannelNo INT NOT NULL,"
-			"\n\tChannelData INT64 NOT NULL,"
-			"\n\tDataType INTEGER NOT NULL,"
-			"\n\tFormat INTEGER NOT NULl,"
-			"\n\tDate INT64 NOT NULL);");
-		// 创建操作记录内存表
-		ret = ExecuteSql(sql);
+		std::string sql;
+		sql.append("CREATE TABLE ").append(tbName);
+		sql.append("(Id INTEGER primary key AUTOINCREMENT,");
+		sql.append("ChannelNo INT NOT NULL,");
+		sql.append("ChannelData INT64 NOT NULL,");
+		sql.append("DataType INTEGER NOT NULL,");
+		sql.append("Format INTEGER NOT NULL,");
+		sql.append("Date INT64 NOT NULL);");
+		char* errmsg;
+		int ret = sqlite3_exec(db, sql.c_str(), 0, 0, &errmsg);
+		if (ret != SQLITE_OK)
+		{
+			std::cout << "Sampledb create fail: " << sqlite3_errmsg(db);
+			return ret;
+		}
+		//Prepare
+		Init();
 		return ret;
+	}
+	int SampleStorageService::Init()
+	{
+		std::string sql;
+
+		//INSERT
+		{
+			sql.clear();
+			sql.append("INSERT INTO ").append(tbName).append(" VALUES(?,?,?,?,?,?)");
+			if (!NewFMT(INS_InsertSampleRecord, sql.c_str(), sizeof(sql)))
+				return INS_InsertSampleRecord;
+
+			sql.clear();
+			sql.append("INSERT INTO ").append(tbName).append(" VALUES(?,?,?,?,?,?)");
+			if (!NewFMT(INS_InsertSampleRecordByLimit, sql.c_str(), sizeof(sql)))
+				return INS_InsertSampleRecord;
+		}
+
+
+		//UPDATE
+		{
+			sql.clear();
+			sql.append("UPDATE ").append(tbName).append(" SET ChannelNo = ?,ChannelData = ?, DataType = ?, Format = ?, Date = ? WHERE ( ChannelNo  = ? and Date= (SELECT  Date FROM ").append(tbName).append(" WHERE  ChannelNo = ? ORDER BY Date LIMIT 1))");
+			if (!NewFMT(UPD_UpdateSampleOnEarliestDate, sql.c_str(), sizeof(sql)))
+				return UPD_UpdateSampleOnEarliestDate;
+		}
+
+		//DELETE
+		{
+			sql.clear();
+			sql.append("DELETE FROM ").append(tbName).append(" WHERE ChannelNo = ?");
+			if (!NewFMT(DEL_DeleteByChannel, sql.c_str(), sizeof(sql)))
+				return DEL_DeleteByChannel;
+
+			sql.clear();
+			sql.append("DELETE FROM ").append(tbName).append(" WHERE ChannelNo >>16 = ?");
+			if (!NewFMT(DEL_DeleteByGroup, sql.c_str(), sizeof(sql)))
+				return DEL_DeleteByGroup;
+		}
+		//SELECT
+		{
+			sql.clear();
+			sql.append("SELECT COUNT(*) FROM ").append(tbName);
+			if (!NewFMT(SEL_GetAllCount, sql.c_str(), sizeof(sql)))
+				return SEL_GetAllCount;
+
+			sql.clear();
+			sql.append("SELECT COUNT(*) FROM ").append(tbName).append(" WHERE ChannelNo = ?");
+			if (!NewFMT(SEL_GetCountByChannel, sql.c_str(), sizeof(sql)))
+				return SEL_GetCountByChannel;
+
+			sql.clear();
+			sql.append("SELECT COUNT(*) FROM ").append(tbName).append(" WHERE ChannelNo>>16 =?  and Date > ? ");
+			if (!NewFMT(SEL_GetChannelCountByDate, sql.c_str(), sizeof(sql)))
+				return SEL_GetChannelCountByDate;
+
+			sql.clear();
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ChannelNo = ? ORDER BY Date;");
+			if (!NewFMT(SEL_SelectSampleRecordByChannel, sql.c_str(), sizeof(sql)))
+				return SEL_SelectSampleRecordByChannel;
+
+			sql.clear();
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ChannelNo = ? AND Date BETWEEN ? AND ?").append(" ORDER BY Date;");
+			if (!NewFMT(SEL_SelectSampleRecordByTime, sql.c_str(), sizeof(sql)))
+				return SEL_SelectSampleRecordByTime;
+
+			sql.clear();
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ChannelNo = ? AND Date BETWEEN ? AND ? ORDER BY Date;");
+			if (!NewFMT(SEL_SelectSampleRecordByDate, sql.c_str(), sizeof(sql)))
+				return SEL_SelectSampleRecordByDate;
+
+			sql.clear();
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ChannelNo>>16 = ? ORDER BY Date;");
+			if (!NewFMT(SEL_SelectSampleRecord, sql.c_str(), sizeof(sql)))
+				return SEL_SelectSampleRecord;
+
+			sql.clear();
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE (ChannelNo>>16 = ? AND Date > ?) ORDER BY Date");
+			if (!NewFMT(SEL_SelectSampleRecordByStTm, sql.c_str(), sizeof(sql)))
+				return SEL_SelectSampleRecordByStTm;
+		}
+
+		sqlite3_exec(db, "PRAGMA synchronous = OFF;", NULL, NULL, NULL);
+
+		return 0;
 	}
 	/**
 	 * @brief  : 插入通道采集记录
@@ -63,135 +149,94 @@ namespace Storage
 	 * @birth  : created by TangYao on 2021/01/12
 	 */
 	int SampleStorageService::InsertSampleRecord(const SampleRecord & record) {
-		int ret = 0;
-		char * errMsg = NULL;
-		char sql[SQLCMDLEN] = { 0 };
-		snprintf(sql, sizeof(sql), "INSERT INTO Sample VALUES(%d, %lld, %d, %d, %lld)",
-			record.Channel, record.Data, record.Type.Cls, record.Type.Type, record.Date);
-		//printf("InsertSampleRecord:value = %d.\n",record.Data);
-		return ExecuteSql(sql);
+		sqlite3_stmt* stmt = GetSTMT(INS_InsertSampleRecord);
+		if (stmt == nullptr)
+			return -1;
+		int ret = sqlite3_reset(stmt);
+		if (!ret)
+		{
+			sqlite3_bind_int(stmt, 2, record.Channel);
+			sqlite3_bind_int64(stmt, 3, record.Data);
+			sqlite3_bind_int(stmt, 4, record.Type.Cls);
+			sqlite3_bind_int(stmt, 5, record.Type.Type);
+			sqlite3_bind_int64(stmt, 6, record.Date);
+			ret = sqlite3_step(stmt);
+			if (!ret)
+				curId++;
+		}
+		return ret;
 	}
 
-	int SampleStorageService::InsertSampleRecord(const SampleRecord & record, int maxcount)
+	int SampleStorageService::InsertSampleRecordByLimit(const SampleRecord & record, int maxcount)
 	{
-		int ret = 0;
-		char * errMsg = NULL;
-		char sql[SQLCMDLEN] = { 0 };
 		int gName = (record.Channel >> 16) & 0xff;
 		int gNo = record.Channel >> 24;
-		if (GetAllCountByNo(gName,gNo,0) > maxcount)
+		if (GetChannelCountByDate(gName, gNo, 0) > maxcount)
 		{
-			//SelectSample("SELECT  * FROM Sample WHERE ( ChannelNo & 0 = 0 and ChannelNo & 0 = 0 )ORDER BY Date LIMIT 1");
-			snprintf(sql, sizeof(sql), "UPDATE Sample SET ChannelNo = %d,ChannelData = %lld, DataType = %d, Format = %d, Date = %lld WHERE ( ChannelNo  = %d and Date= (SELECT  Date FROM Sample WHERE  ChannelNo = %d ORDER BY Date LIMIT 1))", record.Channel,
-				record.Data, record.Type.Cls, record.Type.Type, record.Date, record.Channel, record.Channel);
-			//printf("0InsertSampleRecord:value = %lld.\n",record.Data);
-
-			//snprintf(sql, sizeof(sql), "UPDATE Sample SET ChannelNo = %d,ChannelData = %lld, DataType = %d, Format = %d, Date = %lld WHERE ( ChannelNo & %d = %d and ChannelNo & %d = %d and (Date IN (SELECT MIN(DATE) FROM Sample)) ;UPDATE fileDb.Sample SET ChannelNo = %d, ChannelData = %lld, DataType = %d, Format = %d, Date = %lld WHERE ( ChannelNo & %d = %d and ChannelNo & %d = %d and (Date IN (SELECT MIN(DATE) FROM Sample));", record.Channel,record.Data, record.Type.Cls, record.Type.Type, record.Date,gName, gName, gNo, gNo, record.Channel,record.Data, record.Type.Cls, record.Type.Type, record.Date, gName, gName, gNo, gNo);
-			//(Date IN (SELECT MIN(DATE) FROM Sample))
-			int ret = ExecuteSql(sql);
-			//printf("0InsertSampleRecord:retvalue = %d.\n",ret);
-			return ret;
+			return UpdateSampleRecordByChannel(record);
 		}
 		else
 		{
-			printf("1InsertSampleRecord:value = %lld.\n",record.Data);
-			snprintf(sql, sizeof(sql), "INSERT INTO Sample VALUES(%d, %lld, %d, %d, %lld)",
-				record.Channel, record.Data, record.Type.Cls, record.Type.Type, record.Date);
+			return InsertSampleRecord(record);
 		}
-		
-		return ExecuteSql(sql);
 	}
 
-	/**
-	 * @brief  : 删除通道采集记录
-	 * @params : channel	数据通道号
-	 * @return : int		是否删除成功
-	 * @birth  : created by TangYao on 2021/01/12
-	 */
-	int SampleStorageService::DeleteSampleRecordByChannel(int channel) {
-		int ret = 0;
-		char * errMsg = NULL;
-		char sql[SQLCMDLEN] = { 0 };
-		snprintf(sql, sizeof(sql), "DELETE FROM Sample WHERE ChannelNo = %d; \
-			DELETE FROM fileDb.Sample WHERE ChannelNo = %d;", channel, channel);
-		return ExecuteSql(sql);
+	int SampleStorageService::UpdateSampleRecordByChannel(const SampleRecord & record) {
+		sqlite3_stmt* stmt = GetSTMT(UPD_UpdateSampleOnEarliestDate);
+		if (stmt == nullptr)
+			return -1;
+		int ret = sqlite3_reset(stmt);
+		if (!ret)
+		{
+			sqlite3_bind_int(stmt, 1, record.Channel);
+			sqlite3_bind_int64(stmt, 2, record.Data);
+			sqlite3_bind_int(stmt, 3, record.Type.Cls);
+			sqlite3_bind_int(stmt, 4, record.Type.Type);
+			sqlite3_bind_int64(stmt, 5, record.Date);
+			sqlite3_bind_int(stmt, 6, record.Channel);
+			sqlite3_bind_int(stmt, 7, record.Channel);
+			ret = sqlite3_step(stmt);
+		}
+		return ret;
+	}
+
+	int SampleStorageService::DeleteSampleRecordByChannel(int channel)
+	{
+		sqlite3_stmt* stmt = GetSTMT(DEL_DeleteByChannel);
+		if (stmt == nullptr)
+			return -1;
+		sqlite3_bind_int(stmt, 1, channel);
+		return sqlite3_step(stmt);
 	}
 
 	int SampleStorageService::DeleteSampleRecordByGroup(int gName, int gNo)
 	{
-		int ret = 0;
-		char * errMsg = NULL;
-		char sql[SQLCMDLEN] = { 0 };
-		//int gnm = gName << 16;
-		//int matchnm = gName == 0 ? (0xff << 16) : gnm;
-		//int gno = gNo << 24;
-		//int matchno = gNo == 0 ? (0xff << 24) : gno;
+		sqlite3_stmt* stmt = GetSTMT(DEL_DeleteByChannel);
+		if (stmt == nullptr)
+			return -1;
 		int matchnm = gName | (gNo << 8);
-		snprintf(sql, sizeof(sql), "DELETE FROM Sample WHERE ChannelNo>>16 = %d; \
-			DELETE FROM fileDb.Sample WHERE ChannelNo>>16 = %d", matchnm, matchnm);
-		return ExecuteSql(sql);
+		sqlite3_bind_int(stmt, 1, matchnm);
+		return sqlite3_step(stmt);
 	}
 
-	/**
-	 * @brief  : 更新通道采集记录
-	 * @params : channel	数据通道号
-	 * @params : record		更新数据
-	 * @return : int		是否更新成功
-	 * @birth  : created by TangYao on 2021/01/12
-	 */
-	int SampleStorageService::UpdateSampleRecordByChannel(const SampleRecord & record) {
-		int ret = 0;
-		char * errMsg = NULL;
-		char sql[SQLCMDLEN] = { 0 };
-		snprintf(sql, sizeof(sql), "UPDATE Sample SET ChannelData = %lld, DataType = %c, \
-									Format = %c, Date = %lld WHERE ChannelNo = %d; \
-									UPDATE fileDb.Sample SET ChannelData = %lld, DataType = %c, \
-									Format = %c, Date = %lld WHERE ChannelNo = %d;",
-			record.Data, record.Type.Cls, record.Type.Type, record.Date, record.Channel,
-			record.Data, record.Type.Cls, record.Type.Type, record.Date, record.Channel);
-		return ExecuteSql(sql);
-	}
-
-	/**
-	 * @brief  : 获取通道采集记录
-	 * @params : sql		数据库执行语句
-	 * @params : record		更新数据
-	 * @return : int
-	 * @birth  : created by TangYao on 2021/01/12
-	 */
-	vector<SampleRecord> SampleStorageService::SelectSample(const char * sql) {
-		vector<SampleRecord> records;
-		int ret = 0;
-		struct sqlite3_stmt *stmt;
-		ret = sqlite3_prepare_v2(db, sql, strlen(sql), &stmt, NULL);
-		if (ret != SQLITE_OK) {
-			fprintf(stderr,"Sql Error: %s\n", sqlite3_errmsg(db));
-			return records;
+	int SampleStorageService::GetChannelCountByDate(int groupId, int no, DDWORD date)
+	{
+		sqlite3_stmt* stmt = GetSTMT(SEL_GetChannelCountByDate);
+		if (stmt == nullptr)
+			return -1;
+		int matchnm = groupId | (no << 8);
+		int count = 0;
+		int ret = sqlite3_reset(stmt);
+		if (!ret)
+		{
+			sqlite3_bind_int(stmt, 1, matchnm);
+			sqlite3_bind_int64(stmt, 1, date);
+			ret = sqlite3_step(stmt);
+			if (ret == SQLITE_ROW) {
+				count = sqlite3_column_int(stmt, 0);
+			}
 		}
-		while (sqlite3_step(stmt) == SQLITE_ROW) {
-			SampleRecord record;
-			record.Channel = sqlite3_column_int(stmt, 0);
-			record.Data = sqlite3_column_int64(stmt, 1);
-			record.Type.Cls = sqlite3_column_int(stmt, 2);
-			record.Type.Type = sqlite3_column_int(stmt, 3);
-			record.Date = sqlite3_column_int64(stmt, 4);
-			records.push_back(record);
-		}
-		//fprintf(stderr, "Sql Select Complete.\n");
-		sqlite3_finalize(stmt);
-		return records;
-	}
-
-	/**
-	 * @brief  : 获取通道采集记录
-	 * @params : record		更新数据
-	 * @return : int
-	 * @birth  : created by TangYao on 2021/01/12
-	 */
-	vector<SampleRecord> SampleStorageService::SelectAllSampleRecord() {
-		char sql[SQLCMDLEN] = { 0 };
-		snprintf(sql, sizeof(sql), "SELECT * FROM Sample union all SELECT * FROM fileDb.Sample ORDER BY Date;");
-		return SelectSample(sql);
+		return ret;
 	}
 
 	/**
@@ -202,36 +247,63 @@ namespace Storage
 	 * @birth  : created by TangYao on 2021/01/12
 	 */
 	vector<SampleRecord> SampleStorageService::SelectSampleRecordByChannel(int channel) {
-		char sql[SQLCMDLEN] = { 0 };
-		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE ChannelNo = %d union all \
-									SELECT * FROM fileDb.Sample WHERE ChannelNo = %d ORDER BY Date;", channel, channel);
-		return SelectSample(sql);
+		sqlite3_stmt* stmt = GetSTMT(SEL_SelectSampleRecordByChannel);
+		if (stmt == nullptr)
+			return std::vector<SampleRecord>();
+		std::vector<SampleRecord> records;
+		sqlite3_bind_int(stmt, 1, channel);
+		while (sqlite3_step(stmt) == SQLITE_ROW) {
+			SampleRecord record;
+			record.Channel = sqlite3_column_int(stmt, 1);
+			record.Data = sqlite3_column_int64(stmt, 2);
+			record.Type.Cls = sqlite3_column_int(stmt, 3);
+			record.Type.Type = sqlite3_column_int(stmt, 4);
+			record.Date = sqlite3_column_int64(stmt, 5);
+			records.push_back(record);
+		}
+		return records;
 	}
 
-	vector<SampleRecord> SampleStorageService::SelectSampleRecordByNO(int gName, int gNo)
+	vector<SampleRecord> SampleStorageService::SelectSampleRecord(int gName, int gNo)
 	{
-		char sql[SQLCMDLEN] = { 0 };
-		/*int gnm = gName << 16;
-		int matchnm = gName == 0 ? (0xff << 16) : gnm;
-		int gno = gNo << 24;
-		int matchno = gNo == 0 ? (0xff << 24) : gno;*/
+		sqlite3_stmt* stmt = GetSTMT(SEL_SelectSampleRecordByChannel);
+		if (stmt == nullptr)
+			return std::vector<SampleRecord>();
 		int matchnm = gName | (gNo << 8);
-		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE ChannelNo>>16 = %d union all SELECT * FROM fileDb.Sample WHERE ChannelNo>>16 = %d  ORDER BY Date ", matchnm, matchnm);
-		return SelectSample(sql);
+		std::vector<SampleRecord> records;
+		sqlite3_bind_int(stmt, 1, matchnm);
+		while (sqlite3_step(stmt) == SQLITE_ROW) {
+			SampleRecord record;
+			record.Channel = sqlite3_column_int(stmt, 1);
+			record.Data = sqlite3_column_int64(stmt, 2);
+			record.Type.Cls = sqlite3_column_int(stmt, 3);
+			record.Type.Type = sqlite3_column_int(stmt, 4);
+			record.Date = sqlite3_column_int64(stmt, 5);
+			records.push_back(record);
+		}
+		return records;
 	}
 
-	vector<SampleRecord> SampleStorageService::SelectSampleRecordByNO(int gName, int gNo, unsigned long long startTime)
+	vector<SampleRecord> SampleStorageService::SelectSampleRecordByStTm(int gName, int gNo, unsigned long long startTime)
 	{
-		char sql[SQLCMDLEN] = { 0 };
-		/*int gnm = gName << 16;
-		int matchnm = gName == 0 ? (0xff << 16) : gnm;
-		int gno = gNo << 24;
-		int matchno = gNo == 0 ? (0xff << 24) : gno;*/
+		sqlite3_stmt* stmt = GetSTMT(SEL_SelectSampleRecordByChannel);
+		if (stmt == nullptr)
+			return std::vector<SampleRecord>();
 		int matchnm = gName | (gNo << 8);
-		//snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE (ChannelNo & %d = %d and ChannelNo & %d = %d and Date > %lld) union all SELECT * FROM fileDb.Sample WHERE (ChannelNo & %d = %d and ChannelNo & %d = %d and Date > %lld) ORDER BY Date", gnm, gnm, gno, gno, startTime, gnm, gnm, gno, gno, startTime);
-		//snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE (ChannelNo =%d and Date > %lld) union all SELECT * FROM fileDb.Sample WHERE (ChannelNo = %d and Date > %lld) ORDER BY Date", gnm|gno, startTime, gnm|gno, startTime);
-		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE (ChannelNo>>16 = %d  AND Date > %lld) union all SELECT * FROM fileDb.Sample WHERE (ChannelNo>>16 = %d AND Date > %lld) ORDER BY Date", matchnm,  startTime, matchnm, startTime);
-		return SelectSample(sql);
+		std::vector<SampleRecord> records;
+		sqlite3_bind_int(stmt, 1, matchnm);
+		sqlite3_bind_int64
+		(stmt, 2, startTime);
+		while (sqlite3_step(stmt) == SQLITE_ROW) {
+			SampleRecord record;
+			record.Channel = sqlite3_column_int(stmt, 1);
+			record.Data = sqlite3_column_int64(stmt, 2);
+			record.Type.Cls = sqlite3_column_int(stmt, 3);
+			record.Type.Type = sqlite3_column_int(stmt, 4);
+			record.Date = sqlite3_column_int64(stmt, 5);
+			records.push_back(record);
+		}
+		return records;
 	}
 
 	/**
@@ -244,11 +316,27 @@ namespace Storage
 	 * @birth  : created by TangYao on 2021/01/12
 	 */
 	vector<SampleRecord> SampleStorageService::SelectSampleRecordByDate(int channel, DDWORD startDate, DDWORD endDate) {
-		char sql[SQLCMDLEN] = { 0 };
-		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE ChannelNo = %d AND Date BETWEEN %lld AND %lld union all \
-									SELECT * FROM fileDb.Sample WHERE ChannelNo = %d AND Date BETWEEN %lld AND %lld ORDER BY Date;",
-			channel, startDate, endDate, channel, startDate, endDate);
-		return SelectSample(sql);
+		sqlite3_stmt* stmt = GetSTMT(INS_InsertSampleRecord);
+		if (stmt == nullptr)
+			return std::vector<SampleRecord>();
+		std::vector<SampleRecord> records;
+		int ret = sqlite3_reset(stmt);
+		if (!ret)
+		{
+			sqlite3_bind_int(stmt, 1, channel);
+			sqlite3_bind_int64(stmt, 2, startDate);
+			sqlite3_bind_int64(stmt, 3, endDate);
+			while (sqlite3_step(stmt) == SQLITE_ROW) {
+				SampleRecord record;
+				record.Channel = sqlite3_column_int(stmt, 1);
+				record.Data = sqlite3_column_int64(stmt, 2);
+				record.Type.Cls = sqlite3_column_int(stmt, 3);
+				record.Type.Type = sqlite3_column_int(stmt, 4);
+				record.Date = sqlite3_column_int64(stmt, 5);
+				records.push_back(record);
+			}
+		}
+		return records;
 	}
 
 	/**
@@ -261,58 +349,43 @@ namespace Storage
 	 * @birth  : created by TangYao on 2021/01/12
 	 */
 	vector<SampleRecord> SampleStorageService::SelectSampleRecordByTime(int channel, DDWORD startTime, DDWORD endTime) {
-		char sql[SQLCMDLEN] = { 0 };
-		//sprintf(sql, "SELECT * FROM Sample WHERE ChannelNo = %d AND Date BETWEEN %lld AND %lld", channel, startTime, endTime);
-		snprintf(sql, sizeof(sql), "SELECT * FROM Sample WHERE ChannelNo = %d AND Date BETWEEN %lld AND %lld union all \
-									SELECT * FROM fileDb.Sample WHERE ChannelNo = %d AND Date BETWEEN %lld AND %lld ORDER BY Date;",
-			channel, startTime, endTime, channel, startTime, endTime);
-		return SelectSample(sql);
+		sqlite3_stmt* stmt = GetSTMT(INS_InsertSampleRecord);
+		if (stmt == nullptr)
+			return std::vector<SampleRecord>();
+		std::vector<SampleRecord> records;
+		int ret = sqlite3_reset(stmt);
+		if (!ret)
+		{
+			sqlite3_bind_int(stmt, 1, channel);
+			sqlite3_bind_int64(stmt, 2, startTime);
+			sqlite3_bind_int64(stmt, 3, endTime);
+			while (sqlite3_step(stmt) == SQLITE_ROW) {
+				SampleRecord record;
+				record.Channel = sqlite3_column_int(stmt, 1);
+				record.Data = sqlite3_column_int64(stmt, 2);
+				record.Type.Cls = sqlite3_column_int(stmt, 3);
+				record.Type.Type = sqlite3_column_int(stmt, 4);
+				record.Date = sqlite3_column_int64(stmt, 5);
+				records.push_back(record);
+			}
+		}
+		return records;
 	}
 
-	/**
-	 * @brief  : 获取通道采集记录数量
-	 * @params : channel	数据通道号
-	 * @return : int
-	 * @birth  : created by TangYao on 2021/01/12
-	 */
 	int SampleStorageService::GetCountByChannel(int channel) {
-		char sql[SQLCMDLEN] = { 0 };
-		struct sqlite3_stmt *stmt;
-		snprintf(sql, sizeof(sql), "SELECT COUNT(*) FROM Sample WHERE ChannelNo = %d", channel);
-		int ret = sqlite3_prepare_v2(db, sql, strlen(sql), &stmt, NULL);
-		if (ret != SQLITE_OK) {
-			fprintf(stderr, "Sql Error: %s\n", sqlite3_errmsg(db));
+		sqlite3_stmt* stmt = GetSTMT(SEL_GetCountByChannel);
+		if (stmt == nullptr)
 			return -1;
-		}
 		int count = 0;
-		ret = sqlite3_step(stmt);
-		if (ret == SQLITE_ROW) {
-			count = sqlite3_column_int(stmt, 0);
+		int ret = sqlite3_reset(stmt);
+		if (!ret)
+		{
+			sqlite3_bind_int(stmt, 1, channel);
+			ret = sqlite3_step(stmt);
+			if (ret == SQLITE_ROW) {
+				count = sqlite3_column_int(stmt, 0);
+			}
 		}
-		sqlite3_finalize(stmt);
-		return count;
-	}
-
-	int SampleStorageService::GetAllCountByNo(int gName,int gNo, unsigned long long date) {
-		char sql[SQLCMDLEN] = { 0 };
-		struct sqlite3_stmt *stmt;
-		/*int gnm = gName << 16;
-		int matchnm = gName == 0 ? (0xff << 16) : gnm;
-		int gno = gNo << 24;
-		int matchno = gNo == 0 ? (0xff << 24) : gno;*/
-		int matchnm = gName |(gNo << 8);
-		snprintf(sql, sizeof(sql), "SELECT COUNT(*) FROM Sample WHERE ChannelNo>>16 =%d  and Date > %lld ", matchnm,date);
-		int ret = sqlite3_prepare_v2(db, sql, strlen(sql), &stmt, NULL);
-		if (ret != SQLITE_OK) {
-			fprintf(stderr, "Sql Error: %s\n", sqlite3_errmsg(db));
-			return -1;
-		}
-		int count = 0;
-		ret = sqlite3_step(stmt);
-		if (ret == SQLITE_ROW) {
-			count = sqlite3_column_int(stmt, 0);
-		}
-		sqlite3_finalize(stmt);
-		return count;
+		return ret;
 	}
 }

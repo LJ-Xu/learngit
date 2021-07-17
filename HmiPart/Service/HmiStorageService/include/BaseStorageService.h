@@ -14,6 +14,7 @@
 #define __BASESTORAGESERVICE__
 
 #include <iostream>
+#include <map>
 #include "sqlite3.h"
 #include "RunEnv.h"
 #define SQLCMDLEN 512//sql语句最大长度
@@ -28,7 +29,8 @@ namespace Storage
 	class BaseStorageService
 	{
 	protected:
-		BaseStorageService(const string & dbPath, const string & tbName, int maxCnt = 10000);
+		//BaseStorageService(const string & dbPath, const string & tbName, int maxCnt = 10000);
+		BaseStorageService(const char* tbname);
 		virtual ~BaseStorageService();
 
 	protected:
@@ -37,11 +39,9 @@ namespace Storage
 		// 关闭数据库
 		void Close();
 		// 执行sql语句
-		int ExecuteSql(const char * sql);
+		//int ExecuteSql(const char * sql);
 		// 创建内存数据库
 		virtual int Create() = 0;
-		// 附加文件数据库
-		int Attach();
 
 	public:
 		// 备份至文件数据库
@@ -50,12 +50,22 @@ namespace Storage
 		int Flush(int count);
 		// 获取内存中数据数量
 		int Count();
+		bool NewFMT(char key, const char* sql, int len);
+		bool FinFMT(char key);
+	protected:
+		sqlite3_stmt* GetSTMT(char key);
+		void ExecBegin();
+		void ExecCommit();
+	protected:
+		virtual int Init() = 0;
 
 	protected:
 		sqlite3 * db;	// 数据库句柄
-		string dbPath;	// 数据库路径
+		int curId;
 		string tbName;	// 数据表名称
 		bool isOpened;	// 是否打开数据库
+	private:
+		std::map<char, sqlite3_stmt*> StoreObj;
 	};
 }
 

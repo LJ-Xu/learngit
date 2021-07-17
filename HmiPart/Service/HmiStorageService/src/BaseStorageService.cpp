@@ -15,7 +15,7 @@
 
 namespace Storage
 {
-	BaseStorageService::BaseStorageService(const string & dbPath, const string & tbName, int maxCnt) : dbPath(dbPath), tbName(tbName) {
+	BaseStorageService::BaseStorageService(const char* tbname) : tbName(tbname) {
 		// 打开内存数据库
 		Open();
 	}
@@ -31,14 +31,10 @@ namespace Storage
 	 * @birth  : created by TangYao on 2021/02/04
 	 */
 	int BaseStorageService::Open() {
-		// 打开内存数据库
-		int ret = sqlite3_open(":memory:", &db);
-		if (ret != SQLITE_OK) {
-			//const char * file = strrchr(__FILE__, '\\') + 1;
-			//fprintf(stderr, "%s[%d] ErrCode[%d] Msg: %s\n", file, __LINE__, ret, sqlite3_errmsg(db));
-			sqlite3_close(db);
-		}
-		// 数据库是否打开
+		int flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_URI;
+		std::string sql;
+		sql.append("file:").append("DB").append("?mode=memory&cache=shared");
+		int ret = sqlite3_open_v2(sql.c_str(), &db, flags, NULL);
 		isOpened = (ret == SQLITE_OK);
 		return ret;
 	}
@@ -53,48 +49,10 @@ namespace Storage
 			sqlite3_close_v2(db);
 			isOpened = false;
 		}
-	}
-
-	/**
-	 * @brief  : 执行sql语句
-	 * @params : sql	 SQL语句
-	 * @return : int
-	 * @birth  : created by TangYao on 2021/02/04
-	 */
-	int BaseStorageService::ExecuteSql(const char * sql) {
-		// 校验参数合法性
-		if (sql == nullptr || strlen(sql) == 0) {
-			//const char * file = strrchr(__FILE__, '\\') + 1;
-			//fprintf(stderr, "%s[%d] Sql statements is empty\n", file, __LINE__);
-			return -1;
+		for (auto itor = StoreObj.begin(); itor != StoreObj.end(); ++itor)
+		{
+			sqlite3_finalize(itor->second);
 		}
-		char * errMsg = NULL;
-		// 执行Sql语句
-		//printf(sql);
-		//printf("\n");
-		int ret = sqlite3_exec(db, sql, NULL, NULL, &errMsg);
-		if (ret != SQLITE_OK) {
-			//const char * file = strrchr(__FILE__, '\\') + 1;
-			//fprintf(stderr, "%s[%d] ErrCode[%d] Msg: %s\n", file, __LINE__, ret, errMsg);
-		}
-		//printf("sql exec success!\n");
-		return ret;
-	}
-
-	/**
-	 * @brief  : 附加文件数据库
-	 * @return : int
-	 * @birth  : created by TangYao on 2021/02/04
-	 */
-	int BaseStorageService::Attach() {
-		char sql[512] = { 0 };
-		snprintf(sql, sizeof(sql), "ATTACH '%s' AS fileDb;", dbPath.c_str());
-		// 附加文件数据库
-		int ret = ExecuteSql(sql);
-		if (ret != SQLITE_OK) {
-			Close();
-		}
-		return ret;
 	}
 
 	/**
@@ -115,23 +73,7 @@ namespace Storage
 	 * @birth  : created by TangYao on 2021/02/04
 	 */
 	int BaseStorageService::Flush(int count) {
-		char sql[512] = { 0 };
-		// 清除文件数据库历史数据
-		// sqlite3_busy_timeout(db, 2000);
-		snprintf(sql, sizeof(sql), "DELETE FROM fileDb.%s WHERE ID IN (SELECT ID FROM fileDb.%s LIMIT %d)", tbName.c_str(), tbName.c_str(), count);
-		int ret = ExecuteSql(sql);
-		if (ret != SQLITE_OK) {
-			return ret;
-		}
-		// 备份指定数量数据
-		snprintf(sql, sizeof(sql), "INSERT OR REPLACE INTO fileDb.%s SELECT * FROM %s LIMIT 0, %d", tbName.c_str(), tbName.c_str(), count);
-		ret = ExecuteSql(sql);
-		if (ret != SQLITE_OK) {
-			return ret;
-		}
-		// 删除内存数据库数据
-		snprintf(sql, sizeof(sql), "DELETE FROM %s WHERE ID IN (SELECT ID FROM %s LIMIT %d)", tbName.c_str(), tbName.c_str(), count);
-		return ExecuteSql(sql);
+		return 0;
 	}
 
 	/**
@@ -155,5 +97,43 @@ namespace Storage
 		}
 		sqlite3_finalize(stmt);
 		return count;
+	}
+	bool BaseStorageService::NewFMT(char key, const char * sql, int len)
+	{
+		sqlite3_stmt *stmt;
+		int ret = sqlite3_prepare_v2(db, sql, strlen(sql), &stmt, 0);
+		auto itorret = StoreObj.insert(std::make_pair(key, stmt));
+		return itorret.second;
+	}
+	bool BaseStorageService::FinFMT(char key)
+	{
+		sqlite3_stmt *stmt = GetSTMT(key);
+		if (stmt != nullptr)
+		{
+			sqlite3_finalize(stmt);
+			StoreObj.erase(key);
+		}
+		return false;
+	}
+	sqlite3_stmt * BaseStorageService::GetSTMT(char key)
+	{
+		sqlite3_stmt* stmt = nullptr;
+		try {
+			stmt = StoreObj.at(key);
+		}
+		catch (const std::out_of_range &e) {
+			stmt = nullptr;
+			std::cout << "Out of range while Getstmt,please check your initlize of stmt in Create()." << e.what();
+			return nullptr;
+		}
+		return stmt;
+	}
+	void BaseStorageService::ExecBegin()
+	{
+		sqlite3_exec(db, "BEGIN;", NULL, NULL, NULL);
+	}
+	void BaseStorageService::ExecCommit()
+	{
+		sqlite3_exec(db, "COMMIT;", NULL, NULL, NULL);
 	}
 }
