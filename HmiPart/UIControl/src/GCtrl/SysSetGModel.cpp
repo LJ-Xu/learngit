@@ -42,8 +42,8 @@ namespace UI
 					SysSetGUnit.Clock.ClockViewFormat = sysjson["ClockViewFormat"].GetInt();
 				if (sysjson.HasMember("ClockSource"))
 					SysSetGUnit.Clock.ClockSource = sysjson["ClockSource"].GetInt();
-				if (sysjson.HasMember("OutDeviceVarId") && sysjson["OutDeviceVarId"].IsArray())
-					Project::DataVarId::Parse(SysSetGUnit.Clock.OutDeviceVarId, sysjson["OutDeviceVarId"]);
+				if (sysjson.HasMember("OutDevVarId") && sysjson["OutDevVarId"].IsArray())
+					Project::DataVarId::Parse(SysSetGUnit.Clock.OutDeviceVarId, sysjson["OutDevVarId"]);
 				//SysSetGUnit.Clock.OutDeviceVarId.Parse(sysjson["OutDeviceVarId"]);
 				if (sysjson.HasMember("IsClockWriteinPlc"))
 					SysSetGUnit.Clock.IsClockWriteinPlc = sysjson["IsClockWriteinPlc"].GetBool();
@@ -67,9 +67,9 @@ namespace UI
 						Project::WritePlcDevicesSet tmpvarid;
 						if (sysjson["WriteInPlcDevices"][i].HasMember("ClockWriteViewFormat"))
 							tmpvarid.ClockWriteViewFormat = sysjson["WriteInPlcDevices"][i]["ClockWriteViewFormat"].GetInt();
-						if (sysjson["WriteInPlcDevices"][i].HasMember("DeviceVarId") &&
-							sysjson["WriteInPlcDevices"][i]["DeviceVarId"].IsArray())
-							Project::DataVarId::Parse(tmpvarid.TimeVids, sysjson["WriteInPlcDevices"][i]["DeviceVarId"]);
+						if (sysjson["WriteInPlcDevices"][i].HasMember("DevVarId") &&
+							sysjson["WriteInPlcDevices"][i]["DevVarId"].IsArray())
+							Project::DataVarId::Parse(tmpvarid.TimeVids, sysjson["WriteInPlcDevices"][i]["DevVarId"]);
 						//tmpvarid.Parse(system["WriteInPlcDevices"][i]["DeviceVarId"]);
 						SysSetGUnit.Clock.WriteInPlcDevices.push_back(tmpvarid);
 					}

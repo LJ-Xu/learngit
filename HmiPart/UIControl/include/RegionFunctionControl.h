@@ -43,11 +43,11 @@ namespace UI
 		void HandleSwitchScreen(Project::FunctionSetup param);
 		void HandleOpenWin(Project::FunctionSetup param);
 		void HandleCloseWin(Project::FunctionSetup param);
-		void HandleImportCSVdata(Project::FunctionSetup param);
-		void HandleExportCSVdata(Project::FunctionSetup param);
-		void HandleDownloadRecipe(Project::FunctionSetup param);
-		void HandleUploadRecipe(Project::FunctionSetup param);
-		void HandleCallbackFunc(Project::FunctionSetup param);
+		void HandleImportCSVdata(Project::BtnFunctionRes res);
+		void HandleExportCSVdata(Project::BtnFunctionRes res);
+		void HandleDownloadRecipe(Project::BtnFunctionRes res);
+		void HandleUploadRecipe(Project::BtnFunctionRes res);
+		void HandleCallbackFunc(Project::BtnFunctionRes res);
 		void HandlePrintScreen(Project::FunctionSetup param);
 
 		bool precoilstatus_ = false;

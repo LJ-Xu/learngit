@@ -391,6 +391,8 @@ namespace UI
 		else Arc(fl_gc, (int)arcX, (int)arcY, arcX + (int)width * 2, 
 			arcY + (int)height * 2, (int)startx, (int)starty, (int)endx, (int)endy);
 #else //X11
+		if (sAngle > eAngle)
+			sAngle -= 360;
         fl_arc(arcX, arcY, width * 2, height * 2, sAngle, eAngle);
 #endif
 		fl_end_line();

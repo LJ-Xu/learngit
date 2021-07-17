@@ -93,8 +93,8 @@ namespace Project
 					Clock.ClockViewFormat = system["ClockViewFormat"].GetInt();
 				if (system.HasMember("ClockSource"))
 					Clock.ClockSource = system["ClockSource"].GetInt();
-				if (system.HasMember("OutDeviceVarId") && system["OutDeviceVarId"].IsArray())
-					Project::DataVarId::Parse(Clock.OutDeviceVarId, system["OutDeviceVarId"]);
+				if (system.HasMember("OutDevVarId") && system["OutDevVarId"].IsArray())
+					Project::DataVarId::Parse(Clock.OutDeviceVarId, system["OutDevVarId"]);
 					//Clock.OutDeviceVarId.Parse(system["OutDeviceVarId"]);
 				if (system.HasMember("IsClockWriteinPlc"))
 					Clock.IsClockWriteinPlc = system["IsClockWriteinPlc"].GetBool();
@@ -118,9 +118,9 @@ namespace Project
 						Project::WritePlcDevicesSet tmpvarid;
 						if (system["WriteInPlcDevices"][i].HasMember("ClockWriteViewFormat"))
 							tmpvarid.ClockWriteViewFormat = system["WriteInPlcDevices"][i]["ClockWriteViewFormat"].GetInt();
-						if (system["WriteInPlcDevices"][i].HasMember("DeviceVarId") &&
-							system["WriteInPlcDevices"][i]["DeviceVarId"].IsArray())
-							Project::DataVarId::Parse(tmpvarid.TimeVids, system["WriteInPlcDevices"][i]["DeviceVarId"]);
+						if (system["WriteInPlcDevices"][i].HasMember("DevVarId") &&
+							system["WriteInPlcDevices"][i]["DevVarId"].IsArray())
+							Project::DataVarId::Parse(tmpvarid.TimeVids, system["WriteInPlcDevices"][i]["DevVarId"]);
 							//tmpvarid.Parse(system["WriteInPlcDevices"][i]["DeviceVarId"]);
 						Clock.WriteInPlcDevices.push_back(tmpvarid);
 					}

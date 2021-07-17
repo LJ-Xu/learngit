@@ -44,12 +44,23 @@ namespace UI
 		if (model->MultiStatusKeypadConfig.DataVarType == 0)	//Î»¼Ä´æÆ÷
 		{
 			int value = atoi(model->MultiStatusKeypadConfig.Action[CurrentStatus].Val.c_str());
+			//bool flag = false;
+			if (value < 0)
+			//	flag = true;
+			//else
+			//	flag = false;
+			value = abs(value);
 			for (i = 0; i < model->MultiStatusKeypadConfig.RegVars.size() - 1; i++)
 			{
+				bool state;
+				//if (i == model->MultiStatusKeypadConfig.RegVars.size() - 2)
+				//	state = flag;
+				//else
+				state = (bool)((value >> i) & 0x0001);
 				if (model->MultiStatusKeypadConfig.IsRecord)
 					OperatorGControl::Ins()->AddOperatorRecord(ctrl->Page()->Winno(), model->MultiStatusKeypadConfig.CtrlName, Storage::OA_SET,
-						model->MultiStatusKeypadConfig.RegVars[i],UIData::Bit(model->MultiStatusKeypadConfig.RegVars[i]), (bool)((value >> i) & 0x1));
-				UI::UIData::Bit(model->MultiStatusKeypadConfig.RegVars[i], (value >> i) & 0x1);
+						model->MultiStatusKeypadConfig.RegVars[i],UIData::Bit(model->MultiStatusKeypadConfig.RegVars[i]), state);
+				UI::UIData::Bit(model->MultiStatusKeypadConfig.RegVars[i], state);
 			}
 		}
 		else {					//×Ö¼Ä´æÆ÷

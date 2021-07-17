@@ -181,15 +181,15 @@ namespace UI
 				if (mode_->FuncBtnConfig.Press[i].FunctionName == "CloseWin")
 					HandleCloseWin(mode_->FuncBtnConfig.Press[i].FunctionParam);
 				if (mode_->FuncBtnConfig.Press[i].FunctionName == "ImportCSVdata")
-					HandleImportCSVdata(mode_->FuncBtnConfig.Press[i].FunctionParam);
+					HandleImportCSVdata(mode_->FuncBtnConfig.Press[i]);
 				if (mode_->FuncBtnConfig.Press[i].FunctionName == "ExportCSVdata")
-					HandleExportCSVdata(mode_->FuncBtnConfig.Press[i].FunctionParam);
+					HandleExportCSVdata(mode_->FuncBtnConfig.Press[i]);
 				if (mode_->FuncBtnConfig.Press[i].FunctionName == "DownloadRecipe")
-					HandleDownloadRecipe(mode_->FuncBtnConfig.Press[i].FunctionParam);
+					HandleDownloadRecipe(mode_->FuncBtnConfig.Press[i]);
 				if (mode_->FuncBtnConfig.Press[i].FunctionName == "UploadRecipe")
-					HandleUploadRecipe(mode_->FuncBtnConfig.Press[i].FunctionParam);
+					HandleUploadRecipe(mode_->FuncBtnConfig.Press[i]);
 				if (mode_->FuncBtnConfig.Press[i].FunctionName == "CallbackFunc")
-					HandleCallbackFunc(mode_->FuncBtnConfig.Press[i].FunctionParam);
+					HandleCallbackFunc(mode_->FuncBtnConfig.Press[i]);
 				if (mode_->FuncBtnConfig.Press[i].FunctionName == "PrintScreen")
 					HandlePrintScreen(mode_->FuncBtnConfig.Press[i].FunctionParam);
 				if (mode_->FuncBtnConfig.Press[i].FunctionName == "EditRecipe")
@@ -239,15 +239,15 @@ namespace UI
 				if (mode_->FuncBtnConfig.Release[i].FunctionName == "CloseWin")
 					HandleCloseWin(mode_->FuncBtnConfig.Release[i].FunctionParam);
 				if (mode_->FuncBtnConfig.Release[i].FunctionName == "ImportCSVdata")
-					HandleImportCSVdata(mode_->FuncBtnConfig.Release[i].FunctionParam);
+					HandleImportCSVdata(mode_->FuncBtnConfig.Release[i]);
 				if (mode_->FuncBtnConfig.Release[i].FunctionName == "ExportCSVdata")
-					HandleExportCSVdata(mode_->FuncBtnConfig.Release[i].FunctionParam);
+					HandleExportCSVdata(mode_->FuncBtnConfig.Release[i]);
 				if (mode_->FuncBtnConfig.Release[i].FunctionName == "DownloadRecipe")
-					HandleDownloadRecipe(mode_->FuncBtnConfig.Release[i].FunctionParam);
+					HandleDownloadRecipe(mode_->FuncBtnConfig.Release[i]);
 				if (mode_->FuncBtnConfig.Release[i].FunctionName == "UploadRecipe")
-					HandleUploadRecipe(mode_->FuncBtnConfig.Release[i].FunctionParam);
+					HandleUploadRecipe(mode_->FuncBtnConfig.Release[i]);
 				if (mode_->FuncBtnConfig.Release[i].FunctionName == "CallbackFunc")
-					HandleCallbackFunc(mode_->FuncBtnConfig.Release[i].FunctionParam);
+					HandleCallbackFunc(mode_->FuncBtnConfig.Release[i]);
 				if (mode_->FuncBtnConfig.Release[i].FunctionName == "PrintScreen")
 					HandlePrintScreen(mode_->FuncBtnConfig.Release[i].FunctionParam);
 				if (mode_->FuncBtnConfig.Press[i].FunctionName == "EditRecipe")
@@ -583,14 +583,15 @@ namespace UI
 			Win()->CloseAllDialog();
 		}
 	}
-	void BtnFunctionControl::HandleImportCSVdata(Project::FunctionSetup param)
+	void BtnFunctionControl::HandleImportCSVdata(Project::BtnFunctionRes res)
 	{
 		//导入CSVtoPSW
+		Project::FunctionSetup param = res.FunctionParam;
 		string filename;
 		switch (param.ImportCSVdata.NameType)
 		{
 		case Project::FlieNameType::FIX:
-			filename = param.ImportCSVdata.FileName;
+			filename = res.FileName;
 			break;
 		case Project::FlieNameType::DATA:
 		{
@@ -611,10 +612,10 @@ namespace UI
 		for (size_t i = 0; i < (size_t)param.ImportCSVdata.DataSize; i++)
 		{
 			ColDataTypeInfo info;
-			info.DataFmt = (Project::VarNumberType)param.ImportCSVdata.Data[i].DataFmt;
-			info.DataType = (Project::VarDataType)param.ImportCSVdata.Data[i].DataType;
-			info.RegCount = param.ImportCSVdata.Data[i].Number;
-			info.ColTitle = param.ImportCSVdata.Data[i].Title;
+			info.DataFmt = (Project::VarNumberType)res.Data[i].DataFmt;
+			info.DataType = (Project::VarDataType)res.Data[i].DataType;
+			info.RegCount = res.Data[i].Number;
+			info.ColTitle = res.Data[i].Title;
 			typeinfos.push_back(info);
 			regnum += info.RegCount;
 		}
@@ -623,15 +624,16 @@ namespace UI
 			param.ImportCSVdata.OrgVarIdRef, typeinfos, param.ImportCSVdata.StatusVarRef,
 			param.ImportCSVdata.ResultVarRef, param.ImportCSVdata.ProgressVarRef);
 	}
-	void BtnFunctionControl::HandleExportCSVdata(Project::FunctionSetup param)
+	void BtnFunctionControl::HandleExportCSVdata(Project::BtnFunctionRes res)
 	{
 		//csv导出from PSW
 		//获取文件名称
+		Project::FunctionSetup param = res.FunctionParam;
 		string filename;
 		switch (param.ExportCSVdata.NameType)
 		{
 		case Project::FlieNameType::FIX:
-			filename = param.ExportCSVdata.FileName;
+			filename = res.FileName;
 			break;
 		case Project::FlieNameType::DATA:
 		{
@@ -653,10 +655,10 @@ namespace UI
 		for (size_t i = 0; i < (size_t)param.ExportCSVdata.DataSize; i++)
 		{
 			ColDataTypeInfo info;
-			info.DataFmt = (Project::VarNumberType)param.ExportCSVdata.Data[i].DataFmt;
-			info.DataType = (Project::VarDataType)param.ExportCSVdata.Data[i].DataType;
-			info.RegCount = param.ExportCSVdata.Data[i].Number;
-			info.ColTitle = param.ExportCSVdata.Data[i].Title;
+			info.DataFmt = (Project::VarNumberType)res.Data[i].DataFmt;
+			info.DataType = (Project::VarDataType)res.Data[i].DataType;
+			info.RegCount = res.Data[i].Number;
+			info.ColTitle = res.Data[i].Title;
 			typeinfos.push_back(info);
 			regnum += info.RegCount;
 		}
@@ -665,43 +667,50 @@ namespace UI
 			param.ExportCSVdata.OrgVarIdRef, typeinfos, param.ExportCSVdata.StatusVarRef,
 			param.ExportCSVdata.ResultVarRef, param.ExportCSVdata.ProgressVarRef);
 	}
-	void BtnFunctionControl::HandleDownloadRecipe(Project::FunctionSetup param)
+	void BtnFunctionControl::HandleDownloadRecipe(Project::BtnFunctionRes res)
 	{
+		Project::FunctionSetup param = res.FunctionParam;
 		vector<Project::ColDataTypeInfo> colinfo;
-		RecipeDT::Ins()->GetDataTypes(param.DownloadRecipe.RecipeName, colinfo);
-		int row = Storage::RecipeStorage::Ins()->GetCountByRepiceName(param.DownloadRecipe.RecipeName);
-		LOG_INFO("Upload Recipe %s Form PLC ,count = %d\n", param.DownloadRecipe.RecipeName, param.DownloadRecipe.Size);
+		RecipeDT::Ins()->GetDataTypes(res.FileName, colinfo);
+		int row = Storage::RecipeStorage::Ins()->GetCountByRepiceName(res.FileName);
+		LOG_INFO("Upload Recipe %s Form PLC ,count = %d\n", res.FileName, param.DownloadRecipe.Size);
 		short index;
-		DataVarId indexvar = RecipeDT::Ins()->GetIndexVar(param.DownloadRecipe.RecipeName);
+		DataVarId indexvar = RecipeDT::Ins()->GetIndexVar(res.FileName);
 		if (indexvar == DataVarId::NullId)
 			index = LocalData::GetNumberData<short>(SYS_PSW_RecipeIndex);
 		else
 			index = UI::UIData::Number<short>(indexvar);
 		
-		DataApi::RecipeToPLC(param.DownloadRecipe.RecipeName, param.DownloadRecipe.Size, index,
+		DataApi::RecipeToPLC(res.FileName, param.DownloadRecipe.Size, index,
 			param.DownloadRecipe.RegVar, colinfo, param.DownloadRecipe.TransferVarIdRef);
 	}
-	void BtnFunctionControl::HandleUploadRecipe(Project::FunctionSetup param)
+	void BtnFunctionControl::HandleUploadRecipe(Project::BtnFunctionRes res)
 	{
+		Project::FunctionSetup param = res.FunctionParam;
 		vector<Project::ColDataTypeInfo> colinfo;
-		RecipeDT::Ins()->GetDataTypes(param.UploadRecipe.RecipeName, colinfo);
-		int row = Storage::RecipeStorage::Ins()->GetCountByRepiceName(param.UploadRecipe.RecipeName);
-		LOG_INFO("Download Recipe %s To PLC ,count = %d\n", param.UploadRecipe.RecipeName, param.UploadRecipe.Size);
+		RecipeDT::Ins()->GetDataTypes(res.FileName, colinfo);
+		int row = Storage::RecipeStorage::Ins()->GetCountByRepiceName(res.FileName);
+		LOG_INFO("Download Recipe %s To PLC ,count = %d\n", res.FileName, param.UploadRecipe.Size);
 		short index;
-		DataVarId indexvar = RecipeDT::Ins()->GetIndexVar(param.UploadRecipe.RecipeName);
+		DataVarId indexvar = RecipeDT::Ins()->GetIndexVar(res.FileName);
 		if (indexvar == DataVarId::NullId)
 			index = LocalData::GetNumberData<short>(SYS_PSW_RecipeIndex);
 		else
 			index = UI::UIData::Number<short>(indexvar);
 
-		DataApi::RecipeFromPLC(param.UploadRecipe.RecipeName, param.UploadRecipe.Size, index,
+		DataApi::RecipeFromPLC(res.FileName, param.UploadRecipe.Size, index,
 			param.UploadRecipe.RegVar, colinfo, param.UploadRecipe.TransferVarIdRef);
 	}
-	void BtnFunctionControl::HandleCallbackFunc(Project::FunctionSetup param)
+	void BtnFunctionControl::HandleCallbackFunc(Project::BtnFunctionRes res)
 	{
 		//string name = param.CallbackFunc.CbFuncName;
-		UI::XJMacro::Trig_Macro(param.CallbackFunc.CbFuncName);
-		LOG_INFO("CallbackFunc %s\n", param.CallbackFunc.CbFuncName);
+		Project::FunctionSetup param = res.FunctionParam;
+		char * name = new char[res.FileName.size() + 1];
+		memset(name, '\0', res.FileName.size() + 1);
+		strcpy(name, res.FileName.c_str());
+		UI::XJMacro::Trig_Macro(name);
+		LOG_INFO("CallbackFunc %s\n", name);
+		delete[] name;
 		//UI::XJMacro::Trig_Macro(name);
 	}
 	void BtnFunctionControl::HandlePrintScreen(Project::FunctionSetup param)
