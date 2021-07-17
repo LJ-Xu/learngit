@@ -6,7 +6,7 @@ namespace Storage
 	SampleStorageService * SampleStorageService::ins = nullptr;
 
 	SampleStorageService::SampleStorageService() : 
-		BaseStorageService("Sample") {
+		BaseStorageService(RunEnv::Cnf.SamplePath, "Sample") {
 		if (Create()) {
 			Close();
 		}
@@ -40,7 +40,7 @@ namespace Storage
 	int SampleStorageService::Create() {
 		std::string sql;
 		sql.append("CREATE TABLE ").append(tbName);
-		sql.append("(Id INTEGER primary key AUTOINCREMENT,");
+		sql.append("(Id INT64 NOT NULL,");
 		sql.append("ChannelNo INT NOT NULL,");
 		sql.append("ChannelData INT64 NOT NULL,");
 		sql.append("DataType INTEGER NOT NULL,");
@@ -53,6 +53,7 @@ namespace Storage
 			std::cout << "Sampledb create fail: " << sqlite3_errmsg(db);
 			return ret;
 		}
+		Attach();
 		//Prepare
 		Init();
 		return ret;
@@ -60,7 +61,6 @@ namespace Storage
 	int SampleStorageService::Init()
 	{
 		std::string sql;
-
 		//INSERT
 		{
 			sql.clear();
@@ -98,48 +98,49 @@ namespace Storage
 		//SELECT
 		{
 			sql.clear();
-			sql.append("SELECT COUNT(*) FROM ").append(tbName);
+			sql.append("SELECT COUNT(*) FROM ").append(tbName).append(" union all SELECT COUNT(*) FROM ").append("fileDb.").append(tbName).append(" ORDER BY Date;");
 			if (!NewFMT(SEL_GetAllCount, sql.c_str(), sizeof(sql)))
 				return SEL_GetAllCount;
 
 			sql.clear();
-			sql.append("SELECT COUNT(*) FROM ").append(tbName).append(" WHERE ChannelNo = ?");
+			sql.append("SELECT COUNT(*) FROM ").append(tbName).append(" WHERE ChannelNo = ?").append(" union all SELECT COUNT(*) FROM ").append("fileDb.").append(tbName).append(" WHERE ChannelNo = ?");
 			if (!NewFMT(SEL_GetCountByChannel, sql.c_str(), sizeof(sql)))
 				return SEL_GetCountByChannel;
 
 			sql.clear();
-			sql.append("SELECT COUNT(*) FROM ").append(tbName).append(" WHERE ChannelNo>>16 =?  and Date > ? ");
+			sql.append("SELECT COUNT(*) FROM ").append(tbName).append(" WHERE ChannelNo>>16 =?  and Date > ? ").append(" union all SELECT COUNT(*) FROM ").append("fileDb.").append(tbName).append(" WHERE ChannelNo>>16 =?  and Date > ? ");
 			if (!NewFMT(SEL_GetChannelCountByDate, sql.c_str(), sizeof(sql)))
 				return SEL_GetChannelCountByDate;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ChannelNo = ? ORDER BY Date;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ChannelNo = ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ChannelNo = ? ORDER BY Date;");
 			if (!NewFMT(SEL_SelectSampleRecordByChannel, sql.c_str(), sizeof(sql)))
 				return SEL_SelectSampleRecordByChannel;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ChannelNo = ? AND Date BETWEEN ? AND ?").append(" ORDER BY Date;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ChannelNo = ? AND Date BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ChannelNo = ? AND Date BETWEEN ? AND ? ORDER BY Date;");
 			if (!NewFMT(SEL_SelectSampleRecordByTime, sql.c_str(), sizeof(sql)))
 				return SEL_SelectSampleRecordByTime;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ChannelNo = ? AND Date BETWEEN ? AND ? ORDER BY Date;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ChannelNo = ? AND Date BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ChannelNo = ? AND Date BETWEEN ? AND ? ORDER BY Date;");
 			if (!NewFMT(SEL_SelectSampleRecordByDate, sql.c_str(), sizeof(sql)))
 				return SEL_SelectSampleRecordByDate;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ChannelNo>>16 = ? ORDER BY Date;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ChannelNo>>16 = ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ChannelNo>>16 = ? ORDER BY Date;");
 			if (!NewFMT(SEL_SelectSampleRecord, sql.c_str(), sizeof(sql)))
 				return SEL_SelectSampleRecord;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE (ChannelNo>>16 = ? AND Date > ?) ORDER BY Date");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE (ChannelNo>>16 = ? AND Date > ?)").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE (ChannelNo>>16 = ? AND Date > ?) ORDER BY Date");
 			if (!NewFMT(SEL_SelectSampleRecordByStTm, sql.c_str(), sizeof(sql)))
 				return SEL_SelectSampleRecordByStTm;
 		}
 
 		sqlite3_exec(db, "PRAGMA synchronous = OFF;", NULL, NULL, NULL);
 
+		ExecBegin();
 		return 0;
 	}
 	/**
@@ -155,6 +156,7 @@ namespace Storage
 		int ret = sqlite3_reset(stmt);
 		if (!ret)
 		{
+			sqlite3_bind_int64(stmt, 1, curId);
 			sqlite3_bind_int(stmt, 2, record.Channel);
 			sqlite3_bind_int64(stmt, 3, record.Data);
 			sqlite3_bind_int(stmt, 4, record.Type.Cls);

@@ -19,7 +19,7 @@ namespace Storage
 	public:
 		enum STMTType :char
 		{
-			INS_InsertSampleRecord,
+			INS_InsertSampleRecord= BASE_DEFAULT,
 			INS_InsertSampleRecordByLimit,
 
 			UPD_UpdateSampleOnEarliestDate,

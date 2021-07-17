@@ -516,7 +516,9 @@ namespace UI
 	}
 
 	void SampleFlush_CB(void * param) {
+		long k = clock();
 		Storage::SampleStorage::Ins()->Flush();
+		long escape = clock() - k;
 	}
 
 	void SampleGCtrl::OnReady() {
@@ -547,7 +549,7 @@ namespace UI
 		}
 		Page()->AddTimeout(500, AddFixedTimer_CB, this, true);
 		// 添加定时同步文件数据库定时器
-		//Page()->AddTimeout(10000, SampleFlush_CB, NULL, true);
+		Page()->AddTimeout(10000, SampleFlush_CB, NULL, true);
 	}
 }
 

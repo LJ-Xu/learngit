@@ -30,10 +30,17 @@ namespace Storage
 	{
 	protected:
 		//BaseStorageService(const string & dbPath, const string & tbName, int maxCnt = 10000);
-		BaseStorageService(const char* tbname);
+		BaseStorageService(const string & dbPath, const string & tbName);
+		//BaseStorageService(const char* tbname);
 		virtual ~BaseStorageService();
 
 	protected:
+		enum BaseSTMTType :char
+		{
+			BASE_FLUSH,
+			BASE_DELETE,
+			BASE_DEFAULT
+		};
 		// 打开数据库
 		int Open();
 		// 关闭数据库
@@ -52,16 +59,21 @@ namespace Storage
 		int Count();
 		bool NewFMT(char key, const char* sql, int len);
 		bool FinFMT(char key);
+		// 附加文件数据库
+		int Attach();
 	protected:
 		sqlite3_stmt* GetSTMT(char key);
 		void ExecBegin();
 		void ExecCommit();
+		// 直接执行sql语句
+		int ExecuteSql(const char * sql);
 	protected:
 		virtual int Init() = 0;
 
 	protected:
 		sqlite3 * db;	// 数据库句柄
-		int curId;
+		unsigned long long curId;
+		string dbPath;	// 数据库路径
 		string tbName;	// 数据表名称
 		bool isOpened;	// 是否打开数据库
 	private:
