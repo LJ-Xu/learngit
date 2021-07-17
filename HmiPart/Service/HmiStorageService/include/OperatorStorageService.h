@@ -35,7 +35,7 @@ namespace Storage
 		enum STMTType :char
 		{
 			//INSERT INTO Operation VALUES(""%d, %lld, %lld, '%s', '%s', %d, '%s', '%s', '%s', '%s', '%s')
-			INS_InsertRecord,
+			INS_InsertRecord = BASE_DEFAULT,
 			//DELETE FROM Operation
 			DEL_DeleteRecords,
 			//UPDATE Operation SET Date = %lld,Time = %lld,UserName = '%s',Class = '%s',Window = %d,ObjectName = '%s',Comment = '%s',Action = '%s',Address = '%s',Information = '%s' WHERE ID = %d; 

@@ -20,7 +20,7 @@ namespace Storage
 	public:
 		enum STMTType :char
 		{
-			INS_InsertAlarmRecord,
+			INS_InsertAlarmRecord = BASE_DEFAULT,
 
 			UPD_UpdateAlarmRecord,
 			UPD_UpdateAlarmRecordByConfirm,

@@ -5,7 +5,7 @@ namespace Storage
 	AlarmStorageService * AlarmStorageService::ins = nullptr;
 
 	AlarmStorageService::AlarmStorageService() : 
-		BaseStorageService("Alarm") {
+		BaseStorageService(RunEnv::Cnf.AlarmPath,"Alarm") {
 		// 创建内存数据库
 		if (Create()) {
 			Close();
@@ -41,7 +41,8 @@ namespace Storage
 
 		std::string sql;
 		sql.append("CREATE TABLE ").append(tbName);
-		sql.append("(Id INTEGER primary key AUTOINCREMENT,");
+		//sql.append("(Id INT64 primary key AUTOINCREMENT,");
+		sql.append("(Id INT64 NOT NULL,");
 		sql.append("AlarmGroup INT NOT NULL,");
 		sql.append("AlarmNo INT NOT NULL,");
 		sql.append("StartTime INT64 NOT NULL,");
@@ -57,6 +58,7 @@ namespace Storage
 			std::cout << "Alarmdb create fail: " << sqlite3_errmsg(db);
 			return ret;
 		}
+		Attach();
 		//Prepare
 		Init();
 		return ret;
@@ -65,11 +67,10 @@ namespace Storage
 	int AlarmStorageService::Init()
 	{
 		std::string sql;
-
 		//INSERT
 		{
 			sql.clear();
-			sql.append("INSERT INTO ").append(tbName).append(" VALUES(?,?,?,?,?,?,?,?)");
+			sql.append("INSERT INTO ").append(tbName).append(" VALUES(?,?,?,?,?,?,?,?,?)");
 			if (!NewFMT(INS_InsertAlarmRecord, sql.c_str(), sizeof(sql)))
 				return INS_InsertAlarmRecord;
 		}
@@ -223,6 +224,7 @@ namespace Storage
 				return SEL_SelectAlarmRecordByResolveTick;
 		}
 		sqlite3_exec(db, "PRAGMA synchronous = OFF;", NULL, NULL, NULL);
+		ExecBegin();
 		return 0;
 	}
 
@@ -240,14 +242,16 @@ namespace Storage
 		int ret = sqlite3_reset(stmt);
 		if (!ret)
 		{
-			sqlite3_bind_int(stmt, 1, record.AlarmGroup);
-			sqlite3_bind_int(stmt, 2, record.AlarmNo);
-			sqlite3_bind_int64(stmt, 3, record.StartTick);
-			sqlite3_bind_text(stmt, 4, record.Title.c_str(), record.Title.size(),nullptr);
-			sqlite3_bind_int(stmt, 5, record.Times);
-			sqlite3_bind_int64(stmt, 6, record.ResolveTick);
-			sqlite3_bind_int64(stmt, 7, record.CheckTick);
-			sqlite3_bind_int(stmt, 8, record.Level);
+			int idx = 1;
+			sqlite3_bind_int64(stmt, idx++, curId);
+			sqlite3_bind_int(stmt, idx++, record.AlarmGroup);
+			sqlite3_bind_int(stmt, idx++, record.AlarmNo);
+			sqlite3_bind_int64(stmt, idx++, record.StartTick);
+			sqlite3_bind_text(stmt, idx++, record.Title.c_str(), record.Title.size(),nullptr);
+			sqlite3_bind_int(stmt, idx++, record.Times);
+			sqlite3_bind_int64(stmt, idx++, record.ResolveTick);
+			sqlite3_bind_int64(stmt, idx++, record.CheckTick);
+			sqlite3_bind_int(stmt, idx++, record.Level);
 			ret = sqlite3_step(stmt);
 			if (!ret)
 				curId++;
@@ -347,7 +351,7 @@ namespace Storage
 			records.push_back(record);
 		}
 		// 释放对象
-		sqlite3_finalize(stmt);
+		//sqlite3_finalize(stmt);
 		return records;
 	}
 
@@ -364,7 +368,7 @@ namespace Storage
 			sqlite3_stmt* stmt = GetSTMT(SEL_SelectAllAlarmRecords);
 			if (stmt == nullptr)
 				return vector<AlarmRecord>();
-			SelectAlarm(stmt);
+			return SelectAlarm(stmt);
 		}
 		else
 		{
@@ -373,7 +377,7 @@ namespace Storage
 				return vector<AlarmRecord>();
 			sqlite3_bind_int(stmt, 1, startgroupname);
 			sqlite3_bind_int(stmt, 2, endgroupname);
-			SelectAlarm(stmt);
+			return SelectAlarm(stmt);
 		}
 	}
 

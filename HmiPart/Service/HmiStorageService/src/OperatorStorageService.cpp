@@ -18,7 +18,7 @@ namespace Storage
 
 	OperatorStorageService::OperatorStorageService() : 
 		//BaseStorageService("././HMI/Operation.db", "Operation") {
-		BaseStorageService("Operation") {
+		BaseStorageService(RunEnv::Cnf.OperationPath, "Operation") {
 		//BaseStorageService("..\\..\\HMI\\Operation.db", "Operation") {
 		// 创建内存数据库
 		if (Create())
@@ -53,8 +53,8 @@ namespace Storage
 	int OperatorStorageService::Create() {
 		std::string sql;
 		sql.append("CREATE TABLE ").append(tbName);
-		sql.append("(ID INTEGER primary key AUTOINCREMENT,");
-		sql.append("Date INT64 NOT NULL,");
+		//sql.append("(ID INTEGER primary key AUTOINCREMENT,");
+		sql.append("(ID INT64 NOT NULL,");
 		sql.append("Date INT64 NOT NULL,");
 		sql.append("Time INT64 NOT NULL,");
 		sql.append("UserName Text NOT NULl,");
@@ -72,6 +72,7 @@ namespace Storage
 			std::cout << "Operatedb create fail: " << sqlite3_errmsg(db);
 			return ret;
 		}
+		Attach();
 		//Prepare
 		Init();
 		return ret;
@@ -134,6 +135,7 @@ namespace Storage
 				return SEL_SelectRecordsByTime;
 		}
 		sqlite3_exec(db, "PRAGMA synchronous = OFF;", NULL, NULL, NULL);
+		ExecBegin();
 		return 0;
 	}
 
@@ -238,7 +240,7 @@ namespace Storage
 			records.push_back(record);
 		}
 		// 释放对象
-		sqlite3_finalize(stmt);
+		//sqlite3_finalize(stmt);
 		return 0;
 	}
 
