@@ -153,12 +153,7 @@ namespace Project
 		}
 		if (jsonObj.HasMember("NameType") && jsonObj["NameType"].IsObject())
 		{
-			if (jsonObj["NameType"].HasMember("Name") && !jsonObj["NameType"]["Name"].IsNull())
-			{
-				std::string name = jsonObj["NameType"]["Name"].GetString();
-				memset(FileName,'\0',128);
-				memcpy(FileName, name.c_str(), name.size());
-			}
+			
 			if (jsonObj["NameType"].HasMember("Style"))
 				NameType = (FlieNameType)jsonObj["NameType"]["Style"].GetInt();
 			if (jsonObj["NameType"].HasMember("NameVar") && jsonObj["NameType"]["NameVar"].IsObject())
@@ -168,35 +163,7 @@ namespace Project
 		if (jsonObj.HasMember("DataSize"))
 			Count = jsonObj["DataSize"].GetInt();
 		if (jsonObj.HasMember("DataContents") && jsonObj["DataContents"].IsArray())
-		{
-			//std::vector<ImportCSVdata::DataContent>().swap(Data);
 			DataSize = jsonObj["DataContents"].Size();
-			for (size_t i = 0; i < jsonObj["DataContents"].Size(); i++)
-			{
-				if (i >= 100)
-					return;
-				DataContent content;
-				if (jsonObj["DataContents"][i].HasMember("Id"))
-					content.Id = jsonObj["DataContents"][i]["Id"].GetInt();
-				if (jsonObj["DataContents"][i].HasMember("Title") && !jsonObj["DataContents"][i]["Title"].IsNull())
-				{
-					//content.Title = jsonObj["Data"][i]["Title"].GetString();
-					std::string title = jsonObj["DataContents"][i]["Title"].GetString();
-					memcpy(content.Title, title.c_str(), title.size());
-				}
-				if (jsonObj["DataContents"][i].HasMember("DataType"))
-					content.DataType = jsonObj["DataContents"][i]["DataType"].GetInt();
-				if (jsonObj["DataContents"][i].HasMember("DataFmt"))
-					content.DataFmt = jsonObj["DataContents"][i]["DataFmt"].GetInt();
-				if (jsonObj["DataContents"][i].HasMember("Number"))
-					content.Number = jsonObj["DataContents"][i]["Number"].GetInt();
-				if (jsonObj["DataContents"][i].HasMember("IntegerNum"))
-					content.IntegerNum = jsonObj["DataContents"][i]["IntegerNum"].GetInt();
-				if (jsonObj["DataContents"][i].HasMember("DecimalNum"))
-					content.DecimalNum = jsonObj["DataContents"][i]["DecimalNum"].GetInt();
-				Data[i] = content;
-			}
-		}
 		if (jsonObj.HasMember("StatusVarRef") && jsonObj["StatusVarRef"].IsObject())
 			StatusVarRef.Parse(jsonObj["StatusVarRef"]);
 		if (jsonObj.HasMember("ResultVarRef") && jsonObj["ResultVarRef"].IsObject())
@@ -217,12 +184,7 @@ namespace Project
 		}
 		if (jsonObj.HasMember("NameType") && jsonObj["NameType"].IsObject())
 		{
-			if (jsonObj["NameType"].HasMember("Name") && !jsonObj["NameType"]["Name"].IsNull())
-			{
-				std::string name = jsonObj["NameType"]["Name"].GetString();
-				memset(FileName, '\0', 128);
-				memcpy(FileName, name.c_str(), name.size());
-			}
+			
 			if (jsonObj["NameType"].HasMember("Style"))
 				NameType = (FlieNameType)jsonObj["NameType"]["Style"].GetInt();
 			if (jsonObj["NameType"].HasMember("NameVar") && jsonObj["NameType"]["NameVar"].IsObject())
@@ -232,34 +194,7 @@ namespace Project
 		if (jsonObj.HasMember("DataSize"))
 			Count = jsonObj["DataSize"].GetInt();
 		if (jsonObj.HasMember("DataContents") && jsonObj["DataContents"].IsArray())
-		{
 			DataSize = jsonObj["DataContents"].Size();
-			for (size_t i = 0; i < jsonObj["DataContents"].Size(); i++)
-			{
-				if (i >= 100)
-					return;
-				DataContent content;
-				if (jsonObj["DataContents"][i].HasMember("Id"))
-					content.Id = jsonObj["DataContents"][i]["Id"].GetInt();
-				if (jsonObj["DataContents"][i].HasMember("Title") && !jsonObj["DataContents"][i]["Title"].IsNull())
-				{
-					//content.Title = jsonObj["Data"][i]["Title"].GetString();
-					std::string title = jsonObj["DataContents"][i]["Title"].GetString();
-					memcpy(content.Title, title.c_str(), title.size());
-				}
-				if (jsonObj["DataContents"][i].HasMember("DataType"))
-					content.DataType = jsonObj["DataContents"][i]["DataType"].GetInt();
-				if (jsonObj["DataContents"][i].HasMember("DataFmt"))
-					content.DataFmt = jsonObj["DataContents"][i]["DataFmt"].GetInt();
-				if (jsonObj["DataContents"][i].HasMember("Number"))
-					content.Number = jsonObj["DataContents"][i]["Number"].GetInt();
-				if (jsonObj["DataContents"][i].HasMember("IntegerNum"))
-					content.IntegerNum = jsonObj["DataContents"][i]["IntegerNum"].GetInt();
-				if (jsonObj["DataContents"][i].HasMember("DecimalNum"))
-					content.DecimalNum = jsonObj["DataContents"][i]["DecimalNum"].GetInt();
-				Data[i] = content;
-			}
-		}
 		if (jsonObj.HasMember("StatusVarIdRef") && jsonObj["StatusVarIdRef"].IsObject())
 			StatusVarRef.Parse(jsonObj["StatusVarIdRef"]);
 		if (jsonObj.HasMember("ResultVarIdRef") && jsonObj["ResultVarIdRef"].IsObject())
@@ -269,13 +204,6 @@ namespace Project
 	}
 	void FunctionSetup::DownloadRecipe::Parse(rapidjson::Value& jsonObj)
 	{
-		if (jsonObj.HasMember("RecipeName") && !jsonObj["RecipeName"].IsNull())
-		{
-			std::string name = jsonObj["RecipeName"].GetString();
-			memset(RecipeName, '\0', 128);
-			memcpy(RecipeName, name.c_str(), name.size());
-		}
-
 		if (jsonObj.HasMember("Count"))
 			Size = jsonObj["Count"].GetInt();
 		if (jsonObj.HasMember("RecipeVarIdRef") && jsonObj["RecipeVarIdRef"].IsObject())
@@ -285,12 +213,6 @@ namespace Project
 	}
 	void FunctionSetup::UploadRecipe::Parse(rapidjson::Value& jsonObj)
 	{
-		if (jsonObj.HasMember("RecipeName") && !jsonObj["RecipeName"].IsNull())
-		{
-			std::string name = jsonObj["RecipeName"].GetString();
-			memset(RecipeName, '\0', 128);
-			memcpy(RecipeName, name.c_str(), name.size());
-		}
 		if (jsonObj.HasMember("Count"))
 			Size = jsonObj["Count"].GetInt();
 		if (jsonObj.HasMember("RecipeVarIdRef") && jsonObj["RecipeVarIdRef"].IsObject())
@@ -302,10 +224,8 @@ namespace Project
 	{
 		if (jsonObj.HasMember("FuncName") && !jsonObj["FuncName"].IsNull())
 		{
-			//FunctionName = jsonObj["FunctionName"].GetString();
-			std::string name = jsonObj["FuncName"].GetString();
-			strcpy(CbFuncName, name.c_str());
-			//memcpy(CbFuncName, name.c_str(), name.size());
+			//std::string name = jsonObj["FuncName"].GetString();
+			//strcpy(CbFuncName, name.c_str());
 		}
 	}
 	void FunctionSetup::PrintScreen::Parse(rapidjson::Value& jsonObj)
@@ -329,6 +249,35 @@ namespace Project
 		if (jsonObj.HasMember("RecipeEditAction"))
 			Action = (RecipeEditAction)jsonObj["RecipeEditAction"].GetInt();
 	}
+	void BtnFunctionRes::Parse(BtnFunctionRes& res, rapidjson::Value& jsonObj)
+	{
+		if (jsonObj.HasMember("DataContents") && jsonObj["DataContents"].IsArray())
+		{
+			std::vector<DataContent>().swap(res.Data);
+			for (size_t i = 0; i < jsonObj["DataContents"].Size(); i++)
+			{
+				DataContent content;
+				if (jsonObj["DataContents"][i].HasMember("Id"))
+					content.Id = jsonObj["DataContents"][i]["Id"].GetInt();
+				if (jsonObj["DataContents"][i].HasMember("Title") && !jsonObj["DataContents"][i]["Title"].IsNull())
+					content.Title = jsonObj["DataContents"][i]["Title"].GetString();
+				if (jsonObj["DataContents"][i].HasMember("DataType"))
+					content.DataType = jsonObj["DataContents"][i]["DataType"].GetInt();
+				if (jsonObj["DataContents"][i].HasMember("DataFmt"))
+					content.DataFmt = jsonObj["DataContents"][i]["DataFmt"].GetInt();
+				if (jsonObj["DataContents"][i].HasMember("Number"))
+					content.Number = jsonObj["DataContents"][i]["Number"].GetInt();
+				if (jsonObj["DataContents"][i].HasMember("IntegerNum"))
+					content.IntegerNum = jsonObj["DataContents"][i]["IntegerNum"].GetInt();
+				if (jsonObj["DataContents"][i].HasMember("DecimalNum"))
+					content.DecimalNum = jsonObj["DataContents"][i]["DecimalNum"].GetInt();
+				res.Data.push_back(content);
+			}
+		}
+	}
+
+	
+
 	void BtnFunctionRes::Parse(std::vector<BtnFunctionRes>& vector, rapidjson::Value& jsonObj)
 	{
 		std::vector<BtnFunctionRes>().swap(vector);
@@ -353,15 +302,36 @@ namespace Project
 				if (tmpFunc.FunctionName == "CloseWin")
 					tmpFunc.FunctionParam.CloseWin.Parse(jsonObj[i]);
 				if (tmpFunc.FunctionName == "ImportCSVdata")
+				{
+					if (jsonObj[i]["NameType"].HasMember("Name") && !jsonObj[i]["NameType"]["Name"].IsNull())
+						tmpFunc.FileName = jsonObj[i]["NameType"]["Name"].GetString();
+					Parse(tmpFunc, jsonObj[i]);
 					tmpFunc.FunctionParam.ImportCSVdata.Parse(jsonObj[i]);
+				}
 				if (tmpFunc.FunctionName == "ExportCSVdata")
+				{
+					if (jsonObj[i]["NameType"].HasMember("Name") && !jsonObj[i]["NameType"]["Name"].IsNull())
+						tmpFunc.FileName = jsonObj[i]["NameType"]["Name"].GetString();
+					Parse(tmpFunc, jsonObj[i]);
 					tmpFunc.FunctionParam.ExportCSVdata.Parse(jsonObj[i]);
+				}
 				if (tmpFunc.FunctionName == "DownloadRecipe")
+				{
+					if (jsonObj[i].HasMember("RecipeName") && !jsonObj[i]["RecipeName"].IsNull())
+						tmpFunc.FileName = jsonObj[i]["RecipeName"].GetString();
 					tmpFunc.FunctionParam.DownloadRecipe.Parse(jsonObj[i]);
+				}
 				if (tmpFunc.FunctionName == "UploadRecipe")
+				{
+					if (jsonObj[i].HasMember("RecipeName") && !jsonObj[i]["RecipeName"].IsNull())
+						tmpFunc.FileName = jsonObj[i]["RecipeName"].GetString();
 					tmpFunc.FunctionParam.UploadRecipe.Parse(jsonObj[i]);
+				}
 				if (tmpFunc.FunctionName == "CallbackFunc")
-					tmpFunc.FunctionParam.CallbackFunc.Parse(jsonObj[i]);
+				{
+					if (jsonObj[i].HasMember("FuncName") && !jsonObj[i]["FuncName"].IsNull())
+						tmpFunc.FileName = jsonObj[i]["FuncName"].GetString();
+				}
 				if (tmpFunc.FunctionName == "PrintScreen")
 					tmpFunc.FunctionParam.PrintScreen.Parse(jsonObj[i]);
 				if (tmpFunc.FunctionName == "EditRecipe")

@@ -49,11 +49,11 @@ namespace UI
 		void HandleSwitchScreen(Project::FunctionSetup param);//切换画面
 		void HandleOpenWin(Project::FunctionSetup param);		//打开窗口
 		void HandleCloseWin(Project::FunctionSetup param);		//关闭窗口
-		void HandleImportCSVdata(Project::FunctionSetup param);
-		void HandleExportCSVdata(Project::FunctionSetup param);
-		void HandleDownloadRecipe(Project::FunctionSetup param);
-		void HandleUploadRecipe(Project::FunctionSetup param);
-		void HandleCallbackFunc(Project::FunctionSetup param);
+		void HandleImportCSVdata(Project::BtnFunctionRes res);
+		void HandleExportCSVdata(Project::BtnFunctionRes res);
+		void HandleDownloadRecipe(Project::BtnFunctionRes res);
+		void HandleUploadRecipe(Project::BtnFunctionRes res);
+		void HandleCallbackFunc(Project::BtnFunctionRes res);
 		void HandlePrintScreen(Project::FunctionSetup param);
 		void HandleEditRecipe(Project::FunctionSetup param);
 

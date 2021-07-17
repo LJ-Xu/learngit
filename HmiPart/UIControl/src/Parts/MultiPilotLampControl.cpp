@@ -136,12 +136,12 @@ namespace UI
 			{
 				if (mode_->MPLampconfig.RegVars.size() <= i)
 					return;
-				if (i == mode_->MPLampconfig.BitNum - 1 && mode_->MPLampconfig.DataFormat == 0)
-				{
-					if (UI::UIData::Bit(mode_->MPLampconfig.RegVars[i]))
-						value = 0 - value;
-				}
-				else
+				//if (i == mode_->MPLampconfig.BitNum - 1 && mode_->MPLampconfig.DataFormat == 0)
+				//{
+				//	if (UI::UIData::Bit(mode_->MPLampconfig.RegVars[i]))
+				//		value = 0 - value;
+				//}
+				//else
 					value |= (UI::UIData::Bit(mode_->MPLampconfig.RegVars[i]) << i);
 			}
 			readvalue_ = (float)value;

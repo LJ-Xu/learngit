@@ -60,9 +60,7 @@ namespace Project
 	struct DataContent
 	{
 		int Id;
-		//std::string Title;
-		char Title[128] = { 0 };
-
+		std::string Title;
 		int DataType;
 		int DataFmt;
 		int Number;
@@ -237,14 +235,14 @@ namespace Project
 			FlieLocation FileAddr;		//目标文件位置
 			DataVarId LocationVar;		//动态指定文件位置
 
-			char FileName[128] = {};
+			//char FileName[128] = {};
 			//std::string FileName;		//文件名称
 			FlieNameType NameType;		//文件名称方式
 			DataVarId NameVar;			//动态指定文件名获取地址
 
 			int Count;					//数据容量
 			int DataSize;				//列数
-			DataContent Data[100] = {};
+			//DataContent Data[100] = {};
 
 			DataVarId StatusVarRef;		//执行状态
 			DataVarId ResultVarRef;		//执行结果
@@ -255,8 +253,8 @@ namespace Project
 			template<class Archive>
 			void serialize(Archive & archive)
 			{
-				archive(FileAddr, LocationVar, FileName, NameType, 
-					NameVar, OrgVarIdRef, Count, Data, DataSize,
+				archive(FileAddr, LocationVar,/* FileName,*/ NameType, 
+					NameVar, OrgVarIdRef, Count,/* Data,*/ DataSize,
 					StatusVarRef, ResultVarRef, ProgressVarRef);
 			}
 		}ImportCSVdata;
@@ -266,13 +264,12 @@ namespace Project
 			FlieLocation FileAddr;		//目标文件位置
 			DataVarId LocationVar;		//动态指定文件位置
 			//std::string FileName;		//文件名称
-			char FileName[128] = { 0 };
 			FlieNameType NameType;		//文件名称方式
 			DataVarId NameVar;			//动态指定文件名获取地址
 
 			int Count;				//数据容量
 			int DataSize;				//列数
-			DataContent Data[100];
+			//DataContent Data[100];
 
 			DataVarId StatusVarRef;		//执行状态
 			DataVarId ResultVarRef;		//执行结果
@@ -283,14 +280,13 @@ namespace Project
 			template<class Archive>
 			void serialize(Archive & archive)
 			{
-				archive(FileAddr, LocationVar, FileName, NameType, 
-					NameVar, OrgVarIdRef, Count, Data, DataSize,
+				archive(FileAddr, LocationVar, NameType, /*FileName,*/
+					NameVar, OrgVarIdRef, Count,/* Data,*/ DataSize,
 					StatusVarRef, ResultVarRef, ProgressVarRef);
 			}
 		}ExportCSVdata;
 		struct DownloadRecipe 
 		{
-			char RecipeName[128] = { 0 };
 			int RecipeRow;
 			int Size;
 			DataVarId RegVar;
@@ -301,12 +297,11 @@ namespace Project
 			template<class Archive>
 			void serialize(Archive & archive)
 			{
-				archive(RecipeName, Size, RegVar, TransferVarIdRef);
+				archive(Size, RegVar, TransferVarIdRef);
 			}
 		}DownloadRecipe;
 		struct UploadRecipe
 		{
-			char RecipeName[128] = { 0 };
 			int RecipeRow;
 
 			int Size;
@@ -318,22 +313,13 @@ namespace Project
 			template<class Archive>
 			void serialize(Archive & archive)
 			{
-				archive(RecipeName, Size, RegVar, TransferVarIdRef);
+				archive(Size, RegVar, TransferVarIdRef);
 			}
 
 		}UploadRecipe;
 		struct CallbackFunc
 		{
-			//std::string FunctionName;
-			char CbFuncName[128] = {0};
 			void Parse(rapidjson::Value& jsonObj);
-
-			template<class Archive>
-			void serialize(Archive & archive)
-			{
-				archive(CbFuncName);
-			}
-
 		}CallbackFunc;
 		struct PrintScreen
 		{
@@ -378,14 +364,17 @@ namespace Project
 	{
 		std::string FunctionName;
 		FunctionSetup FunctionParam;
-		bool PopTipWin;			//是否弹窗
-		int RequireRegion;		//用户权限
+		std::string FileName;			//文件名称:ImportCSV、ExportCSV、DownloadRecipe、UploadRecipe、CallbackFunc
+		std::vector<DataContent> Data;
+		bool PopTipWin;					//是否弹窗
+		int RequireRegion;				//用户权限
 		static void Parse(std::vector<BtnFunctionRes>& vector, rapidjson::Value& jsonObj);
+		static void Parse(BtnFunctionRes& res, rapidjson::Value& jsonObj);
 
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
-			archive(FunctionName, FunctionParam, PopTipWin, RequireRegion);
+			archive(FunctionName, FunctionParam, FileName, Data, PopTipWin, RequireRegion);
 		}
 	}; 
 	

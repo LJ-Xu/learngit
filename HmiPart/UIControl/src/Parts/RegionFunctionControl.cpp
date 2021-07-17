@@ -21,6 +21,7 @@
 #include "XJMacro.h"
 #include "System.h"
 #include "RecipeStorage.h"
+#include "PrintSetControl.h"
 namespace UI
 {
 	RegionFunctionControl::RegionFunctionControl(HMIPage* w) :BaseControl(w)
@@ -101,8 +102,8 @@ namespace UI
 		if (mode_->FuncRegionConfig.TimeLmtVar != Project::DataVarId::NullId)
 		{
 			bool stopstatus = UI::UIData::Bit(mode_->FuncRegionConfig.TimeLmtVar);
-			if ((mode_->FuncRegionConfig.StopMode == 0 && stopstatus == false) ||
-				(mode_->FuncRegionConfig.StopMode == 1 && stopstatus == true))
+			if ((mode_->FuncRegionConfig.StopMode == 1 && stopstatus == false) ||
+				(mode_->FuncRegionConfig.StopMode == 0 && stopstatus == true))
 				stopfunc_ = true;
 		}
 		//if (mode_->FuncRegionConfig.Mode == Project::ActionMode::FuncTimer)		//定时模式
@@ -428,14 +429,15 @@ namespace UI
 		if (param.CloseWin.UsePasswd)
 			Win()->OpenDialogPage(2);
 	}
-	void RegionFunctionControl::HandleImportCSVdata(Project::FunctionSetup param)
+	void RegionFunctionControl::HandleImportCSVdata(Project::BtnFunctionRes res)
 	{
 		//导入CSV
+		Project::FunctionSetup param = res.FunctionParam;
 		string filename;
 		switch (param.ImportCSVdata.NameType)
 		{
 		case Project::FlieNameType::FIX:
-			filename = param.ImportCSVdata.FileName;
+			filename = res.FileName;
 			break;
 		case Project::FlieNameType::DATA:
 		{
@@ -456,10 +458,10 @@ namespace UI
 		for (size_t i = 0; i < (size_t)param.ImportCSVdata.DataSize; i++)
 		{
 			ColDataTypeInfo info;
-			info.DataFmt = (Project::VarNumberType)param.ImportCSVdata.Data[i].DataFmt;
-			info.DataType = (Project::VarDataType)param.ImportCSVdata.Data[i].DataType;
-			info.RegCount = param.ImportCSVdata.Data[i].Number;
-			info.ColTitle = param.ImportCSVdata.Data[i].Title;
+			info.DataFmt = (Project::VarNumberType)res.Data[i].DataFmt;
+			info.DataType = (Project::VarDataType)res.Data[i].DataType;
+			info.RegCount = res.Data[i].Number;
+			info.ColTitle = res.Data[i].Title;
 			typeinfos.push_back(info);
 			regnum += info.RegCount;
 		}
@@ -467,15 +469,16 @@ namespace UI
 			param.ImportCSVdata.OrgVarIdRef, typeinfos, param.ImportCSVdata.StatusVarRef,
 			param.ImportCSVdata.ResultVarRef, param.ImportCSVdata.ProgressVarRef);
 	}
-	void RegionFunctionControl::HandleExportCSVdata(Project::FunctionSetup param)
+	void RegionFunctionControl::HandleExportCSVdata(Project::BtnFunctionRes res)
 	{
 		//csv导出
 		//获取文件名称
+		Project::FunctionSetup param = res.FunctionParam;
 		string filename;
 		switch (param.ExportCSVdata.NameType)
 		{
 		case Project::FlieNameType::FIX:
-			filename = param.ExportCSVdata.FileName;
+			filename = res.FileName;
 			break;
 		case Project::FlieNameType::DATA:
 		{
@@ -496,10 +499,10 @@ namespace UI
 		for (size_t i = 0; i < (size_t)param.ExportCSVdata.DataSize; i++)
 		{
 			ColDataTypeInfo info;
-			info.DataFmt = (Project::VarNumberType)param.ExportCSVdata.Data[i].DataFmt;
-			info.DataType = (Project::VarDataType)param.ExportCSVdata.Data[i].DataType;
-			info.RegCount = param.ExportCSVdata.Data[i].Number;
-			info.ColTitle = param.ExportCSVdata.Data[i].Title;
+			info.DataFmt = (Project::VarNumberType)res.Data[i].DataFmt;
+			info.DataType = (Project::VarDataType)res.Data[i].DataType;
+			info.RegCount = res.Data[i].Number;
+			info.ColTitle = res.Data[i].Title;
 			typeinfos.push_back(info);
 			regnum += info.RegCount;
 		}
@@ -507,40 +510,61 @@ namespace UI
 			param.ExportCSVdata.OrgVarIdRef, typeinfos, param.ExportCSVdata.StatusVarRef,
 			param.ExportCSVdata.ResultVarRef, param.ExportCSVdata.ProgressVarRef);
 	}
-	void RegionFunctionControl::HandleDownloadRecipe(Project::FunctionSetup param)
+	void RegionFunctionControl::HandleDownloadRecipe(Project::BtnFunctionRes res)
 	{
+		Project::FunctionSetup param = res.FunctionParam;
 		vector<Project::ColDataTypeInfo> colinfo;
-		RecipeDT::Ins()->GetDataTypes(param.DownloadRecipe.RecipeName, colinfo);
+		RecipeDT::Ins()->GetDataTypes(res.FileName, colinfo);
 		short index;
-		DataVarId indexvar = RecipeDT::Ins()->GetIndexVar(param.DownloadRecipe.RecipeName);
+		DataVarId indexvar = RecipeDT::Ins()->GetIndexVar(res.FileName);
 		if (indexvar == DataVarId::NullId)
 			index = LocalData::GetNumberData<short>(SYS_PSW_RecipeIndex);
 		else
 			index = UI::UIData::Number<short>(indexvar);
-		int row = Storage::RecipeStorage::Ins()->GetCountByRepiceName(param.DownloadRecipe.RecipeName);
-		DataApi::RecipeToPLC(param.DownloadRecipe.RecipeName, param.DownloadRecipe.Size, index,
+		int row = Storage::RecipeStorage::Ins()->GetCountByRepiceName(res.FileName);
+		DataApi::RecipeToPLC(res.FileName, param.DownloadRecipe.Size, index,
 			param.DownloadRecipe.RegVar, colinfo, param.DownloadRecipe.TransferVarIdRef);
 	}
-	void RegionFunctionControl::HandleUploadRecipe(Project::FunctionSetup param)
+	void RegionFunctionControl::HandleUploadRecipe(Project::BtnFunctionRes res)
 	{
+		Project::FunctionSetup param = res.FunctionParam;
 		vector<Project::ColDataTypeInfo> colinfo;
-		RecipeDT::Ins()->GetDataTypes(param.UploadRecipe.RecipeName, colinfo);
+		RecipeDT::Ins()->GetDataTypes(res.FileName, colinfo);
 		short index;
-		DataVarId indexvar = RecipeDT::Ins()->GetIndexVar(param.UploadRecipe.RecipeName);
+		DataVarId indexvar = RecipeDT::Ins()->GetIndexVar(res.FileName);
 		if (indexvar == DataVarId::NullId)
 			index = LocalData::GetNumberData<short>(SYS_PSW_RecipeIndex);
 		else
 			index = UI::UIData::Number<short>(indexvar);
-		int row = Storage::RecipeStorage::Ins()->GetCountByRepiceName(param.UploadRecipe.RecipeName);
-		DataApi::RecipeFromPLC(param.UploadRecipe.RecipeName, param.UploadRecipe.Size, index,
+		int row = Storage::RecipeStorage::Ins()->GetCountByRepiceName(res.FileName);
+		DataApi::RecipeFromPLC(res.FileName, param.UploadRecipe.Size, index,
 			param.UploadRecipe.RegVar, colinfo, param.UploadRecipe.TransferVarIdRef);
 	}
-	void RegionFunctionControl::HandleCallbackFunc(Project::FunctionSetup param)
+	void RegionFunctionControl::HandleCallbackFunc(Project::BtnFunctionRes res)
 	{
-		UI::XJMacro::Trig_Macro(param.CallbackFunc.CbFuncName);
+		Project::FunctionSetup param = res.FunctionParam;
+		char * name = new char[res.FileName.size() + 1];
+		memset(name, '\0', res.FileName.size() + 1);
+		strcpy(name, res.FileName.c_str());
+		UI::XJMacro::Trig_Macro(name);
+		LOG_INFO("CallbackFunc %s\n", name);
+		delete[] name;
+		/*UI::XJMacro::Trig_Macro(param.CallbackFunc.CbFuncName);*/
 	}
 	void RegionFunctionControl::HandlePrintScreen(Project::FunctionSetup param)
 	{
+		int winno;
+		if (param.PrintScreen.ScreenSrc == Project::WinSrc::REGVAR &&
+			param.PrintScreen.ScreenVarIdRef != Project::DataVarId::NullId)
+			winno = UI::UIData::Number<int>(param.PrintScreen.ScreenVarIdRef);
+		else if (param.PrintScreen.ScreenSrc == Project::WinSrc::WINNO)
+			winno = param.PrintScreen.WinNo;
+		else
+			winno = Page()->Winno();
+		Fl_Widget *target = Win()->FindPage(winno);
+		if (!target)
+			target = Win()->ProducePage(winno);
+		PrintSetControl::PrintWinPic(target);
 	}
 	bool RegionFunctionControl::HavePerm()
 	{
@@ -602,15 +626,15 @@ namespace UI
 			if (mode_->FuncRegionConfig.Functions[i].FunctionName == "CloseWin")
 				HandleCloseWin(mode_->FuncRegionConfig.Functions[i].FunctionParam);
 			if (mode_->FuncRegionConfig.Functions[i].FunctionName == "ImportCSVdata")
-				HandleImportCSVdata(mode_->FuncRegionConfig.Functions[i].FunctionParam);
+				HandleImportCSVdata(mode_->FuncRegionConfig.Functions[i]);
 			if (mode_->FuncRegionConfig.Functions[i].FunctionName == "ExportCSVdata")
-				HandleExportCSVdata(mode_->FuncRegionConfig.Functions[i].FunctionParam);
+				HandleExportCSVdata(mode_->FuncRegionConfig.Functions[i]);
 			if (mode_->FuncRegionConfig.Functions[i].FunctionName == "DownloadRecipe")
-				HandleDownloadRecipe(mode_->FuncRegionConfig.Functions[i].FunctionParam);
+				HandleDownloadRecipe(mode_->FuncRegionConfig.Functions[i]);
 			if (mode_->FuncRegionConfig.Functions[i].FunctionName == "UploadRecipe")
-				HandleUploadRecipe(mode_->FuncRegionConfig.Functions[i].FunctionParam);
+				HandleUploadRecipe(mode_->FuncRegionConfig.Functions[i]);
 			if (mode_->FuncRegionConfig.Functions[i].FunctionName == "CallbackFunc")
-				HandleCallbackFunc(mode_->FuncRegionConfig.Functions[i].FunctionParam);
+				HandleCallbackFunc(mode_->FuncRegionConfig.Functions[i]);
 			if (mode_->FuncRegionConfig.Functions[i].FunctionName == "PrintScreen")
 				HandlePrintScreen(mode_->FuncRegionConfig.Functions[i].FunctionParam);
 		}
@@ -699,8 +723,8 @@ namespace UI
 		if (mode_->FuncRegionConfig.TimeLmtVar.Cmp(varId))
 		{
 			bool stopstatus = UI::UIData::Bit(mode_->FuncRegionConfig.TimeLmtVar);
-			if ((mode_->FuncRegionConfig.StopMode == 0 && stopstatus == false) ||
-				(mode_->FuncRegionConfig.StopMode == 1 && stopstatus == true))
+			if ((mode_->FuncRegionConfig.StopMode == 1 && stopstatus == false) ||
+				(mode_->FuncRegionConfig.StopMode == 0 && stopstatus == true))
 			{
 				if (mode_->FuncRegionConfig.Mode == Project::ActionMode::FuncContinue ||
 					mode_->FuncRegionConfig.Mode == Project::ActionMode::FuncTimer ||
