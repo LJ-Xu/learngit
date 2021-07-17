@@ -511,7 +511,6 @@
     <ClCompile Include="src\Utility\RecipeUtility.cpp" />
     <ClCompile Include="src\Utility\RotatePic.cpp" />
     <ClCompile Include="src\Utility\RowTable.cpp" />
-    <ClCompile Include="src\Utility\ScreenSaver.cpp" />
     <ClCompile Include="src\Utility\StringUtility.cpp" />
     <ClCompile Include="src\Utility\SysSetApi.cpp" />
     <ClCompile Include="src\Utility\SysSetHandle.cpp" />
