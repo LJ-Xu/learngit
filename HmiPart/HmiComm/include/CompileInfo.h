@@ -10,7 +10,7 @@
 #endif
 #define EXE_VER_STR "$V:" VER_STR "$"
 #define EXE_GIT_STR "$G:" EXE_GIT_AUTHOR "|" EXE_GIT_BRANCH "|" EXE_GIT_HASH "$"
-#define EXE_TIME_STR "$T:" EXE_VER_DATE  EXE_VER_TIME
+#define EXE_TIME_STR "$T:" EXE_VER_DATE  EXE_VER_TIME "$"
 #define EXE_STR "#X_I_N_J_E_H_M_I" EXE_VER_STR EXE_GIT_STR EXE_TIME_STR "X_I_N_J_E_H_M_I#"
 #ifdef _MSC_VER
 //#pragma( user, "XINJE_EVENT_822342941" ) 
