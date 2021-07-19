@@ -124,7 +124,7 @@ namespace UI
 		int ret = Storage::OperatorStorage::Ins()->CleanRcd();
 
 		/*通知操作记录有更新*/
-		if (ret == SQLITE_OK)		//删除成功
+		if (ret == SQLITE_DONE)		//删除成功
 		{
 			LOG_INFO_("Clean Operator Record\n");
 

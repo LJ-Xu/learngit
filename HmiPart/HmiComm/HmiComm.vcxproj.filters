@@ -84,16 +84,13 @@
     <ClInclude Include="include\RunEnv.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\Version.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\VersionMgr.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\Semaphore.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\OutTimeClock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\version.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -113,13 +110,13 @@
     <ClCompile Include="src\Logger.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\VersionMgr.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\RunEnv.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Semaphore.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\version.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -221,13 +221,16 @@ namespace Utility
 				memcpy(&result, &val, sizeof(DOUBLE));
 			}
 			else if (info.Type == Project::NT_Signed) {
-				memcpy(&result, &db, sizeof(INT64));
+				long long val = (long long)db;
+				memcpy(&result, &val, sizeof(INT64));
 			}
 			else if (info.Type == Project::NT_Hex) {
-				memcpy(&result, &db, sizeof(INT64));
+				long long val = (long long)db;
+				memcpy(&result, &val, sizeof(INT64));
 			}
 			else {
-				memcpy(&result, &db, sizeof(INT64));
+				long long val = (long long)db;
+				memcpy(&result, &val, sizeof(INT64));
 			}
 			break;
 		default:

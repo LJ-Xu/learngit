@@ -2,9 +2,9 @@
 #include "stdafx.h"
 #include "ProjectPortVarsInfo.h"
 #include "HMIProject.h"
-#define SYSPFW_COUNT 256
-#define SYSPSW_COUNT 256
-#define SYSPSB_COUNT 256
+#define SYSPFW_COUNT 512
+#define SYSPSW_COUNT 512
+#define SYSPSB_COUNT 512
 #define SPSB_BYTE_COUNT ((SYSPSB_COUNT+7)/8)
 #define SPSW_BYTE_COUNT (SYSPSW_COUNT*2)
 #define SPFW_BYTE_COUNT (SYSPFW_COUNT*2)

@@ -195,6 +195,8 @@
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SolutionDir)\Lib\win\release</LibraryPath>
     <OutDir>$(SolutionDir)Output\$(Configuration)\out\$(ProjectName)</OutDir>
     <IntDir>$(SolutionDir)Output\$(Configuration)\tmp\$(ProjectName)</IntDir>
+    <CustomBuildAfterTargets>
+    </CustomBuildAfterTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Release|Win32'">
     <IncludePath>$(IncludePath);$(ProjectDir)include;$(ProjectDir)getopt\include;$(SolutionDir)HmiPart\HmiComm\include;$(SolutionDir)HmiPart\HmiCore\include;$(SolutionDir)\ThirdPart\FLTK;$(SolutionDir)\ThirdPart\log4cpp\include;$(SolutionDir)\ThirdPart\gtest\include;$(SolutionDir)\ThirdPart\breakpad\src;$(SolutionDir)\ThirdPart\googlepinyin\include;$(SolutionDir)\ThirdPart\json;$(SolutionDir)OSLayer\System\include;$(SolutionDir)HmiPart\MsgQueue\include;$(SolutionDir)HmiPart\UIControl\include;$(SolutionDir)HmiPart\Project\include;$(SolutionDir)HmiPart\HmiUIManager\include;$(SolutionDir)ExLib\HmiPart\Service\DataClient\include;$(SolutionDir)ExLib\HmiPart\Service\XJSocket\include;$(SolutionDir)ExLib\HmiPart\Service\DataService\include</IncludePath>
@@ -220,6 +222,9 @@
     <PostBuildEvent>
       <Command>XCOPY  $(SolutionDir)Output\$(Configuration)\out\$(ProjectName)\$(ProjectName).exe $(SolutionDir)Output\$(Configuration)\ /e/y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)precompile.cmd $(SolutionDir)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Debug|Win32'">
     <ClCompile>
@@ -247,8 +252,7 @@ XCOPY  $(SolutionDir)ExLib\HmiPart\Service\DataClient\include\* $(SolutionDir)Hm
 XCOPY  $(SolutionDir)ExLib\HmiPart\Service\DataService\include\* $(SolutionDir)HmiPart\Service\DataService\include\ /e/y</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>$(SolutionDir)precompile.cmd $(SolutionDir)</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -300,6 +304,9 @@ XCOPY  $(SolutionDir)ExLib\HmiPart\Service\DataService\include\* $(SolutionDir)H
     <PostBuildEvent>
       <Command>XCOPY  $(SolutionDir)Output\$(Configuration)\out\$(ProjectName)\$(ProjectName).exe $(SolutionDir)Output\$(Configuration)\ /e/y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)precompile.cmd $(SolutionDir)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Release|Win32'">
     <ClCompile>
@@ -318,6 +325,7 @@ XCOPY  $(SolutionDir)ExLib\HmiPart\Service\DataService\include\* $(SolutionDir)H
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;log4cppLIB.lib;common.lib;crash_generation_client.lib;crash_generation_server.lib;exception_handler.lib;libzmq.lib;Iphlpapi.lib;libboost_regex-vc141-mt-1_65_1.lib;libboost_filesystem-vc141-mt-1_65_1.lib;libboost_date_time-vc141-mt-1_65_1.lib;libboost_system-vc141-mt-1_65_1.lib;zint.lib;libprotobuf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Manifest>
       <OutputManifestFile>$(IntDir)$(TargetName)$(TargetExt).embed.manifest</OutputManifestFile>
@@ -336,8 +344,7 @@ XCOPY  $(SolutionDir)ExLib\HmiPart\Service\DataClient\include\* $(SolutionDir)Hm
 XCOPY  $(SolutionDir)ExLib\HmiPart\Service\DataService\include\* $(SolutionDir)HmiPart\Service\DataService\include\ /e/y</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>$(SolutionDir)precompile.cmd $(SolutionDir)</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

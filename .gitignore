@@ -5809,3 +5809,4 @@ build
 /HmiMain/Sample
 /HmiMain/Operation
 /HmiMain/DB
+/HmiPart/HmiComm/include/__ExtInfo.h
