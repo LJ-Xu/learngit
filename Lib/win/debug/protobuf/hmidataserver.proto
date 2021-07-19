@@ -46,6 +46,7 @@ message UpLoadRecipe
 	BaseVarParam dstvar = 3; //PSW开始位置
 	repeated ColDataInfo coldatainfos = 4;
 	BaseVarParam flagvar = 5;
+	string id = 6;
 }
 
 message DownLoadRecipe
@@ -55,6 +56,7 @@ message DownLoadRecipe
 	BaseVarParam srcvar = 3; //PSW开始位置
 	repeated ColDataInfo coldatainfos = 4;
 	BaseVarParam flagvar = 5;
+	string id = 6;
 }
 
 message ImportCSVdata
