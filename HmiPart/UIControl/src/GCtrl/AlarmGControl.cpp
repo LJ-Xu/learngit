@@ -57,7 +57,8 @@ namespace UI
 	AlarmGControl::AlarmGControl(HMIPage * page) : BaseGControl(page) {
 		model_ = shared_ptr<AlarmGModel>(new AlarmGModel());
 		InitMVCModel(model_);
-		Storage::FileSave::GetFileSaveTool()->InitAlarm(&model_->AlarmGUnit.SaveLst);
+		if(model_->AlarmGUnit.IsSave)
+			Storage::FileSave::GetFileSaveTool()->InitAlarm(&model_->AlarmGUnit.SaveLst);
 		ctrl_ = this;
 		Storage::FileSave::GetFileSaveTool();
 	}
