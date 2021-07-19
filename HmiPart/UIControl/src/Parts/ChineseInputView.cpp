@@ -191,7 +191,8 @@ namespace UI
 		/*不需要处理focus事件*/
 		NeedHandleFocus = false;
 		OpenKeypage = true;
-
+		InputString = "";
+		PinYin = "";
 		/*打开键盘窗口*/
 		if (model->InputChineseConfig.KeyMethod.KeypadSrc == 0)	//使用弹出键盘
 		{
@@ -390,8 +391,21 @@ namespace UI
 						//value(inputstring.c_str());
 					}
 				}
-				if (InputString.size() > (size_t)maxsize)
+
+				//int count = UIDataService::Ins().GetDataCounts(model->InputChineseConfig.WriteVar);
+				char *buf = new char[InputString.size() + 1];
+				memset(buf, '\0', InputString.size() + 1);
+				memcpy(buf, InputString.c_str(), InputString.size());
+				/*设置输入框写寄存器*/
+				//if (model->InputChineseConfig.Rule == CodeFormatUtility::GB2312)
+				//	CodeFormatUtility::Utf8ToCode(model->InputChineseConfig.Rule, buf, count);
+				CodeFormatUtility::Utf8ToCode(CodeFormatUtility::GB2312, buf, InputString.size());
+				string tmpstring = buf;
+				if (tmpstring.size() > (size_t)maxsize)
 					InputString = perValue;
+
+				//if (InputString.size() > (size_t)maxsize)
+					//InputString = perValue;
 				if (!UI::CodeFormatUtility::IsStrUtf8(InputString.c_str()))
 					UI::IResourceService::GB2312toUtf8(InputString);
 				value(InputString.c_str());

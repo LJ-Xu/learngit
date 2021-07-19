@@ -256,8 +256,8 @@ namespace UI
 	void HMIPage::CloseEx()
 	{
 		NotifyCtrlClose();
-		DataApi::OnPageClose(Winno());
 		CloseTimerEx();
+		DataApi::OnPageClose(Winno());
 	}
 	void HMIPage::NotifySysChangeEx(SysChangeEM ctg)
 	{
