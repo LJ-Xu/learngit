@@ -250,8 +250,8 @@ namespace UI
 					HandleCallbackFunc(mode_->FuncBtnConfig.Release[i]);
 				if (mode_->FuncBtnConfig.Release[i].FunctionName == "PrintScreen")
 					HandlePrintScreen(mode_->FuncBtnConfig.Release[i].FunctionParam);
-				if (mode_->FuncBtnConfig.Press[i].FunctionName == "EditRecipe")
-					HandleEditRecipe(mode_->FuncBtnConfig.Press[i].FunctionParam);
+				if (mode_->FuncBtnConfig.Release[i].FunctionName == "EditRecipe")
+					HandleEditRecipe(mode_->FuncBtnConfig.Release[i].FunctionParam);
 			}
 			if (mode_->FuncBtnConfig.IsRecord)
 				OperatorGControl::Ins()->AddOperatorRecord(Page()->Winno(), mode_->FuncBtnConfig.CtrlName,
@@ -607,6 +607,8 @@ namespace UI
 		default:
 			break;
 		}
+		if (param.ImportCSVdata.LocationVar != Project::DataVarId::NullId)
+			param.ImportCSVdata.FileAddr = (Project::FlieLocation)UI::DataApi::AppNumber<int>(param.ImportCSVdata.LocationVar);
 		vector<Project::ColDataTypeInfo> typeinfos;
 		int regnum = 0;
 		for (size_t i = 0; i < (size_t)param.ImportCSVdata.DataSize; i++)
@@ -650,6 +652,9 @@ namespace UI
 		default:
 			break;
 		}
+		if (param.ExportCSVdata.LocationVar != Project::DataVarId::NullId)
+			param.ExportCSVdata.FileAddr = (Project::FlieLocation)UI::DataApi::AppNumber<int>(param.ExportCSVdata.LocationVar);
+
 		int regnum = 0;
 		vector<Project::ColDataTypeInfo> typeinfos;
 		for (size_t i = 0; i < (size_t)param.ExportCSVdata.DataSize; i++)
