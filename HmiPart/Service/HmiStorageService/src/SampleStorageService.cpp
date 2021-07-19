@@ -98,12 +98,12 @@ namespace Storage
 		//SELECT
 		{
 			sql.clear();
-			sql.append("SELECT COUNT(*) FROM ").append(tbName).append(" union all SELECT COUNT(*) FROM ").append("fileDb.").append(tbName).append(" ORDER BY Date;");
+			sql.append("SELECT COUNT(*) FROM ").append(tbName).append(" union all SELECT COUNT(*) FROM fileDb.").append(tbName).append(" ORDER BY Date;");
 			if (!NewFMT(SEL_GetAllCount, sql.c_str(), sizeof(sql)))
 				return SEL_GetAllCount;
 
 			sql.clear();
-			sql.append("SELECT COUNT(*) FROM ").append(tbName).append(" WHERE ChannelNo = ?").append(" union all SELECT COUNT(*) FROM ").append("fileDb.").append(tbName).append(" WHERE ChannelNo = ?");
+			sql.append("SELECT COUNT(*) FROM ").append(tbName).append(" WHERE ChannelNo = ?").append(" union all SELECT COUNT(*) FROM ").append("fileDb.").append(tbName).append(" WHERE ChannelNo = ?;");
 			if (!NewFMT(SEL_GetCountByChannel, sql.c_str(), sizeof(sql)))
 				return SEL_GetCountByChannel;
 
@@ -163,7 +163,7 @@ namespace Storage
 			sqlite3_bind_int(stmt, 5, record.Type.Type);
 			sqlite3_bind_int64(stmt, 6, record.Date);
 			ret = sqlite3_step(stmt);
-			if (!ret)
+			if (ret==0||ret==100||ret==101)
 				curId++;
 		}
 		return ret;
@@ -252,8 +252,10 @@ namespace Storage
 		sqlite3_stmt* stmt = GetSTMT(SEL_SelectSampleRecordByChannel);
 		if (stmt == nullptr)
 			return std::vector<SampleRecord>();
+		int ret = sqlite3_reset(stmt);
 		std::vector<SampleRecord> records;
 		sqlite3_bind_int(stmt, 1, channel);
+		sqlite3_bind_int(stmt, 2, channel);
 		while (sqlite3_step(stmt) == SQLITE_ROW) {
 			SampleRecord record;
 			record.Channel = sqlite3_column_int(stmt, 1);
@@ -271,9 +273,11 @@ namespace Storage
 		sqlite3_stmt* stmt = GetSTMT(SEL_SelectSampleRecordByChannel);
 		if (stmt == nullptr)
 			return std::vector<SampleRecord>();
+		int ret = sqlite3_reset(stmt);
 		int matchnm = gName | (gNo << 8);
 		std::vector<SampleRecord> records;
 		sqlite3_bind_int(stmt, 1, matchnm);
+		sqlite3_bind_int(stmt, 2, matchnm);
 		while (sqlite3_step(stmt) == SQLITE_ROW) {
 			SampleRecord record;
 			record.Channel = sqlite3_column_int(stmt, 1);
@@ -291,11 +295,13 @@ namespace Storage
 		sqlite3_stmt* stmt = GetSTMT(SEL_SelectSampleRecordByChannel);
 		if (stmt == nullptr)
 			return std::vector<SampleRecord>();
+		int ret = sqlite3_reset(stmt);
 		int matchnm = gName | (gNo << 8);
 		std::vector<SampleRecord> records;
 		sqlite3_bind_int(stmt, 1, matchnm);
-		sqlite3_bind_int64
-		(stmt, 2, startTime);
+		sqlite3_bind_int64(stmt, 2, startTime);
+		sqlite3_bind_int(stmt, 3, matchnm);
+		sqlite3_bind_int64(stmt, 4, startTime);
 		while (sqlite3_step(stmt) == SQLITE_ROW) {
 			SampleRecord record;
 			record.Channel = sqlite3_column_int(stmt, 1);
@@ -318,7 +324,7 @@ namespace Storage
 	 * @birth  : created by TangYao on 2021/01/12
 	 */
 	vector<SampleRecord> SampleStorageService::SelectSampleRecordByDate(int channel, DDWORD startDate, DDWORD endDate) {
-		sqlite3_stmt* stmt = GetSTMT(INS_InsertSampleRecord);
+		sqlite3_stmt* stmt = GetSTMT(SEL_SelectSampleRecordByDate);
 		if (stmt == nullptr)
 			return std::vector<SampleRecord>();
 		std::vector<SampleRecord> records;
@@ -328,6 +334,9 @@ namespace Storage
 			sqlite3_bind_int(stmt, 1, channel);
 			sqlite3_bind_int64(stmt, 2, startDate);
 			sqlite3_bind_int64(stmt, 3, endDate);
+			sqlite3_bind_int(stmt, 4, channel);
+			sqlite3_bind_int64(stmt, 5, startDate);
+			sqlite3_bind_int64(stmt, 6, endDate);
 			while (sqlite3_step(stmt) == SQLITE_ROW) {
 				SampleRecord record;
 				record.Channel = sqlite3_column_int(stmt, 1);
@@ -351,7 +360,7 @@ namespace Storage
 	 * @birth  : created by TangYao on 2021/01/12
 	 */
 	vector<SampleRecord> SampleStorageService::SelectSampleRecordByTime(int channel, DDWORD startTime, DDWORD endTime) {
-		sqlite3_stmt* stmt = GetSTMT(INS_InsertSampleRecord);
+		sqlite3_stmt* stmt = GetSTMT(SEL_SelectSampleRecordByTime);
 		if (stmt == nullptr)
 			return std::vector<SampleRecord>();
 		std::vector<SampleRecord> records;
@@ -361,6 +370,9 @@ namespace Storage
 			sqlite3_bind_int(stmt, 1, channel);
 			sqlite3_bind_int64(stmt, 2, startTime);
 			sqlite3_bind_int64(stmt, 3, endTime);
+			sqlite3_bind_int(stmt, 4, channel);
+			sqlite3_bind_int64(stmt, 5, startTime);
+			sqlite3_bind_int64(stmt, 6, endTime);
 			while (sqlite3_step(stmt) == SQLITE_ROW) {
 				SampleRecord record;
 				record.Channel = sqlite3_column_int(stmt, 1);
@@ -383,9 +395,10 @@ namespace Storage
 		if (!ret)
 		{
 			sqlite3_bind_int(stmt, 1, channel);
+			sqlite3_bind_int(stmt, 2, channel);
 			ret = sqlite3_step(stmt);
 			if (ret == SQLITE_ROW) {
-				count = sqlite3_column_int(stmt, 0);
+				count += sqlite3_column_int(stmt, 0);
 			}
 		}
 		return ret;

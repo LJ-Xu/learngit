@@ -172,9 +172,13 @@ namespace Storage
 	void FileSave::SaveSample(Project::SampleInfoRes* spIfRs)
 	{
 #if EXECTASKINTHREAD
-		std::lock_guard<std::mutex> lck(Mutex);		
-		SampleSaveList.push(spIfRs);
-		TaskDispatcher.notify_all();
+		std::lock_guard<std::mutex> lck(Mutex);	
+		if (spIfRs->SampleStoreInfo.IsSave)
+		{
+			SampleSaveList.push(spIfRs);
+			TaskDispatcher.notify_all();
+		}
+			
 #else
 		IsSampleSaveAvaliable = false;
 		FromSqlite2File(spIfRs);
@@ -306,6 +310,8 @@ namespace Storage
 	}
 	FileSave::FileSave()
 	{
+		AlarmSaveList = nullptr;
+		OperateSaveList = nullptr;
 		IsSampleSaveAvaliable = true;
 		IsAlarmSaveAvaliable = true;
 		ReadTimingFilesFromIni();
@@ -1010,15 +1016,27 @@ namespace Storage
 		case 4:
 			if (NULL_VID_VALUE != addrPath.Vid)
 			{
-				std::string strName = UI::DataApi::AppString(addrPath);
-				if (strName.size())
+				int type = UI::DataApi::AppNumber<int>(addrPath);
+				switch (type)
+				{
+				case 1://Hmi
+					filePath.append("HMI\\");
+					break;
+				case 2://SD
+					filePath.append("SDCARD\\");
+					break;
+				case 3://USB
+					filePath.append("USB\\");
+					break;
+				}
+				/*if (strName.size())
 				{
 					filePath.append(strName).append("\\");
 				}
 				else
 				{
 					filePath.append("InvalidFilePathInDataVar").append("\\");
-				}
+				}*/
 			}
 			break;
 		}

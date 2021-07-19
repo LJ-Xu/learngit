@@ -105,32 +105,32 @@ namespace Storage
 		//Select
 		{
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName);
+			sql.append("SELECT * FROM ").append(tbName).append(" union all SELECT * FROM fileDb.").append(tbName);
 			if (!NewFMT(SEL_SelectRecords, sql.c_str(), sizeof(sql)))
 				return SEL_SelectRecords;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ID >= ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ID >= ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ID >= ?;");
 			if (!NewFMT(SEL_SelectRecordsFromId, sql.c_str(), sizeof(sql)))
 				return SEL_SelectRecordsFromId;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append("  LIMIT ?,?;");
+			sql.append("SELECT * FROM ").append(tbName).append("  LIMIT ?,?").append(" union all SELECT * FROM fileDb.").append(tbName).append("  LIMIT ?,?;");
 			if (!NewFMT(SEL_SelectRecordsFromIdLimitByCount, sql.c_str(), sizeof(sql)))
 				return SEL_SelectRecordsFromIdLimitByCount;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append("   WHERE UserName = '?';");
+			sql.append("SELECT * FROM ").append(tbName).append("   WHERE UserName = '?'").append(" union all SELECT * FROM fileDb.").append(tbName).append("   WHERE UserName = '?';");
 			if (!NewFMT(SEL_SelectRecordsByUserName, sql.c_str(), sizeof(sql)))
 				return SEL_SelectRecordsByUserName;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append("   WHERE Date BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append("   WHERE Date BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append("   WHERE Date BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectRecordsByDate, sql.c_str(), sizeof(sql)))
 				return SEL_SelectRecordsByDate;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append("   WHERE Date BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append("   WHERE Date BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append("   WHERE Date BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectRecordsByTime, sql.c_str(), sizeof(sql)))
 				return SEL_SelectRecordsByTime;
 		}
@@ -258,7 +258,9 @@ namespace Storage
 			sqlite3_stmt* stmt = GetSTMT(SEL_SelectRecordsFromId);
 			if (stmt == nullptr)
 				return -1;
+			int ret = sqlite3_reset(stmt);
 			sqlite3_bind_int(stmt, 1, startIndex);
+			sqlite3_bind_int(stmt, 2, startIndex);
 			return SelectRecords(stmt, records);
 		}
 		else
@@ -266,8 +268,11 @@ namespace Storage
 			sqlite3_stmt* stmt = GetSTMT(SEL_SelectRecordsFromIdLimitByCount);
 			if (stmt == nullptr)
 				return -1;
+			int ret = sqlite3_reset(stmt);
 			sqlite3_bind_int(stmt, 1, startIndex);
 			sqlite3_bind_int(stmt, 2, count);
+			sqlite3_bind_int(stmt, 3, startIndex);
+			sqlite3_bind_int(stmt, 4, count);
 			return SelectRecords(stmt, records);
 		}
 	}
@@ -276,7 +281,9 @@ namespace Storage
 		sqlite3_stmt* stmt = GetSTMT(SEL_SelectRecordsByUserName);
 		if (stmt == nullptr)
 			return -1;
+		int ret = sqlite3_reset(stmt);
 		sqlite3_bind_text(stmt,1, userName,strlen(userName),nullptr);
+		sqlite3_bind_text(stmt, 2, userName, strlen(userName), nullptr);
 		return SelectRecords(stmt, records);
 	}
 
@@ -284,8 +291,11 @@ namespace Storage
 		sqlite3_stmt* stmt = GetSTMT(SEL_SelectRecordsByDate);
 		if (stmt == nullptr)
 			return -1;
+		int ret = sqlite3_reset(stmt);
 		sqlite3_bind_int64(stmt, 1, sDate);
 		sqlite3_bind_int64(stmt, 2, eDate);
+		sqlite3_bind_int64(stmt, 3, sDate);
+		sqlite3_bind_int64(stmt, 4, eDate);
 		return SelectRecords(stmt, records);
 	}
 
@@ -293,8 +303,11 @@ namespace Storage
 		sqlite3_stmt* stmt = GetSTMT(SEL_SelectRecordsByTime);
 		if (stmt == nullptr)
 			return -1;
+		int ret = sqlite3_reset(stmt);
 		sqlite3_bind_int64(stmt, 1, sTime);
 		sqlite3_bind_int64(stmt, 2, eTime);
+		sqlite3_bind_int64(stmt, 3, sTime);
+		sqlite3_bind_int64(stmt, 4, eTime);
 		return SelectRecords(stmt, records);
 	}
 }
