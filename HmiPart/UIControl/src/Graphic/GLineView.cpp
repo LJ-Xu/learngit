@@ -160,4 +160,8 @@ namespace UI
 	{
 		GLineView::DrawLine();
 	}
+	int GLineView::handle(int event)
+	{
+		return 0;
+	}
 }

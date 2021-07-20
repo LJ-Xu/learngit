@@ -32,7 +32,7 @@ namespace UI
 		void OnReady() override;
 		float GetPieValue(int index);
 
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 	protected:
 		int PeekHMIMessage(Message::Msg * msg) override;
 

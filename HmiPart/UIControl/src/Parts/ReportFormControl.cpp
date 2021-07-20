@@ -102,7 +102,7 @@ namespace UI
 		}
 	}
 
-	void ReportFormControl::HandleSysChange(SysChangeEM catogray)
+	bool ReportFormControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -131,6 +131,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 

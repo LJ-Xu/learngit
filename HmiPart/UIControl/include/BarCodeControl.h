@@ -9,7 +9,7 @@ namespace UI
 		BarCodeControl() :BarCodeControl(nullptr) {}
 		BarCodeControl(HMIPage*);
 		void CreateView()override;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void OnReady() override;
 
 	protected:

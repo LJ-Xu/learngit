@@ -41,7 +41,7 @@ namespace UI
 		//OnReady();
 	}
 
-	void BtnPilotLampControl::HandleSysChange(SysChangeEM catogray)
+	bool BtnPilotLampControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -68,6 +68,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void BtnPilotLampControl::OnReady()
 	{

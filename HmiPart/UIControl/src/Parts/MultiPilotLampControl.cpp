@@ -248,7 +248,7 @@ namespace UI
 	}
 		
 	
-	void MultiPilotLampControl::HandleSysChange(SysChangeEM catogray)
+	bool MultiPilotLampControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -277,6 +277,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	void MultiPilotLampControl::HandleDataVar(Project::DataVarId &varId)

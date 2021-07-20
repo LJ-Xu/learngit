@@ -49,7 +49,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void RecipeTransferControl::HandleSysChange(SysChangeEM catogray)
+	bool RecipeTransferControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -78,6 +78,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	void RecipeTransferControl::SetOffSetPos(int pageoffx, int pageoffy)

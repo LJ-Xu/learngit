@@ -63,7 +63,7 @@ namespace UI
 			mode_->FuncBtnConfig.OffY = pageoffy;
 	}
 
-	void BtnFunctionControl::HandleSysChange(SysChangeEM catogray)
+	bool BtnFunctionControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -85,11 +85,15 @@ namespace UI
 				UI::ViewShowUtility::ShowView(pView_, mode_->FuncBtnConfig.Perm, mode_->FuncBtnConfig.X + mode_->FuncBtnConfig.OffX, mode_->FuncBtnConfig.Y + mode_->FuncBtnConfig.OffY);
 				if (needswitchwin_)
 				{
-					if (switchwinno_ > 25000)
-						Win()->OpenDialogPage(switchwinno_);
-					if (switchwinno_ > 0 && switchwinno_ <= 25000)
-						Win()->SwitchPage(switchwinno_);
 					needswitchwin_ = false;
+					if (switchwinno_ > 5000)
+						Win()->OpenDialogPage(switchwinno_);
+					if (switchwinno_ > 0 && switchwinno_ <= 5000)
+					{
+						Win()->SwitchPage(switchwinno_);
+						switchwinno_ = 0;
+						return false;
+					}
 					switchwinno_ = 0;
 				}
 			}
@@ -304,21 +308,24 @@ namespace UI
 		{
 			if (param.SetData.IncreaseValueVar != Project::DataVarId::NullId)
 				param.SetData.IncreaseValue = UI::UIData::Number<DOUBLE>(param.SetData.IncreaseValueVar);
-			DOUBLE writedata = UI::UIData::Number<DOUBLE>(param.SetData.WriteVarIdRef);
-			writedata += param.SetData.IncreaseValue;
-			if (param.SetData.UpperLmtValueVar != Project::DataVarId::NullId)
-				param.SetData.UpperLmtValue = UI::UIData::Number<DOUBLE>(param.SetData.UpperLmtValueVar);
-			if (param.SetData.LowerLmtValueVar != Project::DataVarId::NullId)
-				param.SetData.LowerLmtValue = UI::UIData::Number<DOUBLE>(param.SetData.LowerLmtValueVar);
-			if (writedata > param.SetData.UpperLmtValue)
+			if (UI::DataApi::GetDataFlag(param.SetData.WriteVarIdRef))
 			{
-				if (param.SetData.Loop)		//使用周期循环
-					UI::UIData::Number(param.SetData.WriteVarIdRef, param.SetData.LowerLmtValue);
+				DOUBLE writedata = UI::UIData::Number<DOUBLE>(param.SetData.WriteVarIdRef);
+				writedata += param.SetData.IncreaseValue;
+				if (param.SetData.UpperLmtValueVar != Project::DataVarId::NullId)
+					param.SetData.UpperLmtValue = UI::UIData::Number<DOUBLE>(param.SetData.UpperLmtValueVar);
+				if (param.SetData.LowerLmtValueVar != Project::DataVarId::NullId)
+					param.SetData.LowerLmtValue = UI::UIData::Number<DOUBLE>(param.SetData.LowerLmtValueVar);
+				if (writedata > param.SetData.UpperLmtValue)
+				{
+					if (param.SetData.Loop)		//使用周期循环
+						UI::UIData::Number(param.SetData.WriteVarIdRef, param.SetData.LowerLmtValue);
+					else
+						UI::UIData::Number(param.SetData.WriteVarIdRef, param.SetData.UpperLmtValue);
+				}
 				else
-					UI::UIData::Number(param.SetData.WriteVarIdRef, param.SetData.UpperLmtValue);
+					UI::UIData::Number(param.SetData.WriteVarIdRef, writedata);
 			}
-			else
-				UI::UIData::Number(param.SetData.WriteVarIdRef, writedata);
 			break;
 
 		}
@@ -326,21 +333,24 @@ namespace UI
 		{
 			if (param.SetData.IncreaseValueVar != Project::DataVarId::NullId)
 				param.SetData.IncreaseValue = UI::UIData::Number<DOUBLE>(param.SetData.IncreaseValueVar);
-			DOUBLE writedata = UI::UIData::Number<DOUBLE>(param.SetData.WriteVarIdRef);
-			writedata -= param.SetData.IncreaseValue;
-			if (param.SetData.UpperLmtValueVar != Project::DataVarId::NullId)
-				param.SetData.UpperLmtValue = UI::UIData::Number<DOUBLE>(param.SetData.UpperLmtValueVar);
-			if (param.SetData.LowerLmtValueVar != Project::DataVarId::NullId)
-				param.SetData.LowerLmtValue = UI::UIData::Number<DOUBLE>(param.SetData.LowerLmtValueVar);
-			if (writedata < param.SetData.LowerLmtValue)
+			if (UI::DataApi::GetDataFlag(param.SetData.WriteVarIdRef))
 			{
-				if (param.SetData.Loop)		//使用周期循环
-					UI::UIData::Number(param.SetData.WriteVarIdRef, param.SetData.UpperLmtValue);
+				DOUBLE writedata = UI::UIData::Number<DOUBLE>(param.SetData.WriteVarIdRef);
+				writedata -= param.SetData.IncreaseValue;
+				if (param.SetData.UpperLmtValueVar != Project::DataVarId::NullId)
+					param.SetData.UpperLmtValue = UI::UIData::Number<DOUBLE>(param.SetData.UpperLmtValueVar);
+				if (param.SetData.LowerLmtValueVar != Project::DataVarId::NullId)
+					param.SetData.LowerLmtValue = UI::UIData::Number<DOUBLE>(param.SetData.LowerLmtValueVar);
+				if (writedata < param.SetData.LowerLmtValue)
+				{
+					if (param.SetData.Loop)		//使用周期循环
+						UI::UIData::Number(param.SetData.WriteVarIdRef, param.SetData.UpperLmtValue);
+					else
+						UI::UIData::Number(param.SetData.WriteVarIdRef, param.SetData.LowerLmtValue);
+				}
 				else
-					UI::UIData::Number(param.SetData.WriteVarIdRef, param.SetData.LowerLmtValue);
+					UI::UIData::Number(param.SetData.WriteVarIdRef, writedata);
 			}
-			else
-				UI::UIData::Number(param.SetData.WriteVarIdRef, writedata);
 			break;
 
 		}
@@ -528,7 +538,7 @@ namespace UI
 				switchwinno_ = param.OpenWin.ExchangeWinNo;
 				return;
 			}
-			if (curwinno > 25000)		//窗口
+			if (curwinno > 5000)		//窗口
 			{
 				Win()->SwitchDialogPage(param.OpenWin.ExchangeWinNo);
 				Win()->ClosePage(curwinno);

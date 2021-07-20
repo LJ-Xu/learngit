@@ -27,7 +27,7 @@ namespace UI
 		void CreateView() override;
 		void SetOffSetPos(int offx, int offy);
 		void OnReady();
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 	protected:
 		int PeekHMIMessage(Message::Msg* msg) override;
 		void HandleDataVar(Project::DataVarId &varId);

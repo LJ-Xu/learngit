@@ -23,7 +23,7 @@ namespace UI
 		RecipeChartControl() :RecipeChartControl(nullptr) {}
 		RecipeChartControl(HMIPage*);
 		void OnReady();
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void SetOffSetPos(int offx, int offy);
 		void GetSearchRegData();
 	protected:

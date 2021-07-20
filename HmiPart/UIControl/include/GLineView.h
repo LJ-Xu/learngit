@@ -26,6 +26,7 @@ namespace UI
 		BasicView BaseView;
 	protected:
 		void draw() override;
+		int handle(int event);
 	private:
 		/*绘制线段部分，并调用Arrow_Rotate函数绘制箭头部分*/
 		void DrawLine();

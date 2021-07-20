@@ -33,6 +33,7 @@ namespace UI
 		int CurrentFlash = 1;
 	protected:
 		void draw() override;
+		int handle(int event);
 	private:
 	};
 }

@@ -208,4 +208,8 @@ namespace UI
 		GraphicDrawHandle::Ins()->EndPopMatrix();
 	
 	}
+	int GPolyLineView::handle(int event)
+	{
+		return 0;
+	}
 }

@@ -88,7 +88,7 @@ namespace UI
 		else
 			mode_->FluidConfig.OffY = pageoffy;
 	}
-	void FluidUnitControl::HandleSysChange(SysChangeEM catogray)
+	bool FluidUnitControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -115,6 +115,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void FluidUnitControl::HandleDataVar(Project::DataVarId &varId)
 	{

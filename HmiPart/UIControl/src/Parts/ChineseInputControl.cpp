@@ -61,7 +61,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void ChineseInputControl::HandleSysChange(SysChangeEM catogray)
+	bool ChineseInputControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -88,6 +88,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	void ChineseInputControl::HandleDataVar(Project::DataVarId &varId)

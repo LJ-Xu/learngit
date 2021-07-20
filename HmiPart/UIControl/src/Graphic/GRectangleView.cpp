@@ -110,4 +110,8 @@ namespace UI
 
 	
 	}
+	int GRectangleView::handle(int event)
+	{
+		return 0;
+	}
 }

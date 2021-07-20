@@ -138,4 +138,8 @@ namespace UI
 		else
 			LOG_INFO("Gif Pic%d is NULL\n", CurrentPicNo);
 	}
+	int GifPicView::handle(int event)
+	{
+		return 0;
+	}
 }

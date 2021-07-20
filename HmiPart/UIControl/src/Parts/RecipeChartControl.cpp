@@ -46,7 +46,7 @@ namespace UI
 	{
 		HandleSysChange(Permission);
 	}
-	void RecipeChartControl::HandleSysChange(SysChangeEM catogray)
+	bool RecipeChartControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -73,6 +73,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void RecipeChartControl::SetOffSetPos(int pageoffx, int pageoffy)
 	{

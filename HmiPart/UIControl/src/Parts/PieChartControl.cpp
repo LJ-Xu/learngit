@@ -48,7 +48,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void PieChartControl::HandleSysChange(SysChangeEM catogray)
+	bool PieChartControl::HandleSysChange(SysChangeEM catogray)
 	{
 		PieChartModel* mode_ = static_cast<PieChartModel*>(pModel_.get());
 		PieChartView* pView = static_cast<PieChartView*>(pView_);
@@ -80,7 +80,7 @@ namespace UI
 					}
 					else
 					{
-						return;
+						return true;
 					}
 				}
 				for (int i = 0; i < mode_->PieChartUnit.ReadVars.size(); ++i)
@@ -96,6 +96,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	int PieChartControl::PeekHMIMessage(Message::Msg * msg) {

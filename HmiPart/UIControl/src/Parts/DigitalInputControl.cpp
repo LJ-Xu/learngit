@@ -62,7 +62,7 @@ namespace UI
 		else
 			mode_->InputNumConfig.OffY = pageoffy;
 	}
-	void DigitalInputControl::HandleSysChange(SysChangeEM catogray)
+	bool DigitalInputControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -91,6 +91,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	
 	void DigitalInputControl::OnReady()

@@ -24,7 +24,7 @@ namespace UI
 		XYTrendControl() :XYTrendControl(nullptr) {}
 		XYTrendControl(HMIPage*);
 		void OnReady();
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void GetSampleData(void);
 		void SetOffSetPos(int offx, int offy);
 		bool HasTimer = false;

@@ -120,7 +120,7 @@ namespace UI
 		//关闭Page
 		void Close();
 		//通知当前页有系统消息通知
-		void NotifySysChange(SysChangeEM ctg);
+		bool NotifySysChange(SysChangeEM ctg);
 		//改变坐标
 		void ChangePos(int offx, int offy);
 
@@ -196,7 +196,7 @@ namespace UI
 		void NotifyCtrlReadyEx();
 		void OpenEx();
 		void CloseEx();
-		void NotifySysChangeEx(SysChangeEM ctg);
+		bool NotifySysChangeEx(SysChangeEM ctg);
 		void ChangePosEx(int offx, int offy);		
 		Fl_Widget* prefocus_;
 

@@ -674,7 +674,9 @@ namespace UI
 		while (pg != curPage_)
 		{
 			HMIPage* tp = pg->Prev;
-			tp->NotifySysChange(ctg);
+			if (!tp->NotifySysChange(ctg))
+				tp = curPage_->Prev;
+				//return;
 			pg = tp;
 		}
 		pg->NotifySysChange(ctg);

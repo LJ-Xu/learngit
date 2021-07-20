@@ -22,7 +22,7 @@ namespace UI
 	public:
 		OperatorChartControl() :OperatorChartControl(nullptr) {}
 		OperatorChartControl(HMIPage*);
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void SetOffSetPos(int pageoffx, int pageoffy);
 		void OnReady();
 		void GetSearchRegData();

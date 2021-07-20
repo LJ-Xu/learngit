@@ -22,7 +22,7 @@ namespace UI
 		PinYinPageControl() :PinYinPageControl(nullptr) {}
 		PinYinPageControl(HMIPage*);
 		void CreateView()override;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void SearchChineseCharacters(const int &currentPage, string pinyin);
 		int ChineseNum = 7;
 		void SetOffSetPos(int offx, int offy);

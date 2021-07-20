@@ -50,7 +50,7 @@ namespace UI
 		else
 			mode_->BackLightConfig.OffY = pageoffy;
 	}
-	void BackLightControl::HandleSysChange(SysChangeEM catogray)
+	bool BackLightControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -81,6 +81,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	void BackLightControl::OnReady()

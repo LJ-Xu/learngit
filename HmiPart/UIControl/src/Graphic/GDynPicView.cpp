@@ -235,4 +235,8 @@ namespace UI
 		//fl_draw_image((const uchar *)imagel->data()[0], model->m_DynPicconfig.x, model->m_DynPicconfig.y,
 		//	model->m_DynPicconfig.width, model->m_DynPicconfig.height, 4, model->m_DynPicconfig.width*4);
 	}
+	int GDynPicView::handle(int event)
+	{
+		return 0;
+	}
 }

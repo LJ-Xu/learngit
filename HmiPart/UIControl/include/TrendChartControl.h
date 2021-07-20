@@ -23,7 +23,7 @@ namespace UI
 	public:
 		TrendChartControl() :TrendChartControl(nullptr) {}
 		TrendChartControl(HMIPage*);
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void OnReady();
 		void SetOffSetPos(int offx, int offy);
 		void GetSearchRegData();

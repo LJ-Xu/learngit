@@ -34,6 +34,7 @@ namespace UI
 		/****************数据访问*******************/
 		static XJDataType GetDataType(Project::DataVarId vid);
 		static char GetDataFlag(Project::DataVarId vid);
+		static void ResetDataFlag(Project::DataVarId vid);
 		/**********************直接指定VAR信息(异步或者访问系统本地寄存器)***********************************/
 		static bool GetBit(Project::BaseVar& var);
 		static void SetBit(Project::BaseVar& var, bool val);

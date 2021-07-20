@@ -89,7 +89,7 @@ namespace UI
 			mode_->TrendXYConfig.OffY = pageoffy;
 	}
 
-	void XYTrendControl::HandleSysChange(SysChangeEM catogray)
+	bool XYTrendControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -116,6 +116,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	void XYTrendControl::GetSampleData(void)

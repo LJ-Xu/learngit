@@ -48,7 +48,7 @@ namespace UI
 		//StartTick(true);
 		
 	}
-	void StirrerControl::HandleSysChange(SysChangeEM catogray)
+	bool StirrerControl::HandleSysChange(SysChangeEM catogray)
 	{
 		StirrerModel* mode_ = static_cast<StirrerModel*>(pModel_.get());
 		switch (catogray)
@@ -80,6 +80,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	int StirrerControl::PeekHMIMessage(Message::Msg * msg) {
 		Project::DataVarId varId = Project::DataVarId(msg->LParam);

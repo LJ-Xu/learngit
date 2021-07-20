@@ -95,7 +95,7 @@ namespace UI
 		if (Mode->AlarmBarConfig.Perm.EnableVID.Cmp(varId))
 			UI::PermUtility::HandleEnablePerm(Mode->AlarmBarConfig.Perm, pView_);
 	}
-	void AlarmBarControl::HandleSysChange(SysChangeEM catogray)
+	bool AlarmBarControl::HandleSysChange(SysChangeEM catogray)
 	{
 		AlarmBarModel* mode_ = static_cast<AlarmBarModel*>(pModel_.get());
 		switch (catogray)
@@ -125,5 +125,6 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 }

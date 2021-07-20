@@ -24,7 +24,7 @@ namespace UI
 		GLineControl(HMIPage*  );
 		void CreateView()override;
 		void SetOffSetPos(int offx, int offy);
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void OnReady();
 
 	protected:

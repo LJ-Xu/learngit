@@ -101,4 +101,8 @@ namespace UI
 		GraphicDrawHandle::Ins()->DrawCircle(point, model->CircleConfig.ArcRes.A, model->CircleConfig.ArcRes.B);
 		GraphicDrawHandle::Ins()->EndPopMatrix();
 	}
+	int GCircleView::handle(int event)
+	{
+		return 0;
+	}
 }

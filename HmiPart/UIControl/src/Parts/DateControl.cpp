@@ -66,7 +66,7 @@ namespace UI
 		Page()->RemoveTimeout(UpdateDate, (void*)pView);
 	}
 
-	void DateControl::HandleSysChange(SysChangeEM catogray)
+	bool DateControl::HandleSysChange(SysChangeEM catogray)
 	{
 		DateModel* mode_ = static_cast<DateModel*>(pModel_.get());
 		switch (catogray)
@@ -96,6 +96,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	void DateControl::OnReady()

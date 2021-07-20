@@ -116,7 +116,7 @@ namespace UI
 
 	}
 
-	void OperatorChartControl::HandleSysChange(SysChangeEM catogray)
+	bool OperatorChartControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -145,6 +145,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void OperatorChartControl::HandleDataVar(Project::DataVarId &varId)
 	{

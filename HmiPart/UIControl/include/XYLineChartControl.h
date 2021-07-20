@@ -33,7 +33,7 @@ namespace UI
 		void OnReady();
 		void GetSampleData();
 		void HandleSampleData(BYTE* str, int len, int channelno,bool Isxdata);
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		XYLineChartData TimerData;
 		int DataNo;			//以获取的数据个数
 		void SetOffSetPos(int offx, int offy);

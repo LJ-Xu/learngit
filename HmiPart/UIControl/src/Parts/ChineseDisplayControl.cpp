@@ -60,7 +60,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void ChineseDisplayControl::HandleSysChange(SysChangeEM catogray)
+	bool ChineseDisplayControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -87,6 +87,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	
 	void ChineseDisplayControl::HandleDataVar(Project::DataVarId &varId)

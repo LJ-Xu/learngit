@@ -56,7 +56,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void DropMenuControl::HandleSysChange(SysChangeEM catogray)
+	bool DropMenuControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -85,6 +85,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	void DropMenuControl::HandleDataVar(Project::DataVarId &varId)

@@ -102,7 +102,7 @@ namespace UI
 		else
 			mode_->PinYinConfig.OffY = pageoffy;
 	}
-	void PinYinPageControl::HandleSysChange(SysChangeEM catogray)
+	bool PinYinPageControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -133,6 +133,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void PinYinPageControl::SearchChineseCharacters(const int &currentPage, string pinyin)
 	{

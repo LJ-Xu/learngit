@@ -53,7 +53,7 @@ namespace UI
 	{
 		HandleSysChange(Permission);
 	}
-	void GCircleControl::HandleSysChange(SysChangeEM catogray)
+	bool GCircleControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -82,6 +82,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void GCircleControl::HandleDataVar(Project::DataVarId &varId)
 	{

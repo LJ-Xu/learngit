@@ -54,7 +54,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void WaterPumpControl::HandleSysChange(SysChangeEM catogray)
+	bool WaterPumpControl::HandleSysChange(SysChangeEM catogray)
 	{
 		WaterPumpModel* mode_ = static_cast<WaterPumpModel*>(pModel_.get());
 		switch (catogray)
@@ -86,6 +86,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	int WaterPumpControl::PeekHMIMessage(Message::Msg * msg) {

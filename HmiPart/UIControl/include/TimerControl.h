@@ -27,7 +27,7 @@ namespace UI
 		void OnStartPage();		//画面开始
 		void OnClosePage();		//画面结束
 		void SetOffSetPos(int offx, int offy);
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 
 		DDWORD TimeCount = 0;
 		void HandleTime();

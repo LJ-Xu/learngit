@@ -11,7 +11,7 @@ namespace UI
 		DashboardControl(HMIPage*);
 		void CreateView()override;
 		void OnReady();
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 	protected:
 		//void AddVarData(vector<Project::DataVarId*> vars) override;
 		int PeekHMIMessage(Message::Msg* msg) override;

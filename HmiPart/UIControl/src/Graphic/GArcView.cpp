@@ -110,4 +110,8 @@ namespace UI
 		//	model->ArcConfig.StartAngle,model->ArcConfig.EndAngle);
 		GraphicDrawHandle::Ins()->EndPopMatrix();
 	}
+	int GArcView::handle(int event)
+	{
+		return 0;
+	}
 }

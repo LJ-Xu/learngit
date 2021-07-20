@@ -11,7 +11,7 @@ namespace UI
 		ScaleControl() :ScaleControl(nullptr) {}
 		 ScaleControl(HMIPage*);
 		void CreateView()override;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void OnReady();
 	protected:
 		//void AddVarData(vector<Project::DataVarId*> vars) override;

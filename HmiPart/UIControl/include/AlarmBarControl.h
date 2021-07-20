@@ -14,7 +14,7 @@ namespace UI
 		void StartScoll();
 		void Stop();
 		void OnReady()override;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 	protected:
 		int PeekHMIMessage(Message::Msg* msg) override;
 		void HandleDataVar(Project::DataVarId &varId);

@@ -73,7 +73,7 @@ namespace UI
 		pView->redraw();
 	}
 
-	void GStickChartControl::HandleSysChange(SysChangeEM catogray)
+	bool GStickChartControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -100,6 +100,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	//获取数据 

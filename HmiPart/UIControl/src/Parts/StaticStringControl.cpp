@@ -54,7 +54,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void StaticStringControl::HandleSysChange(SysChangeEM catogray)
+	bool StaticStringControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -83,6 +83,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void StaticStringControl::HandleDataVar(Project::DataVarId &varId)
 	{

@@ -29,7 +29,7 @@ namespace UI
 		MultiPilotLampControl() :MultiPilotLampControl(nullptr) {}
 		MultiPilotLampControl(HMIPage*);
 		void CreateView() override;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void SetOffSetPos(int offx, int offy);
 
 		void OnReady();		//¿ªÊ¼

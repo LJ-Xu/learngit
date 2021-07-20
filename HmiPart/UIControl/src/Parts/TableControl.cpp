@@ -53,7 +53,7 @@ namespace UI
 	{
 		HandleSysChange(Permission);
 	}
-	void TableControl::HandleSysChange(SysChangeEM catogray)
+	bool TableControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -80,6 +80,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	void TableControl::HandleDataVar(Project::DataVarId &varId)

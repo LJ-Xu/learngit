@@ -100,7 +100,7 @@ namespace UI
 		StartTick(true);
 	}
 
-	void ClockControl::HandleSysChange(SysChangeEM catogray)
+	bool ClockControl::HandleSysChange(SysChangeEM catogray)
 	{
 		ClockModel* mode_ = static_cast<ClockModel*>(pModel_.get());
 		switch (catogray)
@@ -130,6 +130,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 
