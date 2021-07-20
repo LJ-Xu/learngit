@@ -43,7 +43,7 @@ echo !date!
 echo !time!
 set file=!dir!\HmiPart\HmiComm\include\__ExtInfo.h
 echo #pragma once > !file!
-echo #define EXE_GIT_AUTHOR  "!gitusr!" >> !file!
+echo #define EXE_GIT_AUTHOR  "!gitusr! " >> !file!
 echo #define EXE_GIT_BRANCH  "!branch!" >> !file!
 echo #define EXE_GIT_HASH  "!hash!" >> !file!
 echo #define EXE_GIT_SUBBRANCH  "!subbranch!" >> !file!
