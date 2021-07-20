@@ -12,22 +12,31 @@ cdir=`pwd`
 branch=`head -1 .git/HEAD | tail -1 `
 branch=${branch#ref: refs/heads/}
 hash=`head -1 .git/refs/heads/$branch | tail -1`
-gitusr=`git config user.name`
+
+subbranch=`head -1 .git/modules/ExLib/HEAD | tail -1 `
+subbranch=${branch#ref: refs/heads/}
+subhash=`head -1 .git/modules/ExLib/refs/heads/$branch | tail -1`
+
+gitusr=`git config user.name`" "
 gitemail=`git config user.email`
-gitusr="${gitusr}#${gitemail}"
+#gitusr="${gitusr}#${gitemail}"
 date=$(date "+%Y%m%d")
 time=$(date "+%H%M%S")
+echo $gitusr
 echo $branch
 echo $hash
-echo $gitusr
+echo $subbranch
+echo $subhash
 echo $date
 echo $time
 
 file=HmiPart/HmiComm/include/__ExtInfo.h
 echo "#pragma once" > $file
+echo "#define EXE_GIT_AUTHOR  \"${gitusr}\"" >> $file
 echo "#define EXE_GIT_BRANCH  \"${branch}\"" >> $file
 echo "#define EXE_GIT_HASH  \"${hash}\"" >> $file
-echo "#define EXE_GIT_AUTHOR  \"${gitusr}\"" >> $file
+echo "#define EXE_GIT_SUBBRANCH  \"${subbranch}\"" >> $file
+echo "#define EXE_GIT_SUBHASH  \"${subhash}\"" >> $file
 echo "#define EXE_VER_DATE  \"${date}\"" >> $file
 echo "#define EXE_VER_TIME  \"${time}\"" >> $file
 
