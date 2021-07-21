@@ -60,7 +60,7 @@ namespace UI
 		//pView_->damage();
 		//pView_->redraw();
 	}
-	void ValveControl::HandleSysChange(SysChangeEM catogray)
+	bool ValveControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -91,6 +91,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	// 控件处理HMI消息函数
 	int ValveControl::PeekHMIMessage(Message::Msg * msg) {

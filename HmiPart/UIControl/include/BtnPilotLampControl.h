@@ -30,7 +30,7 @@ namespace UI
 		BtnPilotLampControl(HMIPage*  );
 		void CreateView()override;
 		void OnReady();//¿ªÊ¼
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		//bool HandleOperatePush();
 		BtnPilotLampData BtnLampData;
 		void SetOffSetPos(int offx, int offy);

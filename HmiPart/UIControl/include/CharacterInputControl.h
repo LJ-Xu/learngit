@@ -24,7 +24,7 @@ namespace UI
 		CharacterInputControl(HMIPage*  );
 		void SetOffSetPos(int offx, int offy);
 		void CreateView()override;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void OnReady();
 	protected:
 		int PeekHMIMessage(Message::Msg* msg) override;

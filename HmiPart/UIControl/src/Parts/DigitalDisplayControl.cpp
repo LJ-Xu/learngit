@@ -57,7 +57,7 @@ namespace UI
 		else
 			mode_->DisNumConfig.OffY = pageoffy;
 	}
-	void DigitalDisplayControl::HandleSysChange(SysChangeEM catogray)
+	bool DigitalDisplayControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -86,6 +86,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 

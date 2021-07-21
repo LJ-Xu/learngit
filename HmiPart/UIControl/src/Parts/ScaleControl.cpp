@@ -27,7 +27,7 @@ namespace UI
 
 	}
 
-	void ScaleControl::HandleSysChange(SysChangeEM catogray)
+	bool ScaleControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -54,6 +54,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	void ScaleControl::OnReady()

@@ -24,7 +24,7 @@ namespace UI
 		AlarmDisplayControl() : AlarmDisplayControl(nullptr) {}
 		AlarmDisplayControl(HMIPage*);
 		void CreateView()override;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void SetOffSetPos(int offx, int offy);
 		void OnReady();
 		void GetSearchRegData();

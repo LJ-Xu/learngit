@@ -85,7 +85,7 @@ namespace UI
 		else
 			mode_->ChartXYLineConfig.OffY = pageoffy;
 	}
-	void XYLineChartControl::HandleSysChange(SysChangeEM catogray)
+	bool XYLineChartControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -112,6 +112,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	/*获取采样数据*/
 	void XYLineChartControl::GetSampleData()

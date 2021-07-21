@@ -22,7 +22,7 @@ namespace UI
 	public:
 		DataTableControl() :DataTableControl(nullptr) {}
 		DataTableControl(HMIPage*);
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void SetOffSetPos(int pageoffx, int pageoffy);
 		void OnReady();
 	protected:

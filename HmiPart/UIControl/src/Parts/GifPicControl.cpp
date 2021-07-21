@@ -108,7 +108,7 @@ namespace UI
 		else
 			mode_->GifConfig.OffY = pageoffy;
 	}
-	void GifPicControl::HandleSysChange(SysChangeEM catogray)
+	bool GifPicControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -137,6 +137,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	void GifPicControl::HandleDataVar(Project::DataVarId &varId)

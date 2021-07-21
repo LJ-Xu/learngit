@@ -32,7 +32,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void DashboardControl::HandleSysChange(SysChangeEM catogray)
+	bool DashboardControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -59,6 +59,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	int DashboardControl::PeekHMIMessage(Message::Msg* msg)

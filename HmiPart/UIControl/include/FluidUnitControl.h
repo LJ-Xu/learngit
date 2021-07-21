@@ -28,7 +28,7 @@ namespace UI
 	public:
 		FluidUnitControl() :FluidUnitControl(nullptr) {}
 		FluidUnitControl(HMIPage*  );
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void SetOffSetPos(int offx, int offy);
 
 		void OnReady();		//¿ªÊ¼

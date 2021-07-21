@@ -12,7 +12,7 @@ namespace UI
 		void CreateView()override;
 		void StartTick(bool firstStart = false);
 		void StopTick();
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void OnReady() override;
 	protected:
 		int PeekHMIMessage(Message::Msg* msg) override;

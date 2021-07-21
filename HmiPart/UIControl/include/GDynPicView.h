@@ -32,6 +32,7 @@ namespace UI
 
 	protected:
 		void draw() override;
+		int handle(int event);
 	};
 }
 

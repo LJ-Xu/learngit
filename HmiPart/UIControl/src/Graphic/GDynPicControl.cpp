@@ -102,7 +102,7 @@ namespace UI
 		else
 			mode_->PicDynConfig.OffY = pageoffy;
 	}
-	void GDynPicControl::HandleSysChange(SysChangeEM catogray)
+	bool GDynPicControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -131,6 +131,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void GDynPicControl::HandleDataVar(Project::DataVarId &varId)
 	{

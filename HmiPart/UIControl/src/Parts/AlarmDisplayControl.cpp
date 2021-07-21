@@ -62,7 +62,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void AlarmDisplayControl::HandleSysChange(SysChangeEM catogray)
+	bool AlarmDisplayControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -89,7 +89,8 @@ namespace UI
 		default:
 			break;
 		}
-	}	
+		return true;
+	}
 	void AlarmDisplayControl::GetSearchRegData()
 	{
 		AlarmDisplayView* pView = static_cast<AlarmDisplayView*>(pView_);

@@ -21,7 +21,7 @@ namespace UI
 	public:
 		RegionFunctionControl() :RegionFunctionControl(nullptr) {}
 		RegionFunctionControl(HMIPage*);
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void CreateView() override;
 		void OnReady();
 		void OnClose();

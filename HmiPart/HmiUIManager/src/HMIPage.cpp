@@ -183,9 +183,10 @@ namespace UI
 		delete param;
 	}
 
-	void HMIPage::NotifySysChange(SysChangeEM ctg)
+	bool HMIPage::NotifySysChange(SysChangeEM ctg)
 	{
-		NotifySysChangeEx(ctg);
+		if (!NotifySysChangeEx(ctg))
+			return false;
 		if (bottomPage_)
 			bottomPage_->NotifySysChange(ctg);
 		if (topPage_)
@@ -259,12 +260,14 @@ namespace UI
 		CloseTimerEx();
 		DataApi::OnPageClose(Winno());
 	}
-	void HMIPage::NotifySysChangeEx(SysChangeEM ctg)
+	bool HMIPage::NotifySysChangeEx(SysChangeEM ctg)
 	{
 		for (size_t i = 0; i < ctrls_.size(); i++)
 		{
-			ctrls_[i]->HandleSysChange(ctg);
+			if(!ctrls_[i]->HandleSysChange(ctg))
+				return false;
 		}
+		return true;
 	}
 	void HMIPage::ChangePosEx(int offx, int offy)
 	{

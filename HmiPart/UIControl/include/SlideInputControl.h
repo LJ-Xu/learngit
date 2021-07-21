@@ -22,7 +22,7 @@ namespace UI
 		SlideInputControl() :SlideInputControl(nullptr) {}
 		SlideInputControl(HMIPage*);
 		void CreateView()override;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void SetOffSetPos(int offx, int offy);
 		void OnReady();
 	protected:

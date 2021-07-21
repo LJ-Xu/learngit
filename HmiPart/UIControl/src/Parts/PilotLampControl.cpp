@@ -78,7 +78,7 @@ namespace UI
 		}
 	}
 
-	void PilotLampControl::HandleSysChange(SysChangeEM catogray)
+	bool PilotLampControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -107,6 +107,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	void PilotLampControl::SetOffSetPos(int pageoffx, int pageoffy)

@@ -26,6 +26,7 @@ namespace UI
 
 	protected:
 		void draw() override;
+		int handle(int event);
 		void DrawFill();
 		double GetArrowAngle(int startx, int endx, int starty, int endy, int mode);
 	};

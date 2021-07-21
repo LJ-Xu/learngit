@@ -39,7 +39,7 @@ namespace UI
 	{
 		HandleSysChange(Permission);
 	}
-	void GPolyLineControl::HandleSysChange(SysChangeEM catogray)
+	bool GPolyLineControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -68,6 +68,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void GPolyLineControl::SetOffSetPos(int pageoffx, int pageoffy)
 	{

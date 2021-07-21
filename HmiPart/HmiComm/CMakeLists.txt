@@ -10,7 +10,7 @@ add_library(HmiComm STATIC
 	src/DeleteHelper.cpp
 	src/StackArray.cpp
 	src/Logger.cpp
-	src/VersionMgr.cpp
+	src/version.cpp
 	src/RunEnv.cpp
 	src/Semaphore.cpp
 

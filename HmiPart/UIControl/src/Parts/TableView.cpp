@@ -170,4 +170,8 @@ namespace UI
 			return;
 		}
 	}
+	int TableView::handle(int event)
+	{
+		return 0;
+	}
 }

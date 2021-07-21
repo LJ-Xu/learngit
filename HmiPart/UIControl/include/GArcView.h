@@ -25,6 +25,7 @@ namespace UI
 		BasicView BaseView;
 	protected:
 		void draw() override;
+		int handle(int event);
 	private:
 		void DrawFill();
 	};

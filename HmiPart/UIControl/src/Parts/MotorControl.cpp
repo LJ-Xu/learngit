@@ -57,7 +57,7 @@ namespace UI
 	{
 		HandleSysChange(Permission);
 	}
-	void MotorControl::HandleSysChange(SysChangeEM catogray)
+	bool MotorControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -85,6 +85,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	int MotorControl::PeekHMIMessage(Message::Msg* msg)
 	{

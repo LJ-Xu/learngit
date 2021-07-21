@@ -24,7 +24,7 @@ namespace UI
 		GArcControl() :GArcControl(nullptr) {}
 		GArcControl(HMIPage*);
 		void CreateView() override;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void SetOffSetPos(int offx, int offy);
 		void OnReady();
 

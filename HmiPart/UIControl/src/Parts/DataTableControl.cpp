@@ -62,7 +62,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void DataTableControl::HandleSysChange(SysChangeEM catogray)
+	bool DataTableControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -91,6 +91,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void DataTableControl::HandleDataVar(Project::DataVarId &varId)
 	{

@@ -23,7 +23,7 @@ namespace UI
 		void SetOffSetPos(int offx, int offy);
 		CharacterDisplayControl(HMIPage*);
 		void CreateView()override;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void OnReady();
 	protected:
 

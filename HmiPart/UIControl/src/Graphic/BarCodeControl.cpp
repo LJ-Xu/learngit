@@ -26,7 +26,7 @@ namespace UI
 		InitMVCView(view);
 	}
 
-	void BarCodeControl::HandleSysChange(SysChangeEM catogray)
+	bool BarCodeControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -53,6 +53,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	void BarCodeControl::OnReady()

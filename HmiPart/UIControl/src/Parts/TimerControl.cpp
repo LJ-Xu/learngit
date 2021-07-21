@@ -49,7 +49,7 @@ namespace UI
 		else
 			mode_->TimerConfig.OffY = pageoffy;
 	}
-	void TimerControl::HandleSysChange(SysChangeEM catogray)
+	bool TimerControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -58,6 +58,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	void TimerCountCb(void *data)

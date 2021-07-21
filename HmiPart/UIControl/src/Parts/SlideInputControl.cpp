@@ -44,7 +44,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void SlideInputControl::HandleSysChange(SysChangeEM catogray)
+	bool SlideInputControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -71,6 +71,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void SlideInputControl::SetOffSetPos(int pageoffx, int pageoffy)
 	{

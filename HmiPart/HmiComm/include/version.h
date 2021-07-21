@@ -1,11 +1,10 @@
 #pragma once
 #define VERSION_MAIN 0
 #define VERSION_SUB  1
-#define VERSION_ORDER  16
+#define VERSION_ORDER  17
 
 #define STR__(v) #v
-#define STR_(v) STR__(##v)
-#define STR(v) STR_(v)
+#define STR(v) STR__(v)
 
 #define OS_YEAR     ((((__DATE__ [7] - '0') * 10 + (__DATE__ [8] - '0')) * 10 \
                                     + (__DATE__ [9] - '0')) * 10 + (__DATE__ [10] - '0'))

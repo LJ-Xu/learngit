@@ -58,7 +58,7 @@ namespace UI
 		else
 			mode_->InputStrConfig.OffY = pageoffy;
 	}
-	void CharacterInputControl::HandleSysChange(SysChangeEM catogray)
+	bool CharacterInputControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -87,6 +87,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void CharacterInputControl::HandleDataVar(Project::DataVarId &varId)
 	{

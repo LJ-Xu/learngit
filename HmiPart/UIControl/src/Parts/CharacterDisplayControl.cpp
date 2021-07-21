@@ -45,7 +45,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void CharacterDisplayControl::HandleSysChange(SysChangeEM catogray)
+	bool CharacterDisplayControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -74,6 +74,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 

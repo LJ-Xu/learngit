@@ -52,7 +52,7 @@ namespace UI
 	{
 		HandleSysChange(Permission);
 	}
-	void GLineControl::HandleSysChange(SysChangeEM catogray)
+	bool GLineControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -81,6 +81,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void GLineControl::HandleDataVar(Project::DataVarId &varId)
 	{

@@ -27,7 +27,7 @@ namespace UI
 		PilotLampControl(HMIPage*  );
 		void CreateView()override;
 		void OnReady();//¿ªÊ¼
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		PilotLampData LampTimerData;
 		void SetOffSetPos(int offx, int offy);
 		bool HasTimer = false;

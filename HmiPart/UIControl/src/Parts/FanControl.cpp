@@ -84,7 +84,7 @@ namespace UI
 			mode_->FanUnitConfig.OffY = pageoffy;
 	}
 
-	void FanControl::HandleSysChange(SysChangeEM catogray)
+	bool FanControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -113,6 +113,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void FanControl::HandleDataVar(Project::DataVarId &varId)
 	{
@@ -182,12 +183,14 @@ namespace UI
 				//default:
 				//	break;
 				//}
-				if (meetcond && isswitch_ == false)
+				if (meetcond)
 				{
-					Page()->RemoveTimeout(FanTimerCb, (void*)this);
-					if(mode_->FanUnitConfig.CycleTime != 0)
+					if (mode_->FanUnitConfig.CycleTime != 0 && isswitch_ == false)
+					{
+						Page()->RemoveTimeout(FanTimerCb, (void*)this);
 						Page()->AddTimeout((size_t)(10000.0 / (double)mode_->FanUnitConfig.CycleTime), FanTimerCb, (void *)this, true);
-					isswitch_ = true;
+						isswitch_ = true;
+					}
 				}
 				else
 				{

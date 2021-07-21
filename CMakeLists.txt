@@ -10,6 +10,7 @@ project(Hmi)
 #include_directories(${PROJECT_SOURCE_DIR}/Json)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+set(CMAKE_BUILD_TYPE "Debug")
 IF(NOT LX32)
   add_definitions(-DARM_PLAT)
 endif()

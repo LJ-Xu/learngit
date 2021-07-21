@@ -21,7 +21,7 @@ namespace UI
 		VarStringControl() :VarStringControl(nullptr) {}
 		VarStringControl(HMIPage*  );
 		void SetOffSetPos(int offx, int offy);
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void CreateView()override;
 		void OnReady();
 	protected:

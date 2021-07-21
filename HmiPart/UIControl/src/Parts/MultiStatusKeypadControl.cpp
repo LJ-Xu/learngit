@@ -41,7 +41,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void MultiStatusKeypadControl::HandleSysChange(SysChangeEM catogray)
+	bool MultiStatusKeypadControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -70,6 +70,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void MultiStatusKeypadControl::SetOffSetPos(int pageoffx, int pageoffy)
 	{

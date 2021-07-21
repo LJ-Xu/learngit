@@ -181,7 +181,7 @@
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;log4cppD.lib;common.lib;crash_generation_client.lib;crash_generation_server.lib;exception_handler.lib;libzmqd.lib;Iphlpapi.lib;libboost_regex-vc141-mt-gd-1_65_1.lib;libboost_filesystem-vc141-mt-gd-1_65_1.lib;libboost_date_time-vc141-mt-gd-1_65_1.lib;libboost_system-vc141-mt-gd-1_65_1.lib;zint.lib;libprotobufd.lib;XJSocketd.lib;DataClientd.lib;DataServiced.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY  $(SolutionDir)Output\$(Configuration)\out\$(ProjectName)\$(ProjectName).dll $(SolutionDir)Output\$(Configuration)\ /e/y</Command>
+      <Command>XCOPY  $(SolutionDir)Output\$(Configuration)\out\$(ProjectName)\$(ProjectName).dll  $(SolutionDir)..\Hmi\Hmi\bin\HmiTest\HMI\HMI\LDLL\ /e/y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='HMI_Debug|Win32'">
@@ -252,7 +252,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;log4cppLIB.lib;common.lib;crash_generation_client.lib;crash_generation_server.lib;exception_handler.lib;gtestd.lib;gtest_maind.lib;libzmq.lib;Iphlpapi.lib;libboost_regex-vc141-mt-1_65_1.lib;libboost_filesystem-vc141-mt-1_65_1.lib;libboost_date_time-vc141-mt-1_65_1.lib;libboost_system-vc141-mt-1_65_1.lib;zint.lib;libprotobuf.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;log4cppLIB.lib;common.lib;crash_generation_client.lib;crash_generation_server.lib;exception_handler.lib;libzmq.lib;Iphlpapi.lib;libboost_regex-vc141-mt-1_65_1.lib;libboost_filesystem-vc141-mt-1_65_1.lib;libboost_date_time-vc141-mt-1_65_1.lib;libboost_system-vc141-mt-1_65_1.lib;zint.lib;libprotobuf.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>XCOPY  $(SolutionDir)Output\$(Configuration)\out\$(ProjectName)\$(ProjectName).dll $(SolutionDir)Output\$(Configuration)\ /e/y</Command>

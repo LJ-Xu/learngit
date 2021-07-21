@@ -56,7 +56,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void VarStringControl::HandleSysChange(SysChangeEM catogray)
+	bool VarStringControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -85,6 +85,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void VarStringControl::HandleDataVar(Project::DataVarId &varId)
 	{

@@ -117,7 +117,7 @@ namespace UI
 		}
 
 	}
-	void TrendChartControl::HandleSysChange(SysChangeEM catogray)
+	bool TrendChartControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -146,6 +146,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void TrendChartControl::HandleDataVar(Project::DataVarId &varId)
 	{

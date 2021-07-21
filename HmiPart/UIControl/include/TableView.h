@@ -29,6 +29,8 @@ namespace UI
 	protected:
 		void draw_cell(TableContext context,  		// table cell drawing
 			int R = 0, int C = 0, int X = 0, int Y = 0, int W = 0, int H = 0);
+		int handle(int event);
+
 	private:
 		Fl_Color bgcolor_;			//列表背景颜色
 		Fl_Color bordercolor_;			//列表序号文字颜色

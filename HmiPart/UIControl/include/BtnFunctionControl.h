@@ -23,7 +23,7 @@ namespace UI
 		BtnFunctionControl(HMIPage*);
 		void SetOffSetPos(int offx, int offy);
 		void CreateView()override;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		bool HandlePermLimit(int region, bool popwin);
 		void OnReady();
 		/*******************************************************************************

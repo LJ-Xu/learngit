@@ -30,7 +30,7 @@ namespace UI
 		void OnReady();//¿ªÊ¼
 		void CreateView()override;
 		GifData GifTimerData;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void SetOffSetPos(int offx, int offy);
 
 	protected:

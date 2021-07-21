@@ -13,7 +13,7 @@ namespace UI
 		void CreateView()override;
 		void BlinkMoment();
 		void OnReady() override;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 	public:
 		bool IsBlinking;
 		double BlinkSpeed;

@@ -82,9 +82,9 @@ namespace UI
 		virtual int PeekHMIMessage(Message::Msg* msg) = 0;
 		virtual void SetOffSetPos(int offx, int offy) {}
 
-		virtual void HandleSysChange(SysChangeEM catogray)
+		virtual bool HandleSysChange(SysChangeEM catogray)
 		{
-
+			return false;
 		}
 		Project::WinCtrlID CtrlId() { return ctrlId_; };   //¿Ø¼þID
 		void CtrlId(Project::WinCtrlID id) { ctrlId_ = id; };   //¿Ø¼þID

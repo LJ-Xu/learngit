@@ -24,7 +24,7 @@ namespace UI
 		MultiStatusKeypadControl(HMIPage*);
 		void CreateView()override;
 		void SetOffSetPos(int offx, int offy);
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void OnReady();
 	protected:
 

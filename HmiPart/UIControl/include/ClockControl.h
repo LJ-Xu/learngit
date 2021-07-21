@@ -14,7 +14,7 @@ namespace UI
 		void StartTick(bool firstStart=false);
 		void StopTick();
 		void OnReady() override;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void SetOffSetPos(int pageoffx, int pageoffy);
 	protected:
 		int PeekHMIMessage(Message::Msg* msg) override;

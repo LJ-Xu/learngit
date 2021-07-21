@@ -41,7 +41,7 @@ namespace UI
 		HandleSysChange(Permission);
 	}
 
-	void KeypadControl::HandleSysChange(SysChangeEM catogray)
+	bool KeypadControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -70,6 +70,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void KeypadControl::SetOffSetPos(int pageoffx, int pageoffy)
 	{

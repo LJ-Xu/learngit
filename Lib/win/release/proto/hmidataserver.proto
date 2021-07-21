@@ -3,19 +3,19 @@ syntax = "proto3";
 message DeleteRecipeRecord
 {
    bytes tablename = 1;
-   int32 id = 2;
+   string id = 2;
 }
 
 message InsertRecipeRecord
 {
    bytes tablename = 1;
-   int32 id = 2;
+   string id = 2;
 }
 
 message UpdateRecipeRecord
 {
    bytes tablename = 1;
-   int32 id = 2;
+   string id = 2;
    bytes columnname = 3;
    string data = 4;
 }
@@ -46,6 +46,7 @@ message UpLoadRecipe
 	BaseVarParam dstvar = 3; //PSW开始位置
 	repeated ColDataInfo coldatainfos = 4;
 	BaseVarParam flagvar = 5;
+	string id = 6;
 }
 
 message DownLoadRecipe
@@ -55,6 +56,7 @@ message DownLoadRecipe
 	BaseVarParam srcvar = 3; //PSW开始位置
 	repeated ColDataInfo coldatainfos = 4;
 	BaseVarParam flagvar = 5;
+	string id = 6;
 }
 
 message ImportCSVdata
@@ -79,4 +81,11 @@ message ExportCSVdata
 	BaseVarParam statusvar = 6;
 	BaseVarParam resultvar = 7;
 	BaseVarParam processvar = 8;
+}
+
+message MoveVardatas
+{
+	BaseVarParam svar = 1;
+	BaseVarParam dvar = 2;
+	int32 regcount = 3;
 }

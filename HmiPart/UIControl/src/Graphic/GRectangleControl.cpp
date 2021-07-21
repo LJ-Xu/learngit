@@ -52,7 +52,7 @@ namespace UI
 	{
 		HandleSysChange(Permission);
 	}
-	void GRectangleControl::HandleSysChange(SysChangeEM catogray)
+	bool GRectangleControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -81,6 +81,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	
 	void GRectangleControl::HandleDataVar(Project::DataVarId &varId)

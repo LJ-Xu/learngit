@@ -27,7 +27,7 @@ namespace UI
 		DigitalDisplayControl() :DigitalDisplayControl(nullptr) {}
 		DigitalDisplayControl(HMIPage*);
 		void CreateView()override;
-		void HandleSysChange(SysChangeEM catogray);
+		bool HandleSysChange(SysChangeEM catogray);
 		void OnReady();		//¿ªÊ¼
 		void SetOffSetPos(int offx, int offy);
 

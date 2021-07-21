@@ -52,7 +52,7 @@ namespace UI
 	{
 		HandleSysChange(Permission);
 	}
-	void GArcControl::HandleSysChange(SysChangeEM catogray)
+	bool GArcControl::HandleSysChange(SysChangeEM catogray)
 	{
 		switch (catogray)
 		{
@@ -82,6 +82,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 	void GArcControl::HandleDataVar(Project::DataVarId &varId)
 	{
