@@ -68,7 +68,7 @@ namespace UI
 		void DrawArc(bool isSector, Project::Point center, double xlength, double ylength,
 			double startangle, double endangle,double startx,double starty, double endx, double endy);
 		void DrawCircle(Project::Point center, double xlength, double ylength);
-		void DrawArrow(Project::ArrowType style, double angle, int& x, int& y, int width);
+		void DrawArrow(Project::ArrowType style, double angle, int x, int y, int width);
 		void DrawRenderScroll(int mode, int X, int Y, int W, int H);
 		static void PushClip(double x, double y, double w, double h);
 	};

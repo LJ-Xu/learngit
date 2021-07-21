@@ -20,7 +20,7 @@ namespace UI
 	GLineView::~GLineView() {}
 
 
-	void GLineView::DrawStartArrow(double angle, int& startx, int& starty)
+	void GLineView::DrawStartArrow(double angle, int startx, int starty)
 	{
 		shared_ptr<GLineModel> model = BaseView.GetModel<GLineModel>();
 		if (model->LineConfig.Coordinate.size() == 0)
@@ -35,7 +35,7 @@ namespace UI
 
 	}
 
-	void GLineView::DrawEndArrow(double angle, int& endx, int& endy)
+	void GLineView::DrawEndArrow(double angle, int endx, int endy)
 	{
 		shared_ptr<GLineModel> model = BaseView.GetModel<GLineModel>();
 		if (model->LineConfig.Coordinate.size() < 2)
@@ -115,7 +115,38 @@ namespace UI
 			}
 		}
 	}
+	void  GLineView::CalculatePoint(int startangle, int endangle, int &sx, int &sy, int &ex, int &ey)
+	{
+		shared_ptr<GLineModel> model = BaseView.GetModel<GLineModel>();
+		int startsize = model->LineConfig.Arrow.StartArrowSize;
+		int endsize = model->LineConfig.Arrow.EndArrowSize;
+		if (model->LineConfig.Arrow.StartArrowType == Project::ArrowType::Arrow
+			|| !model->LineConfig.Arrow.HaveStartArrow)
+			startsize = 0;
+		if (model->LineConfig.Arrow.EndArrowType == Project::ArrowType::Arrow
+			|| !model->LineConfig.Arrow.HaveEndArrow)
+			endsize = 0;
+		int startx = model->LineConfig.Coordinate[0].X + model->LineConfig.OffX;        //线段起始坐标
+		int starty = model->LineConfig.Coordinate[0].Y + model->LineConfig.OffY;
+		int endx = model->LineConfig.Coordinate[1].X + model->LineConfig.OffX;        //线段终点坐标
+		int endy = model->LineConfig.Coordinate[1].Y + model->LineConfig.OffY;
 
+		fl_push_matrix();
+		fl_translate(startx, starty);
+		fl_rotate(startangle);
+		fl_translate(-startx, -starty);
+		sx = (int)fl_transform_x((double)startx, (double)(starty + startsize / 2));
+		sy = (int)fl_transform_y((double)startx, (double)(starty + startsize / 2));
+		fl_pop_matrix();
+
+		fl_push_matrix();
+		fl_translate(endx, endy);
+		fl_rotate(endangle);
+		fl_translate(-endx, -endy);
+		ex = (int)fl_transform_x((double)endx, (double)(endy + endsize / 2));
+		ey = (int)fl_transform_y((double)endx, (double)(endy + endsize / 2));
+		fl_pop_matrix();
+	}
 	void GLineView::DrawLine()
 	{
 		shared_ptr<GLineModel> model = BaseView.GetModel<GLineModel>();
@@ -131,14 +162,16 @@ namespace UI
 
 		double pointX = model->LineConfig.RotateCenter.X + (double)model->LineConfig.OffX;
 		double pointY = model->LineConfig.RotateCenter.Y + (double)model->LineConfig.OffY;
+		double startangle, endangle;
+		CalculateAngle(startangle, endangle);
+		int sx, sy, ex, ey;
+		CalculatePoint(startangle, endangle, sx, sy, ex, ey);
 
 		Fl_Color lineColor = fl_rgb_color(RGBColor(model->LineConfig.Line.Color));
 		GraphicDrawHandle::Ins()->BeginPushMatrix(model->LineConfig.RotateAngle, 1.0, 1.0, pointX, pointY);
 		GraphicDrawHandle::Ins()->SetBrushStyle(active() ? lineColor : fl_inactive(lineColor),
 			model->LineConfig.Line.Type, model->LineConfig.Line.Weight, model->LineConfig.Line.Alpha);
 
-		double startangle, endangle;
-		CalculateAngle(startangle, endangle);
 		
 		if (model->LineConfig.Arrow.HaveEndArrow)
 			DrawEndArrow(endangle, endx, endy);
@@ -147,13 +180,10 @@ namespace UI
 
 		/*绘制线段*/
 		/*测试使用*/
-		pointX = (startx + endx) / 2.0;
-		pointY = (starty + endy) / 2.0;
 		GraphicDrawHandle::Ins()->SetBrushStyle(active() ? lineColor : fl_inactive(lineColor),
 			model->LineConfig.Line.Type, model->LineConfig.Line.Weight, model->LineConfig.Line.Alpha);
-		GraphicDrawHandle::Ins()->DrawLine(startx, starty, endx, endy);
+		GraphicDrawHandle::Ins()->DrawLine(sx, sy, ex, ey);
 		GraphicDrawHandle::Ins()->EndPopMatrix();
-		//fl_pop_matrix();
 	}
 
 	void GLineView::draw()

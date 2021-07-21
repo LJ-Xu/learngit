@@ -30,9 +30,11 @@ namespace UI
 	private:
 		/*绘制线段部分，并调用Arrow_Rotate函数绘制箭头部分*/
 		void DrawLine();
+		void CalculatePoint(int startangle, int endangle, int &startx, int &endx, int &staty, int &endy);
+
 		/*绘制线段箭头部分*/
-		void DrawStartArrow(double angle, int& startx, int& starty);
-		void DrawEndArrow(double angle, int& endx, int& endy);
+		void DrawStartArrow(double angle, int startx, int starty);
+		void DrawEndArrow(double angle, int endx, int endy);
 		void CalculateAngle(double &startangle, double &endangle);
 	};
 }
