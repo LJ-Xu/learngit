@@ -224,7 +224,7 @@ int main(int argc, char ** argv) {
 		{				 
 			core.Init();
 			UI::UIManager::Ins().AddExit([] {
-				CLOSE_DATASERVER();
+				//CLOSE_DATASERVER();
 			});
 		    return core.Run();
 		}
