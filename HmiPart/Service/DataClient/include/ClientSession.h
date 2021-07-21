@@ -32,11 +32,11 @@ namespace HMI
 		void ExportCSVdata(const char* csvinfo);
 		void ImportCSVdata(const char* csvinfo);
 
-		void MoveByVar(BaseVar* svar, BaseVar* dvar,int regcount);
-		void ReadByVar(BaseVar* var, int id);
-		void ReadByFrame(BaseVar* var, int fid1, int fid2);
-		void Read(BaseVar* var, int type, int fid1, int fid2);
-		void WriteByVar(BaseVar* var, char* data, int len);
+		void MoveByVar(BaseVar* svar, BaseVar* dvar,int regcount, bool isimmediate = false);
+		void ReadByVar(BaseVar* var, int id, bool isimmediate = false);
+		void ReadByFrame(BaseVar* var, int fid1, int fid2, bool isimmediate = false);
+		void Read(BaseVar* var, int type, int fid1, int fid2, bool isimmediate = false);
+		void WriteByVar(BaseVar* var, char* data, int len, bool isimmediate = false);
 
 		void FlushSend();
 		
