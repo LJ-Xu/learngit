@@ -49,7 +49,7 @@ namespace UI
 		{
 		case WM_EVENT_DATEUPDATE:
 		{
-			DCMapDrawFunc * func = (DCMapDrawFunc *)(msg->LParam);
+			/*DCMapDrawFunc * func = (DCMapDrawFunc *)(msg->LParam);
 			model->GFuncUnit.FuncId = func->FuncId;
 			// 初始化绘制参数
 			model->GFuncUnit.Init();
@@ -341,7 +341,7 @@ namespace UI
 			}
 			view->position(view->x(), view->y());
 			view->redraw();
-			break;
+			break;*/
 		}
 		default:
 			break;

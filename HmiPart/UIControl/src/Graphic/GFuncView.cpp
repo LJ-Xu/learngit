@@ -27,7 +27,7 @@ namespace UI
 	}
 
 	void GFuncView::draw() {
-		shared_ptr<GFuncModel> model = BaseView.GetModel<GFuncModel>();
+		/*shared_ptr<GFuncModel> model = BaseView.GetModel<GFuncModel>();
 		switch (model->GFuncUnit.FuncId)
 		{
 		case Project::DrawFunc::DCMapClear: 
@@ -194,6 +194,6 @@ namespace UI
 		}
 		default:
 			break;
-		}
+		}*/
 	}
 }

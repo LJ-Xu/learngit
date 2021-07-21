@@ -77,13 +77,14 @@ namespace Storage
 		sqlite3_stmt* stmt = GetSTMT(BASE_FLUSH);
 		if (stmt == nullptr)
 			return -1;
-		int ret = sqlite3_reset(stmt);
+		int ret;//= sqlite3_reset(stmt);
 		ret = sqlite3_step(stmt);
 		stmt = GetSTMT(BASE_DELETE);
 		if (stmt == nullptr)
 			return -1;
-		ret = sqlite3_reset(stmt);
+		//ret = sqlite3_reset(stmt);
 		ret = sqlite3_step(stmt);
+		return 0;
 #endif
 	}
 
