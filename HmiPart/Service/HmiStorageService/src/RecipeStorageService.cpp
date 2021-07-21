@@ -68,7 +68,11 @@ namespace Storage
 			for (size_t i = 1; i <= (size_t)col; i++)
 			{
 				const unsigned char* str = sqlite3_column_text(stmt, i);
-				string data((const char*)str);
+				string data;
+				if (!str)
+					data = "";
+				else
+					data = (const char*)str;
 				record.push_back(data);
 			}
 			records.push_back(record);

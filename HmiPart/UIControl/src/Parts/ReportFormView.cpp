@@ -344,7 +344,7 @@ namespace UI
 			for (size_t i = 0; i < 3; i++)
 			{
 				Storage::SampleRecord record;
-				record.Channel = j + 1;		// 采集通道编号
+				record.Channel = GetChannelNo(j + 1);		// 采集通道编号
 				record.Data = i * j;		// 采集数据内容
 				record.Type = tp;			// 采集数据内容格式
 				record.Date = duration_cast<MilliSecs>(system_clock::now().time_since_epoch()).count();		// 采集数据时间

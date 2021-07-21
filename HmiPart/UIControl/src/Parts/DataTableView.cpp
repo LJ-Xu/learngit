@@ -226,7 +226,7 @@ namespace UI
 		shared_ptr<DataTableControl> ctrl = BaseView.GetControl<DataTableControl>();
 		if (!HandleOperatePerm())		//没有权限则返回
 			return;
-		ctrl->Win()->OpenDialogPage(SYS_FULLKEY_PAGENUM, nullptr,
+		ctrl->Win()->OpenKeyBoard(SYS_FULLKEY_PAGENUM, nullptr,
 			mx + col_width(callback_col()) / 2, my + row_height(callback_row()) / 2);
 		vector<int>().swap(languageflag_);
 		haskeyboard_ = true;

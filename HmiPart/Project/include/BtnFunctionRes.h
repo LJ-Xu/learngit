@@ -366,8 +366,8 @@ namespace Project
 		FunctionSetup FunctionParam;
 		std::string FileName;			//文件名称:ImportCSV、ExportCSV、DownloadRecipe、UploadRecipe、CallbackFunc
 		std::vector<DataContent> Data;
-		bool PopTipWin;					//是否弹窗
-		int RequireRegion;				//用户权限
+		bool PopTipWin = false;					//是否弹窗
+		int RequireRegion = 0;				//用户权限
 		static void Parse(std::vector<BtnFunctionRes>& vector, rapidjson::Value& jsonObj);
 		static void Parse(BtnFunctionRes& res, rapidjson::Value& jsonObj);
 

@@ -385,7 +385,44 @@ namespace UI
 		}
 		return true;
 	}
+	HMIPage* HMIWindow::ProduceKeyBoardPage(int winno, int x, int y)
+	{
+		HMIPage* pg;
+		pg = FindPage(winno);
+		if (pg)  //如果当前page被使用的话，就直接返回空。同一个页面不能同时出现
+			return nullptr;
 
+		if (prj_->Pages.Screens.find(winno) == prj_->Pages.Screens.end())
+			return nullptr;
+		Project::PageInfo& pi = prj_->Pages.Screens[winno];
+		pg = IPageFactory::Ins()->NewPage(pi.Catogray, pi.Id, pi.Pos.X, pi.Pos.Y, pi.Sz.W, pi.Sz.H).release();
+		//pg = new HMIPage(pi.Id, pi.Pos.X, pi.Pos.Y, pi.Sz.W, pi.Sz.H/*, pi.Name.c_str()*/);
+		pg->Win(this);
+		pg->color(fl_rgb_color(RGBColor(pi.WinColor)));
+		if (pi.PageCfg.IsMonopoly)		//垄断
+			pg->SetModal(true);
+		//构建并添加底部page
+		if (pi.Template.BottomWinId > 0 && pi.Template.TopWinId != winno)
+			pg->TemplateBottomPage(ProducePage(pi.Template.BottomWinId));
+
+		pg->ProduceCtrl(pi.Shapes, winno);
+		int offx = 0, offy = 0;
+		if (x + pi.Sz.W > prj_->Setting.Width)
+			offx = prj_->Setting.Width - pi.Sz.W - pi.Pos.X;
+		else
+			offx = x - pi.Pos.X;
+		if(y + pi.Sz.H > prj_->Setting.Height)
+			offy = prj_->Setting.Height - pi.Sz.H - pi.Pos.Y;
+		else
+			offy = y - pi.Pos.Y;
+		if (offx != 0 || offy != 0)
+			pg->ChangePos(pi.Pos.X + offx, pi.Pos.Y + offy);
+
+		//构建并添加顶部page
+		if (pi.Template.TopWinId > 0 && pi.Template.TopWinId != winno)
+			pg->TemplateTopPage(ProducePage(pi.Template.TopWinId));
+		return pg;
+	}
 	HMIPage* HMIWindow::ProducePage(int winno, int offx, int offy)
 	{
 		HMIPage* pg;
@@ -512,7 +549,17 @@ namespace UI
 		}
 		return -1;
 	}
+	int HMIWindow::OpenKeyBoard(int page, HMIPage*p, int x, int y)
+	{
+		HMIPage* pg = FindPage(page);
+		if (pg)return 0;
+		pg = ProduceKeyBoardPage(page, x, y);
+		if (!pg)return -1;
 
+
+		ShowPage(pg, p);
+		return 0;
+	}
 	//打开弹出窗体
 	int HMIWindow::OpenDialogPage(int page, HMIPage* p, int offx, int offy)
 	{

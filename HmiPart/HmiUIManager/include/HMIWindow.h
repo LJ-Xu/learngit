@@ -44,6 +44,8 @@ namespace UI
 		//切换页面，入栈,最多N个页面入栈
 		int SwitchPage(int page, int offx = 0, int offy = 0);
 
+		int OpenKeyBoard(int page, HMIPage * p, int x, int y);
+
 		//打开弹出窗体
 		int OpenDialogPage(int page, HMIPage* p = nullptr, int offx = 0, int offy = 0);
 		//切换弹出窗体
@@ -92,6 +94,7 @@ namespace UI
 			return prj_;
 		}
 		bool PageHasPrem(int winno, bool popwin);
+		HMIPage * ProduceKeyBoardPage(int winno, int x, int y);
 		HMIPage* ProducePage(int winno, int offx = 0, int offy = 0);
 	protected:
 		int CloseOnePage(int page);
