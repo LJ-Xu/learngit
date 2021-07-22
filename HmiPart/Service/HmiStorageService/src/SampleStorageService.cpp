@@ -98,7 +98,7 @@ namespace Storage
 		//SELECT
 		{
 			sql.clear();
-			sql.append("SELECT COUNT(*) FROM ").append(tbName).append(" union all SELECT COUNT(*) FROM fileDb.").append(tbName).append(" ORDER BY Date;");
+			sql.append("SELECT COUNT(*) FROM ").append(tbName).append(" union all SELECT COUNT(*) FROM fileDb.").append(tbName).append(";");
 			if (!NewFMT(SEL_GetAllCount, sql.c_str(), sizeof(sql)))
 				return SEL_GetAllCount;
 
@@ -232,7 +232,7 @@ namespace Storage
 		if (!ret)
 		{
 			sqlite3_bind_int(stmt, 1, matchnm);
-			sqlite3_bind_int64(stmt, 1, date);
+			sqlite3_bind_int64(stmt, 2, date);
 			ret = sqlite3_step(stmt);
 			if (ret == SQLITE_ROW) {
 				count = sqlite3_column_int(stmt, 0);
