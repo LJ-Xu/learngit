@@ -169,7 +169,7 @@ namespace UI
 			model->ValveUnit.CurrentStatus = 0;
 			break;
 		case Project::BtnAction::BtnSHORTON:	// Ë²Ê±
-			model->ValveUnit.CurrentStatus = 1;
+			model->ValveUnit.CurrentStatus = !model->ValveUnit.Logic;
 			break;
 		case Project::BtnAction::BtnOPPOSITE:	// È¡·´
 			model->ValveUnit.CurrentStatus ^= 1;
