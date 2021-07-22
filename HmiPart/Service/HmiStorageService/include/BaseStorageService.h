@@ -38,7 +38,11 @@ namespace Storage
 		enum BaseSTMTType :char
 		{
 			BASE_FLUSH,
-			BASE_DELETE,
+			BASE_DeleteAllInMem,
+			BASE_CountOfMem,
+			BASE_CountOfDisk,
+			BASE_SelectMinRowid,
+			BASE_DeleteCountOfDisk,
 			BASE_DEFAULT
 		};
 		// 打开数据库

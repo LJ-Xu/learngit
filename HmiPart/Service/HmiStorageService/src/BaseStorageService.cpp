@@ -74,16 +74,59 @@ namespace Storage
 		// 备份文件数据库
 		return Flush(Count());
 #else
+		ExecCommit();
 		sqlite3_stmt* stmt = GetSTMT(BASE_FLUSH);
 		if (stmt == nullptr)
 			return -1;
-		int ret = sqlite3_reset(stmt);
+		int ret= sqlite3_reset(stmt);
 		ret = sqlite3_step(stmt);
-		stmt = GetSTMT(BASE_DELETE);
+
+		stmt = GetSTMT(BASE_DeleteAllInMem);
+		if (stmt == nullptr)
+			return -1;
+		ret= sqlite3_reset(stmt);
+		ret = sqlite3_step(stmt);
+
+		int count = 0;
+		//stmt = GetSTMT(BASE_CountOfMem);
+		//if (stmt == nullptr)
+		//	return -1;
+		//ret = sqlite3_reset(stmt);
+		//// = sqlite3_step(stmt);
+		//while(sqlite3_step(stmt) == SQLITE_ROW){
+		//	count += sqlite3_column_int(stmt, 0);
+		//}
+
+		//count = 0;
+		stmt = GetSTMT(BASE_CountOfDisk);
 		if (stmt == nullptr)
 			return -1;
 		ret = sqlite3_reset(stmt);
-		ret = sqlite3_step(stmt);
+		while (sqlite3_step(stmt) == SQLITE_ROW) {
+			count = sqlite3_column_int(stmt, 0);
+		}
+		if (count > 10000)
+		{
+			/*stmt = GetSTMT(BASE_SelectMinRowid);
+			if (stmt == nullptr)
+				return -1;
+			ret = sqlite3_reset(stmt);
+			int startrowid = ret;
+			while (sqlite3_step(stmt) == SQLITE_ROW) {
+				startrowid = sqlite3_column_int(stmt, 0);
+			}*/
+			int outcount = count - 10000; 
+			stmt = GetSTMT(BASE_DeleteCountOfDisk);
+			if (stmt == nullptr)
+				return -1;
+			ret = sqlite3_reset(stmt);
+			//ret = sqlite3_bind_int(stmt, 1, startrowid);
+			ret = sqlite3_bind_int(stmt, 1, outcount + 1000);
+			ret = sqlite3_step(stmt);
+		}
+
+		ExecBegin();
+		return 0;
 #endif
 	}
 
@@ -142,6 +185,8 @@ namespace Storage
 	{
 		sqlite3_stmt *stmt;
 		int ret = sqlite3_prepare_v2(db, sql, strlen(sql), &stmt, 0);
+		if(!stmt)
+			return stmt;
 		auto itorret = StoreObj.insert(std::make_pair(key, stmt));
 		return itorret.second;
 	}
@@ -164,19 +209,39 @@ namespace Storage
 		if (ret != SQLITE_OK) {
 			Close();
 		}
-
 		std::string sqlpre;
 
 		sqlpre.clear();
-		sqlpre.append("INSERT OR REPLACE INTO fileDb.").append(tbName).append(" SELECT * FROM ").append(tbName);
+		sqlpre.append("INSERT OR REPLACE INTO fileDb.").append(tbName).append(" SELECT * FROM ").append(tbName).append(" ;");
 		if (!NewFMT(BASE_FLUSH, sqlpre.c_str(), sizeof(sqlpre)))
 			return BASE_FLUSH;
 
 
 		sqlpre.clear();
-		sqlpre.append("DELETE FROM  ").append(tbName);
-		if (!NewFMT(BASE_DELETE, sqlpre.c_str(), sizeof(sqlpre)))
-			return BASE_DELETE;
+		sqlpre.append("DELETE FROM  ").append(tbName).append(";");
+		if (!NewFMT(BASE_DeleteAllInMem, sqlpre.c_str(), sizeof(sqlpre)))
+			return BASE_DeleteAllInMem;
+
+		sqlpre.clear();
+		sqlpre.append("SELECT COUNT(*) FROM ").append(tbName).append(";");
+		if (!NewFMT(BASE_CountOfMem, sqlpre.c_str(), sizeof(sqlpre)))
+			return BASE_CountOfMem;
+
+		sqlpre.clear();
+		sqlpre.append("SELECT COUNT(*) FROM fileDb.").append(tbName).append(";");
+		if (!NewFMT(BASE_CountOfDisk, sqlpre.c_str(), sizeof(sqlpre)))
+			return BASE_CountOfDisk;
+
+		sqlpre.clear();
+		sqlpre.append("SELECT MIN(rowid) FROM fileDb.").append(tbName).append(";");
+		if (!NewFMT(BASE_SelectMinRowid, sqlpre.c_str(), sizeof(sqlpre)))
+			return BASE_SelectMinRowid;
+
+		sqlpre.clear();
+		sqlpre.append("DELETE FROM fileDb.").append(tbName).append(" WHERE rowid IN (SELECT rowid FROM fileDb.").append(tbName).append(" LIMIT ?);");
+		//sqlpre.append("DELETE FROM fileDb.").append(tbName).append(" SELECT * FROM fileDb.").append(tbName).append(" LIMIT ?;");
+		if (!NewFMT(BASE_DeleteCountOfDisk, sqlpre.c_str(), sizeof(sqlpre)))
+			return BASE_DeleteCountOfDisk;
 
 		return ret;
 

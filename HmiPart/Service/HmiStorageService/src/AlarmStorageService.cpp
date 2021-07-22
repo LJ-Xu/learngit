@@ -77,17 +77,17 @@ namespace Storage
 		//UPDATE
 		{
 			sql.clear();
-			sql.append("UPDATE ").append(tbName).append(" SET StartTime = ?, Title = '?', Times = ?, ResolveTime = ?,CheckTime = ?, Level = ? WHERE AlarmGroup = ? AND AlarmNo = ?;");
+			sql.append("UPDATE ").append(tbName).append(" SET StartTime = ?, Title = ?, Times = ?, ResolveTime = ?,CheckTime = ?, Level = ? WHERE AlarmGroup = ? AND AlarmNo = ?;");
 			if (!NewFMT(UPD_UpdateAlarmRecord, sql.c_str(), sizeof(sql)))
 				return UPD_UpdateAlarmRecord;
 
 			sql.clear();
-			sql.append("UPDATE ").append(tbName).append(" SET StartTime = ?, Title = '?', Times = ?, CheckTime = ?, Level = ? WHERE AlarmGroup = ? AND AlarmNo = ?;");
+			sql.append("UPDATE ").append(tbName).append(" SET StartTime = ?, Title = ?, Times = ?, CheckTime = ?, Level = ? WHERE AlarmGroup = ? AND AlarmNo = ?;");
 			if (!NewFMT(UPD_UpdateAlarmRecordByConfirm, sql.c_str(), sizeof(sql)))
 				return UPD_UpdateAlarmRecordByConfirm;
 
 			sql.clear();
-			sql.append("UPDATE ").append(tbName).append(" SET StartTime = ?, Title = '?', Times = ?, ResolveTime = ?, Level = ? WHERE AlarmGroup = ? AND AlarmNo = ?;");
+			sql.append("UPDATE ").append(tbName).append(" SET StartTime = ?, Title = ?, Times = ?, ResolveTime = ?, Level = ? WHERE AlarmGroup = ? AND AlarmNo = ?;");
 			if (!NewFMT(UPD_UpdateAlarmRecordByResolve, sql.c_str(), sizeof(sql)))
 				return UPD_UpdateAlarmRecordByResolve;
 		}
@@ -109,7 +109,7 @@ namespace Storage
 				return SEL_SelectByNameAndNo;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime <> 0;").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime <> 0").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ?;");
 			if (!NewFMT(SEL_SelectByNameAndNoAndUnResolved, sql.c_str(), sizeof(sql)))
 				return SEL_SelectByNameAndNoAndUnResolved;
 
@@ -253,7 +253,7 @@ namespace Storage
 			sqlite3_bind_int64(stmt, idx++, record.CheckTick);
 			sqlite3_bind_int(stmt, idx++, record.Level);
 			ret = sqlite3_step(stmt);
-			if (!ret)
+			if (0==ret||100==ret||101==ret)
 				curId++;
 		}
 		return ret;
@@ -323,6 +323,7 @@ namespace Storage
 			sqlite3_bind_int(stmt, 7, record.AlarmNo);
 			ret = sqlite3_step(stmt);
 		}
+		return ret;
 	}
 
 	/**
@@ -687,6 +688,8 @@ namespace Storage
 		int ret = sqlite3_reset(stmt);
 		sqlite3_bind_int(stmt, idx++, startgroupname);
 		sqlite3_bind_int(stmt, idx++, endgroupname);
+		sqlite3_bind_int(stmt, idx++, startgroupname);
+		sqlite3_bind_int(stmt, idx++, endgroupname);
 		return SelectAlarm(stmt);
 	}
 
@@ -697,6 +700,8 @@ namespace Storage
 			return vector<AlarmRecord>();
 		int idx = 1;
 		int ret = sqlite3_reset(stmt);
+		sqlite3_bind_int(stmt, idx++, startgroupname);
+		sqlite3_bind_int(stmt, idx++, endgroupname);
 		sqlite3_bind_int(stmt, idx++, startgroupname);
 		sqlite3_bind_int(stmt, idx++, endgroupname);
 		return SelectAlarm(stmt);
@@ -717,12 +722,20 @@ namespace Storage
 			sqlite3_bind_int64(stmt, idx++, endDate);
 			sqlite3_bind_int(stmt, idx++, startgroupname);
 			sqlite3_bind_int(stmt, idx++, endgroupname);
+			sqlite3_bind_int64(stmt, idx++, startDate);
+			sqlite3_bind_int64(stmt, idx++, endDate);
+			sqlite3_bind_int(stmt, idx++, startgroupname);
+			sqlite3_bind_int(stmt, idx++, endgroupname);
 			break;
 		case 1:
 			stmt = GetSTMT(SEL_SelectResolvedRangeTimeAndGroup);
 			if (stmt == nullptr)
 				return vector<AlarmRecord>();
 			ret = sqlite3_reset(stmt);
+			sqlite3_bind_int64(stmt, idx++, startDate);
+			sqlite3_bind_int64(stmt, idx++, endDate);
+			sqlite3_bind_int(stmt, idx++, startgroupname);
+			sqlite3_bind_int(stmt, idx++, endgroupname);
 			sqlite3_bind_int64(stmt, idx++, startDate);
 			sqlite3_bind_int64(stmt, idx++, endDate);
 			sqlite3_bind_int(stmt, idx++, startgroupname);
@@ -736,7 +749,11 @@ namespace Storage
 			sqlite3_bind_int64(stmt, idx++, startDate);
 			sqlite3_bind_int64(stmt, idx++, endDate);
 			sqlite3_bind_int(stmt, idx++, startgroupname);
-			sqlite3_bind_int(stmt, idx++, endgroupname); 
+			sqlite3_bind_int(stmt, idx++, endgroupname);
+			sqlite3_bind_int64(stmt, idx++, startDate);
+			sqlite3_bind_int64(stmt, idx++, endDate);
+			sqlite3_bind_int(stmt, idx++, startgroupname);
+			sqlite3_bind_int(stmt, idx++, endgroupname);
 			break;
 		}
 		return SelectAlarm(stmt);
@@ -757,6 +774,10 @@ namespace Storage
 			sqlite3_bind_int64(stmt, idx++, endTime);
 			sqlite3_bind_int(stmt, idx++, startgroupname);
 			sqlite3_bind_int(stmt, idx++, endgroupname);
+			sqlite3_bind_int64(stmt, idx++, startTime);
+			sqlite3_bind_int64(stmt, idx++, endTime);
+			sqlite3_bind_int(stmt, idx++, startgroupname);
+			sqlite3_bind_int(stmt, idx++, endgroupname);
 			break;
 		case 1:
 			stmt = GetSTMT(SEL_SelectResolvedRangeTimeAndGroup);
@@ -767,12 +788,20 @@ namespace Storage
 			sqlite3_bind_int64(stmt, idx++, endTime);
 			sqlite3_bind_int(stmt, idx++, startgroupname);
 			sqlite3_bind_int(stmt, idx++, endgroupname);
+			sqlite3_bind_int64(stmt, idx++, startTime);
+			sqlite3_bind_int64(stmt, idx++, endTime);
+			sqlite3_bind_int(stmt, idx++, startgroupname);
+			sqlite3_bind_int(stmt, idx++, endgroupname);
 			break;
 		case 2:
 			stmt = GetSTMT(SEL_SelectUnResolvedRangeTimeAndGroup);
 			if (stmt == nullptr)
 				return vector<AlarmRecord>();
 			ret = sqlite3_reset(stmt);
+			sqlite3_bind_int64(stmt, idx++, startTime);
+			sqlite3_bind_int64(stmt, idx++, endTime);
+			sqlite3_bind_int(stmt, idx++, startgroupname);
+			sqlite3_bind_int(stmt, idx++, endgroupname);
 			sqlite3_bind_int64(stmt, idx++, startTime);
 			sqlite3_bind_int64(stmt, idx++, endTime);
 			sqlite3_bind_int(stmt, idx++, startgroupname);

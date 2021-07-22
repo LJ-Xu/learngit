@@ -28,7 +28,7 @@ namespace UI
 			LOG_ERROR("Can not find window!");
 			return;
 		}
-#if 1
+#if 0
 		GraphicDrawHandle::PushClip(0,
 			0,
 			win->w(),
@@ -90,7 +90,7 @@ namespace UI
 			LOG_ERROR("Can not find window!");
 			return;
 		}
-#if 1
+#if 0
 		GraphicDrawHandle::PushClip(0,
 			0,
 			win->w(),
@@ -147,7 +147,7 @@ namespace UI
 			LOG_ERROR("Can not find window!");
 			return;
 		}
-#if 1
+#if 0
 		GraphicDrawHandle::PushClip(0,
 			0,
 			win->w(),
@@ -209,7 +209,7 @@ namespace UI
 			LOG_ERROR("Can not find window!");
 			return;
 		}
-#if 1
+#if 0
 		GraphicDrawHandle::PushClip(0,
 			0,
 			win->w(),
@@ -277,7 +277,7 @@ namespace UI
 			LOG_ERROR("Can not find window!");
 			return;
 		}
-#if 1
+#if 0
 		GraphicDrawHandle::PushClip(0,
 			0,
 			win->w(),
@@ -352,7 +352,7 @@ namespace UI
 			LOG_ERROR("Can not find window!");
 			return;
 		}
-#if 1
+#if 0
 		GraphicDrawHandle::PushClip(0,
 			0,
 			win->w(),
