@@ -71,8 +71,8 @@ namespace UI
 				RecipeConfig.IsUseMultiLan = json["IsUseMultiLan"].GetBool();
 			if (json.HasMember("AutoSize"))
 				RecipeConfig.AutoSize = json["AutoSize"].GetBool();
-			if (json.HasMember("ListFontStyle"))
-				RecipeConfig.ListFontStyle.Parse(json["ListFontStyle"]);
+			if (json.HasMember("TextStyle"))
+				RecipeConfig.ListFontStyle.Parse(json["TextStyle"]);
 			if (json.HasMember("AppearMode"))
 				RecipeConfig.AppearMode = json["AppearMode"].GetInt();
 			if (json.HasMember("Key"))

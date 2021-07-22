@@ -52,7 +52,7 @@ namespace Storage
 	vector<vector<string>> RecipeStorageService::SelectRecipe(const char * sql, int col) {
 		vector<vector<string>> records;
 		int ret = 0;
-		struct sqlite3_stmt *stmt;
+		sqlite3_stmt *stmt = NULL;
 		ret = sqlite3_prepare_v2(db, sql, strlen(sql), &stmt, NULL);
 		if (ret != SQLITE_OK) {
 			fprintf(stderr, "Sql Error: %s\n", sqlite3_errmsg(db));
@@ -91,7 +91,7 @@ namespace Storage
 	{
 		vector<vector<string>> records;
 		int ret = 0;
-		struct sqlite3_stmt *stmt;
+		sqlite3_stmt *stmt = NULL;
 		ret = sqlite3_prepare_v2(db, sql, strlen(sql), &stmt, NULL);
 		if (ret != SQLITE_OK) {
 			fprintf(stderr, "Sql Error: %s\n", sqlite3_errmsg(db));
@@ -188,7 +188,7 @@ namespace Storage
 	 */
 	int RecipeStorageService::GetRecipeDataNum(string recipename) {
 		char sql[SQLCMDLEN] = { 0 };
-		struct sqlite3_stmt *stmt;
+		sqlite3_stmt *stmt = NULL;
 		snprintf(sql, sizeof(sql), "SELECT COUNT(*) FROM %s", recipename.c_str());
 		int ret = sqlite3_prepare_v2(db, sql, strlen(sql), &stmt, NULL);
 		if (ret != SQLITE_OK) {
@@ -217,7 +217,7 @@ namespace Storage
 	bool RecipeStorageService::OrderRecipeRecord(string recipename, int mode)
 	{
 		char sql[SQLCMDLEN] = { 0 };
-		struct sqlite3_stmt *stmt = nullptr;
+		sqlite3_stmt *stmt = NULL;
 		
 		if (mode)	//ÄæÐò
 			snprintf(sql, sizeof(sql), "SELECT * FROM %s ORDER BY ÐòºÅ DESC", recipename.c_str());
@@ -247,7 +247,7 @@ namespace Storage
 	bool RecipeStorageService::AddRecipeRecord(string recipename, int row)
 	{
 		char sql[SQLCMDLEN] = { 0 };
-		struct sqlite3_stmt *stmt;
+		sqlite3_stmt *stmt = NULL;
 		snprintf(sql, sizeof(sql), "INSERT INTO %s (ÐòºÅ) VALUES (%d)", recipename.c_str(), row);
 		string sqlstr = sql;
 		if (!UI::CodeFormatUtility::IsStrUtf8(sqlstr.c_str()))
@@ -270,7 +270,7 @@ namespace Storage
 	bool RecipeStorageService::InsertRecipeRecord(string recipename, int row)
 	{
 		char sql[SQLCMDLEN] = { 0 };
-		struct sqlite3_stmt *stmt;
+		sqlite3_stmt *stmt = NULL;
 		/*½«IdÍùºó¼Ó*/
 		snprintf(sql, sizeof(sql), "UPDATE %s SET ÐòºÅ = ÐòºÅ + 1 WHERE ÐòºÅ > %d", recipename.c_str(), row);
 		string sqlstr = sql;
@@ -294,7 +294,7 @@ namespace Storage
 	bool RecipeStorageService::DeleteRecipeRecord(string recipename, int row)
 	{
 		char sql[SQLCMDLEN] = { 0 };
-		struct sqlite3_stmt *stmt;
+		sqlite3_stmt *stmt = NULL;
 		snprintf(sql, sizeof(sql), "DELETE FROM %s WHERE ÐòºÅ = %d;UPDATE %s SET ÐòºÅ = ÐòºÅ - 1 WHERE ÐòºÅ > %d",
 			recipename.c_str(), row, recipename.c_str(), row);
 		string sqlstr = sql;
@@ -321,7 +321,7 @@ namespace Storage
 		if (InsertRecipeRecord(recipename, row))		//²åÈëÒ»ÐÐ
 		{
 			char sql[SQLCMDLEN] = { 0 };
-			struct sqlite3_stmt *stmt;
+			sqlite3_stmt *stmt = NULL;
 			string sqlstr = "UPDATE " + recipename + " SET";
 			int size = colnames.size() > data.size() ? data.size() : colnames.size();
 			for (size_t i = 0; i < size; i++)
@@ -357,7 +357,7 @@ namespace Storage
 	bool RecipeStorageService::MoveUpRecipeRecord(string recipename, int row)
 	{
 		char sql[SQLCMDLEN] = { 0 };
-		struct sqlite3_stmt *stmt;
+		sqlite3_stmt *stmt = NULL;
 		snprintf(sql, sizeof(sql), "UPDATE %s SET ÐòºÅ = -1 WHERE ÐòºÅ = %d;\
 			UPDATE %s SET ÐòºÅ = %d WHERE ÐòºÅ = %d;\
 			UPDATE %s SET ÐòºÅ = %d WHERE ÐòºÅ = -1",
@@ -385,7 +385,7 @@ namespace Storage
 	bool RecipeStorageService::MoveDownRecipeRecord(string recipename, int row)
 	{
 		char sql[SQLCMDLEN] = { 0 };
-		struct sqlite3_stmt *stmt;
+		sqlite3_stmt *stmt = NULL;
 		snprintf(sql, sizeof(sql), "UPDATE %s SET ÐòºÅ = -1 WHERE ÐòºÅ = %d;\
 			UPDATE %s SET ÐòºÅ = %d WHERE ÐòºÅ = %d;\
 			UPDATE %s SET ÐòºÅ = %d WHERE ÐòºÅ = -1",
@@ -413,7 +413,7 @@ namespace Storage
 	bool RecipeStorageService::UpdateRecipeRecord(string recipename, string colname, int rowcol, string data)
 	{
 		char sql[SQLCMDLEN] = { 0 };
-		struct sqlite3_stmt *stmt;
+		sqlite3_stmt *stmt = NULL;
 		snprintf(sql, sizeof(sql), "UPDATE %s SET %s = '%s' WHERE ÐòºÅ = %d;",
 			recipename.c_str(), colname.c_str(), data.c_str(), rowcol);
 		string sqlstr = sql;
