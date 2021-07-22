@@ -242,9 +242,19 @@ namespace UI
 		//TableContext context = cursor2rowcol(R, C, resizeflag);
 
 		switch (event) {
+		case FL_FOCUS:
+		{
+			if (haskeyboard_)
+				Fl::focus(this);
+			return 1;
+		}
 		case FL_PUSH:				//控件按下
 		{
+			Fl::focus(this);
+
 			SysSetApi::TriggerBeep();
+			if (!HandleOperatePerm())		//没有权限则返回
+				return 1;
 			int mx = Fl::event_x();
 			int my = Fl::event_y();
 			if (!haskeyboard_)

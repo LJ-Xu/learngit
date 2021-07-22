@@ -54,7 +54,7 @@ namespace UI
 
 		//设置列数
 		cols(model->RecipeConfig.InfoLst.size());
-		datacol_ = RecipeDT::Ins()->GetColNum(model->RecipeConfig.RecipeGroupId);
+		datacol_ = RecipeDT::Ins()->GetColNum(model->RecipeConfig.RecipeGroupId) + 1;
 
 		//设置行数
 		rows(model->RecipeConfig.PerPageRowCount + 1);
@@ -96,22 +96,25 @@ namespace UI
 	string RecipeChartView::GetDrawString(string projectname, int row)
 	{
 		shared_ptr<RecipeChartModel> model = BaseView.GetModel<RecipeChartModel>();
-		
 		string text = "";
+		if (row >= RecipeDatas.size())
+			return text;
 		if (projectname == "序号")
 		{
-			if (model->RecipeConfig.SerialNumStyle)
-			{
-				char serial[128] = { 0 };
-				snprintf(serial, sizeof(serial), "第%d组", row + 1);
-				text = serial;
-			}
+			if (RecipeDatas[row].empty())
+				return text;
 			else
-				text = to_string(row + 1);
+			{
+				string num = RecipeDatas[row][0];
+				if (model->RecipeConfig.SerialNumStyle)
+					text = "第" + num + "组";
+				else
+					text = num;
+			}
 		}
 		else 
 		{
-			int col = RecipeDT::Ins()->GetColNum(model->RecipeConfig.RecipeGroupId, projectname);
+			int col = RecipeDT::Ins()->GetColNum(model->RecipeConfig.RecipeGroupId, projectname) + 1;
 			if (col < 0)
 				return text;
 			//if (model->RecipeConfig.SerialNoShown)
@@ -258,7 +261,9 @@ namespace UI
 			if (!HandleOperatePerm())		//没有权限则返回
 				return 1;	
 			/*记录当前行列*/
-			RecipeUtility::Ins().RecordFocus(model->RecipeConfig.RecipeGroupId, selectedrow_);
+			if (selectedrow_ < RecipeDatas.size() && !RecipeDatas[selectedrow_].empty())
+				RecipeUtility::Ins().RecordFocus(model->RecipeConfig.RecipeGroupId, atoi(RecipeDatas[selectedrow_][0].c_str()));
+			//RecipeUtility::Ins().RecordFocus(model->RecipeConfig.RecipeGroupId, selectedrow_);
 			int mx = Fl::event_x();
 			int my = Fl::event_y();
 			if (!haskeyboard_)
