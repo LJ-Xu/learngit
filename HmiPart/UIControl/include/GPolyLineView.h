@@ -28,6 +28,7 @@ namespace UI
 		void draw() override;
 		int handle(int event);
 		void DrawFill();
+		void CalculatePoint(int angle, int size, int & x, int & y);
 		double GetArrowAngle(int startx, int endx, int starty, int endy, int mode);
 	};
 }

@@ -65,10 +65,14 @@ namespace Storage
 		}
 		while (sqlite3_step(stmt) == SQLITE_ROW) {
 			vector<string> record;
-			for (size_t i = 1; i <= (size_t)col; i++)
+			for (size_t i = 0; i <= (size_t)col; i++)
 			{
 				const unsigned char* str = sqlite3_column_text(stmt, i);
-				string data((const char*)str);
+				string data;
+				if (!str)
+					data = "";
+				else
+					data = (const char*)str;
 				record.push_back(data);
 			}
 			records.push_back(record);
@@ -100,7 +104,7 @@ namespace Storage
 		}
 		while (sqlite3_step(stmt) == SQLITE_ROW) {
 			vector<string> record;
-			for (size_t i = 1; i <= (size_t)col; i++)
+			for (size_t i = 0; i <= (size_t)col; i++)
 			{
 				const unsigned char* str = sqlite3_column_text(stmt, i);
 				string data((const char*)str);
@@ -126,14 +130,24 @@ namespace Storage
 	 */
 	vector<vector<string>> RecipeStorageService::SelectAllRecipeRecord(string recipename, int col) {
 		char sql[SQLCMDLEN] = { 0 };
-		snprintf(sql, sizeof(sql), "SELECT * FROM %s;", recipename.c_str());
-		return std::move(SelectRecipe(sql, col));
+		//OrderRecipeRecord(recipename);
+		snprintf(sql, sizeof(sql), "SELECT * FROM %s ORDER BY ÐòºÅ ASC", recipename.c_str());
+		string sqlstr = sql;
+		if (!UI::CodeFormatUtility::IsStrUtf8(sqlstr.c_str()))
+			UI::IResourceService::GB2312toUtf8(sqlstr);
+		//snprintf(sql, sizeof(sql), "SELECT * FROM %s;", recipename.c_str());
+		return std::move(SelectRecipe(sqlstr.c_str(), col));
 	}
 	vector<string> RecipeStorageService::SelectRecipeRecordByRow(string recipename,int row, int cols) {
 		char sql[SQLCMDLEN] = { 0 };
-		snprintf(sql, sizeof(sql), "SELECT * FROM %s WHERE ÐòºÅ == '%s';",
-			recipename.c_str(),to_string(row).c_str());
-		return std::move(SelectRowRecipe(sql, cols));
+		snprintf(sql, sizeof(sql), "SELECT * FROM %s WHERE ÐòºÅ == %d;",
+			recipename.c_str(),row);
+		string sqlstr = sql;
+		if (!UI::CodeFormatUtility::IsStrUtf8(sqlstr.c_str()))
+			UI::IResourceService::GB2312toUtf8(sqlstr);
+		char * errMsg = NULL;
+		//int ret = sqlite3_exec(db, sqlstr.c_str(), NULL, NULL, &errMsg);
+		return std::move(SelectRowRecipe(sqlstr.c_str(), cols));
 	}
 	vector<vector<string>> RecipeStorageService::SelectRecipeRecordByValue(string recipename, vector<string> value, vector<string> colname)
 	{
@@ -203,18 +217,18 @@ namespace Storage
 	bool RecipeStorageService::OrderRecipeRecord(string recipename, int mode)
 	{
 		char sql[SQLCMDLEN] = { 0 };
-		struct sqlite3_stmt *stmt;
+		struct sqlite3_stmt *stmt = nullptr;
 		
 		if (mode)	//ÄæÐò
-			snprintf(sql, sizeof(sql), "ISELECT * FROM %s ORDER BY ÐòºÅ DESC", recipename.c_str());
+			snprintf(sql, sizeof(sql), "SELECT * FROM %s ORDER BY ÐòºÅ DESC", recipename.c_str());
 		else		//Ë³Ðò
-			snprintf(sql, sizeof(sql), "ISELECT * FROM %s ORDER BY ÐòºÅ ASC", recipename.c_str());
+			snprintf(sql, sizeof(sql), "SELECT * FROM %s ORDER BY 'ÐòºÅ' ASC", recipename.c_str());
 		string sqlstr = sql;
 		if (!UI::CodeFormatUtility::IsStrUtf8(sqlstr.c_str()))
 			UI::IResourceService::GB2312toUtf8(sqlstr);
 		char * errMsg = NULL;
-		int ret = sqlite3_exec(db, sqlstr.c_str(), NULL, NULL, &errMsg);
-		//int ret = sqlite3_prepare_v2(db, sql, strlen(sql), &stmt, NULL);
+		//int ret = sqlite3_exec(db, sqlstr.c_str(), NULL, NULL, &errMsg);
+		int ret = sqlite3_prepare_v2(db, sqlstr.c_str(), sqlstr.size(), &stmt, NULL);
 		if (ret != SQLITE_OK) {
 			fprintf(stderr, "Sql Error: %s\n", sqlite3_errmsg(db));
 			if (isOpened) {
@@ -224,6 +238,9 @@ namespace Storage
 			}
 			return false;
 		}
+		sqlite3_step(stmt);
+		sqlite3_finalize(stmt);
+		sqlite3_close_v2(db);
 		return true;
 	}
 
@@ -231,7 +248,7 @@ namespace Storage
 	{
 		char sql[SQLCMDLEN] = { 0 };
 		struct sqlite3_stmt *stmt;
-		snprintf(sql, sizeof(sql), "INSERT INTO %s (ÐòºÅ) VALUES (%s)", recipename.c_str(), to_string(row).c_str());
+		snprintf(sql, sizeof(sql), "INSERT INTO %s (ÐòºÅ) VALUES (%d)", recipename.c_str(), row);
 		string sqlstr = sql;
 		if (!UI::CodeFormatUtility::IsStrUtf8(sqlstr.c_str()))
 			UI::IResourceService::GB2312toUtf8(sqlstr);
@@ -247,14 +264,15 @@ namespace Storage
 			}
 			return false;
 		}
-		return  OrderRecipeRecord(recipename);
+		//return  OrderRecipeRecord(recipename);
+		return true;
 	}
 	bool RecipeStorageService::InsertRecipeRecord(string recipename, int row)
 	{
 		char sql[SQLCMDLEN] = { 0 };
 		struct sqlite3_stmt *stmt;
 		/*½«IdÍùºó¼Ó*/
-		snprintf(sql, sizeof(sql), "UPDATE %s SET ÐòºÅ = ÐòºÅ + '1' WHERE ÐòºÅ > '%s'", recipename.c_str(), to_string(row).c_str());
+		snprintf(sql, sizeof(sql), "UPDATE %s SET ÐòºÅ = ÐòºÅ + 1 WHERE ÐòºÅ > %d", recipename.c_str(), row);
 		string sqlstr = sql;
 		if (!UI::CodeFormatUtility::IsStrUtf8(sqlstr.c_str()))
 			UI::IResourceService::GB2312toUtf8(sqlstr);
@@ -277,8 +295,8 @@ namespace Storage
 	{
 		char sql[SQLCMDLEN] = { 0 };
 		struct sqlite3_stmt *stmt;
-		snprintf(sql, sizeof(sql), "DELETE FROM %s WHERE ÐòºÅ = '%s';UPDATE %s SET ÐòºÅ = ÐòºÅ - '1' WHERE ÐòºÅ > '%s'",
-			recipename.c_str(), to_string(row).c_str(), recipename.c_str(), to_string(row).c_str());
+		snprintf(sql, sizeof(sql), "DELETE FROM %s WHERE ÐòºÅ = %d;UPDATE %s SET ÐòºÅ = ÐòºÅ - 1 WHERE ÐòºÅ > %d",
+			recipename.c_str(), row, recipename.c_str(), row);
 		string sqlstr = sql;
 		if (!UI::CodeFormatUtility::IsStrUtf8(sqlstr.c_str()))
 			UI::IResourceService::GB2312toUtf8(sqlstr);
@@ -294,7 +312,8 @@ namespace Storage
 			}
 			return false;
 		}
-		return OrderRecipeRecord(recipename);
+		return true;
+		//return OrderRecipeRecord(recipename);
 	}
 
 	bool RecipeStorageService::CopyRecipeRecord(string recipename, int row, vector<string>& data, vector<Project::ColDataTypeInfo>& colnames)
@@ -307,11 +326,11 @@ namespace Storage
 			int size = colnames.size() > data.size() ? data.size() : colnames.size();
 			for (size_t i = 0; i < size; i++)
 			{
-				sqlstr = sqlstr + " " + colnames[i].ColTitle + " = " + data[i];
+				sqlstr = sqlstr + " " + colnames[i].ColTitle + " = " + data[i + 2];
 				if (i != size - 1)
 					sqlstr += " ,";
 			}
-			sqlstr += " WHERE ÐòºÅ = '" + to_string(row + 1) + "'";
+			sqlstr += " WHERE ÐòºÅ = " + to_string(row + 1);
 			//memcpy(sql, sqlstr.c_str(), sizeof(sql));
 			//string sqlstr = sql;
 			if (!UI::CodeFormatUtility::IsStrUtf8(sqlstr.c_str()))
@@ -328,7 +347,8 @@ namespace Storage
 				}
 				return false;
 			}
-			return OrderRecipeRecord(recipename);
+			return true;
+			//return OrderRecipeRecord(recipename);
 			row + 1;
 		}
 		return false;
@@ -338,12 +358,12 @@ namespace Storage
 	{
 		char sql[SQLCMDLEN] = { 0 };
 		struct sqlite3_stmt *stmt;
-		snprintf(sql, sizeof(sql), "UPDATE %s SET ÐòºÅ = 't' WHERE ÐòºÅ = '%s';\
-			UPDATE %s SET ÐòºÅ = '%s' WHERE ÐòºÅ = '%s';\
-			UPDATE %s SET ÐòºÅ = '%s' WHERE ÐòºÅ = 't'",
-			recipename.c_str(), to_string(row).c_str(), 
-			recipename.c_str(), to_string(row).c_str(), to_string(row-1).c_str(),
-			recipename.c_str(), to_string(row-1).c_str());
+		snprintf(sql, sizeof(sql), "UPDATE %s SET ÐòºÅ = -1 WHERE ÐòºÅ = %d;\
+			UPDATE %s SET ÐòºÅ = %d WHERE ÐòºÅ = %d;\
+			UPDATE %s SET ÐòºÅ = %d WHERE ÐòºÅ = -1",
+			recipename.c_str(), row,
+			recipename.c_str(), row, row -1,
+			recipename.c_str(), row - 1);
 		string sqlstr = sql;
 		if (!UI::CodeFormatUtility::IsStrUtf8(sqlstr.c_str()))
 			UI::IResourceService::GB2312toUtf8(sqlstr);
@@ -359,24 +379,24 @@ namespace Storage
 			}
 			return false;
 		}
-		return OrderRecipeRecord(recipename);
+		return true;
+		//return OrderRecipeRecord(recipename);
 	}
 	bool RecipeStorageService::MoveDownRecipeRecord(string recipename, int row)
 	{
 		char sql[SQLCMDLEN] = { 0 };
 		struct sqlite3_stmt *stmt;
-		snprintf(sql, sizeof(sql), "UPDATE %s SET ÐòºÅ = 't' WHERE ÐòºÅ = '%s';\
-			UPDATE %s SET ÐòºÅ = '%s' WHERE ÐòºÅ = '%s';\
-			UPDATE %s SET ÐòºÅ = '%s' WHERE ÐòºÅ = 't'",
-			recipename.c_str(), to_string(row).c_str(),
-			recipename.c_str(), to_string(row).c_str(), to_string(row + 1).c_str(),
-			recipename.c_str(), to_string(row + 1).c_str());
+		snprintf(sql, sizeof(sql), "UPDATE %s SET ÐòºÅ = -1 WHERE ÐòºÅ = %d;\
+			UPDATE %s SET ÐòºÅ = %d WHERE ÐòºÅ = %d;\
+			UPDATE %s SET ÐòºÅ = %d WHERE ÐòºÅ = -1",
+			recipename.c_str(), row,
+			recipename.c_str(), row, row + 1,
+			recipename.c_str(), row + 1);
 		string sqlstr = sql;
 		if (!UI::CodeFormatUtility::IsStrUtf8(sqlstr.c_str()))
 			UI::IResourceService::GB2312toUtf8(sqlstr);
 		char * errMsg = NULL;
 		int ret = sqlite3_exec(db, sqlstr.c_str(), NULL, NULL, &errMsg);
-		//int ret = sqlite3_prepare_v2(db, sql, strlen(sql), &stmt, NULL);
 		if (ret != SQLITE_OK) {
 			fprintf(stderr, "Sql Error: %s\n", sqlite3_errmsg(db));
 			if (isOpened) {
@@ -386,14 +406,16 @@ namespace Storage
 			}
 			return false;
 		}
-		return OrderRecipeRecord(recipename);
+
+		//return OrderRecipeRecord(recipename);
+		return true;
 	}
 	bool RecipeStorageService::UpdateRecipeRecord(string recipename, string colname, int rowcol, string data)
 	{
 		char sql[SQLCMDLEN] = { 0 };
 		struct sqlite3_stmt *stmt;
-		snprintf(sql, sizeof(sql), "UPDATE %s SET %s = '%s' WHERE ÐòºÅ = '%s';",
-			recipename.c_str(), colname.c_str(), data.c_str(), to_string(rowcol).c_str());
+		snprintf(sql, sizeof(sql), "UPDATE %s SET %s = '%s' WHERE ÐòºÅ = %d;",
+			recipename.c_str(), colname.c_str(), data.c_str(), rowcol);
 		string sqlstr = sql;
 		if (!UI::CodeFormatUtility::IsStrUtf8(sqlstr.c_str()))
 			UI::IResourceService::GB2312toUtf8(sqlstr);

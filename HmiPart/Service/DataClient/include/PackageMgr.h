@@ -49,16 +49,12 @@ namespace HMI
 		{
 			parseflag_ = false;
 		}
-		void ReadByVar(BaseVar* var, int id);
-
-		void ReadByFrame(BaseVar* var, int fid1, int fid2);
-
+		void ReadByVar(BaseVar* var, int id, bool isimmediate = false);
+		void ReadByFrame(BaseVar* var, int fid1, int fid2, bool isimmediate = false);
 		//void Read(BaseVar* var, int type, int id, int eid);
-
-		void WriteByVar(BaseVar* var, const  char* data, int len);
+		void WriteByVar(BaseVar* var, const  char* data, int len, bool isimmediate = false);
+		void MoveData(const char* cmd, bool isimmediate=false);
 		void TriggerMacro(const char* funcname);
-		void MoveData(const char* cmd);
-
 		ClientSession* GetClientSession()
 		{
 			return session_;
@@ -71,9 +67,9 @@ namespace HMI
 	private:
 		int Parse();
 		void ProcessPackage(const char* buf, int len);
-		void SendPackage(int cmd, const  char* data, int len);
-		void SendPackage(int cmd, int type, int vid, const  char*buf, int len);
-		void SendPackage(int cmd, int type, int vid, int eid, const  char*buf, int len);
+		void SendPackage(int cmd, const  char* data, int len ,bool isimmediate=false);
+		void SendPackage(int cmd, int type, int vid, const  char*buf, int len, bool isimmediate = false);
+		void SendPackage(int cmd, int type, int vid, int eid, const  char*buf, int len, bool isimmediate = false);
 		void SendEx(char* data, int len);
 		char* GetBufEx(int len);
 		std::unique_ptr<char> buf_;

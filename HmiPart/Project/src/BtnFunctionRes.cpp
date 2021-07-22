@@ -246,8 +246,8 @@ namespace Project
 	}
 	void FunctionSetup::EditRecipe::Parse(rapidjson::Value& jsonObj)
 	{
-		if (jsonObj.HasMember("RecipeEditAction"))
-			Action = (RecipeEditAction)jsonObj["RecipeEditAction"].GetInt();
+		if (jsonObj.HasMember("Action"))
+			Action = (RecipeEditAction)jsonObj["Action"].GetInt();
 	}
 	void BtnFunctionRes::Parse(BtnFunctionRes& res, rapidjson::Value& jsonObj)
 	{

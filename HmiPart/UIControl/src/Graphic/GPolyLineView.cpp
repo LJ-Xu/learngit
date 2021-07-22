@@ -140,6 +140,18 @@ namespace UI
 				UI::RotatePic::DeleteRotatePic(picRes);
 		}
 	}
+	void  GPolyLineView::CalculatePoint(int angle,int size, int &x, int &y)
+	{
+		shared_ptr<GPolyLineModel> model = BaseView.GetModel<GPolyLineModel>();
+		int startx = x, starty = y;
+		fl_push_matrix();
+		fl_translate(startx, starty);
+		fl_rotate(angle);
+		fl_translate(-startx, -starty);
+		x = (int)fl_transform_x((double)startx, (double)(starty + size / 2));
+		y = (int)fl_transform_y((double)startx, (double)(starty + size / 2));
+		fl_pop_matrix();
+	}
 
 	void GPolyLineView::draw()
 	{
@@ -153,18 +165,10 @@ namespace UI
 		double pointX = model->PolyLineConfig.RotateCenter.X + model->PolyLineConfig.OffX;
 		double pointY = model->PolyLineConfig.RotateCenter.Y + model->PolyLineConfig.OffY;
 		/*测试使用*/
-		pointX = model->PolyLineConfig.X + model->PolyLineConfig.Width / 2.0;
-		pointY = model->PolyLineConfig.Y + model->PolyLineConfig.Height / 2.0;
-		Fl_Color linecolor = fl_rgb_color(RGBColor(model->PolyLineConfig.LineStyle.Color));
-		linecolor = active() ? linecolor : fl_inactive(linecolor);
-
-		GraphicDrawHandle::Ins()->BeginPushMatrix(model->PolyLineConfig.RotateAngle, 1.0, 1.0, pointX, pointY);
-		GraphicDrawHandle::Ins()->SetBrushStyle(active() ? linecolor : fl_inactive(linecolor),
-			model->PolyLineConfig.LineStyle.Type, model->PolyLineConfig.LineStyle.Weight,
-			model->PolyLineConfig.LineStyle.Alpha);
+		pointX = model->PolyLineConfig.X + model->PolyLineConfig.Width / 2.0 + model->PolyLineConfig.OffX;
+		pointY = model->PolyLineConfig.Y + model->PolyLineConfig.Height / 2.0 + model->PolyLineConfig.OffY;
 		/*获取点*/
 		vector<Project::Point> points;
-		//points.swap(model->PolyLineConfig.Points);
 		for (size_t i = 0; i < model->PolyLineConfig.Points.size(); i++)
 		{
 			Project::Point tmppoint;
@@ -172,39 +176,66 @@ namespace UI
 			tmppoint.Y = model->PolyLineConfig.Points[i].Y + model->PolyLineConfig.OffY;
 			points.push_back(tmppoint);
 		}
+		/*计算起始角度*/
+		double startangle = 0, endangle = 0;
+		startangle = GetArrowAngle(points[0].X, points[1].X, points[0].Y, points[1].Y, 0);
+		endangle = GetArrowAngle(points[points.size() - 2].X,
+			points[points.size() - 1].X, points[points.size() - 2].Y,
+			points[points.size() - 1].Y, 1);
+		int sx = points[0].X, sy = points[0].Y, ex = points[points.size() - 1].X, ey = points[points.size() - 1].Y;
+		int startsize = model->PolyLineConfig.Arrow.StartArrowSize,
+			endsize = model->PolyLineConfig.Arrow.EndArrowSize;
+		if (model->PolyLineConfig.Arrow.StartArrowType == Project::ArrowType::Arrow
+			|| !model->PolyLineConfig.Arrow.HaveStartArrow)
+			startsize = 0;
+		if (model->PolyLineConfig.Arrow.EndArrowType == Project::ArrowType::Arrow
+			|| !model->PolyLineConfig.Arrow.HaveEndArrow)
+			endsize = 0;
+		CalculatePoint(startangle, startsize, sx, sy);
+		CalculatePoint(endangle, endsize, ex, ey);
+
+		Fl_Color linecolor = fl_rgb_color(RGBColor(model->PolyLineConfig.LineStyle.Color));
+		linecolor = active() ? linecolor : fl_inactive(linecolor);
+
+		GraphicDrawHandle::Ins()->BeginPushMatrix(model->PolyLineConfig.RotateAngle, 1.0, 1.0, pointX, pointY);
+		GraphicDrawHandle::Ins()->SetBrushStyle(active() ? linecolor : fl_inactive(linecolor),
+			model->PolyLineConfig.LineStyle.Type, model->PolyLineConfig.LineStyle.Weight,
+			model->PolyLineConfig.LineStyle.Alpha);
+		
 		if (model->PolyLineConfig.Mode == 0)		//折线
 		{
-			double angle = 0;
+			//double angle = 0;
 			if (model->PolyLineConfig.Arrow.HaveStartArrow)
 			{
-				angle = GetArrowAngle(points[0].X, points[1].X,	points[0].Y, points[1].Y, 0);
+				//angle = GetArrowAngle(points[0].X, points[1].X,	points[0].Y, points[1].Y, 0);
 				//Fl_Color lineColor = fl_rgb_color(RGBColor(model->PolyLineConfig.LineStyle.Color));
 				//GraphicDrawHandle::Ins()->SetBrushStyle(active() ? lineColor : fl_inactive(lineColor),
 				//	model->PolyLineConfig.LineStyle.Type, 1, model->PolyLineConfig.LineStyle.Alpha);
-				GraphicDrawHandle::Ins()->DrawArrow(model->PolyLineConfig.Arrow.StartArrowType, angle,
+				GraphicDrawHandle::Ins()->DrawArrow(model->PolyLineConfig.Arrow.StartArrowType, startangle,
 					points[0].X, points[0].Y, model->PolyLineConfig.Arrow.StartArrowSize);
 			}
 			if (model->PolyLineConfig.Arrow.HaveEndArrow)
 			{
-				angle = GetArrowAngle(points[points.size() - 2].X,
+			/*	angle = GetArrowAngle(points[points.size() - 2].X,
 					points[points.size() - 1].X, points[points.size() - 2].Y,
-					points[points.size() - 1].Y, 1);
+					points[points.size() - 1].Y, 1);*/
 				//Fl_Color lineColor = fl_rgb_color(RGBColor(model->PolyLineConfig.LineStyle.Color));
 				//GraphicDrawHandle::Ins()->SetBrushStyle(active() ? lineColor : fl_inactive(lineColor),
 				//	model->PolyLineConfig.LineStyle.Type, 1, model->PolyLineConfig.LineStyle.Alpha);
 
-				GraphicDrawHandle::Ins()->DrawArrow(model->PolyLineConfig.Arrow.EndArrowType, angle,
+				GraphicDrawHandle::Ins()->DrawArrow(model->PolyLineConfig.Arrow.EndArrowType, endangle,
 					points[points.size() - 1].X, points[points.size() - 1].Y,
 					model->PolyLineConfig.Arrow.EndArrowSize);
 				//drawArrow(angle, model->PolyLineConfig.Points[num - 1].X + model->PolyLineConfig.OffX,
 				//	model->PolyLineConfig.Points[num - 1].Y + model->PolyLineConfig.OffY, 1);
 			}
 		}
+
+		points[0].X = sx; points[0].Y = sy;points[points.size() - 1].X = ex; points[points.size() - 1].Y = ey;
 		GraphicDrawHandle::Ins()->SetBrushStyle(active() ? linecolor : fl_inactive(linecolor),
 			model->PolyLineConfig.LineStyle.Type, model->PolyLineConfig.LineStyle.Weight,
 			model->PolyLineConfig.LineStyle.Alpha);
 		GraphicDrawHandle::Ins()->DrawPolyLine(model->PolyLineConfig.Mode, points);
-
 		GraphicDrawHandle::Ins()->EndPopMatrix();
 	
 	}

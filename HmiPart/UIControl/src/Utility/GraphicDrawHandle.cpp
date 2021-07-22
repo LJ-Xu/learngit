@@ -195,6 +195,7 @@ namespace UI
 		double y2 = fl_transform_y(endx, endy);
 
 		graphics->DrawLine(pen, (INT)x1, (INT)y1, (INT)x2, (INT)y2);
+		//graphics->DrawLine(pen, (INT)startx, (INT)starty, (INT)endx, (INT)endy);
 #else
 		fl_begin_line();
 		fl_vertex(startx, starty);
@@ -604,7 +605,7 @@ namespace UI
 		//delete[] cCtlPt;
 #endif // WIN32
 	}
-	void GraphicDrawHandle::DrawArrow(Project::ArrowType style, double angle, int& x, int& y, int size)
+	void GraphicDrawHandle::DrawArrow(Project::ArrowType style, double angle, int x, int y, int size)
 	{
 		int tmpx = x, tmpy = y;
 		fl_push_matrix();
@@ -707,11 +708,10 @@ namespace UI
 		default:
 			break;
 		}
-		if (style != Project::ArrowType::Arrow)
-		{
-			x = (int)fl_transform_x((double)tmpx, (double)(tmpy + size / 2));
-			y = (int)fl_transform_y((double)tmpx, (double)(tmpy + size / 2));
-		}
+		//if (style == Project::ArrowType::Arrow)
+		//	size = 0;
+		//x = (int)fl_transform_x((double)tmpx, (double)(tmpy + size / 2));
+		//y = (int)fl_transform_y((double)tmpx, (double)(tmpy + size / 2));
 		fl_pop_matrix();
 	}
 	void GraphicDrawHandle::DrawRenderScroll(int mode, int X, int Y, int W, int H)
