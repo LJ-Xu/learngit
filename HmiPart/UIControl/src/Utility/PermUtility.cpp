@@ -136,6 +136,8 @@ namespace UI
 		//LocalData::SetNumberData(SYS_PSW_ConfirmOperate, (int)PremConfirm::TriggerOperate);		//设置触发
 		LocalData::SetNumberData(SYS_PSW_OperateCtrlID, ctrlid);							//绑定ctrid
 		LocalData::SetNumberData(SYS_PSW_ConfirmTime, perm.WaitTime);								//设置时间
+		LocalData::SetNumberData(SYS_PSW_ConfirmOperateTime, perm.WaitTime);								//设置时间
+		
 		return false;
 	}
 

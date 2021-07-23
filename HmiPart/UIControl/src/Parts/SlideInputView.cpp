@@ -100,15 +100,16 @@ namespace UI
 					if (val > 1.0) val = 1.0;
 					else if (val < 0.0) val = 0.0;
 				}
-			
+
 				int ww = (horizontal() ? model->SlideInputConfig.SlideRailWidth : model->SlideInputConfig.SlideRailHeight);
 				int mx = (horizontal() ? Fl::event_x() - (model->SlideInputConfig.SlideRailPos.X + model->SlideInputConfig.OffX) :
 					Fl::event_y() - (model->SlideInputConfig.SlideRailPos.Y + model->SlideInputConfig.OffY));
-			
+
 				int T = (horizontal() ? model->SlideInputConfig.SlideRailHeight : model->SlideInputConfig.SlideRailWidth) / 2 + 1;
 				//if (slideW_ < T) slideW_ = T;
 				int xx = int(val * (ww - slideW_) + .5) + slideW_ / 2;
-
+				if (fabs(mx - xx) > slideW_) isdrag_ = false;
+				else isdrag_ = true;
 				handle_push();
 				if (wp.deleted()) return 1;
 				if (mx > xx)
@@ -118,6 +119,8 @@ namespace UI
 				handle_release();
 				return 1;
 			}
+			else
+				isdrag_ = true;
 			handle_push();
 			if (wp.deleted()) return 1;
 		}
@@ -136,6 +139,7 @@ namespace UI
 			int ww = (horizontal() ? model->SlideInputConfig.SlideRailWidth : model->SlideInputConfig.SlideRailHeight);
 			int mx = (horizontal() ? Fl::event_x() - (model->SlideInputConfig.SlideRailPos.X + model->SlideInputConfig.OffX) :
 				Fl::event_y() - (model->SlideInputConfig.SlideRailPos.Y + model->SlideInputConfig.OffY));
+			//int xx = int(val * (ww - slideW_) + .5) + slideW_ / 2;
 
 			if (slideW_ >= ww) return 0;
 
@@ -145,11 +149,16 @@ namespace UI
 			if (event == FL_PUSH) {
 				int xx = int(val * (ww - slideW_) + .5);
 				offcenter = mx - xx;
+			/*	if (fabs(offcenter) > slideW_) isdrag_ = false;
+				else
+					isdrag_ = true;*/
+				//return 0;
 				if (offcenter < 0) offcenter = 0;
 				else if (offcenter > slideW_) offcenter = slideW_;
 				else return 1;
 			}
-
+			if (!isdrag_)
+				return 0;
 			int xx = mx - offcenter;
 			double v = 0;
 			char tryAgain = 1;
@@ -181,6 +190,7 @@ namespace UI
 		} return 1;
 		case FL_RELEASE:	
 		{
+			isdrag_ = false;
 			char dataflag = DataApi::GetDataFlag(model->SlideInputConfig.ReadVar);
 			if (dataflag == 0)		return 1;
 			/*标志FL_WHEN_RELEASE释放后调用callback将数值写入到寄存器*/

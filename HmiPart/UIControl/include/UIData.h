@@ -44,6 +44,7 @@ namespace UI
 #define SYS_PSW_ConfirmOperate			TP_SPSW,158				//操作确认 0:超时 1:触发 2:确认操作 3：取消操作
 #define SYS_PSW_OperateCtrlID           TP_SPSW,160				//执行操作确认的控件ID
 #define SYS_PSW_ConfirmTime				TP_SPSW,162				//操作确认等待时间
+#define SYS_PSW_ConfirmOperateTime		TP_SPSW,164
 #define SYS_PSW_RecipeIndex				TP_SPSW,256				//配方索引
 
 #define SYS_PINYIN_PAGENUM				25900			//拼音界面编号

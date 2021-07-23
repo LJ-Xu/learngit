@@ -57,6 +57,8 @@ namespace UI
 		Fl_Color scalecolor_;				//标注颜色
 		int scalesize_;						//标注大小
 		int slideW_;						//滑块宽/高
+
+		bool isdrag_ = false;
 	};
 }
 
