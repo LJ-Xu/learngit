@@ -207,8 +207,7 @@ static void LoadParam(Param& param, int argc, char ** argv)
 int main(int argc, char ** argv) {
 	InitBreakpad();
 	
-
-	Param param;	
+	Param param;
 	LoadParam(param, argc, argv);
 	LOG_INFO("Start HmiMain.exe\n");
 	//CLOSE_DATASERVER();
@@ -224,7 +223,7 @@ int main(int argc, char ** argv) {
 		{				 
 			core.Init();
 			UI::UIManager::Ins().AddExit([] {
-				//CLOSE_DATASERVER();
+				CLOSE_DATASERVER();
 			});
 		    return core.Run();
 		}

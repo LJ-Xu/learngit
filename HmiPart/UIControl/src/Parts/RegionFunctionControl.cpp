@@ -199,7 +199,7 @@ namespace UI
 			{
 				DOUBLE writedata = UI::UIData::Number<DOUBLE>(param.SetData.WriteVarIdRef);
 				writedata += param.SetData.IncreaseValue;
-				if (param.SetData.UpperLmtValueVar != Project::DataVarId::NullId)
+				if (param.SetData.UpperLmtValueVar != Project::DataVarId::NullId)  
 					param.SetData.UpperLmtValue = UI::UIData::Number<DOUBLE>(param.SetData.UpperLmtValueVar);
 				if (param.SetData.LowerLmtValueVar != Project::DataVarId::NullId)
 					param.SetData.LowerLmtValue = UI::UIData::Number<DOUBLE>(param.SetData.LowerLmtValueVar);
