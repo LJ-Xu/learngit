@@ -18,6 +18,8 @@ namespace UI
 		
 		AlarmBarConfig.InitBaseData(json);
 
+		if (json.HasMember("MoveSpeed"))
+			AlarmBarConfig.MoveSpeed = json["MoveSpeed"].GetInt();
 		if (json.HasMember("GroupScopeFrom"))
 			AlarmBarConfig.GroupScopeFrom = json["GroupScopeFrom"].GetInt();
 		if (json.HasMember("GroupScopeTo"))

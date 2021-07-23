@@ -25,11 +25,12 @@ namespace Project
 		bool IsFill;//是否填充
 		int FillColor;//填充颜色
 		float Transparency;//透明度
+		int MoveSpeed;//流动速度
 
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
-			archive(X, Y, VOffX, VOffY, Perm, Width, Height, CtrlName, AlarmNoticeVarId, GroupScopeFrom, GroupScopeTo, IsUseMultiLanguage, MultiLanConfig, DateFormat, TimeFormat, AlarmBarFont, IsBorder, BorderColor, IsFill, FillColor, Transparency);
+			archive(X, Y, VOffX, VOffY, Perm, Width, Height, CtrlName, AlarmNoticeVarId, GroupScopeFrom, GroupScopeTo, IsUseMultiLanguage, MultiLanConfig, DateFormat, TimeFormat, AlarmBarFont, IsBorder, BorderColor, IsFill, FillColor, Transparency, MoveSpeed);
 		}
 	};
 	class AlarmBarMultiLan

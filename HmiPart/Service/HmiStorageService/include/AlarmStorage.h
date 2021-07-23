@@ -25,6 +25,7 @@ namespace Storage
 		void Trigger(int groupname, int groupno, string msg, int times, Project::AlarmLevel level);
 		// 报警消失,更新记录
 		void UnTrigger(int idx);
+		void Flush();
 		// 报警恢复, 更新记录
 		void UnTriggerByEventId(int groupname, int groupno);
 		// 报警确认，更新记录

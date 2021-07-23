@@ -35,7 +35,8 @@ namespace UI
 
 	public:
 		void CreateView();
-
+	public:
+		int GetBackcolor() { return model_->GFuncUnit.BackColor; }
 	protected:
 		int PeekHMIMessage(Message::Msg * msg) override;
 

@@ -47,7 +47,7 @@ namespace Project
 
 
 		int MapId;		// ID
-		Color BackColor;// ±³¾°ÑÕÉ«
+		int BackColor;// ±³¾°ÑÕÉ«
 	};
 }
 

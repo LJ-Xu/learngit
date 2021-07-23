@@ -3,6 +3,7 @@
 #include "UIManager.h"
 #include "HMIWindow.h"
 #include "Logger.h"
+#include "../../include/GFuncControl.h"
 using namespace std;
 namespace UI
 {
@@ -20,7 +21,7 @@ namespace UI
 	{
 		cout << "Client DrawCircle" << endl;
 	}
-	void UIApi::DCMapClear(unsigned int DCMapId, unsigned int backColor)
+	void UIApi::DCMapClear(unsigned int DCMapId)
 	{
 		HMIWindow* win = UIManager::Ins().CurrWin();
 		if (!win)
@@ -55,30 +56,16 @@ namespace UI
 			// 设置原始背景色
 	/*		Fl_Color originColor = fl_rgb_color(255, 255, 255);
 			fl_color(originColor);*/
-
-			fl_color(RGBColor(backColor));
+			GFuncControl* ctl = static_cast<GFuncControl*>(ctrl.get());
+			int backcolor = ctl->GetBackcolor();
+			fl_color(RGBColor(backcolor));
 			// 绘制画布背景颜色
 			fl_rectf(rect.X,
 				rect.Y,
 				rect.W,
 				rect.H);
-			fl_pop_clip();
+			//fl_pop_clip();
 			//win->SendAutoFreeMessage<APIParam>((void*)id, WM_EVENT_UI_FUNC, parma);
-		}
-		else
-		{
-			GraphicDrawHandle::PushClip(win->x(),
-				win->y(),
-				win->w(),
-				win->h());
-			// 设置背景色
-			fl_color(RGBColor(backColor));
-			// 绘制画布背景颜色
-			fl_rectf(win->x(),
-				win->y(),
-				win->w(),
-				win->h());
-			fl_pop_clip();
 		}
 #endif
 	}
@@ -120,7 +107,7 @@ namespace UI
 				rect.Y,
 				rect.W,
 				rect.H);
-			fl_pop_clip();
+			//fl_pop_clip();
 		}
 		else
 		{
@@ -135,7 +122,7 @@ namespace UI
 				win->y(),
 				win->w(),
 				win->h());
-			fl_pop_clip();
+			//fl_pop_clip();
 		}
 #endif
 	}
@@ -172,10 +159,7 @@ namespace UI
 			UI::Rectangle rect;
 			ctrl->GetMode()->GetRect(rect);
 
-			GraphicDrawHandle::PushClip(rect.X,
-				rect.Y,
-				rect.W,
-				rect.H);
+			//GraphicDrawHandle::PushClip(rect.X,rect.Y,rect.W,rect.H);
 			// 绘制线条
 			if (linewidth > 0) {
 				// 设置线条样式
@@ -188,7 +172,7 @@ namespace UI
 					rect.X + x2,
 					rect.Y + y2);
 			}
-			fl_pop_clip();
+			//fl_pop_clip();
 		}
 		else
 		{
@@ -261,7 +245,7 @@ namespace UI
 					width,
 					height);
 			}
-			fl_pop_clip();
+			//fl_pop_clip();
 		}
 		else
 		{
@@ -310,11 +294,8 @@ namespace UI
 		if (ctrl)
 		{
 			UI::Rectangle rect;
-			ctrl->GetMode()->GetRect(rect);
-			GraphicDrawHandle::PushClip(rect.X,
-				rect.Y,
-				rect.W,
-				rect.H);
+		  	ctrl->GetMode()->GetRect(rect);
+			GraphicDrawHandle::PushClip(rect.X,rect.Y,rect.W,rect.H);
 			// 是否填充
 			if (fillrect)
 			{
@@ -336,7 +317,7 @@ namespace UI
 					radius * 2,
 					radius * 2, 0, 360);
 			}
-			fl_pop_clip();
+			//fl_pop_clip();
 		}
 		else
 		{
@@ -378,7 +359,7 @@ namespace UI
 				xAxisLen * 2,
 				yAxisLen * 2, 0, 360);
 		}
-		fl_pop_clip();
+		//fl_pop_clip();
 #else
 		std::shared_ptr<BaseControl> ctrl = win->GetCtrlById((int)DCMap);
 		if (ctrl)
@@ -410,7 +391,7 @@ namespace UI
 					xAxisLen * 2,
 					yAxisLen * 2, 0, 360);
 			}
-			fl_pop_clip();
+			//fl_pop_clip();
 		}
 		else
 		{
@@ -441,7 +422,7 @@ namespace UI
 				radius * 2,
 				radius * 2, startAngle, endAngle);
 		}
-		fl_pop_clip();
+		//fl_pop_clip();
 	}
 	void UIApi::DCMapDrawEllipseArc(unsigned int DCMap, int x, int y, int xAxisLen, int yAxisLen, int linewidth, unsigned int color, int startAngle, int endAngle)
 	{
@@ -466,7 +447,7 @@ namespace UI
 				xAxisLen * 2,
 				yAxisLen * 2, startAngle, endAngle);
 		}
-		fl_pop_clip();
+		//fl_pop_clip();
 	}
 	void UIApi::OpenWindow(unsigned short winNo, unsigned short winX, unsigned short winY)
 	{

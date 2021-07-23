@@ -58,7 +58,8 @@ namespace UI
 		}
 		IsRuning = true;
 		IsNewAlarm = true;
-		unsigned long long lastTime = 500;
+		AlarmBarModel* model = static_cast<AlarmBarModel*>(pModel_.get());
+		unsigned long long lastTime = 10000.0 / (double)model->AlarmBarConfig.MoveSpeed;
 		/*pView_->damage();
 		pView_->redraw();*/
 		Page()->AddTimeout(lastTime, UpdateAlarm, (void*)this,true);

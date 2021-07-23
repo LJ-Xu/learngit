@@ -23,7 +23,7 @@ namespace UI
 		static void Start();
 		static void Stop();
 	private:
-		static void DCMapClear(rest_rpc::rpc_service::rpc_conn con, unsigned int DCMap, unsigned int backColor);
+		static void DCMapClear(rest_rpc::rpc_service::rpc_conn con, unsigned int DCMap);
 		static void DCMapSetBackColor(rest_rpc::rpc_service::rpc_conn con, unsigned int DCMap, unsigned int backColor);
 		static void DCMapDrawLine(rest_rpc::rpc_service::rpc_conn con, unsigned int DCMap, int x1, int y1, int x2, int y2, int linewidth, unsigned int color);
 		static void DCMapDrawRect(rest_rpc::rpc_service::rpc_conn con, unsigned int DCMap, int x, int y, int width, int height, int linewidth, unsigned int color, bool fillrect, unsigned int fillColor);

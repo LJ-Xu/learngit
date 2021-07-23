@@ -106,9 +106,9 @@ namespace UI
 		/*if (srv_)
 			srv_->stop();*/
 	}
-	void UIServer::DCMapClear(rest_rpc::rpc_service::rpc_conn con, unsigned int DCMap, unsigned int backColor)
+	void UIServer::DCMapClear(rest_rpc::rpc_service::rpc_conn con, unsigned int DCMap)
 	{
-		UIApi::DCMapClear(DCMap, backColor);
+		UIApi::DCMapClear(DCMap);
 	}
 	void UIServer::DCMapSetBackColor(rest_rpc::rpc_service::rpc_conn con, unsigned int DCMap, unsigned int backColor)
 	{

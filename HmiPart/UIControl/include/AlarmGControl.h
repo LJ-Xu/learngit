@@ -38,6 +38,7 @@ namespace UI
 		void HandleAlarmAction(Project::AlarmInfoRes& alarmres, bool triggeralarm);
 		//std::string GetContextString(const AlarmInfoContext& almctxt);
 		static AlarmGControl *Ins();
+		void OnReady() override;
 	private:
 		//void AnalyseNumberStr(const string& ssrc,string& sdst,int itgDgt,int dmcDgt,bool isPre);
 	private:
