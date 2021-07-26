@@ -15,7 +15,7 @@
 #include <FL/Fl_Box.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Widget.H>
-
+#include "GFuncConfig.h"
 using namespace std;
 
 namespace UI
@@ -34,5 +34,9 @@ namespace UI
 
 	public:
 		BasicView BaseView;
+		void AddrDrawTask(Project::DrawFunc cmdtype, Project::ParamType* pararms, int pararmcount);
+	private:
+		Project::DrawFunc CurType;
+		Project::ParamType Params[10];
 	};
 }
