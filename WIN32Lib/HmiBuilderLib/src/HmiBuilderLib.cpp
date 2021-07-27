@@ -74,6 +74,45 @@ extern "C"  __declspec(dllexport) int __stdcall Builder_AddDataVars(char * json)
 	if (prj == nullptr || json == nullptr)
 		return -1;
 	prj->Vars.InitData(json);
+	std::map<int, Project::WindowVar>::iterator it;
+	for (it= prj->Vars.WinVarInfos.begin();it!= prj->Vars.WinVarInfos.end();++it)
+	{
+		Project::WindowVar& winvar = (*it).second;
+		if ((*it).first == 0)
+		{
+			//HACK 窗体0，检查是否有用户寄存器，没有手动插入PSB0寄存器，避免全为系统寄存器的情况下dataservice进入全速运行CPU过高
+			int i;
+			for (i = 0; i < winvar.Frames.size(); i++)
+			{
+				if (winvar.Frames[i].Var.RegType != Project::TP_SPSB &&
+					winvar.Frames[i].Var.RegType != Project::TP_SPFW&&
+					winvar.Frames[i].Var.RegType != Project::TP_SPSW)
+					break;
+			}
+			if (i == winvar.Frames.size())
+			{
+				Project::FrameInfo frameinfo;
+				frameinfo.RISize = 1;
+				frameinfo.Var.Count = 1;
+				frameinfo.Var.Addr1 = -1;
+				frameinfo.Var.Addr = 0;
+				frameinfo.Var.DevId = 0;
+				frameinfo.Var.StaNo = 0;
+				frameinfo.Var.RegType = Project::TP_PSB;
+				frameinfo.Var.DataType = Project::DT_Bit;
+				winvar.Frames.push_back(frameinfo);			
+			}
+			
+		}
+		std::sort(winvar.VIds.begin(), winvar.VIds.end(), [](Project::DataVarId v1, Project::DataVarId v2) {
+			Project::DataVarInfo* info1 = prj->Vars.GetDataVarInfo(v1);
+			Project::DataVarInfo* info2 = prj->Vars.GetDataVarInfo(v2);
+			if (!info1 || !info2)return false;
+			return info1->DevId < info2->DevId;
+		});
+
+		//std::sort(winvar.Frames.begin(), winvar.Frames.end());
+	}
 	return 0;
 
 }

@@ -22,7 +22,7 @@ namespace UI
 	class DataService :public HMI::IDaAppCB
 	{
 	public:
-		DataService()
+		DataService() :sysDataOK_(false)
 		{}
 	public:
 		void Init(Project::HMIProject*);
@@ -59,12 +59,17 @@ namespace UI
 		std::unique_ptr<DataFrame> dataFrame_;
 		std::shared_ptr<DataCache> dataCache_;
 		std::unique_ptr<HMI::DataClient> client_;
+		volatile bool sysDataOK_;
+
 		thread td_;
 		bool runFlag_ = false;
 		
 		Project::ProjectPortVarsInfo* vars_ = nullptr;
-		friend void Run(void* param);
 
+
+		private:
+		friend void Run(void* param);
+		
 
 		/*Observer* obsrv_;
 		vector<WinData*> winData_;*/

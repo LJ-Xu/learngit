@@ -28,21 +28,28 @@ namespace UI
 	{
 		WR_State_OK,WR_State_Continue_Next,WR_State_Timeout, WR_State_Continue_Wait, WR_State_Param_Err
 	};
+	struct ComCond
+	{
+		int CanCnt;//可以的个数
+		unsigned int Tick;//上次请求时间
+	};
 	class CommStateMgr
 	{
 	public:
-		static void Init(Project::HMIProject* prj);
-		static void State(short devid, short stano, short state);
+		static bool Wait(int ms);
+		static void Signal();
 
-		static int WaitReq(short devid, short stano);
-		static void NotifyReq(short devid, short stano);
+		static void Init(Project::HMIProject* prj,int canreqcnt=2);
+
+		static int Req(short devid, short stano=0);
+		static void Resp(short devid, short stano=0);
+		static ComCond Get(short devid, short stano=0);
+		static void SetCanCount(int count, short devid, short stano=0);
 		//static bool IsRespTimeout();
-		//是否可以继续请求
-		static RespStateEM RespState(short devid, short stano);
 	private:
 		//static std::vector<DevCommStateInfo> devstate_;
 		static Semaphore* sem_;
-		static std::vector<unsigned int> devcondition_;
+		static std::vector<ComCond> devcondition_;
 	};
 }
 
