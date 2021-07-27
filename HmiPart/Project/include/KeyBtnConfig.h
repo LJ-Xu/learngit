@@ -19,11 +19,11 @@ namespace Project
 	{
 	public:
 		int AsciiNum;
-
+		bool IsCloseBtn = false;
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
-			archive(AsciiNum, StatusCnt, PicKey, CurrentStatus,Txt, StrStyles, 
+			archive(AsciiNum, StatusCnt, PicKey, CurrentStatus,Txt, StrStyles, IsCloseBtn,
 				VOffX, VOffY, Perm, Width, Height, X, Y, IsEnable, IsRecord, CtrlName);
 		}
 

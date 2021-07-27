@@ -135,6 +135,10 @@ namespace Project
 						PageCfg.ChangeToLimit = cfg["ChangeToLimit"].GetInt();
 					if (cfg.HasMember("IsChangeToLimit"))
 						PageCfg.IsChangeToLimit = cfg["IsChangeToLimit"].GetBool();
+					if (cfg.HasMember("WinViewPos_x"))
+						PageCfg.WinViewPos_x = cfg["WinViewPos_x"].GetInt();
+					if (cfg.HasMember("WinViewPos_y"))
+						PageCfg.WinViewPos_y = cfg["WinViewPos_y"].GetInt();
 			}
 		}
 	}

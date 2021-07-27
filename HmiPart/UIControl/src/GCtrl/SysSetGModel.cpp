@@ -75,6 +75,12 @@ namespace UI
 					}
 				}
 				SysSetGUnit.Clock.WriteInPlcDevicesNum = SysSetGUnit.Clock.WriteInPlcDevices.size();
+				if (sysjson.HasMember("StartWinNoVarId") && sysjson["StartWinNoVarId"].IsObject())
+					SysSetGUnit.StartWinNoVarId.Parse(sysjson["StartWinNoVarId"]);
+				if (sysjson.HasMember("ScreenSaverTimeVarId") && sysjson["ScreenSaverTimeVarId"].IsObject())
+					SysSetGUnit.ScreenSaverTimeVarId.Parse(sysjson["ScreenSaverTimeVarId"]);
+				if (sysjson.HasMember("BacklightTimeVarId") && sysjson["BacklightTimeVarId"].IsObject())
+					SysSetGUnit.BacklightTimeVarId.Parse(sysjson["BacklightTimeVarId"]);
 			}
 			
 		}

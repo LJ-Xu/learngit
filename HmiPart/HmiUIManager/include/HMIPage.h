@@ -148,7 +148,7 @@ namespace UI
 				add(page);
 		}
 		/*´´½¨ctrl*/
-		void ProduceCtrl(vector<Project::UnitInfo>& shapes, int winno);
+		void ProduceCtrl(Project::PageInfo& pi, int winno);
 		static std::shared_ptr<BaseControl> NewCtr(Project::UnitInfo &unintInfo, UI::HMIPage*);		
 		//int  PeekHMIMessage(Message::HMIMsg* msg);
 		HMIPage* Next = nullptr;

@@ -92,6 +92,11 @@ namespace UI
 		case FL_PUSH:
 			SysSetApi::TriggerBeep();
 			CurrentStatus = 1;
+			if (model->KeyBtnConfig.IsCloseBtn)			//πÿ±’∞¥≈•
+			{
+				ctrl->Win()->ClosePage(ctrl->Page()->Winno());
+				return 1;
+			}
 			if (HandleOperatePush())
 			{
 				redraw();
@@ -135,7 +140,10 @@ namespace UI
 			align(FL_ALIGN_IMAGE_BACKDROP);		//…Ë÷√±≥æ∞Õº∆¨
 		}
 		else
+		{
+			box(FL_NO_BOX);
 			LOG_INFO_("Key Btn Pic is NULL\n");
+		}
 
 		//ªÊ÷∆Õº∆¨øÚÃÂ
 		//box(FL_FLAT_BOX);

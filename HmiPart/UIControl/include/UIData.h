@@ -46,11 +46,18 @@ namespace UI
 #define SYS_PSW_ConfirmTime				TP_SPSW,162				//操作确认等待时间
 #define SYS_PSW_ConfirmOperateTime		TP_SPSW,164
 #define SYS_PSW_RecipeIndex				TP_SPSW,256				//配方索引
+#define SYS_PSW_StartWinNo				TP_SPSW,257
+#define SYS_PSW_ScreenSaverTime			TP_SPSW,258
+#define SYS_PSW_BacklightTime			TP_SPSW,259
 
 #define SYS_PINYIN_PAGENUM				25900			//拼音界面编号
 #define SYS_FULLKEY_PAGENUM				25007			//全拼键盘编号
 
 #define SYS_PSB_HASLOGINUSER			TP_SPSB,0		//用户权限登录标志位
+#define SYS_PSB_HASLOGOUTUSER			TP_SPSB,1		//用户权限取消标志位
+#define SYS_PSB_HasScreenSaver			TP_SPSB,4		//屏保状态标志 0:非屏保状态 1:屏保状态
+
+
 #define SYS_PSB_COMMPORT_FAIL			TP_SPSB,23		//通讯失败
 #define SYS_PSB_DATASAMPLE_NOTICE		TP_SPSB,100		//采集数据更新通知
 #define SYS_PSB_ALARMRECORD_NOTICE		TP_SPSB,101		//报警数据更新通知

@@ -69,6 +69,7 @@ namespace UI
 		}
 		else if (prj->SysSetting.Param.IsOffBgLed)
 			SysCtrlApi::CloseBacklight();
+		LocalData::SetBit(SYS_PSB_HasScreenSaver,true);
 	}
 
 	void SysSetGControl::CloseScreenSaver(int mode, int winno)
@@ -84,6 +85,7 @@ namespace UI
 		ScreenSaverClickTime = System::GetCurrentTimeStampMs();			//记录时间
 		if (mode)
 			Win()->SwitchPage(winno);
+		LocalData::SetBit(SYS_PSB_HasScreenSaver, false);
 	}
 
 	void SysSetGControl::GetSysTime(int mode,vector<int>& time)
@@ -196,7 +198,16 @@ namespace UI
 		}
 		/*设置屏保*/
 		if (prj->SysSetting.Param.WaitTime != 0)
+		{
+			hasScreenTime = true;
 			Page()->AddTimeout(1000, ScreenSaverTimer, (void *)this, true);
+		}
+		/*设置屏保及背光时间*/
+		LocalData::SetNumberData(SYS_PSW_ScreenSaverTime, prj->SysSetting.Param.WaitTime);
+		//LocalData::SetNumberData(SYS_PSW_BacklightTime, prj->SysSetting.Param.WaitTime);
+		/*设置启动画面*/
+		LocalData::SetNumberData(SYS_PSW_StartWinNo, prj->SysSetting.Param.StartPage);
+
 	}
 	void SysSetGControl::HandleDataVar(Project::DataVarId &id)
 	{
@@ -223,6 +234,44 @@ namespace UI
 				WriteTimeToPlc();
 			preclockflag_ = state;
 		}
+		if (mode_->SysSetGUnit.StartWinNoVarId.Cmp(id))
+		{
+			int winno = DataApi::AppNumber<int>(mode_->SysSetGUnit.StartWinNoVarId);
+			Project::HMIProject* prj = Win()->HMIProject();
+			map<int, PageInfo>::iterator iter;
+			iter = prj->Pages.Screens.find(winno);
+			if (iter != prj->Pages.Screens.end())
+			{
+				prj->SysSetting.Param.StartPage = winno;
+				LocalData::SetNumberData(SYS_PSW_StartWinNo, prj->SysSetting.Param.StartPage);
+			}
+		}
+		if (mode_->SysSetGUnit.ScreenSaverTimeVarId.Cmp(id))
+		{
+			Project::HMIProject* prj = Win()->HMIProject();
+			int waittime = DataApi::AppNumber<int>(mode_->SysSetGUnit.ScreenSaverTimeVarId);
+			prj->SysSetting.Param.WaitTime = waittime;
+			LocalData::SetNumberData(SYS_PSW_ScreenSaverTime, waittime);
+
+			if (waittime != 0)
+			{
+				if (!hasScreenTime)
+				{
+					Page()->AddTimeout(1000, ScreenSaverTimer, (void *)this, true);
+					hasScreenTime = true;
+				}
+			}
+			else
+			{
+				Page()->RemoveTimeout(ScreenSaverTimer, (void *)this);
+				hasScreenTime = false;
+			}
+
+		}
+		//if (mode_->SysSetGUnit.BacklightTimeVarId.Cmp(id))
+		//{
+
+		//}
 	}
 	int SysSetGControl::PeekHMIMessage(Message::Msg* msg)
 	{
