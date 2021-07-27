@@ -163,11 +163,15 @@ namespace UI
 		{
 			if (when() & FL_WHEN_RELEASE)
 			{
-				ctrl->Page()->RemoveTimeout(BtnSafeTimerCb, (void*)this);		//移除定时器
-				char dataflag = DataApi::GetDataFlag(model->KeypadConfig.WriteVar);
-				if (dataflag == 0)		return 1;
-				IsReleased = true;
 				CurrentStatus = 0;
+				ctrl->Page()->RemoveTimeout(BtnSafeTimerCb, (void*)this);		//移除定时器
+				//char dataflag = DataApi::GetDataFlag(model->KeypadConfig.WriteVar);
+				//if (dataflag == 0)
+				//{
+				//	redraw();
+				//	return 1;
+				//}
+				IsReleased = true;
 				if (HaveOperateLimit && model->KeypadConfig.Action == Project::BtnAction::BtnSHORTON)
 				{
 					HaveOperateLimit = false;

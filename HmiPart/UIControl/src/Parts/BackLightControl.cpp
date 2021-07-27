@@ -67,8 +67,8 @@ namespace UI
 			case '1':
 			{
 				/*вўВи*/
-				pView_->hide();
-				pView_->redraw();
+			//	pView_->hide();
+			//	pView_->redraw();
 				break;
 			}
 			default:
@@ -141,7 +141,10 @@ namespace UI
 					pView->IsPutOutStatus = true;
 				}
 				if (mode_->BackLightConfig.Perm.HasShowPerm && mode_->BackLightConfig.Perm.HasLimitShowPerm)
+				{
+					pView->show();
 					pView->redraw();
+				}
 			}
 		}
 	}

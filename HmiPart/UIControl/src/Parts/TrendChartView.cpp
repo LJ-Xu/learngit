@@ -857,7 +857,17 @@ namespace UI
 			fl_end_line();
 		}
 	}
-
+	int TrendChartView::GetChannelNo(int no)
+	{
+		shared_ptr< TrendChartModel> model = BaseView.GetModel< TrendChartModel>();
+		for (size_t i = 0; i < model->ChartTrendConfig.SetChannel.size(); i++)
+		{
+			if ((no | (model->ChartTrendConfig.SimpleGroup << 16) |
+				(model->ChartTrendConfig.SimpleNo << 24)) == model->ChartTrendConfig.SetChannel[i].ChannelNo)
+				return  model->ChartTrendConfig.SetChannel[i].ChannelNo;
+		}
+		return 0;
+	}
 	/*绘制信息显示框*/
 	void TrendChartView::DrawInfoDisplay()
 	{
@@ -960,7 +970,7 @@ namespace UI
 							bool hasdata = false;
 							for (unsigned no = 0; no < currentContent_.size(); no++)
 							{
-								if (currentContent_[no].Channel == num)
+								if (currentContent_[no].Channel == GetChannelNo(num))
 								{
 									hasdata = true;
 									Utility::NumberFmtInfo fmt;
@@ -1140,7 +1150,10 @@ namespace UI
 			vector<Storage::SampleRecord>().swap(ChannelData);
 			Storage::SampleStorage::Ins()->QueryByTimePeriod(channelno, perScreenPeriod_, ChannelData);
 			if (ChannelData.empty() || perScreenPeriod_ == 0)
+			{
+				LOG_INFO("ChannelData size = %d\n", ChannelData.size());
 				return;
+			}
 			scalecurrenttime_ = ChannelData[ChannelData.size() - 1].Date;
 			startTime_ = ChannelData[0].Date;
 
@@ -1152,42 +1165,40 @@ namespace UI
 
 			if (Hscrollbar->value() == Xaxislength || ScrollClick == 0)
 			{
+				//if (ChannelData[ChannelData.size() - 1].Date <= firstStartTime_)
+					startTime_ = ChannelData[0].Date;
+				//else
+					//startTime_ = ChannelData[ChannelData.size() - 1].Date - perScreenPeriod_;
+				
 				fl_push_clip(origin.X + model->ChartTrendConfig.OffX, origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - yaxislength, Xaxislength, yaxislength);
 				{
-					if (ChannelData[ChannelData.size() - 1].Date <= firstStartTime_)
-						startTime_ = ChannelData[0].Date;
-					else
-						startTime_ = ChannelData[ChannelData.size() - 1].Date - perScreenPeriod_;
 					fl_begin_line();
-					for (size_t i = 0;i < ChannelData.size(); i++)
 					{
-						int dx = (int)((ChannelData[i].Date - startTime_) * (DDWORD)Xaxislength / perScreenPeriod_);
-						SetDisPlayPos(i, dx);
-						fl_color(active() ? linecolor : fl_inactive(linecolor));
-						fl_line_style(0, channelinfo.TrendStyle.Weight);
-						DrawChannelLine((Project::TrendLineType)channelinfo.TrendStyle.Type, origin.X + model->ChartTrendConfig.OffX + dx,
-							origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
-
-						//fl_vertex(origin.X + model->ChartTrendConfig.OffX + dx,
-						//	origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
-						//fl_pie(origin.X + model->ChartTrendConfig.OffX + dx - 2, 
-						//	origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min) - 2, 4, 4, 0, 360);
+						for (size_t i = 0;i < ChannelData.size(); i++)
+						{
+							int dx = (int)((ChannelData[i].Date - startTime_) * (DDWORD)Xaxislength / perScreenPeriod_);
+							SetDisPlayPos(i, dx);
+							fl_color(active() ? linecolor : fl_inactive(linecolor));
+							fl_line_style(0, channelinfo.TrendStyle.Weight);
+							DrawChannelLine((Project::TrendLineType)channelinfo.TrendStyle.Type, origin.X + model->ChartTrendConfig.OffX + dx,
+								origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
+						}
 					}
 					fl_end_line();
 				}
 				fl_pop_clip();
 			}
-			if (ScrollClick)
+			else if (ScrollClick)
 			{
 				if (Hscrollbar->maximum() - Hscrollbar->minimum() == 0) return;
 				clickstarttime_ = firstStartTime_ + (((scalecurrenttime_ - (DDWORD)perScreenPeriod_) - firstStartTime_) * (DDWORD)Hscrollbar->value() / (DDWORD)(Hscrollbar->maximum() - Hscrollbar->minimum()));
 				vector<Storage::SampleRecord>().swap(ChannelData);
 				ChannelData = Storage::SampleStorage::Ins()->QueryByTime(channelno, clickstarttime_, clickstarttime_ + perScreenPeriod_);
+				LOG_INFO("ScrollClick ChannelData size = %d\n", ChannelData.size());
 
+				fl_begin_line();
 				fl_push_clip(origin.X + model->ChartTrendConfig.OffX, origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - yaxislength, Xaxislength, yaxislength);
 				{
-					fl_begin_line();
-					
 					for (size_t i = 0; i < ChannelData.size(); i++)
 					{
 						int dx = (int)((ChannelData[i].Date - clickstarttime_) * (DDWORD)Xaxislength / perScreenPeriod_);
@@ -1196,15 +1207,11 @@ namespace UI
 						fl_line_style(0, channelinfo.TrendStyle.Weight);
 						DrawChannelLine((Project::TrendLineType)channelinfo.TrendStyle.Type, origin.X + model->ChartTrendConfig.OffX + dx,
 							origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
-
-						//fl_vertex(origin.X + model->ChartTrendConfig.OffX + dx, 
-						//	origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
-						//fl_pie(origin.X + model->ChartTrendConfig.OffX + dx - 2, 
-						//	origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min) - 2, 4, 4, 0, 360);
 					}
-					fl_end_line();
 				}
 				fl_pop_clip();
+				fl_end_line();
+
 			}
 		}
 		else
@@ -1221,16 +1228,17 @@ namespace UI
 			if (Hscrollbar->value() == Xaxislength || ScrollClick == 0)
 			{
 				vector<Storage::SampleRecord>().swap(ChannelData);
+				vector<DDWORD> times;
 				Storage::SampleStorage::Ins()->QueryLastRecords(channelno, perScreendot_, ChannelData);
 				xscaleNum = 0;
 				printf("value1 = %d\n", Hscrollbar->value());
-			
+				fl_push_clip(origin.X + model->ChartTrendConfig.OffX, origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - yaxislength, Xaxislength, yaxislength);
+				{
 					fl_begin_line();
 					for (size_t i = 0; i < ChannelData.size(); i++)
 					{
 						int dx;
-						fl_push_clip(origin.X + model->ChartTrendConfig.OffX, origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - yaxislength, Xaxislength, yaxislength);
-						{
+						
 						if (perScreendot_ == 1)
 							dx = 0;
 						else
@@ -1246,11 +1254,11 @@ namespace UI
 						//	origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
 						//fl_pie(origin.X + model->ChartTrendConfig.OffX + dx - 2, 
 						//	origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min) - 2, 4, 4, 0, 360);
-						}
-						fl_pop_clip();
+						
 						if (dx >= xscaleInterval_ * xscaleNum)
 						{
-							DrawXScaleDot(xscaleNum, ChannelData[i].Date);
+							times.push_back(ChannelData[i].Date);
+							/*DrawXScaleDot(xscaleNum, ChannelData[i].Date);*/
 							xscaleNum++;
 							if (xscaleNum == model->ChartTrendConfig.AxisX.MainScaleNum + 1)
 								xscaleNum = 0;
@@ -1258,7 +1266,10 @@ namespace UI
 						}
 					}
 					fl_end_line();
-				
+				}
+				fl_pop_clip();
+				for (size_t i = 0; i < times.size(); i++)
+					DrawXScaleDot(i, times[i]);
 			}
 			else if (ScrollClick == 1)
 			{
@@ -1266,13 +1277,14 @@ namespace UI
 				int startNum = (int)((double)((scalecurrentnum_ - perScreendot_) * Hscrollbar->value()) / (Hscrollbar->maximum() - Hscrollbar->minimum()));
 				vector<Storage::SampleRecord>().swap(ChannelData);
 				ChannelData = Storage::SampleStorage::Ins()->QueryByChannel(channelno, startNum, perScreendot_);
-				
+				vector<DDWORD> times;
+				fl_push_clip(origin.X + model->ChartTrendConfig.OffX, origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - yaxislength, Xaxislength, yaxislength);
+				{
 					fl_begin_line();
 					for (size_t i = 0; i < ChannelData.size(); i++)
 					{
 						int dx = i * Xaxislength / (perScreendot_ - 1);
-						fl_push_clip(origin.X + model->ChartTrendConfig.OffX, origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - yaxislength, Xaxislength, yaxislength);
-						{
+						
 							SetDisPlayPos(i, dx);
 					
 							fl_color(active() ? linecolor : fl_inactive(linecolor));
@@ -1284,18 +1296,21 @@ namespace UI
 							//	origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
 							//fl_pie(origin.X + model->ChartTrendConfig.OffX + dx - 2, 
 							//	origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min) - 2, 4, 4, 0, 360);
-						}
-						fl_pop_clip();
+						
 						if (dx >= xscaleInterval_ * xscaleNum)
 						{
-							DrawXScaleDot(xscaleNum, ChannelData[i].Date);
+							times.push_back(ChannelData[i].Date);
+							//DrawXScaleDot(xscaleNum, ChannelData[i].Date);
 							xscaleNum++;
 							if (xscaleNum == model->ChartTrendConfig.AxisX.MainScaleNum + 1)
 								xscaleNum = 0;
 						}
 					}
 					fl_end_line();
-				
+				}
+				fl_pop_clip();
+				for (size_t i = 0; i < times.size(); i++)
+					DrawXScaleDot(i, times[i]);
 			}
 		}
 	}

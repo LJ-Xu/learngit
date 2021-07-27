@@ -58,6 +58,7 @@ namespace UI
 		void DrawEveryYaxisScale(DOUBLE max, DOUBLE min, vector<Project::ScaleInfo>& info);
 		/*绘制栅格*/
 		void DrawGrid();
+		int GetChannelNo(int no);
 		/*绘制趋势图*/
 		void DrawChannelLine(Project::TrendLineType type, double x, double y);
 		void DrawChannelTrend(Project::TrendChannel channelinfo);
