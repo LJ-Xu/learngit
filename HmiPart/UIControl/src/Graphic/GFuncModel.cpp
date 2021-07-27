@@ -89,6 +89,10 @@ namespace UI
 			if (json.HasMember("Y")) {
 				GFuncUnit.Y = json["Y"].GetInt();
 			}
+			if (json.HasMember("MapBgColor"))
+			{
+				GFuncUnit.BackColor = json["MapBgColor"].GetInt();
+			}
 		}
 	}
 

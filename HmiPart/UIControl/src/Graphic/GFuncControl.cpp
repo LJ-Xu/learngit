@@ -42,6 +42,15 @@ namespace UI
 		InitMVCView(view);
 	}
 
+	void GFuncControl::AddrDrawTask(Project::DrawFunc cmdtype, Project::ParamType * pararms, int pararmcount)
+	{
+		GFuncView * view = (GFuncView *)pView_;
+		view->AddrDrawTask(cmdtype, pararms, pararmcount);
+		view->hide();
+		view->redraw();
+		view->show();
+	}
+
 	int GFuncControl::PeekHMIMessage(Message::Msg * msg) {
 		shared_ptr<GFuncModel> model = static_pointer_cast<GFuncModel>(model_);
 		GFuncView * view = (GFuncView *)pView_;

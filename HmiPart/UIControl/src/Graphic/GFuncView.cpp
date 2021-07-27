@@ -14,11 +14,12 @@
 #include "stdafx.h"
 #include "GFuncView.h"
 #include "GFuncModel.h"
-
+#include "UIApi.h"
+using namespace Project;
 namespace UI
 {
 	GFuncView::GFuncView(int x, int y, int w, int h)
-		: HMIBaseView(x, y, w, h) {
+		: HMIBaseView(x, y, w, h), CurType(DCMapDefault){
 
 	}
 
@@ -27,6 +28,128 @@ namespace UI
 	}
 
 	void GFuncView::draw() {
+		shared_ptr<GFuncModel> model = BaseView.GetModel<GFuncModel>();
+		//shared_ptr<GFuncControl> ctrl = BaseView.GetControl<GFuncControl>();
+		int Finx = model->GFuncUnit.X + model->GFuncUnit.OffX;
+		int Finy = model->GFuncUnit.Y + model->GFuncUnit.OffY;
+		GraphicDrawHandle::PushClip(Finx, Finy, model->GFuncUnit.Width, model->GFuncUnit.Height);
+		switch (CurType)
+		{
+		case DCMapClear:
+		{
+			fl_color(RGBColor(model->GFuncUnit.BackColor));
+			// 绘制画布背景颜色
+			fl_rectf(Finx, Finy, model->GFuncUnit.Width, model->GFuncUnit.Height);
+			break;
+		}
+		case DCMapSetBackColor:
+		{
+			fl_color(RGBColor(Params[0]));
+			// 绘制画布背景颜色
+			fl_rectf(Finx, Finy, model->GFuncUnit.Width, model->GFuncUnit.Height);
+			break;
+		}
+		case DCMapDrawLine:
+		{
+			fl_line_style(0, Params[4]);
+			fl_color(RGBColor(Params[5]));
+			// 绘制线条
+			fl_line(Finx + Params[0],
+				Finy + Params[1],
+				Finx + Params[2],
+				Finy + Params[3]);
+			break;
+		}
+		case DCMapDrawRect:
+		{
+			//fillrect
+			if (Params[6])
+			{
+				fl_color(RGBColor(Params[7]));
+				fl_rectf(Finx + Params[0],Finy + Params[1], Params[2], Params[3]);
+			}
+			if (Params[4] > 0) {
+				// 设置线条样式
+				fl_line_style(0, Params[4]);
+				// 设置线条颜色
+				fl_color(RGBColor(Params[5]));
+				// 绘制线条
+				fl_rect(Finx + Params[0],Finy + Params[1], Params[2], Params[3]);
+			}
+			break;
+		}
+		case DCMapDrawCircle:
+		{
+			if (Params[5])
+			{
+				// 设置填充颜色
+				fl_color(RGBColor(Params[6]));
+				// 填充内部
+				fl_pie(Finx + Params[0], Finy + Params[1],Params[2] * 2,Params[2] * 2, 0, 360);
+			}
+			// 绘制边框
+			if (Params[3] > 0) {
+				// 设置线条样式
+				fl_line_style(0, Params[3]);
+				// 设置线条颜色
+				fl_color(RGBColor(Params[4]));
+				// 绘制边框
+				fl_arc(Finx + Params[0], Finy + Params[1], Params[2] * 2, Params[2] * 2, 0, 360);
+			}
+			break;
+		}
+		case DCMapDrawEllipse:
+		{
+			// 是否填充
+			if (Params[6])
+			{
+				// 设置填充颜色
+				fl_color(RGBColor(Params[7]));
+				// 填充内部
+				fl_pie(Finx + Params[0], Finy + Params[1],Params[2] * 2,Params[3] * 2, 0, 360);
+			}
+			// 绘制边框
+			if (Params[4] > 0) {
+				// 设置线条样式
+				fl_line_style(0, Params[4]);
+				// 设置线条颜色
+				fl_color(RGBColor(Params[5]));
+				// 绘制边框
+				fl_arc(Finx + Params[0], Finy + Params[1],Params[2] * 2,Params[3] * 2, 0, 360);
+			}
+			break;
+		}
+		case DCMapDrawCircleArc:
+		{
+			// 绘制边框
+			if (Params[3] > 0) {
+				// 设置线条样式
+				fl_line_style(0, Params[3]);
+				// 设置线条颜色
+				fl_color(RGBColor(Params[4]));
+				// 绘制边框
+				fl_arc(Finx + Params[0], Finy + Params[1],
+					Params[2] * 2,
+					Params[2] * 2, Params[5], Params[6]);
+			}
+			break;
+		}
+		case DCMapDrawEllipseArc:
+		{
+			if (Params[4] > 0) {
+				// 设置线条样式
+				fl_line_style(0, Params[4]);
+				// 设置线条颜色
+				fl_color(RGBColor(Params[5]));
+				// 绘制边框
+				fl_arc(Finx + Params[0], Finy + Params[1],
+					Params[2] * 2,
+					Params[3] * 2, Params[6], Params[7]);
+			}
+			break;
+		}
+		}
+		fl_pop_clip();
 		/*shared_ptr<GFuncModel> model = BaseView.GetModel<GFuncModel>();
 		switch (model->GFuncUnit.FuncId)
 		{
@@ -195,5 +318,15 @@ namespace UI
 		default:
 			break;
 		}*/
+	}
+	void GFuncView::AddrDrawTask(Project::DrawFunc cmdtype, Project::ParamType * pararms, int pararmcount)
+	{
+		CurType = cmdtype;
+		memset(Params, 0, sizeof(Project::ParamType)*10);
+		if (pararms&&pararmcount)
+		{
+			memcpy(Params, pararms, pararmcount * sizeof(Project::ParamType));
+		}
+		
 	}
 }

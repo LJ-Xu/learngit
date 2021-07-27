@@ -13,7 +13,7 @@ namespace UI
 	public:
 		static void Draw(int id, APIParam* parma);
 		static void DrawCircle(int x, int y,int r);
-		static void DCMapClear(unsigned int DCMap,unsigned int backColor);
+		static void DCMapClear(unsigned int DCMap);
 		static void DCMapSetBackColor(unsigned int DCMap, unsigned int backColor);
 		static void DCMapDrawLine(unsigned int DCMap, int x1, int y1, int x2,int y2,int linewidth,unsigned int color);
 		static void DCMapDrawRect(unsigned int DCMap, int x, int y, int width, int height, int linewidth, unsigned int color, bool fillrect, unsigned int fillColor);

@@ -18,6 +18,10 @@ namespace Storage
 		//读取文件初始化循环buf
 	}
 
+	void AlarmStorage::Flush() {
+		AlarmStorageService::Ins()->Flush();
+	}
+
 	// 产生报警记录
 	void AlarmStorage::Trigger(int groupname, int groupno, string msg, int times, Project::AlarmLevel level)
 	{

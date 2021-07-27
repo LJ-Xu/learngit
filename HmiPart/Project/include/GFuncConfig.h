@@ -16,7 +16,8 @@
 
 namespace Project
 {
-	enum DrawFunc {
+	typedef int ParamType;
+	enum DrawFunc:int {
 		DCMapClear = 0,
 		DCMapSetBackColor,
 		DCMapDrawLine,
@@ -24,7 +25,8 @@ namespace Project
 		DCMapDrawCircle,
 		DCMapDrawEllipse,
 		DCMapDrawCircleArc,
-		DCMapDrawEllipseArc
+		DCMapDrawEllipseArc,
+		DCMapDefault
 	};
 
 	class GFuncConfig : public MoveableDisplayUnit
@@ -47,7 +49,7 @@ namespace Project
 
 
 		int MapId;		// ID
-		Color BackColor;// ±³¾°ÑÕÉ«
+		int BackColor;// ±³¾°ÑÕÉ«
 	};
 }
 

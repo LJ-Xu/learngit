@@ -149,7 +149,7 @@ namespace Storage
 				return SEL_SelectByGroupAndResolvedRangeByGroup;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmNo = %d AND AlarmGroup BETWEEN %d AND %d").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmNo = %d AND AlarmGroup BETWEEN %d AND %d;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmNo = ? AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmNo = ? AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectByNoRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectByNoRangeByGroup;
 
@@ -164,7 +164,7 @@ namespace Storage
 				return SEL_SelectByNoAndResolvedRangeByGroup;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmNo = %d AND AlarmGroup BETWEEN %d AND %d").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmNo = %d AND AlarmGroup BETWEEN %d AND %d;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmNo = ? AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmNo = ? AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectByLevRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectByLevRangeByGroup;
 

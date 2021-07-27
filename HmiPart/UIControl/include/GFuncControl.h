@@ -35,7 +35,9 @@ namespace UI
 
 	public:
 		void CreateView();
-
+	public:
+		void AddrDrawTask(Project::DrawFunc cmdtype, Project::ParamType* pararms,int pararmcount);
+		int GetBackcolor() { return model_->GFuncUnit.BackColor; }
 	protected:
 		int PeekHMIMessage(Message::Msg * msg) override;
 

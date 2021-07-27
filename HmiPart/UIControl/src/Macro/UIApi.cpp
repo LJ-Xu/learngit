@@ -3,6 +3,7 @@
 #include "UIManager.h"
 #include "HMIWindow.h"
 #include "Logger.h"
+#include "../../include/GFuncControl.h"
 using namespace std;
 namespace UI
 {
@@ -20,7 +21,7 @@ namespace UI
 	{
 		cout << "Client DrawCircle" << endl;
 	}
-	void UIApi::DCMapClear(unsigned int DCMapId, unsigned int backColor)
+	void UIApi::DCMapClear(unsigned int DCMapId)
 	{
 		HMIWindow* win = UIManager::Ins().CurrWin();
 		if (!win)
@@ -28,59 +29,11 @@ namespace UI
 			LOG_ERROR("Can not find window!");
 			return;
 		}
-#if 0
-		GraphicDrawHandle::PushClip(0,
-			0,
-			win->w(),
-			win->h());
-		// 设置背景色
-		fl_color(RGBColor(backColor));
-		// 绘制画布背景颜色
-		fl_rectf(0,
-			0,
-			win->w(),
-			win->h());
-		fl_pop_clip();
-#else
-
-		std::shared_ptr<BaseControl> ctrl = win->GetCtrlById((int)DCMapId);
+		std::shared_ptr<GFuncControl> ctrl = std::static_pointer_cast<GFuncControl>(win->GetCtrlById((int)DCMapId));
 		if (ctrl)
 		{
-			UI::Rectangle rect;
-			ctrl->GetMode()->GetRect(rect);
-			GraphicDrawHandle::PushClip(rect.X,
-				rect.Y,
-				rect.W,
-				rect.H);
-			// 设置原始背景色
-	/*		Fl_Color originColor = fl_rgb_color(255, 255, 255);
-			fl_color(originColor);*/
-
-			fl_color(RGBColor(backColor));
-			// 绘制画布背景颜色
-			fl_rectf(rect.X,
-				rect.Y,
-				rect.W,
-				rect.H);
-			fl_pop_clip();
-			//win->SendAutoFreeMessage<APIParam>((void*)id, WM_EVENT_UI_FUNC, parma);
+			ctrl->AddrDrawTask(Project::DCMapClear, NULL, 0);
 		}
-		else
-		{
-			GraphicDrawHandle::PushClip(win->x(),
-				win->y(),
-				win->w(),
-				win->h());
-			// 设置背景色
-			fl_color(RGBColor(backColor));
-			// 绘制画布背景颜色
-			fl_rectf(win->x(),
-				win->y(),
-				win->w(),
-				win->h());
-			fl_pop_clip();
-		}
-#endif
 	}
 	void UIApi::DCMapSetBackColor(unsigned int DCMapId, unsigned int backColor)
 	{
@@ -90,54 +43,11 @@ namespace UI
 			LOG_ERROR("Can not find window!");
 			return;
 		}
-#if 0
-		GraphicDrawHandle::PushClip(0,
-			0,
-			win->w(),
-			win->h());
-		// 设置背景色
-		fl_color(RGBColor(backColor));
-		// 绘制画布背景颜色
-		fl_rectf(0,
-			0,
-			win->w(),
-			win->h());
-		fl_pop_clip();
-#else
-		std::shared_ptr<BaseControl> ctrl = win->GetCtrlById((int)DCMapId);
+		std::shared_ptr<GFuncControl> ctrl = std::static_pointer_cast<GFuncControl>(win->GetCtrlById((int)DCMapId));
 		if (ctrl)
 		{
-			UI::Rectangle rect;
-			ctrl->GetMode()->GetRect(rect);
-			GraphicDrawHandle::PushClip(rect.X,
-				rect.Y,
-				rect.W,
-				rect.H);
-			// 设置背景色
-			fl_color(RGBColor(backColor));
-			// 绘制画布背景颜色
-			fl_rectf(rect.X,
-				rect.Y,
-				rect.W,
-				rect.H);
-			fl_pop_clip();
+			ctrl->AddrDrawTask(Project::DCMapSetBackColor, (int*)&backColor, 1);
 		}
-		else
-		{
-			GraphicDrawHandle::PushClip(win->x(),
-				win->y(),
-				win->w(),
-				win->h());
-			// 设置背景色
-			fl_color(RGBColor(backColor));
-			// 绘制画布背景颜色
-			fl_rectf(win->x(),
-				win->y(),
-				win->w(),
-				win->h());
-			fl_pop_clip();
-		}
-#endif
 	}
 	void UIApi::DCMapDrawLine(unsigned int DCMapId, int x1, int y1, int x2, int y2, int linewidth, unsigned int color)
 	{
@@ -147,59 +57,18 @@ namespace UI
 			LOG_ERROR("Can not find window!");
 			return;
 		}
-#if 0
-		GraphicDrawHandle::PushClip(0,
-			0,
-			win->w(),
-			win->h());
-		// 绘制线条
-		if (linewidth > 0) {
-			// 设置线条样式
-			fl_line_style(0, linewidth);
-			// 设置线条颜色
-			fl_color(RGBColor(color));
-			// 绘制线条
-			fl_line(x1,
-				y1,
-				x2,
-				y2);
-		}
-		fl_pop_clip();
-#else
-		std::shared_ptr<BaseControl> ctrl = win->GetCtrlById((int)DCMapId);
+		std::shared_ptr<GFuncControl> ctrl = std::static_pointer_cast<GFuncControl>(win->GetCtrlById((int)DCMapId));
 		if (ctrl)
 		{
-			UI::Rectangle rect;
-			ctrl->GetMode()->GetRect(rect);
-
-			GraphicDrawHandle::PushClip(rect.X,
-				rect.Y,
-				rect.W,
-				rect.H);
-			// 绘制线条
-			if (linewidth > 0) {
-				// 设置线条样式
-				fl_line_style(0, linewidth);
-				// 设置线条颜色
-				fl_color(RGBColor(color));
-				// 绘制线条
-				fl_line(rect.X+x1,
-					rect.Y+y1,
-					rect.X + x2,
-					rect.Y + y2);
-			}
-			fl_pop_clip();
+			int arr[6];
+			arr[0] = x1;
+			arr[1] = y1;
+			arr[2] = x2;
+			arr[3] = y2;
+			arr[4] = linewidth;
+			arr[5] = color;
+			ctrl->AddrDrawTask(Project::DCMapDrawLine, arr, 6);
 		}
-		else
-		{
-			/*HDC new_gc = CreateCompatibleDC(fl_gc);
-			int save = SaveDC(new_gc);
-			SelectObject(new_gc, bitmap);
-			BitBlt(fl_gc, x, y, w, h, new_gc, srcx, srcy, SRCCOPY);
-			RestoreDC(new_gc, save);
-			DeleteDC(new_gc);*/
-		}
-#endif
 	}
 	void UIApi::DCMapDrawRect(unsigned int DCMap, int x, int y, int width, int height, int linewidth, unsigned int color, bool fillrect, unsigned int fillColor)
 	{
@@ -209,65 +78,20 @@ namespace UI
 			LOG_ERROR("Can not find window!");
 			return;
 		}
-#if 0
-		GraphicDrawHandle::PushClip(0,
-			0,
-			win->w(),
-			win->h());//填充
-		if (fillrect)
-		{
-			fl_color(RGBColor(fillColor));
-			fl_rectf(x, y, width, height);
-		}
-		// 绘制线条
-		if (linewidth > 0) {
-			// 设置线条样式
-			fl_line_style(0, linewidth);
-			// 设置线条颜色
-			fl_color(RGBColor(color));
-			// 绘制线条
-			fl_rect(x,
-				y,
-				width,
-				height);
-		}
-		fl_pop_clip();
-#else
-		std::shared_ptr<BaseControl> ctrl = win->GetCtrlById((int)DCMap);
+		std::shared_ptr<GFuncControl> ctrl = std::static_pointer_cast<GFuncControl>(win->GetCtrlById((int)DCMap));
 		if (ctrl)
 		{
-			UI::Rectangle rect;
-			ctrl->GetMode()->GetRect(rect);
-
-			GraphicDrawHandle::PushClip(rect.X,
-				rect.Y,
-				rect.W,
-				rect.H);
-			//填充
-			if (fillrect)
-			{
-				fl_color(RGBColor(fillColor));
-				fl_rectf(rect.X + x, rect.Y + y, width, height);
-			}
-			// 绘制线条
-			if (linewidth > 0) {
-				// 设置线条样式
-				fl_line_style(0, linewidth);
-				// 设置线条颜色
-				fl_color(RGBColor(color));
-				// 绘制线条
-				fl_rect(x,
-					y,
-					width,
-					height);
-			}
-			fl_pop_clip();
+			int arr[8];
+			arr[0] = x;
+			arr[1] = y;
+			arr[2] = width;
+			arr[3] = height;
+			arr[4] = linewidth;
+			arr[5] = color;
+			arr[6] = fillrect?1:0;
+			arr[7] = fillColor;
+			ctrl->AddrDrawTask(Project::DCMapDrawRect, arr, 8);
 		}
-		else
-		{
-
-		}
-#endif
 	}
 	void UIApi::DCMapDrawCircle(unsigned int DCMap, int x, int y, int radius, int linewidth, unsigned int color, bool fillrect, unsigned int fillColor)
 	{
@@ -277,72 +101,19 @@ namespace UI
 			LOG_ERROR("Can not find window!");
 			return;
 		}
-#if 0
-		GraphicDrawHandle::PushClip(0,
-			0,
-			win->w(),
-			win->h());
-		//填充
-		// 是否填充
-		if (fillrect)
-		{
-			// 设置填充颜色
-			fl_color(RGBColor(fillColor));
-			// 填充内部
-			fl_pie(x, y,
-				radius * 2,
-				radius * 2, 0, 360);
-		}
-		// 绘制边框
-		if (linewidth > 0) {
-			// 设置线条样式
-			fl_line_style(0, linewidth);
-			// 设置线条颜色
-			fl_color(RGBColor(color));
-			// 绘制边框
-			fl_arc(x, y,
-				radius * 2,
-				radius * 2, 0, 360);
-		}
-		fl_pop_clip();
-#else
-		std::shared_ptr<BaseControl> ctrl = win->GetCtrlById((int)DCMap);
+		std::shared_ptr<GFuncControl> ctrl = std::static_pointer_cast<GFuncControl>(win->GetCtrlById((int)DCMap));
 		if (ctrl)
 		{
-			UI::Rectangle rect;
-			ctrl->GetMode()->GetRect(rect);
-			GraphicDrawHandle::PushClip(rect.X,
-				rect.Y,
-				rect.W,
-				rect.H);
-			// 是否填充
-			if (fillrect)
-			{
-				// 设置填充颜色
-				fl_color(RGBColor(fillColor));
-				// 填充内部
-				fl_pie(rect.X + x, rect.Y + y,
-					radius * 2,
-					radius * 2, 0, 360);
-			}
-			// 绘制边框
-			if (linewidth > 0) {
-				// 设置线条样式
-				fl_line_style(0, linewidth);
-				// 设置线条颜色
-				fl_color(RGBColor(color));
-				// 绘制边框
-				fl_arc(rect.X + x, rect.Y + y,
-					radius * 2,
-					radius * 2, 0, 360);
-			}
-			fl_pop_clip();
+			int arr[7];
+			arr[0] = x;
+			arr[1] = y;
+			arr[2] = radius;
+			arr[3] = linewidth;
+			arr[4] = color;
+			arr[5] = fillrect ? 1 : 0;
+			arr[6] = fillColor;
+			ctrl->AddrDrawTask(Project::DCMapDrawCircle, arr, 7);
 		}
-		else
-		{
-
-		}
-#endif
 	}
 	void UIApi::DCMapDrawEllipse(unsigned int DCMap, int x, int y, int xAxisLen, int yAxisLen, int linewidth, unsigned int color, bool fillrect, unsigned int fillColor)
 	{
@@ -352,71 +123,20 @@ namespace UI
 			LOG_ERROR("Can not find window!");
 			return;
 		}
-#if 0
-		GraphicDrawHandle::PushClip(0,
-			0,
-			win->w(),
-			win->h());
-		// 是否填充
-		if (fillrect)
-		{
-			// 设置填充颜色
-			fl_color(RGBColor(fillColor));
-			// 填充内部
-			fl_pie(x, y,
-				xAxisLen * 2,
-				yAxisLen * 2, 0, 360);
-		}
-		// 绘制边框
-		if (linewidth > 0) {
-			// 设置线条样式
-			fl_line_style(0, linewidth);
-			// 设置线条颜色
-			fl_color(RGBColor(color));
-			// 绘制边框
-			fl_arc(x, y,
-				xAxisLen * 2,
-				yAxisLen * 2, 0, 360);
-		}
-		fl_pop_clip();
-#else
-		std::shared_ptr<BaseControl> ctrl = win->GetCtrlById((int)DCMap);
+		std::shared_ptr<GFuncControl> ctrl = std::static_pointer_cast<GFuncControl>(win->GetCtrlById((int)DCMap));
 		if (ctrl)
 		{
-			UI::Rectangle rect;
-			ctrl->GetMode()->GetRect(rect);
-			GraphicDrawHandle::PushClip(rect.X,
-				rect.Y,
-				rect.W,
-				rect.H);
-			// 是否填充
-			if (fillrect)
-			{
-				// 设置填充颜色
-				fl_color(RGBColor(fillColor));
-				// 填充内部
-				fl_pie(rect.X + x, rect.Y + y,
-					xAxisLen * 2,
-					yAxisLen * 2, 0, 360);
-			}
-			// 绘制边框
-			if (linewidth > 0) {
-				// 设置线条样式
-				fl_line_style(0, linewidth);
-				// 设置线条颜色
-				fl_color(RGBColor(color));
-				// 绘制边框
-				fl_arc(rect.X + x, rect.Y + y,
-					xAxisLen * 2,
-					yAxisLen * 2, 0, 360);
-			}
-			fl_pop_clip();
+			int arr[8];
+			arr[0] = x;
+			arr[1] = y;
+			arr[2] = xAxisLen;
+			arr[3] = yAxisLen;
+			arr[4] = linewidth;
+			arr[5] = color;
+			arr[6] = fillrect ? 1 : 0;
+			arr[7] = fillColor;
+			ctrl->AddrDrawTask(Project::DCMapDrawEllipse, arr, 8);
 		}
-		else
-		{
-
-		}
-#endif
 	}
 	void UIApi::DCMapDrawCircleArc(unsigned int DCMap, int x, int y, int radius, int linewidth, unsigned int color, int startAngle, int endAngle)
 	{
@@ -426,22 +146,19 @@ namespace UI
 			LOG_ERROR("Can not find window!");
 			return;
 		}
-		GraphicDrawHandle::PushClip(0,
-			0,
-			win->w(),
-			win->h());
-		// 绘制边框
-		if (linewidth > 0) {
-			// 设置线条样式
-			fl_line_style(0, linewidth);
-			// 设置线条颜色
-			fl_color(RGBColor(color));
-			// 绘制边框
-			fl_arc(x, y,
-				radius * 2,
-				radius * 2, startAngle, endAngle);
+		std::shared_ptr<GFuncControl> ctrl = std::static_pointer_cast<GFuncControl>(win->GetCtrlById((int)DCMap));
+		if (ctrl)
+		{
+			int arr[7];
+			arr[0] = x;
+			arr[1] = y;
+			arr[2] = radius;
+			arr[3] = linewidth;
+			arr[4] = color;
+			arr[5] = startAngle;
+			arr[6] = endAngle;
+			ctrl->AddrDrawTask(Project::DCMapDrawCircleArc, arr, 7);
 		}
-		fl_pop_clip();
 	}
 	void UIApi::DCMapDrawEllipseArc(unsigned int DCMap, int x, int y, int xAxisLen, int yAxisLen, int linewidth, unsigned int color, int startAngle, int endAngle)
 	{
@@ -451,22 +168,23 @@ namespace UI
 			LOG_ERROR("Can not find window!");
 			return;
 		}
-		GraphicDrawHandle::PushClip(0,
-			0,
-			win->w(),
-			win->h());
-		// 绘制边框
-		if (linewidth > 0) {
-			// 设置线条样式
-			fl_line_style(0, linewidth);
-			// 设置线条颜色
-			fl_color(RGBColor(color));
-			// 绘制边框
-			fl_arc(x, y,
-				xAxisLen * 2,
-				yAxisLen * 2, startAngle, endAngle);
+		std::shared_ptr<GFuncControl> ctrl = std::static_pointer_cast<GFuncControl>(win->GetCtrlById((int)DCMap));
+		if (ctrl)
+		{
+			int arr[8];
+			arr[0] = x;
+			arr[1] = y;
+			arr[2] = xAxisLen;
+			arr[3] = yAxisLen;
+			arr[4] = linewidth;
+			arr[5] = color;
+			arr[6] = startAngle;
+			arr[7] = endAngle;
+			ctrl->AddrDrawTask(Project::DCMapDrawEllipseArc, arr, 8);
 		}
-		fl_pop_clip();
+
+		// 绘制边框
+		
 	}
 	void UIApi::OpenWindow(unsigned short winNo, unsigned short winX, unsigned short winY)
 	{

@@ -34,7 +34,7 @@ namespace Storage
 		void Trigger(int channel, DDWORD data, XJDataType type, DDWORD date,int maxcount);
 		void Flush();
 		void CleanByGroup(int gName,int gNo);
-		vector<SampleRecord> QueryByGroup(int gName, int gNo);
+		//vector<SampleRecord> QueryByGroup(int gName, int gNo);
 		vector<SampleRecord> QueryByGroupByTime(int gName, int gNo,unsigned long long startTime);
 		vector<SampleRecord> QueryByChannel(int channel);
 		vector<SampleRecord> QueryByChannel(int channel, unsigned int start, unsigned int length);

@@ -22,6 +22,12 @@
 
 namespace UI
 {
+	void AlarmFlush_CB(void * param) {
+		long k = clock();
+		Storage::AlarmStorage::Ins()->Flush();
+		long escape = clock() - k;
+	}
+
 	void AlarmBeepFunc(void *data)
 	{
 		AlarmInfoRes* res = (AlarmInfoRes*)data;
@@ -61,10 +67,17 @@ namespace UI
 			Storage::FileSave::GetFileSaveTool()->InitAlarm(&model_->AlarmGUnit.SaveLst);
 		ctrl_ = this;
 		Storage::FileSave::GetFileSaveTool();
+
+		//
 	}
 	AlarmGControl *AlarmGControl::Ins()
 	{
 		return ctrl_;
+	}
+
+	void AlarmGControl::OnReady()
+	{
+		Page()->AddTimeout(10000, AlarmFlush_CB, NULL, true);
 	}
 
 	void AnalyseNumberStr(const string & ssrc, string & sdst, int itgDgt, int dmcDgt, bool isPre)
