@@ -104,6 +104,10 @@ extern "C"  __declspec(dllexport) int __stdcall Builder_AddDataVars(char * json)
 			}
 			
 		}
+		std::sort(winvar.Frames.begin(), winvar.Frames.end(), [](Project::FrameInfo v1, Project::FrameInfo v2) {
+
+			return v1.Var.DevId < v2.Var.DevId;
+		});
 		std::sort(winvar.VIds.begin(), winvar.VIds.end(), [](Project::DataVarId v1, Project::DataVarId v2) {
 			Project::DataVarInfo* info1 = prj->Vars.GetDataVarInfo(v1);
 			Project::DataVarInfo* info2 = prj->Vars.GetDataVarInfo(v2);
