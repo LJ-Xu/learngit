@@ -155,7 +155,7 @@ namespace Project
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
-			archive(DevId,StaNo, RegType, Data, DataType,Addr,Addr1,Count,CtrlId,IndctVid,RawAddr,DataExType);
+			archive(DevId, StaNo, RegType, Data, DataType, Addr, Addr1, Count, CtrlId, IndctVid, RawAddr, DataExType);
 		}
 
 
@@ -179,6 +179,23 @@ namespace Project
 		{
 			return CtrlId = -1;
 		}
+ 
+		bool IsBottomVar()
+		{
+			//return sub==DataVarId::NullId || sub.vid < 0;
+			return Sub.IsNegative();
+		}
+		bool GetTopVarIdByBottom(DataVarId& varId)
+		{
+			if (IsBottomVar())
+			{
+				varId.Vid = Sub.Vid&NULL_VID_VALUE;
+				return true;
+			}				
+			else
+				return false;
+		}
+		 
 /*
 		bool operator>(const DataVarInfo& val)
 		{
