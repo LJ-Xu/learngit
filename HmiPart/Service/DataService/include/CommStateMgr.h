@@ -50,6 +50,7 @@ namespace UI
 		//static std::vector<DevCommStateInfo> devstate_;
 		static Semaphore* sem_;
 		static std::vector<ComCond> devcondition_;
+		static int canreqcnt_;
 	};
 }
 

@@ -5,6 +5,8 @@
 #include "IControlFactory.h"
 #include "DataApi.h"
 #include "ViewShowUtility.h"
+#include "ControlFactory.h"
+#include "KeyBtnControl.h"
 namespace UI
 {
 	static void InitTimerParam(PageTimerParam *p)
@@ -75,13 +77,49 @@ namespace UI
 		return ctrl;
 	}
 
-	void HMIPage::ProduceCtrl(vector<Project::UnitInfo>& shapes, int winno)
+	void HMIPage::ProduceCtrl(Project::PageInfo& pi, int winno)
 	{
+		vector<Project::UnitInfo>& shapes = pi.Shapes;
 		begin();
-		ResizeCtrlBuf(shapes.size());
-		for (size_t i = 0; i < shapes.size(); i++)
+		if (pi.PageCfg.IsCloseBtn)		/*绘制关闭按钮*/
+			ResizeCtrlBuf(shapes.size() + 1);
+		else
+			ResizeCtrlBuf(shapes.size());
+
+		size_t i;
+		for (i = 0; i < shapes.size(); i++)
 		{
 			std::shared_ptr<BaseControl> ctrl = NewCtr(shapes[i], this);
+			ctrl->CtrlId(WINCTR_ID(winno, i));
+			SetCtrl(i, ctrl);
+		}
+		if (pi.PageCfg.IsCloseBtn)		/*绘制关闭按钮*/
+		{
+			//Project::UnitInfo btnshape;
+			//btnshape.CtrName = "KeyBtnControl";
+			//std::shared_ptr<UI::BaseModel> mode = ctrl->GetMode();
+
+			std::shared_ptr<BaseControl> ctrl(IControlFactory::Ins()->GetNewControlByName("KeyBtnControl"));
+			shared_ptr<KeyBtnModel> model = std::static_pointer_cast<KeyBtnModel>(ctrl->GetMode());
+			Project::StatusRes res;
+			res.Texts.push_back("@+11+");
+			model->KeyBtnConfig.Txt = res;
+			vector<Project::StringStyle> styles;
+			Project::StringStyle tmp;
+			tmp.Colors = 0;
+			tmp.Font.Name = "Arial";
+			tmp.Font.Size = 14;
+			tmp.Align = 5;
+			styles.push_back(tmp);
+			styles.push_back(tmp);
+			model->KeyBtnConfig.StrStyles = styles;
+			model->KeyBtnConfig.Width = 15;
+			model->KeyBtnConfig.Height = 15;
+			model->KeyBtnConfig.X = pi.Pos.X + pi.Sz.W - model->KeyBtnConfig.Width - 6;
+			model->KeyBtnConfig.Y = pi.Pos.Y + 6;
+			model->KeyBtnConfig.IsCloseBtn = true;
+			ctrl->SetHMIPage(this);
+			ctrl->CreateView("");
 			ctrl->CtrlId(WINCTR_ID(winno, i));
 			SetCtrl(i, ctrl);
 		}

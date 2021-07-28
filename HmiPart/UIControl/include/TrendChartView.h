@@ -93,7 +93,7 @@ namespace UI
 		 *******************************************************************************/
 		string GetTimeString(DDWORD time, int mode, int style);
 		/*获取数据Y轴偏移值*/
-		int GetYCoordinate(DDWORD& data, XJDataType& info, DOUBLE max, DOUBLE min);
+		int GetYCoordinate(int channelNo, DDWORD& data, XJDataType& info, DOUBLE max, DOUBLE min);
 		/*设置翻页*/
 		void SetCurrentPage(int pagenum);
 		/*设置缩放*/

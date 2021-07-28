@@ -71,11 +71,13 @@ namespace Project
 		int UserLimit;			//用户权限
 		int ChangeToLimit;		//关闭时切换权限
 		bool IsChangeToLimit;	//关闭是是否切换权限
+		int WinViewPos_x;		//弹出位置
+		int WinViewPos_y;		
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
-			archive(IsMonopoly, IsCloseBtn, WinBgMode, WinKey,
-				UserLimit, ChangeToLimit, IsChangeToLimit);
+			archive(IsMonopoly, IsCloseBtn, WinBgMode, WinKey, WinViewPos_x,
+				UserLimit, ChangeToLimit, IsChangeToLimit, WinViewPos_y);
 		}
 	};
 	struct PageInfo

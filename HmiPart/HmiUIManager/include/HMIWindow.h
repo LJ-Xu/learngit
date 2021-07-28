@@ -47,7 +47,7 @@ namespace UI
 		int OpenKeyBoard(int page, HMIPage * p, int x, int y);
 
 		//打开弹出窗体
-		int OpenDialogPage(int page, HMIPage* p = nullptr, int offx = 0, int offy = 0);
+		int OpenDialogPage(int page, HMIPage* p = nullptr, int offx = -1, int offy = -1);
 		//切换弹出窗体
 
 		int SwitchDialogPage(int page, HMIPage* p = nullptr, int offx = 0, int offy = 0);
@@ -95,7 +95,7 @@ namespace UI
 		}
 		bool PageHasPrem(int winno, bool popwin);
 		HMIPage * ProduceKeyBoardPage(int winno, int x, int y);
-		HMIPage* ProducePage(int winno, int offx = 0, int offy = 0);
+		HMIPage* ProducePage(int winno, int offx = -1, int offy = -1);
 	protected:
 		int CloseOnePage(int page);
 		int CloseOnePage(HMIPage*);
