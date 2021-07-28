@@ -267,6 +267,24 @@ namespace UI
 					mode_->ChartTrendConfig.X + mode_->ChartTrendConfig.OffX,
 					mode_->ChartTrendConfig.Y + mode_->ChartTrendConfig.OffY);
 		}
+		bool needredraw = false;
+		for (size_t i = 0; i < mode_->ChartTrendConfig.SetChannel.size(); i++)
+		{
+			if (mode_->ChartTrendConfig.SetChannel[i].TrendMaxVarId.Cmp(varId))
+			{
+				needredraw = true;
+				mode_->ChartTrendConfig.SetChannel[i].TrendMax = UI::UIData::Number<DOUBLE>(mode_->ChartTrendConfig.SetChannel[i].TrendMaxVarId);
+			}
+			if (mode_->ChartTrendConfig.SetChannel[i].TrendMinVarId.Cmp(varId))
+			{
+				needredraw = true;
+				mode_->ChartTrendConfig.SetChannel[i].TrendMin = UI::UIData::Number<DOUBLE>(mode_->ChartTrendConfig.SetChannel[i].TrendMinVarId);
+			}
+		}
+		if(needredraw)
+			UI::ViewShowUtility::ShowView(pView, mode_->ChartTrendConfig.Perm,
+				mode_->ChartTrendConfig.X + mode_->ChartTrendConfig.OffX,
+				mode_->ChartTrendConfig.Y + mode_->ChartTrendConfig.OffY);
 	}
 
 	int TrendChartControl::PeekHMIMessage(Message::Msg* msg)
