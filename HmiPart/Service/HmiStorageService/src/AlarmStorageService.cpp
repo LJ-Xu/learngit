@@ -109,12 +109,12 @@ namespace Storage
 				return SEL_SelectByNameAndNo;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime <> 0").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime = 0").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime = 0;");
 			if (!NewFMT(SEL_SelectByNameAndNoAndUnResolved, sql.c_str(), sizeof(sql)))
 				return SEL_SelectByNameAndNoAndUnResolved;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime = 0").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime = 0;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime <> 0").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime <> 0;");
 			if (!NewFMT(SEL_SelectByNameAndNoAndResolved, sql.c_str(), sizeof(sql)))
 				return SEL_SelectByNameAndNoAndResolved;
 
@@ -124,12 +124,12 @@ namespace Storage
 				return SEL_SelectByNameAndNoRangeByGroupName;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectByNameAndNoAndUnResolvedRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectByNameAndNoAndUnResolvedRangeByGroup;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmGroup = ? AND AlarmNo = ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectByNameAndNoAndResolvedRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectByNameAndNoAndResolvedRangeByGroup;
 
@@ -139,12 +139,12 @@ namespace Storage
 				return SEL_SelectByGroupRangeByGroup;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmGroup = ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmGroup = ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmGroup = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmGroup = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectByGroupAndUnResolvedRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectByGroupAndUnResolvedRangeByGroup;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmGroup = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmGroup = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmGroup <> ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmGroup <> ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectByGroupAndResolvedRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectByGroupAndResolvedRangeByGroup;
 
@@ -154,12 +154,12 @@ namespace Storage
 				return SEL_SelectByNoRangeByGroup;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmNo = ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmNo = ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE AlarmNo = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE AlarmNo = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectByNoAndUnResolvedRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectByNoAndUnResolvedRangeByGroup;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE Level = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE Level = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE Level = ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE Level = ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectByNoAndResolvedRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectByNoAndResolvedRangeByGroup;
 
@@ -169,37 +169,37 @@ namespace Storage
 				return SEL_SelectByLevRangeByGroup;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE Level = ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE Level = ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE Level = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE Level = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectByLevAndUnResolvedRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectByLevAndUnResolvedRangeByGroup;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE Level = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE Level = ? AND ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE Level = ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE Level = ? AND ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectByLevAndResolvedRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectByLevAndResolvedRangeByGroup;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE CheckTime = 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE CheckTime = 0 AND AlarmGroup BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE CheckTime <> 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE CheckTime <> 0 AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectCheckedRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectCheckedRangeByGroup;
 			
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectResolvedRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectResolvedRangeByGroup;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ResolveTime = 0 OR CheckTime = 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ResolveTime = 0 OR CheckTime = 0 AND AlarmGroup BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ResolveTime <> 0 OR CheckTime <> 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ResolveTime <> 0 OR CheckTime <> 0 AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectCheckedOrResolvedRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectCheckedOrResolvedRangeByGroup;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectUnResolvedRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectUnResolvedRangeByGroup;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ? OR CheckTime = 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ResolveTime <> 0 AND AlarmGroup BETWEEN ? AND ? OR CheckTime = 0 AND AlarmGroup BETWEEN ? AND ?;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ? OR CheckTime = 0 AND AlarmGroup BETWEEN ? AND ?").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ResolveTime = 0 AND AlarmGroup BETWEEN ? AND ? OR CheckTime = 0 AND AlarmGroup BETWEEN ? AND ?;");
 			if (!NewFMT(SEL_SelectUnResolvedOrCheckedRangeByGroup, sql.c_str(), sizeof(sql)))
 				return SEL_SelectUnResolvedOrCheckedRangeByGroup;
 
@@ -219,7 +219,7 @@ namespace Storage
 				return SEL_SelectUnResolvedRangeTimeAndGroup;
 
 			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ResolveTime = 0").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ResolveTime = 0;");
+			sql.append("SELECT * FROM ").append(tbName).append(" WHERE ResolveTime <> 0").append(" union all SELECT * FROM fileDb.").append(tbName).append(" WHERE ResolveTime <> 0;");
 			if (!NewFMT(SEL_SelectAlarmRecordByResolveTick, sql.c_str(), sizeof(sql)))
 				return SEL_SelectAlarmRecordByResolveTick;
 		}

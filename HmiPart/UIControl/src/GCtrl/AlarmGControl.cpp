@@ -63,8 +63,6 @@ namespace UI
 	AlarmGControl::AlarmGControl(HMIPage * page) : BaseGControl(page) {
 		model_ = shared_ptr<AlarmGModel>(new AlarmGModel());
 		InitMVCModel(model_);
-		if(model_->AlarmGUnit.IsSave)
-			Storage::FileSave::GetFileSaveTool()->InitAlarm(&model_->AlarmGUnit.SaveLst);
 		ctrl_ = this;
 		Storage::FileSave::GetFileSaveTool();
 
@@ -77,6 +75,8 @@ namespace UI
 
 	void AlarmGControl::OnReady()
 	{
+		if (model_->AlarmGUnit.IsSave)
+			Storage::FileSave::GetFileSaveTool()->InitAlarm(&model_->AlarmGUnit.SaveLst);
 		Page()->AddTimeout(10000, AlarmFlush_CB, NULL, true);
 	}
 

@@ -95,10 +95,14 @@ namespace Storage
 
 	void SampleStorage::QueryByTimePeriod(int channel, int period, vector<SampleRecord> & records) {
 		// 获取当前时间
-		auto timeNow = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-		auto timeStart = timeNow - period;
+		/*auto timeNow = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+		auto timeStart = timeNow - period;*/
 		// 查询指定通道数据
 		vector<SampleRecord> tmpRecords = QueryByChannel(channel);
+		if (tmpRecords.size() == 0)
+			return;
+		auto timeLast = tmpRecords[tmpRecords.size()-1].Date;
+		auto timeStart = timeLast - period;
 		// 通道中无数据
 		if (tmpRecords.size() == 0)
 			return;
@@ -111,8 +115,8 @@ namespace Storage
 		}
 		int startIndex = iter != tmpRecords.begin() ? distance(tmpRecords.begin(), iter) - 1 : 0;
 		// 数据终止位置
-		iter = find_if(tmpRecords.begin(), tmpRecords.end(), [timeNow](SampleRecord & recd) {
-			return recd.Date >= (DDWORD)timeNow;
+		iter = find_if(tmpRecords.begin(), tmpRecords.end(), [timeLast](SampleRecord & recd) {
+			return recd.Date >= (DDWORD)timeLast;
 		});
 		int endIndex = iter == tmpRecords.end() ? tmpRecords.size() : distance(tmpRecords.begin(), iter) + 1;
 		records.assign(tmpRecords.begin() + startIndex, tmpRecords.begin() + endIndex);

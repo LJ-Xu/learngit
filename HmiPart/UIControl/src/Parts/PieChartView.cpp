@@ -59,11 +59,11 @@ namespace UI
 		Rectangle rect;
 		model->GetRect(rect);
 		// 获取饼图总角度
-		int totalAngle = 0;// model->PieChartUnit.EndAngle - model->PieChartUnit.StartAngle;
-		int usedAngle = 0;
+		float totalAngle = 0;// model->PieChartUnit.EndAngle - model->PieChartUnit.StartAngle;
+		float usedAngle = 0;
 		int wSAng = 90, wEAng = 90;
-		int startAngle = 0;
-		int endAngle=0;
+		float startAngle = 0;
+		float endAngle=0;
 		switch (model->PieChartUnit.Dir)
 		{
 		case 0:
@@ -90,8 +90,13 @@ namespace UI
 		{
 			// 获取角度百分比
 			//int angle = i == ValueSnapList.size() - 1 ?totalAngle - usedAngle : totalAngle *model->PieChartUnit.Channels[i].Percent;
-			int angle = totalAngle * model->PieChartUnit.Channels[i].Percent;
-			int endAngle = model->PieChartUnit.Dir == 0 ? startAngle - angle : startAngle + angle;
+			float angle = totalAngle * model->PieChartUnit.Channels[i].Percent;
+			float endAngle;
+			/*if(i< model->PieChartUnit.Channels.size()-1)
+				endAngle = totalAngle * model->PieChartUnit.Channels[i+1].Percent;
+			else
+				*/
+			endAngle = model->PieChartUnit.Dir == 0 ? startAngle - angle : startAngle + angle;
 			/*if (endAngle < 0)
 				endAngle += 360;*/
 			/*if (endAngle > 360)
@@ -173,8 +178,7 @@ namespace UI
 			double wVal = cos(model->PieChartUnit.Channels[i].StartAngle * M_PI / 180) * (rect.W / 2);
 			double hVal = sin(model->PieChartUnit.Channels[i].StartAngle * M_PI / 180) * (rect.H / 2);
 			// 绘制扇区左边线
-			fl_line(rect.X + rect.W / 2, rect.Y + rect.H / 2,
-				rect.X + rect.W / 2 + wVal, rect.Y + rect.H / 2 - hVal);
+			fl_line(rect.X + rect.W / 2, rect.Y + rect.H / 2,rect.X + rect.W / 2 + wVal, rect.Y + rect.H / 2 - hVal);
 		}
 		double wVal = cos(endAngle * M_PI / 180) * (rect.W / 2);
 		double hVal = sin(endAngle * M_PI / 180) * (rect.H / 2);
