@@ -103,6 +103,7 @@ namespace UI
 		default:
 			break;
 		}
+		return true;
 	}
 
 	void SetDataTimerCb(void *data)
@@ -579,6 +580,8 @@ namespace UI
 		}
 		else
 		{
+			if (curwinno == param.CloseWin.CloseNum)
+				switchwin_ = true;
 			HMIPage* pg = Page()->Next;
 			while (pg != Page())
 			{

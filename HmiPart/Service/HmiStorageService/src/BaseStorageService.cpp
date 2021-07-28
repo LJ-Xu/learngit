@@ -75,55 +75,50 @@ namespace Storage
 		return Flush(Count());
 #else
 		ExecCommit();
-		sqlite3_stmt* stmt = GetSTMT(BASE_FLUSH);
-		if (stmt == nullptr)
-			return -1;
-		int ret= sqlite3_reset(stmt);
-		ret = sqlite3_step(stmt);
-
-		stmt = GetSTMT(BASE_DeleteAllInMem);
-		if (stmt == nullptr)
-			return -1;
-		ret= sqlite3_reset(stmt);
-		ret = sqlite3_step(stmt);
-
 		int count = 0;
-		//stmt = GetSTMT(BASE_CountOfMem);
-		//if (stmt == nullptr)
-		//	return -1;
-		//ret = sqlite3_reset(stmt);
-		//// = sqlite3_step(stmt);
-		//while(sqlite3_step(stmt) == SQLITE_ROW){
-		//	count += sqlite3_column_int(stmt, 0);
-		//}
-
-		//count = 0;
-		stmt = GetSTMT(BASE_CountOfDisk);
+		sqlite3_stmt* stmt = GetSTMT(BASE_CountOfMem);
 		if (stmt == nullptr)
 			return -1;
-		ret = sqlite3_reset(stmt);
+		int ret = sqlite3_reset(stmt);
 		while (sqlite3_step(stmt) == SQLITE_ROW) {
-			count = sqlite3_column_int(stmt, 0);
+			count += sqlite3_column_int(stmt, 0);
 		}
-		if (count > 10000)
+		if (count)
 		{
-			/*stmt = GetSTMT(BASE_SelectMinRowid);
+			stmt = GetSTMT(BASE_FLUSH);
 			if (stmt == nullptr)
 				return -1;
 			ret = sqlite3_reset(stmt);
-			int startrowid = ret;
-			while (sqlite3_step(stmt) == SQLITE_ROW) {
-				startrowid = sqlite3_column_int(stmt, 0);
-			}*/
-			int outcount = count - 10000; 
-			stmt = GetSTMT(BASE_DeleteCountOfDisk);
-			if (stmt == nullptr)
-				return -1;
-			ret = sqlite3_reset(stmt);
-			//ret = sqlite3_bind_int(stmt, 1, startrowid);
-			ret = sqlite3_bind_int(stmt, 1, outcount + 1000);
 			ret = sqlite3_step(stmt);
+
+			stmt = GetSTMT(BASE_DeleteAllInMem);
+			if (stmt == nullptr)
+				return -1;
+			ret = sqlite3_reset(stmt);
+			ret = sqlite3_step(stmt);
+
+
+			//count = 0;
+			stmt = GetSTMT(BASE_CountOfDisk);
+			if (stmt == nullptr)
+				return -1;
+			ret = sqlite3_reset(stmt);
+			while (sqlite3_step(stmt) == SQLITE_ROW) {
+				count = sqlite3_column_int(stmt, 0);
+			}
+			if (count > 10000)
+			{
+				int outcount = count - 10000;
+				stmt = GetSTMT(BASE_DeleteCountOfDisk);
+				if (stmt == nullptr)
+					return -1;
+				ret = sqlite3_reset(stmt);
+				//ret = sqlite3_bind_int(stmt, 1, startrowid);
+				ret = sqlite3_bind_int(stmt, 1, outcount + 1000);
+				ret = sqlite3_step(stmt);
+			}
 		}
+		
 
 		ExecBegin();
 		return 0;

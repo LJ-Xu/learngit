@@ -157,7 +157,7 @@ namespace UI
 				case Project::SampleMode::Trigger:	
 					//if(sampleGroup.TriggerReadAddr)
 					// ´¥·¢²ÉÑù
-					if (sampleGroup.TriggerBitMode == 0) {	// Î»¼Ä´æÆ÷´¥·¢
+					if (sampleGroup.TriggerBitMode == 1) {	// Î»¼Ä´æÆ÷´¥·¢
 						BOOL bitVal = UIData::Bit(sampleGroup.TriggerReadAddr);
 
 						if (model_->SampleGUnit.InfoLst[i].TempByteState == -1)
@@ -207,7 +207,7 @@ namespace UI
 						}
 						model_->SampleGUnit.InfoLst[i].TempByteState = bitVal;
 					}
-					else if (sampleGroup.TriggerBitMode == 1) {	// ×Ö¼Ä´æÆ÷´¥·¢
+					else if (sampleGroup.TriggerBitMode == 0) {	// ×Ö¼Ä´æÆ÷´¥·¢
 						DOUBLE cmpVal = sampleGroup.ComPareValue;
 						if (sampleGroup.ComPareVar != Project::DataVarId::NullId) {
 							cmpVal = UIData::Number<DOUBLE>(sampleGroup.ComPareVar);

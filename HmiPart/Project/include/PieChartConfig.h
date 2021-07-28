@@ -29,8 +29,8 @@ namespace Project
 		string text;
 		Color FontColor;	// 通道文字颜色
 		Color BackColor;	// 通道背景颜色
-		int StartAngle;		// 起始角度
-		int EndAngle;		// 终止角度
+		float StartAngle;		// 起始角度
+		float EndAngle;		// 终止角度
 		template<class Archive>
 		void serialize(Archive & archive)
 		{

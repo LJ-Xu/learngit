@@ -61,6 +61,7 @@ namespace UI
 			{
 				LocalData::SetString(SYS_PSW_LoginedName, loginusername);		//设置登陆账户
 				LocalData::SetBit(SYS_PSB_HASLOGINUSER, true);				//标志已有用户登陆
+				LocalData::SetBit(SYS_PSB_HASLOGOUTUSER, false);				//标志已注销用户登陆
 				LocalData::SetNumberData(SYS_PSW_LOGINFlag, 1);				//登陆成功
 				delete[] loginusername;
 				delete[] userpwd;
@@ -88,7 +89,8 @@ namespace UI
 				if (prj_->Tables.User.Users[i].Passwd == userpwd)
 				{
 					LocalData::SetString(SYS_PSW_LoginedName, "");				//设置登陆账户
-					LocalData::SetBit(SYS_PSB_HASLOGINUSER, false);				//标志已有用户登陆
+					LocalData::SetBit(SYS_PSB_HASLOGINUSER, false);				//标志未有用户登陆
+					LocalData::SetBit(SYS_PSB_HASLOGOUTUSER, true);				//标志注销用户登陆
 					LocalData::SetNumberData(SYS_PSW_LOGINFlag, 3);				//注销成功
 					/*通知部件权限有变化*/
 					return true;

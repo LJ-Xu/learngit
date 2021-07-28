@@ -47,6 +47,7 @@ namespace UI
 	private:
 		shared_ptr<SysSetGModel> mode_;
 		bool preclockflag_;
+		bool hasScreenTime = false;
 	};
 }
 

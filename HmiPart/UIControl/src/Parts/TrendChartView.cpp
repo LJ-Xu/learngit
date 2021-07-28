@@ -335,13 +335,39 @@ namespace UI
 		return text;
 	}
 	/*获取点的Y轴坐标偏移*/
-	int TrendChartView::GetYCoordinate(DDWORD& data, XJDataType& info, DOUBLE max, DOUBLE min)
+	int TrendChartView::GetYCoordinate(int channelNo, DDWORD& data, XJDataType& info, DOUBLE max, DOUBLE min)
 	{
 		shared_ptr<TrendChartModel> model = BaseView.GetModel<TrendChartModel>();
+		
 		Utility::ScaleInfo scale;
 		scale.A = (DOUBLE)(yaxislength) / (max - min);
 		scale.B = 0 - (scale.A * min);
-		return Utility::DataFormate::GetScale(scale, data, info);
+		int ydata = Utility::DataFormate::GetScale(scale, data, info);
+		
+		int datamax = 0, datamin = 0;
+		XJDataType tp;
+		tp.Cls = Project::VarDataType::DT_DDWORD;
+		tp.Type = Project::VarNumberType::NT_Float;
+		for (size_t i = 0; i < model->ChartTrendConfig.SetChannel.size(); i++)
+		{
+			if (channelNo == model->ChartTrendConfig.SetChannel[i].ChannelNo)
+			{
+				/*计算通道数据Y轴偏移*/
+				DDWORD maxda, minda;
+				memcpy(&maxda, &model->ChartTrendConfig.SetChannel[i].TrendMax, sizeof(DDWORD));
+				memcpy(&minda, &model->ChartTrendConfig.SetChannel[i].TrendMin, sizeof(DDWORD));
+
+				datamax = Utility::DataFormate::GetScale(scale, maxda, tp);
+				datamin = Utility::DataFormate::GetScale(scale, minda, tp);
+				if (ydata > datamax)
+					return datamax;
+				else if (ydata < datamin)
+					return datamin;
+				else
+					return ydata;
+			}
+		}
+		return ydata;
 	}
 	/*确定信息显示线位置*/
 	void TrendChartView::SetDisPlayPos(int num, int dx)
@@ -468,18 +494,18 @@ namespace UI
 			size_t num;
 			for (size_t i = 0; i < model->ChartTrendConfig.SetChannel.size(); i++)
 			{
-				if (channelNo == model->ChartTrendConfig.SetChannel[i].ChannelNo)
+				if (GetChannelNo(channelNo) == model->ChartTrendConfig.SetChannel[i].ChannelNo)
 					num = i;
 			}
 			if (num < model->ChartTrendConfig.SetChannel.size())
 			{
-				if (model->ChartTrendConfig.SetChannel[num].TrendMaxVarId != Project::DataVarId::NullId)
-					max = UI::UIData::Number<DOUBLE>(model->ChartTrendConfig.SetChannel[num].TrendMaxVarId);
-				else
+				//if (model->ChartTrendConfig.SetChannel[num].TrendMaxVarId != Project::DataVarId::NullId)
+				//	max = UI::UIData::Number<DOUBLE>(model->ChartTrendConfig.SetChannel[num].TrendMaxVarId);
+				//else
 					max = model->ChartTrendConfig.SetChannel[num].TrendMax;
-				if (model->ChartTrendConfig.SetChannel[num].TrendMinVarId != Project::DataVarId::NullId)
-					min = UI::UIData::Number<DOUBLE>(model->ChartTrendConfig.SetChannel[num].TrendMinVarId);
-				else
+				//if (model->ChartTrendConfig.SetChannel[num].TrendMinVarId != Project::DataVarId::NullId)
+				//	min = UI::UIData::Number<DOUBLE>(model->ChartTrendConfig.SetChannel[num].TrendMinVarId);
+				//else
 					min = model->ChartTrendConfig.SetChannel[num].TrendMin;
 			}
 			break;
@@ -1097,7 +1123,7 @@ namespace UI
 				fl_color(active() ? linecolor : fl_inactive(linecolor));
 				fl_line_style(0, channelinfo.TrendStyle.Weight);
 				DrawChannelLine((Project::TrendLineType)channelinfo.TrendStyle.Type, origin.X + model->ChartTrendConfig.OffX + dx,
-					origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
+					origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(channelinfo.ChannelNo, ChannelData[i].Data, ChannelData[i].Type, max, min));
 
 				//fl_vertex(origin.X + model->ChartTrendConfig.OffX + dx, 
 				//	origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
@@ -1149,22 +1175,23 @@ namespace UI
 		{
 			vector<Storage::SampleRecord>().swap(ChannelData);
 			Storage::SampleStorage::Ins()->QueryByTimePeriod(channelno, perScreenPeriod_, ChannelData);
-			if (ChannelData.empty() || perScreenPeriod_ == 0)
-			{
-				LOG_INFO("ChannelData size = %d\n", ChannelData.size());
+			if (perScreenPeriod_ == 0)
 				return;
+			if (!ChannelData.empty())
+			{
+				scalecurrenttime_ = ChannelData[ChannelData.size() - 1].Date;
+				startTime_ = ChannelData[0].Date;
+
+				/*设置滚动条*/
+				float hscrolltab = (ChannelData[ChannelData.size() - 1].Date <= firstEndTime_) ? 1 : (float)perScreenPeriod_ / (float)(ChannelData[ChannelData.size() - 1].Date - firstStartTime_);
+				if (hscrolltab == 1)
+					Hscrollbar->value(Xaxislength);
+				Hscrollbar->slider_size(hscrolltab);
 			}
-			scalecurrenttime_ = ChannelData[ChannelData.size() - 1].Date;
-			startTime_ = ChannelData[0].Date;
-
-			/*设置滚动条*/
-			float hscrolltab = (ChannelData[ChannelData.size() - 1].Date <= firstEndTime_) ? 1 : (float)perScreenPeriod_ / (float)(ChannelData[ChannelData.size() - 1].Date - firstStartTime_);
-			if (hscrolltab == 1)
-				Hscrollbar->value(Xaxislength);
-			Hscrollbar->slider_size(hscrolltab);
-
 			if (Hscrollbar->value() == Xaxislength || ScrollClick == 0)
 			{
+				if (ChannelData.empty())
+					return;
 				//if (ChannelData[ChannelData.size() - 1].Date <= firstStartTime_)
 					startTime_ = ChannelData[0].Date;
 				//else
@@ -1181,7 +1208,7 @@ namespace UI
 							fl_color(active() ? linecolor : fl_inactive(linecolor));
 							fl_line_style(0, channelinfo.TrendStyle.Weight);
 							DrawChannelLine((Project::TrendLineType)channelinfo.TrendStyle.Type, origin.X + model->ChartTrendConfig.OffX + dx,
-								origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
+								origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(channelinfo.ChannelNo, ChannelData[i].Data, ChannelData[i].Type, max, min));
 						}
 					}
 					fl_end_line();
@@ -1206,7 +1233,7 @@ namespace UI
 						fl_color(active() ? linecolor : fl_inactive(linecolor));
 						fl_line_style(0, channelinfo.TrendStyle.Weight);
 						DrawChannelLine((Project::TrendLineType)channelinfo.TrendStyle.Type, origin.X + model->ChartTrendConfig.OffX + dx,
-							origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
+							origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(channelinfo.ChannelNo, ChannelData[i].Data, ChannelData[i].Type, max, min));
 					}
 				}
 				fl_pop_clip();
@@ -1248,7 +1275,7 @@ namespace UI
 						fl_color(active() ? linecolor : fl_inactive(linecolor));
 						fl_line_style(0, channelinfo.TrendStyle.Weight);
 						DrawChannelLine((Project::TrendLineType)channelinfo.TrendStyle.Type, origin.X + model->ChartTrendConfig.OffX + dx,
-							origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
+							origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(channelinfo.ChannelNo, ChannelData[i].Data, ChannelData[i].Type, max, min));
 
 						//fl_vertex(origin.X + model->ChartTrendConfig.OffX + dx, 
 						//	origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
@@ -1290,7 +1317,7 @@ namespace UI
 							fl_color(active() ? linecolor : fl_inactive(linecolor));
 							fl_line_style(0, channelinfo.TrendStyle.Weight);
 							DrawChannelLine((Project::TrendLineType)channelinfo.TrendStyle.Type, origin.X + model->ChartTrendConfig.OffX + dx,
-								origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));
+								origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(channelinfo.ChannelNo, ChannelData[i].Data, ChannelData[i].Type, max, min));
 
 							//fl_vertex(origin.X + model->ChartTrendConfig.OffX + dx, 
 							//	origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - GetYCoordinate(ChannelData[i].Data, ChannelData[i].Type, max, min));

@@ -292,7 +292,7 @@ namespace Storage
 
 	vector<SampleRecord> SampleStorageService::SelectSampleRecordByStTm(int gName, int gNo, unsigned long long startTime)
 	{
-		sqlite3_stmt* stmt = GetSTMT(SEL_SelectSampleRecordByChannel);
+		sqlite3_stmt* stmt = GetSTMT(SEL_SelectSampleRecordByStTm);
 		if (stmt == nullptr)
 			return std::vector<SampleRecord>();
 		int ret = sqlite3_reset(stmt);

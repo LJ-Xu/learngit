@@ -190,13 +190,13 @@ namespace UI
 			{
 				ctrl->Page()->RemoveTimeout(BtnLampSafeTimerCb, (void*)this);		//移除定时器
 				IsReleased = true;
-				char dataflag;
-				if (model->BtnPilotLampConfig.RwDiffAddrUsed)  //读写使用不同寄存器
-					dataflag = DataApi::GetDataFlag(model->BtnPilotLampConfig.WriteVar);
-				else
-					dataflag = DataApi::GetDataFlag(model->BtnPilotLampConfig.ReadVar);
-				if (dataflag == 0)		//没有权限则返回
-					return 1;
+				//char dataflag;
+				//if (model->BtnPilotLampConfig.RwDiffAddrUsed)  //读写使用不同寄存器
+				//	dataflag = DataApi::GetDataFlag(model->BtnPilotLampConfig.WriteVar);
+				//else
+				//	dataflag = DataApi::GetDataFlag(model->BtnPilotLampConfig.ReadVar);
+				//if (dataflag == 0)		//没有权限则返回
+				//	return 1;
 				if (HaveOperateLimit && model->BtnPilotLampConfig.Action == Project::BtnAction::BtnSHORTON)
 				{
 					HaveOperateLimit = false;

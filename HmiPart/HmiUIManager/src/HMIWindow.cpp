@@ -405,7 +405,7 @@ namespace UI
 		if (pi.Template.BottomWinId > 0 && pi.Template.TopWinId != winno)
 			pg->TemplateBottomPage(ProducePage(pi.Template.BottomWinId));
 
-		pg->ProduceCtrl(pi.Shapes, winno);
+		pg->ProduceCtrl(pi, winno);
 		int offx = 0, offy = 0;
 		if (x + pi.Sz.W > prj_->Setting.Width)
 			offx = prj_->Setting.Width - pi.Sz.W - pi.Pos.X;
@@ -445,9 +445,17 @@ namespace UI
 		if (pi.Template.BottomWinId > 0 && pi.Template.TopWinId != winno)
 			pg->TemplateBottomPage(ProducePage(pi.Template.BottomWinId));
 
-		pg->ProduceCtrl(pi.Shapes, winno);
-		if(offx != 0 || offy != 0)
-			pg->ChangePos(pi.Pos.X + offx, pi.Pos.Y + offy);
+		pg->ProduceCtrl(pi, winno);
+		if (offx != -1 && offy != -1)			//键盘位置
+		{
+			if(offx != 0 || offy != 0)
+				pg->ChangePos(pi.Pos.X + offx, pi.Pos.Y + offy);
+		}
+		else
+		{
+			if (pi.PageCfg.WinViewPos_x != 0 || offy != pi.PageCfg.WinViewPos_y)
+				pg->ChangePos(pi.Pos.X + pi.PageCfg.WinViewPos_x, pi.Pos.Y + pi.PageCfg.WinViewPos_y);
+		}
 
 		//构建并添加顶部page
 		if (pi.Template.TopWinId > 0 && pi.Template.TopWinId != winno)
