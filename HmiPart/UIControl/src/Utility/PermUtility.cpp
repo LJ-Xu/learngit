@@ -29,7 +29,8 @@ namespace UI
 			{
 			case 0:
 			{
-				view->show();
+				if(perm.HasLimitShowPerm)
+					view->show();
 				view->redraw();
 				perm.HasShowPerm = true;
 				break;

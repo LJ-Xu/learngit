@@ -114,10 +114,10 @@ namespace Storage
 			if (!NewFMT(SEL_SelectRecordsFromId, sql.c_str(), sizeof(sql)))
 				return SEL_SelectRecordsFromId;
 
-			sql.clear();
-			sql.append("SELECT * FROM ").append(tbName).append("  LIMIT ?,?").append(" union all SELECT * FROM fileDb.").append(tbName).append("  LIMIT ?,?;");
-			if (!NewFMT(SEL_SelectRecordsFromIdLimitByCount, sql.c_str(), sizeof(sql)))
-				return SEL_SelectRecordsFromIdLimitByCount;
+			//sql.clear();
+			//sql.append("SELECT * FROM ").append(tbName).append("  LIMIT ?,?").append(" union all SELECT * FROM fileDb.").append(tbName).append("  LIMIT ?,?;");
+			//if (!NewFMT(SEL_SelectRecordsFromIdLimitByCount, sql.c_str(), sizeof(sql)))
+			//	return SEL_SelectRecordsFromIdLimitByCount;
 
 			sql.clear();
 			sql.append("SELECT * FROM ").append(tbName).append("   WHERE UserName = '?'").append(" union all SELECT * FROM fileDb.").append(tbName).append("   WHERE UserName = '?';");

@@ -315,16 +315,16 @@ namespace UI
 			switch (style)
 			{
 			case Project::MDYSlash:
-				sprintf(displayTime, "%d\\%d\\%d", local->tm_mon + 1, local->tm_mday, local->tm_year + 1900);
+				sprintf(displayTime, "%d\/%d\/%d", local->tm_mon + 1, local->tm_mday, local->tm_year + 1900);
 				break;
 			case Project::DMYSlash:
-				sprintf(displayTime, "%d\\%d\\%d", local->tm_mday, local->tm_mon + 1, local->tm_year + 1900);
+				sprintf(displayTime, "%d\/%d\/%d", local->tm_mday, local->tm_mon + 1, local->tm_year + 1900);
 				break;
 			case Project::YMDChinese:
 				sprintf(displayTime, "%dÄê%dÔÂ%dÈÕ", local->tm_year + 1900, local->tm_mon + 1, local->tm_mday);
 				break;
 			case Project::YMDSlash:
-				sprintf(displayTime, "%d\\%d\\%d", local->tm_year + 1900, local->tm_mon + 1, local->tm_mday);
+				sprintf(displayTime, "%d\/%d\/%d", local->tm_year + 1900, local->tm_mon + 1, local->tm_mday);
 				break;
 			default:
 				break;
@@ -1193,10 +1193,12 @@ namespace UI
 				if (ChannelData.empty())
 					return;
 				//if (ChannelData[ChannelData.size() - 1].Date <= firstStartTime_)
-					startTime_ = ChannelData[0].Date;
+				//	startTime_ = ChannelData[0].Date;
 				//else
-					//startTime_ = ChannelData[ChannelData.size() - 1].Date - perScreenPeriod_;
-				
+				startTime_ = ChannelData[ChannelData.size() - 1].Date - perScreenPeriod_;
+				vector<Storage::SampleRecord>().swap(ChannelData);
+				ChannelData = Storage::SampleStorage::Ins()->QueryByTime(channelno, startTime_, startTime_ + perScreenPeriod_);
+
 				fl_push_clip(origin.X + model->ChartTrendConfig.OffX, origin.Y + model->ChartTrendConfig.OffY - scrollheight_ - yaxislength, Xaxislength, yaxislength);
 				{
 					fl_begin_line();

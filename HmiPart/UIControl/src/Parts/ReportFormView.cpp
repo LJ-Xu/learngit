@@ -160,16 +160,16 @@ namespace UI
 			switch (model->ReportConfig.DateStyle)
 			{
 			case Project::MDYSlash:
-				sprintf(displayTime, "%d\\%d\\%d", local->tm_mon + 1, local->tm_mday, local->tm_year + 1900);
+				sprintf(displayTime, "%d\/%d\/%d", local->tm_mon + 1, local->tm_mday, local->tm_year + 1900);
 				break;
 			case Project::DMYSlash:
-				sprintf(displayTime, "%d\\%d\\%d", local->tm_mday, local->tm_mon + 1, local->tm_year + 1900);
+				sprintf(displayTime, "%d\/%d\/%d", local->tm_mday, local->tm_mon + 1, local->tm_year + 1900);
 				break;
 			case Project::YMDChinese:
 				sprintf(displayTime, "%dÄê%dÔÂ%dÈÕ", local->tm_year + 1900, local->tm_mon + 1, local->tm_mday);
 				break;
 			case Project::YMDSlash:
-				sprintf(displayTime, "%d\\%d\\%d", local->tm_year + 1900, local->tm_mon + 1, local->tm_mday);
+				sprintf(displayTime, "%d\/%d\/%d", local->tm_year + 1900, local->tm_mon + 1, local->tm_mday);
 				break;
 			default:
 				break;

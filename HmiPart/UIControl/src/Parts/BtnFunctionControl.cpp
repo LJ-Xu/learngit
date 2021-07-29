@@ -83,22 +83,30 @@ namespace UI
 			{
 				mode_->FuncBtnConfig.Perm.HasLimitShowPerm = true;
 				UI::ViewShowUtility::ShowView(pView_, mode_->FuncBtnConfig.Perm, mode_->FuncBtnConfig.X + mode_->FuncBtnConfig.OffX, mode_->FuncBtnConfig.Y + mode_->FuncBtnConfig.OffY);
-				if (needswitchwin_)
-				{
-					needswitchwin_ = false;
-					if (switchwinno_ > 5000)
-						Win()->OpenDialogPage(switchwinno_);
-					if (switchwinno_ > 0 && switchwinno_ <= 5000)
-					{
-						Win()->SwitchPage(switchwinno_);
-						switchwinno_ = 0;
-						return false;
-					}
-					switchwinno_ = 0;
-				}
 			}
+			if (needswitchwin_ && Win()->PageHasPrem(switchwinno_, false) && haspopwin)
+			{
+				haspopwin = false;
+				needswitchwin_ = false;
+				if (switchwinno_ > 5000)
+					Win()->OpenDialogPage(switchwinno_);
+				if (switchwinno_ > 0 && switchwinno_ <= 5000)
+				{
+					Win()->SwitchPage(switchwinno_);
+					switchwinno_ = 0;
+					return false;
+				}
+				switchwinno_ = 0;
+				
+			}
+			break;
 		}
 		case UI::Language:
+			break;
+		case UI::ExitLog:
+			needswitchwin_ = false;
+			switchwinno_ = 0;
+			haspopwin = false;
 			break;
 		default:
 			break;
@@ -499,6 +507,7 @@ namespace UI
 			if (!Win()->PageHasPrem(frontwinno, param.SwitchScreen.UsePasswd))		//没有权限
 			{
 				needswitchwin_ = true;
+				haspopwin = param.SwitchScreen.UsePasswd;
 				switchwinno_ = frontwinno;
 				return;
 			}
@@ -515,6 +524,7 @@ namespace UI
 				if (!Win()->PageHasPrem(param.SwitchScreen.FrameNum, param.SwitchScreen.UsePasswd))		//没有权限
 				{
 					needswitchwin_ = true;
+					haspopwin = param.SwitchScreen.UsePasswd;
 					switchwinno_ = param.SwitchScreen.FrameNum;
 					return;
 				}
@@ -536,6 +546,7 @@ namespace UI
 			if (!Win()->PageHasPrem(param.OpenWin.ExchangeWinNo, param.OpenWin.UsePasswd))		//没有权限
 			{
 				needswitchwin_ = true;
+				haspopwin = param.OpenWin.UsePasswd;
 				switchwinno_ = param.OpenWin.ExchangeWinNo;
 				return;
 			}
@@ -557,6 +568,7 @@ namespace UI
 		case Project::WinAction::OPEN:
 			if (!Win()->PageHasPrem(param.OpenWin.PopUpWinNo, param.OpenWin.UsePasswd))		//没有权限
 			{
+				haspopwin = param.OpenWin.UsePasswd;
 				needswitchwin_ = true;
 				switchwinno_ = param.OpenWin.PopUpWinNo;
 				return;

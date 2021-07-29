@@ -39,6 +39,7 @@ namespace UI
 	{
 		Permission,
 		Language,
+		ExitLog,
 	};
 	typedef Fl_Timeout_Handler TimeoutHandler;
 	struct PageTimerParam

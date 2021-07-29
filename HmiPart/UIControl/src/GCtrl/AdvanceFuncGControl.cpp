@@ -114,6 +114,11 @@ namespace UI
 			LOG_INFO_("Log Changed\n");
 			bool bit = LocalData::GetBit(SYS_PSB_HASLOGINUSER);
 			int status = LocalData::GetNumberData<int>(SYS_PSW_LOGINFlag);
+			if (status == 5)	//退出登陆
+			{
+				Win()->NotifySysChange(SysChangeEM::ExitLog);
+				return;
+			}
 			if (status != 0)		//有状态改变
 			{
 				char login[32] = { 0 };
