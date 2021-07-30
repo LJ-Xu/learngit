@@ -43,7 +43,7 @@ namespace Project
 				GridBorderStyle, IsRowDividLine, IsColDividLine, FocusFontColor, FocusCellColor,
 				FocusRowColor, SearchMode, EnableSearch, SeekModeVar, SeekCtrlVar, SearchDate, SearchDateVarId,
 				SearchTimeStart, SearchTimeEnd, SearchTimeVar, SearchGroup, SearchGroupVar, RegMode, SearchRegVarId,
-				SearchNo, SearchNoVar, SearchLevel, SearchLevelVar, SearchChannelNo, SearchChannelNoVar,
+				SearchNo, SearchNoVar, SearchLevel, SearchLevelVar, SearchChannelNo, SearchChannelNoVar, SearchKey, SearchKeyVar,
 				VOffX, VOffY, Perm, Width, Height, X, Y, IsEnable, IsRecord, CtrlName);
 		}
 	};

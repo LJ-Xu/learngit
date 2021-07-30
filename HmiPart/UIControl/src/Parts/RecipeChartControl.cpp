@@ -141,7 +141,8 @@ namespace UI
 		/*¹Ø¼ü×Ö*/
 		if (mode_->RecipeConfig.SearchKeyVar.Cmp(varId))
 		{
-			mode_->RecipeConfig.SearchKey = UIDataService::Ins().GetString(mode_->RecipeConfig.SearchKeyVar);
+			mode_->RecipeConfig.SearchKey = DataApi::AppString(mode_->RecipeConfig.SearchKeyVar).c_str();
+			//mode_->RecipeConfig.SearchKey = UIDataService::Ins().GetString(mode_->RecipeConfig.SearchKeyVar);
 			if (pView->DisplayMode && mode_->RecipeConfig.SearchMode == Project::RecipeSeekMode::RecipeKey)
 				UI::ViewShowUtility::ShowView(pView, mode_->RecipeConfig.Perm,
 					mode_->RecipeConfig.X + mode_->RecipeConfig.OffX,

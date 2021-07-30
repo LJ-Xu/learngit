@@ -159,7 +159,8 @@ namespace Storage
 			if (i != colname.size() - 1)
 				sqlstr += " OR";
 		}
-		
+		if (!UI::CodeFormatUtility::IsStrUtf8(sqlstr.c_str()))
+			UI::IResourceService::GB2312toUtf8(sqlstr);
 		memcpy(sql, sqlstr.c_str(), sizeof(sql));
 		return std::move(SelectRecipe(sql, colname.size()));
 	}
@@ -177,6 +178,8 @@ namespace Storage
 			if (i != colname.size() - 1)
 				sqlstr += " OR";
 		}
+		if (!UI::CodeFormatUtility::IsStrUtf8(sqlstr.c_str()))
+			UI::IResourceService::GB2312toUtf8(sqlstr);
 		memcpy(sql, sqlstr.c_str(), sizeof(sql));
 		return std::move(SelectRecipe(sql, colname.size()));
 	}

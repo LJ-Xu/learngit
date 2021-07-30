@@ -681,7 +681,7 @@ namespace UI
 			//获取显示字符串
 			if (model->RecipeConfig.InfoLst.size() < (size_t)C)
 				return;
-			if (DisplayMode && SearchRows.size() <= (size_t)R)	//查询模式
+			if (DisplayMode && RecipeDatas.size() <= (size_t)R)	//查询模式
 				return;
 			text = GetDrawString(model->RecipeConfig.InfoLst[C].ProjectName, R);
 			if (!UI::CodeFormatUtility::IsStrUtf8(text.c_str()))

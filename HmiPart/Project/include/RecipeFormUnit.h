@@ -53,7 +53,11 @@ namespace Project
 			archive(AppearMode, Key, TableBgColor, TitleBackColor, ColTitleBackColor,
 				ParityDiffColor, OddBackColor, EvenBackColor, IsUseBorder, TableBorderStyle,
 				GridBorderStyle, IsRowDividLine, IsColDividLine, FocusFontColor, FocusCellColor,
-				FocusRowColor, SearchMode);
+				FocusRowColor, SearchMode, EnableSearch, SeekModeVar, SeekCtrlVar, SearchDate, SearchDateVarId,
+				SearchTimeStart, SearchTimeEnd, SearchTimeVar, SearchGroup, SearchGroupVar,
+				SearchNo, SearchNoVar, SearchLevel, SearchLevelVar, SearchChannelNo,
+				SearchChannelNoVar, SearchKey, SearchKeyVar, SearchData, SearchDataVar,
+				RegMode, SearchRegVarId);
 		}
 
 	};

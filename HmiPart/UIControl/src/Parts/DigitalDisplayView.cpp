@@ -10,6 +10,7 @@
  * modify   :
  *          :
  *******************************************************************************/
+//#include "GraphicDrawHandle.h"
 #include "ResourceService.h"
 #include "stdafx.h"
 #include "DigitalDisplayView.h"
@@ -17,7 +18,6 @@
 #include "DigitalDisplayModel.h"
 #include <FL/fl_draw.H>
 #include "Message.h"
-
 namespace UI
 {
 #define MAXBUF 320
@@ -175,7 +175,7 @@ namespace UI
 			p = e + 1;
 		}
 
-		//fl_push_clip(X, Y, W, H);
+		//GraphicDrawHandle::PushClip(X, Y, W, H);
 		Fl_Color tc = active_r() ? textcolor() : fl_inactive(textcolor());
 
 		p = text;
@@ -251,7 +251,7 @@ namespace UI
 				fl_draw(buf, (int)strlen(buf), (int)xpos, (int)(Y + ypos + desc));
 			}
 
-			if (do_mu) fl_pop_clip();
+			//if (do_mu) fl_pop_clip();
 
 		CONTINUE2:
 			// draw the cursor:
@@ -278,7 +278,7 @@ namespace UI
 			p = e;
 		}
 
-		fl_pop_clip();
+		//fl_pop_clip();
 		if (Fl::focus() == this) {
 			fl_set_spot(textfont(), textsize(),
 				(int)xpos + curx, Y + ypos - fl_descent(), W, H, window());

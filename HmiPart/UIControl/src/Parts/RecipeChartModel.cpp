@@ -172,8 +172,8 @@ namespace UI
 			if (json.HasMember("FocusCellColor"))
 				RecipeConfig.FocusCellColor = json["FocusCellColor"].GetInt();
 
-			if (json.HasMember("IsEnableSearch"))
-				RecipeConfig.EnableSearch = json["IsEnableSearch"].GetBool();
+			if (json.HasMember("IsSearchUsed"))
+				RecipeConfig.EnableSearch = json["IsSearchUsed"].GetBool();
 			if (json.HasMember("SearchMethod"))
 				RecipeConfig.SearchMode = (Project::RecipeSeekMode)json["SearchMethod"].GetInt();
 			if (json.HasMember("SearchMethodVarIdref") && json["SearchMethodVarIdref"].IsObject())

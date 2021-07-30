@@ -115,8 +115,10 @@ namespace UI
 		switch (event)
 		{
 		case FL_PUSH:
+#ifdef WIN32
 		case FL_MOVE:
 		case FL_DRAG:
+#endif // WIN32
 		case FL_KEYUP:
 		case FL_KEYBOARD:
 		case FL_MOUSEWHEEL:
@@ -125,7 +127,10 @@ namespace UI
 				return 1;
 			ScreenSaverClickTime = System::GetCurrentTimeStampMs();			//记录时间
 			if (SysCtrlApi::GetBacklight())		//背光已关闭
+			{
 				SysCtrlApi::OpenBacklight();	//打开背光
+				return 1;
+			}
 			break;
 		}
 		default:

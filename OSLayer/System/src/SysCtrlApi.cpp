@@ -95,11 +95,18 @@ bool SysCtrlApi::isclosebacklight_ = false;
 void SysCtrlApi::OpenBacklight()
 {
 #ifndef WIN32
+	printf("OpenBacklight\n");
 	int fd, ret;
 	if ((fd = open(brightness_name, O_RDWR)) < 0)
+	{
+		printf("can't Open file\n");
 		return;
+	}
 	int open = 1;
-	ret = write(fd, &open, sizeof(open));
+	char buffer[20];
+	int bytes = sprintf(buffer, "%d\n", open);
+	ret = write(fd, buffer, bytes);
+	//ret = write(fd, &open, sizeof(open));
 	isclosebacklight_ = false;
 	close(fd);
 #endif
@@ -107,11 +114,14 @@ void SysCtrlApi::OpenBacklight()
 void SysCtrlApi::CloseBacklight()
 {
 #ifndef WIN32
+	printf("CloseBacklight\n");
 	int fd, ret;
 	if ((fd = open(brightness_name, O_RDWR)) < 0)
 		return;
 	int open = 0;
-	ret = write(fd, &open, sizeof(open));
+	char buffer[20];
+	int bytes = sprintf(buffer, "%d\n", open);
+	ret = write(fd, buffer, bytes);
 	isclosebacklight_ = true;
 	close(fd);
 #endif
