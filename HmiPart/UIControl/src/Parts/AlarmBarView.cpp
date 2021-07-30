@@ -183,6 +183,7 @@ namespace UI
 		{
 #if SPLTBYSTRING
 			std::string StrAlarm;
+			tm time = System::GetFormatTimeBySec(itorRec->StartTick / 1000);
 			for (int tipidx = 0; tipidx < 5; ++tipidx)
 			{
 				switch (TitleTip[tipidx])
@@ -191,10 +192,18 @@ namespace UI
 					StrAlarm.append("Event").append(std::to_string(itorRec->AlarmGroup << 16 | itorRec->AlarmNo)).append(" ");
 					break;
 				case 2:
-					StrAlarm.append(System::GetDateToString(itorRec->StartTick / 1000)).append(" ");
+					char datebuf[ALARMTEXTLEN];
+					
+					SplitTimeStr(time, -1, model->AlarmBarConfig.TimeFormat, datebuf, ALARMTEXTLEN);
+					StrAlarm.append(datebuf);
+					//StrAlarm.append(System::GetDateToString(itorRec->StartTick / 1000)).append(" ");
 					break;
 				case 3:
-					StrAlarm.append(System::GetTimeToString(itorRec->StartTick / 1000)).append(" ");
+					char timebuf[ALARMTEXTLEN];
+
+					SplitTimeStr(time, model->AlarmBarConfig.DateFormat, -1, timebuf, ALARMTEXTLEN);
+					StrAlarm.append(timebuf);
+					//StrAlarm.append(System::GetTimeToString(itorRec->StartTick / 1000)).append(" ");
 					break;
 				case 4:
 					StrAlarm.append(itorRec->Title.c_str(), itorRec->Title.size()).append(" ");
@@ -231,40 +240,43 @@ namespace UI
 	//"HH:MM:SS", "HH:SS", "HH:MM:SS:MS", "HH时MM分SS秒"
 	void AlarmBarView::SplitTimeStr(tm time, int datetype, int clocktype, char * str,int buffLen)
 	{
+		char* tempstr = str;
 		switch (datetype)
 		{
 		case 0:
-			snprintf(str, buffLen, "%s %d/%d/%d", str, 1900+time.tm_year, time.tm_mon+1, time.tm_mday);
+			sprintf(tempstr,"%04d/%02d/%02d ", 1900+time.tm_year, time.tm_mon+1, time.tm_mday);
+			tempstr += 11;
 			break;
 		case 1:
-			snprintf(str, buffLen, "%s %d/%d/%d", str, time.tm_mday, time.tm_mon + 1, 1900 + time.tm_year);
+			sprintf(tempstr, "%02d/%02d/%04d ", time.tm_mday, time.tm_mon + 1, 1900 + time.tm_year);
+			tempstr += 11;
 			break;
 		case 2:
-			snprintf(str, buffLen, "%s %d/%d/%d", str, time.tm_mon + 1, time.tm_mday, 1900 + time.tm_year);
+			sprintf(tempstr, "%02d/%02d/%04d ", time.tm_mon + 1, time.tm_mday, 1900 + time.tm_year);
+			tempstr += 11;
 			break;
 		case 3:
-			char tempbuf[32];
-			memset(tempbuf, 0, 32);
-			sprintf(tempbuf, "%d年%d月%d日", 1900 + time.tm_year, time.tm_mon + 1, time.tm_mday);
-			memcpy(str + strlen(str), tempbuf, strlen(tempbuf));
+			sprintf(tempstr, "%04d年%02d月%02d日 ", 1900 + time.tm_year, time.tm_mon + 1, time.tm_mday);
+			tempstr += 15;
 			break;
 		}
 		switch (clocktype)
 		{
 		case 0:
-			snprintf(str, buffLen, "%s %d:%d:%d", str, time.tm_hour, time.tm_min, time.tm_sec);
+			sprintf(tempstr, "%02d:%02d:%02d ", time.tm_hour, time.tm_min, time.tm_sec);
+			tempstr += 9;
 			break;
 		case 1:
-			snprintf(str, buffLen, "%s %d:%d", str, time.tm_hour, time.tm_min);
+			sprintf(tempstr, "%02d:%02d ", time.tm_hour, time.tm_min);
+			tempstr += 6;
 			break;
 		case 2:
-			snprintf(str, buffLen, "%s %d:%d:%d", str, time.tm_hour, time.tm_min, time.tm_sec);
+			sprintf(tempstr, "%02d:%02d:%02d ", time.tm_hour, time.tm_min, time.tm_sec);
+			tempstr += 9;
 			break;
 		case 3:
-			char tempbuf[32];
-			memset(tempbuf, 0, 32);
-			sprintf(tempbuf, "%d时%d分%d秒", time.tm_hour, time.tm_min, time.tm_sec);
-			memcpy(str + strlen(str), tempbuf, strlen(tempbuf));
+			sprintf(tempstr, "%02d时%02d分%02d秒 ", time.tm_hour, time.tm_min, time.tm_sec);
+			tempstr += 13;
 			break;
 		}
 	}

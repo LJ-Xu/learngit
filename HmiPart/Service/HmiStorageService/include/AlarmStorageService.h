@@ -22,9 +22,12 @@ namespace Storage
 		{
 			INS_InsertAlarmRecord = BASE_DEFAULT,
 
-			UPD_UpdateAlarmRecord,
-			UPD_UpdateAlarmRecordByConfirm,
-			UPD_UpdateAlarmRecordByResolve,
+			UPD_UpdateAlarmRecord_MEM,
+			UPD_UpdateAlarmRecord_DB,
+			UPD_UpdateAlarmRecordByConfirm_MEM,
+			UPD_UpdateAlarmRecordByConfirm_DB,
+			UPD_UpdateAlarmRecordByResolve_MEM,
+			UPD_UpdateAlarmRecordByResolveDB,
 
 			SEL_SelectAllAlarmRecords,
 			SEL_SelectAllRecordsRangeByGroup,
