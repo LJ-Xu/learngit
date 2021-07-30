@@ -229,6 +229,7 @@ namespace UI
 			bottomPage_->NotifySysChange(ctg);
 		if (topPage_)
 			topPage_->NotifySysChange(ctg);
+		return true;
 	}
 	
 	void HMIPage::NotifyCtrlClose()

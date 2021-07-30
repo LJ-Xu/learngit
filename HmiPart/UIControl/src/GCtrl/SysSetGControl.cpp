@@ -215,7 +215,8 @@ namespace UI
 			&& mode_->SysSetGUnit.Exchange.IsCtrlPageExchange)
 		{
 			int winno = UI::UIData::Number<int>(mode_->SysSetGUnit.Exchange.CtrlPageExchangeVarId);
-			Win()->SwitchPage(winno);
+			if (Win()->PageHasPrem(winno, false))		//跳转页面有权限
+				Win()->SwitchPage(winno);
 		}
 		if (mode_->SysSetGUnit.Clock.CycleVarId.Cmp(id))
 		{

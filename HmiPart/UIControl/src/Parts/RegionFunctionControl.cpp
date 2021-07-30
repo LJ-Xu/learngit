@@ -64,6 +64,12 @@ namespace UI
 				UI::ViewShowUtility::ShowView(pView_, mode_->FuncRegionConfig.Perm, mode_->FuncRegionConfig.X + mode_->FuncRegionConfig.OffX, mode_->FuncRegionConfig.Y + mode_->FuncRegionConfig.OffY);
 				if (needswitchwin_)
 				{
+					if (!Win()->PageHasPrem(switchwinno_, false))		//没有权限
+					{
+						needswitchwin_ = false;
+						switchwinno_ = 0;
+						return true;
+					}
 					needswitchwin_ = false;
 					if (switchwinno_ > 5000)
 						Win()->OpenDialogPage(switchwinno_);

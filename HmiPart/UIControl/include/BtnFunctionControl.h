@@ -59,6 +59,7 @@ namespace UI
 
 		bool needswitchwin_ = false;
 		int switchwinno_ = 0;
+		bool haspopwin = false;
 	};
 }
 

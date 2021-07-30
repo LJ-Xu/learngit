@@ -85,6 +85,7 @@ namespace UI
 		case FL_PUSH:
 			SysSetApi::TriggerBeep();
 			CurrentStatus = 1;
+			redraw();
 			if (HandleOperatePush())
 			{
 				if (ctrl->HandleBtnFunc(PRESS))				//按下返回true，窗口仍存在
@@ -99,10 +100,11 @@ namespace UI
 				redraw();
 			return 1;
 		case FL_RELEASE:
+			CurrentStatus = 0;
+			redraw();
 			if (when() & FL_WHEN_RELEASE)
 			{
 				ctrl->Page()->RemoveTimeout(BtnFuncSafeTimerCb, (void*)this);		//移除定时器
-				CurrentStatus = 0;
 				IsReleased = true;
 				if (HaveOperateLimit)
 				{

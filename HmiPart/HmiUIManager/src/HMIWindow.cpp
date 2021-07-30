@@ -43,7 +43,9 @@
 #endif
 #include "UIData.h"
 #include "SysSetHandle.h"
+#include "SysCtrlApi.h"
 #include "System.h"
+
 unsigned long long ScreenSaverClickTime = 0;
 namespace UI
 {
@@ -122,6 +124,8 @@ namespace UI
 			if (SysSetHandle::CheckScreenSaver())
 				return 1;
 			ScreenSaverClickTime = System::GetCurrentTimeStampMs();			//记录时间
+			if (SysCtrlApi::GetBacklight())		//背光已关闭
+				SysCtrlApi::OpenBacklight();	//打开背光
 			break;
 		}
 		default:
@@ -520,6 +524,8 @@ namespace UI
 	{
 		int prewin = curPage_->LastWinno();
 		if (!prewin)return 0;
+		if (prewin == SafeLoginWinNum)
+			LocalData::SetNumberData(SYS_PSW_LOGINFlag, 0);
 		HMIPage* pg = ProducePage(prewin, offx, offy);
 		HMIPage *perpg = curPage_;
 
@@ -543,6 +549,8 @@ namespace UI
 	int HMIWindow::SwitchPage(int page, int offx, int offy)
 	{
 		if (curPage_->Winno() == page)return 0;
+		if (page == SafeLoginWinNum)
+			LocalData::SetNumberData(SYS_PSW_LOGINFlag, 0);
 		HMIPage* pg = ProducePage(page, offx, offy);
 		// 关闭之前的页面
 		CloseAllDialog();
@@ -559,6 +567,8 @@ namespace UI
 	}
 	int HMIWindow::OpenKeyBoard(int page, HMIPage*p, int x, int y)
 	{
+		if (page == SafeLoginWinNum)
+			LocalData::SetNumberData(SYS_PSW_LOGINFlag, 0);
 		HMIPage* pg = FindPage(page);
 		if (pg)return 0;
 		pg = ProduceKeyBoardPage(page, x, y);
@@ -571,6 +581,8 @@ namespace UI
 	//打开弹出窗体
 	int HMIWindow::OpenDialogPage(int page, HMIPage* p, int offx, int offy)
 	{
+		if (page == SafeLoginWinNum)
+			LocalData::SetNumberData(SYS_PSW_LOGINFlag, 0);
 		HMIPage* pg = FindPage(page);
 		if (pg)return 0;
 		pg = ProducePage(page, offx, offy);
@@ -583,6 +595,8 @@ namespace UI
 	//切换弹出窗体
 	int HMIWindow::SwitchDialogPage(int page, HMIPage* p, int offx, int offy)
 	{
+		if (page == SafeLoginWinNum)
+			LocalData::SetNumberData(SYS_PSW_LOGINFlag, 0);
 		HMIPage* pg = FindPage(page);
 		if (pg)return 0;
 		pg = ProducePage(page, offx, offy);

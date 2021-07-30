@@ -35,14 +35,14 @@ namespace UI
 		void DeleteOnePage(HMIPage* page);
 		void ShowPage(HMIPage* page);
 		void ShowPage(HMIPage* page, HMIPage* ppage);
-		void AppStart(int offx = 0, int offy = 0);
+		void AppStart(int offx = -1, int offy = -1);
 
 		//返回上一页面
-		int GobackPage(int offx = 0, int offy = 0);
+		int GobackPage(int offx = -1, int offy = -1);
 		//int GobackDialogPage(int offx = 0, int offy = 0);	
-		int SwitchStartPage(int offx = 0, int offy = 0);
+		int SwitchStartPage(int offx = -1, int offy = -1);
 		//切换页面，入栈,最多N个页面入栈
-		int SwitchPage(int page, int offx = 0, int offy = 0);
+		int SwitchPage(int page, int offx = -1, int offy = -1);
 
 		int OpenKeyBoard(int page, HMIPage * p, int x, int y);
 
@@ -50,7 +50,7 @@ namespace UI
 		int OpenDialogPage(int page, HMIPage* p = nullptr, int offx = -1, int offy = -1);
 		//切换弹出窗体
 
-		int SwitchDialogPage(int page, HMIPage* p = nullptr, int offx = 0, int offy = 0);
+		int SwitchDialogPage(int page, HMIPage* p = nullptr, int offx = -1, int offy = -1);
 		//关闭弹出窗体
 
 		int ClosePage(int page);
