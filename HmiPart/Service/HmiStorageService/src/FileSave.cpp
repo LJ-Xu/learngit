@@ -573,7 +573,7 @@ namespace Storage
 			spIfRs.SampleStoreInfo.StoreFileInfo.SavedCount += vecSpRec.size();
 			spIfRs.SampleStoreInfo.StoreFileInfo.SavedFlag = vecSpRec[vecSpRec.size() - 1].Date;
 		}
-		//delete[]buff;
+		delete[]buff;
 	}
 	void FileSave::FromSqlite2File(Project::SaveFileRes & res)
 	{
@@ -709,7 +709,7 @@ namespace Storage
 			tembuf += 2;
 		}
 		LocalExportFile(filePath, buff, buflen, res.IsFileSaveTimeLimit ? res.SaveDays : 0,0);
-
+		delete[]buff;
 		//IsAlarmNewTrig = false;
 	}
 	void FileSave::FromSqlite2OperateFile(Project::SaveFileRes& res)
@@ -849,6 +849,7 @@ namespace Storage
 			OperatorStorage::Ins()->CleanRcd();
 			break;
 		}
+		delete[]buff;
 	}
 
 	void FileSave::StartKeepSave()
