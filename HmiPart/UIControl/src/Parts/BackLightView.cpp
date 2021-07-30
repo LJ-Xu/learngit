@@ -54,12 +54,12 @@ namespace UI
 				model->TimerConfig.Y + model->TimerConfig.OffY,
 				model->TimerConfig.Width, model->TimerConfig.Height, FL_ALIGN_CENTER);
 		}
-		else
-		{
-			if (!IsPutOutStatus)
-				return;
-			fl_color(FL_BLACK);
-			fl_rectf(x(),y(),w(),h());
-		}
+		//else
+		//{
+		//	if (!IsPutOutStatus)
+		//		return;
+		//	fl_color(FL_BLACK);
+		//	fl_rectf(x(),y(),w(),h());
+		//}
 	}
 }

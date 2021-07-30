@@ -43,7 +43,9 @@
 #endif
 #include "UIData.h"
 #include "SysSetHandle.h"
+#include "SysCtrlApi.h"
 #include "System.h"
+
 unsigned long long ScreenSaverClickTime = 0;
 namespace UI
 {
@@ -122,6 +124,8 @@ namespace UI
 			if (SysSetHandle::CheckScreenSaver())
 				return 1;
 			ScreenSaverClickTime = System::GetCurrentTimeStampMs();			//记录时间
+			if (SysCtrlApi::GetBacklight())		//背光已关闭
+				SysCtrlApi::OpenBacklight();	//打开背光
 			break;
 		}
 		default:

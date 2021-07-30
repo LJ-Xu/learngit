@@ -18,6 +18,7 @@
 #include "PermUtility.h"
 #include "ViewShowUtility.h"
 #include "Logger.h"
+#include "SysCtrlApi.h"
 namespace UI
 {
 	BackLightControl::BackLightControl(UI::HMIPage* w) :BaseControl(w)
@@ -86,10 +87,10 @@ namespace UI
 
 	void BackLightControl::OnReady()
 	{
-		BackLightView* pView = static_cast<BackLightView*>(pView_);
-		pView->resize(Page()->x(), Page()->y(), Page()->w(), Page()->h());
-		pView->override();
-		pView->type();
+		//BackLightView* pView = static_cast<BackLightView*>(pView_);
+		//pView->resize(Page()->x(), Page()->y(), Page()->w(), Page()->h());
+		//pView->override();
+		//pView->type();
 		//pView->set_modal();
 	}
 	
@@ -133,18 +134,18 @@ namespace UI
 				if (mode_->BackLightConfig.Act)		//»½ÐÑ
 				{
 					LOG_INFO_("Wake up BackLight\n");
-					pView->IsPutOutStatus = false;
+					SysCtrlApi::OpenBacklight();
 				}
 				else
 				{
 					LOG_INFO_("Put out BackLight\n");
-					pView->IsPutOutStatus = true;
+					SysCtrlApi::CloseBacklight();
 				}
-				if (mode_->BackLightConfig.Perm.HasShowPerm && mode_->BackLightConfig.Perm.HasLimitShowPerm)
-				{
-					pView->show();
-					pView->redraw();
-				}
+				//if (mode_->BackLightConfig.Perm.HasShowPerm && mode_->BackLightConfig.Perm.HasLimitShowPerm)
+				//{
+				//	pView->show();
+				//	pView->redraw();
+				//}
 			}
 		}
 	}

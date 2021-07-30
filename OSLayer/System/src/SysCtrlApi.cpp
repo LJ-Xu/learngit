@@ -90,6 +90,8 @@ void SysCtrlApi::Beep(int ms, int hz)
 	close(fd);
 #endif
 }
+bool SysCtrlApi::isclosebacklight_ = false;
+
 void SysCtrlApi::OpenBacklight()
 {
 #ifndef WIN32
@@ -98,6 +100,7 @@ void SysCtrlApi::OpenBacklight()
 		return;
 	int open = 1;
 	ret = write(fd, &open, sizeof(open));
+	isclosebacklight_ = false;
 	close(fd);
 #endif
 }
@@ -109,8 +112,13 @@ void SysCtrlApi::CloseBacklight()
 		return;
 	int open = 0;
 	ret = write(fd, &open, sizeof(open));
+	isclosebacklight_ = true;
 	close(fd);
 #endif
+}
+bool SysCtrlApi::GetBacklight()
+{
+	return isclosebacklight_;
 }
 void SysCtrlApi::SwitchSysTime(int src, int mode, std::vector<int>* time)
 {
